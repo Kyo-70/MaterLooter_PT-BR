@@ -1,6 +1,5 @@
-# Teks menu Master Looter dalam Bahasa Indonesia (id).
-# Terjemahan mesin oleh Claude, AI dari Anthropic; belum diperiksa oleh
-# penutur asli. Koreksi dipersilakan di GitHub
+# Teks menu Master Looter dalam Bahasa Indonesia (id). Terjemahan mesin; belum
+# diperiksa oleh penutur asli. Koreksi dipersilakan di GitHub
 # (github.com/shin2344234/master-looter) atau di halaman Nexus mod ini.
 #
 # Satu baris per teks: bahasa Inggris asli, satu tab, lalu terjemahannya.

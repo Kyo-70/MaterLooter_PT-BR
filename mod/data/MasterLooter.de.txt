@@ -1,8 +1,7 @@
-# Menütext von Master Looter auf Deutsch (de).
-# Maschinelle Übersetzung, erstellt von Claude, einer KI von Anthropic.
-# Noch kein Muttersprachler hat sie geprüft. Korrekturen sind willkommen,
-# auf GitHub (github.com/shin2344234/master-looter) oder auf der Nexus-Seite
-# des Mods.
+# Menütext von Master Looter auf Deutsch (de). Maschinelle Übersetzung. Noch
+# kein Muttersprachler hat sie geprüft. Korrekturen sind willkommen, auf
+# GitHub (github.com/shin2344234/master-looter) oder auf der Nexus-Seite des
+# Mods.
 #
 # Eine Zeile pro Text: das englische Original, ein Tabulator, dann die
 # Übersetzung. \n steht für einen Zeilenumbruch. Zeilen, die mit # beginnen,

@@ -1,5 +1,10 @@
-# Texto do menu do Master Looter em Português do Brasil (pt-BR).
-# Tradução e revisão por Kyo-70.
+# Texto do menu do Master Looter em Português do Brasil (pt-BR). Tradução e
+# revisão por Kyo-70.
+#
+# As linhas acrescentadas depois da tradução de Kyo-70 são tradução
+# automática e ainda não foram revisadas por um falante nativo.
+# Correções são bem-vindas no GitHub
+# (github.com/shin2344234/master-looter) ou na página do mod no Nexus.
 #
 # Uma linha por texto: o original em inglês, uma tabulação e a tradução.
 # Linhas iniciadas por # são ignoradas, \n representa uma quebra de linha e

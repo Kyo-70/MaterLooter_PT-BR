@@ -1,7 +1,6 @@
-# Master Looter-menuteksten på dansk (da).
-# Maskinoversat af Claude, en AI fra Anthropic. Ingen indfødt dansktalende
-# har gennemgået oversættelsen endnu. Rettelser modtages gerne på GitHub
-# (github.com/shin2344234/master-looter) eller på moddets Nexus-side.
+# Master Looter-menuteksten på dansk (da). Maskinoversat. Ingen indfødt
+# dansktalende har gennemgået oversættelsen endnu. Rettelser modtages gerne på
+# GitHub (github.com/shin2344234/master-looter) eller på moddets Nexus-side.
 #
 # Én linje pr. tekst: den engelske original, et tabulatortegn og
 # oversættelsen. Linjer, der starter med #, ignoreres. \n betyder et

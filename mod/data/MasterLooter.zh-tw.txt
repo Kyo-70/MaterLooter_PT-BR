@@ -11,7 +11,7 @@
 # This copy is built into the plugin. To change it without rebuilding, put a
 # file of this name next to MasterLooter.asi and it will be read instead.
 #
-# dofo7777 的翻譯之後新增的行，是由 Claude（Anthropic 開發的 AI）產生的機器翻譯，
+# dofo7777 的翻譯之後新增的行，是機器翻譯，
 # 尚未經過任何人校對，歡迎至 GitHub（github.com/shin2344234/master-looter）或 Nexus 頁面提出修正。
 
   bag full	  背包已滿

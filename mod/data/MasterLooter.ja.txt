@@ -1,5 +1,5 @@
 # Master Looterメニューのテキスト、日本語。
-# この翻訳はAnthropicのAIであるClaudeによる機械翻訳で、まだネイティブスピーカーによる
+# この翻訳は機械翻訳で、まだネイティブスピーカーによる
 # 確認を受けていません。修正はGitHub（github.com/shin2344234/master-looter）または
 # Nexusのページで歓迎します。
 #

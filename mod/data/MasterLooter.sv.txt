@@ -1,8 +1,7 @@
-# Master Looter-menyns text på svenska.
-# Maskinöversatt av Claude, en AI från Anthropic. Ingen som talar
-# svenska som modersmål har granskat den här filen än. Rättelser tas
-# gärna emot på GitHub (github.com/shin2344234/master-looter) eller på
-# moddens Nexus-sida.
+# Master Looter-menyns text på svenska. Maskinöversatt. Ingen som talar
+# svenska som modersmål har granskat den här filen än. Rättelser tas gärna
+# emot på GitHub (github.com/shin2344234/master-looter) eller på moddens
+# Nexus-sida.
 #
 # En rad per text: originalet på engelska, ett tabbtecken, sedan
 # översättningen. Rader som börjar med # ignoreras. \n betyder ett

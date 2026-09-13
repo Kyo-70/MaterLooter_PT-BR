@@ -1,8 +1,7 @@
-# Master Looter menü metni - Türkçe.
-# Bu, Anthropic'in yapay zekası Claude tarafından yapılan bir makine
-# çevirisidir; henüz bir anadil konuşucusu tarafından gözden geçirilmedi.
-# Düzeltmeler GitHub'da (github.com/shin2344234/master-looter) veya
-# Nexus sayfasında memnuniyetle karşılanır.
+# Master Looter menü metni - Türkçe. Bu bir makine çevirisidir; henüz bir
+# anadil konuşucusu tarafından gözden geçirilmedi. Düzeltmeler GitHub'da
+# (github.com/shin2344234/master-looter) veya Nexus sayfasında memnuniyetle
+# karşılanır.
 #
 # Satır başına bir metin: önce İngilizcesi, bir sekme, sonra çevirisi.
 # # ile başlayan satırlar yok sayılır. \n bir satır sonu anlamına gelir,

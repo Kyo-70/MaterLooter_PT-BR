@@ -1,8 +1,7 @@
-# Văn bản menu của Master Looter bằng tiếng Việt.
-# Đây là bản dịch máy do Claude, một AI của Anthropic, thực hiện; chưa có
+# Văn bản menu của Master Looter bằng tiếng Việt. Đây là bản dịch máy; chưa có
 # người nói tiếng Việt bản ngữ nào kiểm tra lại bản dịch này. Góp ý sửa lỗi
-# xin gửi trên GitHub (github.com/shin2344234/master-looter) hoặc trên
-# trang Nexus của mod.
+# xin gửi trên GitHub (github.com/shin2344234/master-looter) hoặc trên trang
+# Nexus của mod.
 #
 # Mỗi dòng gồm một chuỗi: bản gốc tiếng Anh, một dấu tab, rồi đến bản dịch.
 # Dòng bắt đầu bằng # bị bỏ qua. \n là một dấu xuống dòng. Một dòng không có

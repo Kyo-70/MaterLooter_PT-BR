@@ -1,5 +1,4 @@
-# Master Looterin valikkoteksti suomeksi.
-# Käännös: Claude, Anthropicin tekoäly. Tämä on konekäännös, jota kukaan
+# Master Looterin valikkoteksti suomeksi. Tämä on konekäännös, jota kukaan
 # äidinkielinen puhuja ei ole vielä tarkistanut. Korjaukset ovat tervetulleita
 # GitHubissa (github.com/shin2344234/master-looter) tai modin Nexus-sivulla.
 #

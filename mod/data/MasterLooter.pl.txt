@@ -1,7 +1,7 @@
 # Tekst menu Master Looter po polsku (pl).
 #
-# To jest tłumaczenie maszynowe wykonane przez Claude, sztuczną inteligencję
-# firmy Anthropic. Nikt jeszcze nie sprawdził go pod kątem poprawności
+# To jest tłumaczenie maszynowe. Nikt jeszcze nie sprawdził go pod
+# kątem poprawności
 # językowej jako native speaker. Poprawki są mile widziane na GitHubie
 # (github.com/shin2344234/master-looter) albo na stronie moda na Nexusie.
 #

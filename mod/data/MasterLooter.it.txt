@@ -1,7 +1,7 @@
 # Testo del menu di Master Looter in italiano.
 #
-# Questa è una traduzione automatica prodotta da Claude, un'IA di
-# Anthropic: nessun madrelingua l'ha ancora rivista. Le correzioni sono
+# Questa è una traduzione automatica: nessun madrelingua l'ha ancora
+# rivista. Le correzioni sono
 # benvenute su GitHub (github.com/shin2344234/master-looter) o sulla
 # pagina Nexus del mod.
 #

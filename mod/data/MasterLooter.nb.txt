@@ -1,8 +1,7 @@
-# Master Looter-menyteksten på norsk bokmål (nb).
-# Dette er en maskinoversettelse laget av Claude, en KI fra Anthropic.
-# Ingen som har norsk som morsmål har korrekturlest den ennå. Rettelser
-# mottas gjerne på GitHub (github.com/shin2344234/master-looter) eller
-# på moddens Nexus-side.
+# Master Looter-menyteksten på norsk bokmål (nb). Dette er en
+# maskinoversettelse. Ingen som har norsk som morsmål har korrekturlest den
+# ennå. Rettelser mottas gjerne på GitHub
+# (github.com/shin2344234/master-looter) eller på moddens Nexus-side.
 #
 # Én linje per tekst: originalen på engelsk, en tabulator, så
 # oversettelsen. \n er et linjeskift: behold samme antall som i

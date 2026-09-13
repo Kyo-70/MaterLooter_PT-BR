@@ -1,7 +1,7 @@
-# Texto do menu do Master Looter em português europeu (pt-PT).
-# Tradução automática feita pela Claude, uma IA da Anthropic; ainda não foi
-# revista por um falante nativo. Correções são bem-vindas no GitHub
-# (github.com/shin2344234/master-looter) ou na página do mod no Nexus.
+# Texto do menu do Master Looter em português europeu (pt-PT). Tradução
+# automática; ainda não foi revista por um falante nativo. Correções são
+# bem-vindas no GitHub (github.com/shin2344234/master-looter) ou na página do
+# mod no Nexus.
 #
 # Uma linha por texto: o original em inglês, uma tabulação e a tradução.
 # Linhas iniciadas por # são ignoradas. \n representa uma quebra de linha, e

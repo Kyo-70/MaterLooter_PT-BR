@@ -1,8 +1,6 @@
-# Text menu Master Looter v češtině.
-# Toto je strojový překlad vytvořený Claude, umělou inteligencí od
-# Anthropicu, a zatím ho nezkontroloval žádný rodilý mluvčí. Opravy jsou
-# vítány na GitHubu (github.com/shin2344234/master-looter) nebo na
-# stránce modu na Nexusu.
+# Text menu Master Looter v češtině. Toto je strojový překlad a zatím ho
+# nezkontroloval žádný rodilý mluvčí. Opravy jsou vítány na GitHubu
+# (github.com/shin2344234/master-looter) nebo na stránce modu na Nexusu.
 #
 # Jeden řádek na text: anglický originál, tabulátor a pak překlad.
 # Řádky začínající # se ignorují. \n znamená zalomení řádku, a řádek bez

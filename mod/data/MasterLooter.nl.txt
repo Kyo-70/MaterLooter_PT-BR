@@ -1,6 +1,5 @@
-# Master Looter-menutekst in het Nederlands (nl).
-# Machinevertaling door Claude, een AI van Anthropic. Nog niet gecontroleerd
-# door een moedertaalspreker. Correcties zijn welkom op GitHub
+# Master Looter-menutekst in het Nederlands (nl). Machinevertaling. Nog niet
+# gecontroleerd door een moedertaalspreker. Correcties zijn welkom op GitHub
 # (github.com/shin2344234/master-looter) of op de Nexus-pagina van de mod.
 #
 # Een tekst per regel: het Engelse origineel, een tab, dan de vertaling.

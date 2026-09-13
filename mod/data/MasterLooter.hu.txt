@@ -1,7 +1,5 @@
-# A Master Looter menü szövege magyarul.
-# Ez egy gépi fordítás, amelyet Claude, az Anthropic mesterséges
-# intelligenciája készített, és eddig még nem nézte át anyanyelvi
-# beszélő. A javításokat szívesen fogadjuk a GitHubon
+# A Master Looter menü szövege magyarul. Ez egy gépi fordítás, és eddig még
+# nem nézte át anyanyelvi beszélő. A javításokat szívesen fogadjuk a GitHubon
 # (github.com/shin2344234/master-looter) vagy a mod Nexus oldalán.
 #
 # Soronként egy szöveg: az angol eredeti, egy tabulátor, majd a

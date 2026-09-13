@@ -1,5 +1,4 @@
-# Texte du menu de Master Looter en français.
-# Traduction automatique produite par Claude, une IA d'Anthropic. Aucun
+# Texte du menu de Master Looter en français. Traduction automatique. Aucun
 # locuteur natif ne l'a encore relue. Les corrections sont bienvenues sur
 # GitHub (github.com/shin2344234/master-looter) ou sur la page Nexus du mod.
 #

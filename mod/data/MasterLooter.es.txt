@@ -1,6 +1,5 @@
-# Texto del menú de Master Looter en español de España (es).
-# Traducción automática hecha por Claude, una IA de Anthropic. Todavía no
-# la ha revisado ningún hablante nativo.
+# Texto del menú de Master Looter en español de España (es). Traducción
+# automática. Todavía no la ha revisado ningún hablante nativo.
 #
 # Las correcciones son bienvenidas en GitHub
 # (github.com/shin2344234/master-looter) o en la página del mod en Nexus.

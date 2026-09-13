@@ -1,8 +1,7 @@
-# Textul meniului Master Looter in limba romana (ro).
-# Traducere automata realizata de Claude, un model de inteligenta artificiala
-# de la Anthropic; niciun vorbitor nativ nu a verificat-o inca. Corecturile
-# sunt binevenite pe GitHub (github.com/shin2344234/master-looter) sau pe
-# pagina de Nexus a modului.
+# Textul meniului Master Looter in limba romana (ro). Traducere automata;
+# niciun vorbitor nativ nu a verificat-o inca. Corecturile sunt binevenite pe
+# GitHub (github.com/shin2344234/master-looter) sau pe pagina de Nexus a
+# modului.
 #
 # O linie per text: originalul in engleza, o tabulare, apoi traducerea.
 # Liniile care incep cu # sunt ignorate. \n reprezinta o schimbare de linie.

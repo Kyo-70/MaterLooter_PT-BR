@@ -1,5 +1,5 @@
 # Master Looter 메뉴 텍스트, 한국어.
-# 이 번역은 Anthropic의 AI인 Claude가 기계적으로 생성한 것으로,
+# 이 번역은 기계 번역이며,
 # 아직 원어민의 검수를 거치지 않았습니다. 수정 제안은 GitHub
 # (github.com/shin2344234/master-looter)나 Nexus 모드 페이지에서 환영합니다.
 #

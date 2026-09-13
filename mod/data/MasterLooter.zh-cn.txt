@@ -1,7 +1,7 @@
 # Master Looter menu text, Simplified Chinese (简体中文).
 # Translated by dofo7777.
 #
-# dofo7777 翻译完成后新增的行是由 Claude（Anthropic 出品的 AI）机器翻译而成，
+# dofo7777 翻译完成后新增的行是机器翻译而成，
 # 尚未经过母语者校对。欢迎通过 GitHub（github.com/shin2344234/master-looter）
 # 或 Nexus 页面提出更正。
 #
