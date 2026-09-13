@@ -63,11 +63,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.15:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.16:
 
-    ce858be735749082d2904bd8553e66153ea5cf33fc015cd6117bbcb70eea3287  MasterLooter-1.6.15-DMM.zip
-    dd0f77eeada948c7d2255b438cd8c52d2b463550d5e10236b50e0cb8c88968af  MasterLooter-1.6.15.zip
-    e6bc8f79d896f682e3aa392f33231ee9946eca9ff77dc006153212b20d3f14f8  MasterLooter.asi
+    1270218be8c9a16b6c5d53e7fc0f7224cc4b3e95690534190523196bfe5a4428  MasterLooter-1.6.16-DMM.zip
+    50a129d88f8add8c1b8c05366a397191dd6ed91972ac2aa0cf4eb37e30720deb  MasterLooter-1.6.16.zip
+    2677a31634dca0c15e4f90fd4cfe4b665218a5be231c3de20f8395fb7ed9e00e  MasterLooter.asi
 
 ## Controls
 
@@ -78,7 +78,7 @@ If Defender or your browser quarantines the download, restore it and exclude the
 
 All four keys are rebindable in the menu under General, and they also sit in `MasterLooter.ini` beside the plugin as `MenuKey`, `KeyToggle`, `KeyBurst` and `KeyWatch`, written as virtual-key codes. Edit the file and save it and the change is picked up about a second later without a restart, which is the quickest way to clear a clash with another ASI mod. Each of the four also takes a controller shortcut of two buttons at once rather than one, since every single button already does something in this game.
 
-If the menu opens but will not take a click, the cursor is the usual cause and not the menu. In borderless windowed mode the Windows pointer and the game's own pointer drift apart, so clicks land somewhere other than where you are pointing. Move the pointer to the top left corner once and the two snap back together. Thanks to LuxDragon for working that one out.
+The menu keeps a pointer of its own rather than borrowing the game's, so clicks land where you point in fullscreen and in borderless windowed mode alike. On builds before 1.6.16 the two could come apart, and dragging the pointer into the top left corner was the way to put them back. Thanks to LuxDragon for finding that workaround and to Sov for the log that explained it.
 
 ## How it decides
 
