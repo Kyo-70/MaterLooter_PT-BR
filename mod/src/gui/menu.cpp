@@ -1341,6 +1341,34 @@ namespace ml::gui
         ImGui::PopStyleVar(2);
     }
 
+    // The menu's cursor is virtual, and the moment ImGui is handed it decides
+    // whether it is used at all. The Win32 backend polls GetCursorPos inside
+    // its own NewFrame and queues a position every frame, and ImGui applies
+    // queued positions in order, so the last one queued before the frame is
+    // built is the one it keeps.
+    //
+    // This ran from Render until 13 September 2026, which is after
+    // ImGui::NewFrame, so the virtual position sat in the queue until the
+    // following frame and the backend's poll overwrote it every time. It read
+    // as correct anyway, because the GetCursorPos detour makes that poll
+    // return the virtual position as well. Where another mod owns
+    // GetCursorPos the detour does not land, the poll comes back with the real
+    // cursor, and the game clips the real cursor to a single pixel, so the
+    // menu's pointer sits on that pixel and will not move. Sov's log of that
+    // day: ImGui at 1118,684 with the virtual cursor at 1031,566 and the OS
+    // cursor clipped to 1118,684..1118,684.
+    void FeedInput()
+    {
+        State& st = State::Get();
+        ImGuiIO& io = ImGui::GetIO();
+        const bool capt = st.Captures();
+        io.MouseDrawCursor = capt;
+        static bool s_wasCapt = false;
+        if (capt != s_wasCapt) { s_wasCapt = capt; if (capt) input::MenuOpened(); else input::MenuClosed(); }
+        if (capt) input::FeedMouse(io);
+        else { io.AddMousePosEvent(-FLT_MAX, -FLT_MAX); io.AddFocusEvent(capt); } // nothing hovers or reacts while watching
+    }
+
     void Render()
     {
         State& st = State::Get();
@@ -1368,12 +1396,6 @@ namespace ml::gui
 
         ImGuiIO& io = ImGui::GetIO();
         const bool capt = st.Captures();
-        io.MouseDrawCursor = capt;
-        st.renderTid = GetCurrentThreadId();
-        static bool s_wasCapt = false;
-        if (capt != s_wasCapt) { s_wasCapt = capt; if (capt) input::MenuOpened(); else input::MenuClosed(); }
-        if (capt) input::FeedMouse(io);
-        else { io.AddMousePosEvent(-FLT_MAX, -FLT_MAX); io.AddFocusEvent(capt); } // nothing hovers or reacts while watching
 
         if (c.showHud || st.noticeImportant) DrawNotice();
         if (!st.menuOpen) { st.textCapture = false; if (st.rebindCapture) { st.rebindCapture = false; g_rebindTarget = -1; } return; }

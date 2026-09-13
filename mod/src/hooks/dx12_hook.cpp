@@ -812,8 +812,13 @@ namespace ml::hooks
             gui::RebuildFonts();
         }
 
+        // Before the backends, so the GetCursorPos detour knows which thread is
+        // drawing when the Win32 backend polls the cursor a line below.
+        State::Get().renderTid = GetCurrentThreadId();
+
         ImGui_ImplDX12_NewFrame();
         ImGui_ImplWin32_NewFrame();
+        gui::FeedInput();   // after the backend's own cursor poll, before the frame is built
         ImGui::NewFrame();
 
         gui::Render();
