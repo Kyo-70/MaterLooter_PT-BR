@@ -945,10 +945,13 @@ namespace ml::loot::hooks
         return h.tag;
     }
 
-    static uint64_t CallOracle(uintptr_t me, uintptr_t target, bool* boom)
+    // The context is passed in rather than read from the global. It used to read
+    // g_ownCtx here, which meant the pointer could be rewritten by another thread
+    // between the caller deciding it was good and this call using it.
+    static uint64_t CallOracle(uintptr_t ctx, uintptr_t me, uintptr_t target, bool* boom)
     {
         *boom = false;
-        __try { return oOwn(g_ownCtx, reinterpret_cast<void*>(me), reinterpret_cast<void*>(target), g_ownTag, 7, 0); }
+        __try { return oOwn(reinterpret_cast<void*>(ctx), reinterpret_cast<void*>(me), reinterpret_cast<void*>(target), g_ownTag, 7, 0); }
         __except (EXCEPTION_EXECUTE_HANDLER) { *boom = true; return 0; }
     }
 
@@ -968,6 +971,17 @@ namespace ml::loot::hooks
         LOG_ERR("%s", msg);
     }
 
+    // The two dereferences off the player that reach its ownership context. The
+    // chain is the one the game itself walks, confirmed against the argument the
+    // game passes to its own check. Cheap enough to redo per call, which is the
+    // point: what lives at the end of it is replaced when the world changes.
+    static uintptr_t DeriveOwnerCtx(uintptr_t me)
+    {
+        if (!me) return 0;
+        const uintptr_t holder = mem::Deref(me, ml::sig::kOff_Own_CtxHolder);
+        return holder ? mem::Deref(holder, ml::sig::kOff_Own_CtxField) : 0;
+    }
+
     static bool ArmFromPlayer(uintptr_t me)
     {
         if (g_ownCtx && g_ownTag) return true;
@@ -985,8 +999,7 @@ namespace ml::loot::hooks
         if (!s_looked) { s_looked = true; s_tag = FindOwnTag(ownFn); }
         if (!s_tag) { OnceErr(s_noTag, "[owner] no ownership tag, so the mod has to wait for the game to ask."); return false; }
 
-        const uintptr_t holder = mem::Deref(me, ml::sig::kOff_Own_CtxHolder);
-        const uintptr_t ctx = holder ? mem::Deref(holder, ml::sig::kOff_Own_CtxField) : 0;
+        const uintptr_t ctx = DeriveOwnerCtx(me);
         if (!ctx) { OnceErr(s_noCtx, "[owner] the player carries no ownership context yet; arming will retry as the world finishes loading."); return false; }
 
         g_ownCtx = reinterpret_cast<void*>(ctx);
@@ -1008,11 +1021,78 @@ namespace ml::loot::hooks
 
     int WouldSteal(uintptr_t me, uintptr_t target)
     {
-        if (!oOwn || !me || !target) return -1;
+        // Five paths return -1 from here, and the player is shown one sentence
+        // for all of them: "waiting for the game to check ownership once". Until
+        // 2026-09-13 only the arming path wrote anything down, so a log could not
+        // tell a mod that is about to start working from one that never will.
+        // drscott11's report on 1.6.16 is what these lines are for. The arming
+        // path still says its piece through ArmFromPlayer's own OnceErr calls,
+        // so all four are accounted for.
+        static bool s_noHook = false, s_noArgs = false, s_noCtxNow = false;
+        if (!oOwn)
+        {
+            OnceErr(s_noHook, "[owner] the ownership check is not hooked, so the mod cannot ask whether anything belongs to someone. "
+                              "Bodies, dropped items and nodes all stay where they are. Switch on Take goods that belong to someone to loot without asking.");
+            return -1;
+        }
+        if (!me || !target)
+        {
+            OnceErr(s_noArgs, "[owner] asked about ownership before there was a player to ask on behalf of, or about nothing at all.");
+            return -1;
+        }
         if (!OwnerCaptured() && !ArmFromPlayer(me)) return -1;
+        // Work the context out here, on the thread about to make the call, and
+        // prefer that to the pointer the game last published. The context hangs
+        // off the actor and the world replaces it, so a captured one outlives
+        // what it points at: after a teleport the mod could hand the game a
+        // freed object, and the __try below turns that into a silent -1 for the
+        // rest of the session, which is what a report of everything reading
+        // "waiting for the game to check ownership once" looks like.
+        //
+        // Refreshing the global on a timer was tried first and was wrong twice
+        // over: a derivation that comes back null is exactly when the old
+        // pointer is most likely dead, so keeping it there preserved the fault,
+        // and writing the global from the scan thread raced hkOwn on the game
+        // thread. ArmContextNow in engine.cpp answers the same question the same
+        // way for the arm context: remember what the pointer is, never keep the
+        // pointer.
+        //
+        // The fallback is not belt and braces, it is the normal path for half
+        // the roster. The chain only resolves off a player-tagged actor: every
+        // "context chain check" line on record that reads "different" derived
+        // null and had a non-player subject, and as Damiane or Oongka the scan
+        // centre is the B0 played body rather than the A0 identity. Refusing on
+        // a null derivation would have stopped those two looting anything but
+        // catchables. So a null here falls through to what the game published,
+        // which is exactly what every build before this one used.
+        uintptr_t ctx = DeriveOwnerCtx(me);
+        if (!ctx)
+        {
+            static bool s_usedPublished = false;
+            ctx = reinterpret_cast<uintptr_t>(g_ownCtx);
+            if (ctx) OnceErr(s_usedPublished, "[owner] this actor does not carry an ownership context, so the mod is asking with the one the game last used. Normal as Damiane or Oongka, where the body being played is not the player-tagged actor.");
+        }
+        if (!ctx)
+        {
+            OnceErr(s_noCtxNow, "[owner] there is no ownership context to ask with, from the actor or from the game, so nothing will be asked about ownership until one appears.");
+            return -1;
+        }
         bool boom = false;
-        const uint64_t r = CallOracle(me, target, &boom);
-        if (boom) return -1;
+        const uint64_t r = CallOracle(ctx, me, target, &boom);
+        if (boom)
+        {
+            // Per target rather than per session, and WouldStealCached refuses to
+            // remember a -1, so one target that faults is asked again on every
+            // scan for as long as it stays in range. Name the first few and then
+            // count the rest, or a single bad body fills the file.
+            static int s_boom = 0;
+            uint32_t beid = 0; mem::Read32(target + 0x60, &beid);
+            if (++s_boom <= 10)
+                LOG_ERR("[owner] the game's own ownership check faulted on target %08X, so the mod cannot say whether taking it would be theft (%d so far).", beid, s_boom);
+            else if (s_boom == 11)
+                LOG_ERR("[owner] the ownership check has faulted 11 times now; the rest will not be logged.");
+            return -1;
+        }
         static int s_logged = 0;
         if (s_logged < 40)
         {
