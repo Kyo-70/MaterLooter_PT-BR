@@ -32,6 +32,7 @@
 1 match%s	1 個相符%s
 3 of 3	3/3
 \"%s\" already exists. Saving over it asks first.	\"%s\" 已存在。覆蓋儲存前會先進行確認。
+A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	寵物想撿什麼就撿什麼，而遊戲本身沒有任何開關能管這件事。開啟後，寵物、傭兵或同伴撿起的東西，只要你的物品規則、標籤、類別或價值下限本會拒絕，就會在進入背包的那一刻被刪除，並由提示告訴你消失了什麼。任務物品與受保護的物品永遠不會被刪除，已經在你包裡的東西也不會被動到。\n\n開啟前值得知道的一點：同伴從地上撿起散落物品時，遊戲會當成是你自己撿的來回報，兩者無從分辨。所以只要有同伴在外面活動，你親手撿起而你自己的規則又拒絕的東西，也會連同牠撿的一起被刪除。身邊沒有同伴時，你撿的任何東西都不會被動到。如果你寧可全部留著自己整理，就讓這項保持關閉。
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	水桶等物品從不自動拾取，但對其預載能讓遊戲顯示互動提示，以便手動使用。
 Abyss and Kuku	阿比斯與嘟嘟鸟
 Abyss gear, Kuku pots and their parts.	阿比斯的齿轮、嘟嘟鸟铁锅及其物品。
@@ -57,12 +58,12 @@ Breaking drives the game's own state machine at the vein, the swing landing and 
 Butterflies, beetles, dragonflies, bees, spiders, scorpions, snails and the other small things the game files as insects. Species come from the creature table; a creature the table cannot name is only caught when every category it could belong to is on (a flyer could be a fish, an insect or a bird).	蝴蝶、甲蟲、蜻蜓、蜜蜂、蜘蛛、蠍子、蝸牛，以及遊戲歸類為昆蟲的其他小型生物。物種名稱來自生物資料表；若資料表無法為某生物命名，只有在牠可能屬於的每個類別都已開啟時才會被捕捉（例如會飛的生物可能是魚、昆蟲或鳥類）。
 captured	已攔截
 Carcasses	生物遺骸
+Carcasses and bodies	生物遺骸與屍體
 Bodies	屍體
 carcasses off	遺骸已關閉
 bodies off	屍體關閉
 Catching	捕捉
 Caught creatures, live or lying around; a creature the table can name follows its class rule. Crabs, shrimp and squid are seafood under Food and drink.	已捕獲的生物，無論是活的還是倒在地上的；資料表能命名的生物依其類別規則處理。螃蟹、蝦與魷魚屬於「食物與飲品」底下的海鮮。
-Chests, crates and drop-set nodes. They rarely respond to the loot event. Off by default.	箱子、木箱與掉落組資源點。它們很少對拾取事件有反應。預設為關閉。
 Class	類別
 class %s	類別 %s
 Classes	類別
@@ -72,6 +73,7 @@ Clears what this session worked out from your bag. Nodes named by the prefab tab
 Close	關閉
 container (off)	容器 (已關閉)
 Containers	容器
+containers off	容器已關閉
 Controller	控制器
 Copper	銅幣
 Copy	複製
@@ -99,6 +101,7 @@ entity %08X	實體 %08X
 entity %08X, %d items across every store	實體 %08X，所有儲存空間中共有 %d 件物品
 entity %08X, bag %d of %d slots, %d items across every store	實體 %08X，背包 %d/%d 格，所有儲存空間中共有 %d 件物品
 Event descriptors	事件描述符
+Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	所有石頭：地上的礦石與石塊、礦脈、巨石、碎石堆以及採石場的石料。礦脈會在原地被打碎，內容物從地上撿起，這正是你的鎬子所做的事，也是值得帶一把更好的鎬子的理由：工具的採礦產出加成作用於掉落物，而不是資源點。每條礦脈只敲一次，之後就放著不管，直到遊戲把它恢復。對礦脈的伸手從掃描所能看到的最遠處就開始，因為灌木只要一瞬就能回應，礦脈卻要數秒。\n\n石頭曾經有過自己的開關，而這種劃分從未站得住腳：遊戲把大部分採石場石料歸在採礦之下，所以把石頭關掉，它照樣會進來。想留下礦石、把石頭丟在原地，請在類別頁籤中拒絕 stone 類別。這涵蓋石頭、優質石頭、無瑕石頭與鐘乳石，凡是遊戲說不含其他東西的岩石便會留在原處，礦洞岩石與鐘乳石也在其中。同時含有礦石或寶石的礦脈仍會被打碎，因為拒絕石頭並不等於拒絕它旁邊的東西。若遊戲對某個資源點完全沒有描述，則需要礦石、寶石與石頭全部被拒絕，才會略過那一個。
 Extra ore per vein	每條礦脈額外礦石
 failed	失敗
 fast-travel artifact	封印的阿比斯神器
@@ -123,7 +126,7 @@ Gathering	採集
 General	一般
 Ground items	地面物品
 Groups	群組
-Herb, flower and mushroom nodes, and the same lying on the ground. Food crops have their own switch.	藥草、花朵與蕈菇類資源點，以及散落在地上的同類物品。食用農作物有自己獨立的開關。
+Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class on the Classes tab: herb and seed are separate there. That sorts what is lying on the ground item by item, and it reaches the node as well wherever the game says what the node holds: refuse herb and a herb patch is left alone. Plant nodes are a mixed lot, paying grain and crafting materials too, and for the ones the game does not describe this switch is the only control.	草藥、花朵與蘑菇的資源點，以及散落在地上的同類，種子也包含在內。糧食作物有自己的開關。想留下草藥而把種子丟在原地，或者反過來，請在類別頁籤中拒絕相應類別：herb 與 seed 在那裡是分開的。這會把地上的東西逐件分揀，而且只要遊戲說明了資源點的內容，也能一併管到資源點：拒絕 herb，一叢草藥就會被原樣留下。植物資源點成分駁雜，也會產出穀物與製作材料，而對於遊戲沒有描述的那些，這個開關是唯一的控制手段。
 hold two buttons (Escape cancels)	同時按住兩個按鍵（按 Escape 取消）
 Household clutter and collectibles, most of it worthless.	居家雜物與收藏品，大多數不值錢。
 How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.	背包容量直接讀取自背包本身，因此無論是否正在拾取，一旦裝滿便會立即顯示提示。如果該數值出現異常，模組會退回監測拾取後的狀態：連續三次拾取未獲得任何物品將觸發滿包提示，成功獲得一件物品則清除提示。
@@ -139,7 +142,7 @@ Items	物品
 Items lying in the world, including drops from enemies.	散落在世界中的物品，包括敵人掉落的物品。
 Items no shop will buy, across every class.	所有類別中沒有任何商店願意收購的物品。
 Items on the ground	地面上的物品
-Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. This reads the item's own tags, so it covers anything picked up, gathered or broken open. Skinning a carcass is outside it: that yield arrives without the mod ever seeing what it is.	帶有「任務」標籤的物品會被略過，因此解謎與劇情拾取物不會被自動拿走。這項設定讀取的是物品本身的標籤，因此涵蓋任何被拾取、採集或打開取得的物品。剝皮取得的產物則不在此列：那些產物送達時，模組根本看不到它們是什麼。
+Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.	帶有任務標籤的物品會被原樣留下，這樣解謎與劇情物品就不會被自動取走。它讀取物品自身的標籤，因此涵蓋你撿起的一切，以及模組能叫出內容物名稱的每一個資源點。有兩樣不在其列。它叫不出名字的資源點由其種類的開關決定，因為那裡沒有可供讀取標籤的物品。另外，剝取生物遺骸的產出會直接入帳，模組根本看不到來的是什麼。
 Items with an unknown value are never filtered by it.	價值未知的物品絕不會依價值進行篩選。
 Keep the menu on screen while you play. %s brings it back, %s closes it.	遊玩時保持選單顯示。按 %s 重新呼叫，按 %s 關閉。
 Keys	按鍵
@@ -200,8 +203,7 @@ One click per family. The table below still sets single classes; a group shows a
 Open and close this menu	開啟與關閉此選單
 Open folder	開啟資料夾
 Opens the folder in Explorer. The log is rewritten every launch and is what to attach to a report.	在檔案總管中開啟該資料夾。記錄檔每次啟動時都會重新寫入，回報問題時請檢附此檔案。
-Ore	礦石
-Ore chunks on the ground and any node that yields ore, veins included. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.	地上的礦石碎塊，以及任何會產出礦石的資源點，包含礦脈。礦脈會在原地被打破，其內容物會被從地上拾取，這正是你的鎬子所做的事，也是更好的鎬子值得攜帶的原因：工具的「採礦收穫加成」是套用在掉落物上，而非資源點本身。每條礦脈只會被打一次，之後便維持原狀，直到遊戲讓它重新出現。對礦脈的預載，從掃描能看到的最遠距離就會開始，因為它們需要數秒才會回應，而灌木叢只需要一瞬間。
+Ore and stone	礦石與石頭
 ore off	礦石已關閉
 Ore, gems, stone, timber, hides, herbs, trade goods and other crafting input.	礦石、寶石、石材、木材、皮革、藥草、貿易商品及其他製作素材。
 out of range	超出範圍
@@ -262,11 +264,11 @@ skip: %s	略過：%s
 Small animals	小型動物
 small animals off	小型動物已關閉
 Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	部分世界物品不包含可讀的物品名稱。開啟：照常拾取。關閉：保留所有未識別物品。
+someone is wearing this; taking it would copy it	有人正穿戴著這件；取走會複製它
 stack at one point (storage contents)	堆疊於單點 (儲存空間內容物)
 Status	狀態
-Stone	石材
-stone off	石材已關閉
-Stone on the ground and nodes that yield stone.	地上的石材，以及會產出石材的資源點。
+Stop pets looting	阻止寵物拾取
+Stop pets looting at all	完全阻止寵物拾取
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	桌子、椅子、床、地毯、燈具、蠟燭、畫作、盆栽等佈置房間用的物品，無論是從地上拾取還是透過其自身的互動資源點取得。大多數只值一兩枚銅幣，但地毯與高級床鋪可能高達數千，所以在佈置房屋前請先開啟此項。箱子及其他能容納物品的東西則歸「容器」管理。預設為關閉。
 Tag	標籤
 Tags	標籤
@@ -275,10 +277,11 @@ Take goods that belong to someone	拾取歸他人所有的物品
 Take goods that belong to someone, on / off	拾取歸他人所有的物品 開/關
 Take items the database cannot name	拾取資料庫中無名稱的物品
 Pets and companions follow the filters	寵物與同伴遵守過濾規則
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands. Quest and protected items are never deleted. Something you pick up by hand in the same two seconds is judged by the same rules.	寵物想撿什麼就撿什麼，遊戲沒有對應的開關。開啟後：寵物或同伴撿起的任何物品，只要你的物品規則、標籤、類別或價值下限會拒絕它，就會在進入背包的瞬間被刪除。任務物品與受保護物品永遠不會被刪除。你在同樣兩秒內親手撿起的東西也以同樣的規則判定。
 Take owned goods on / off	拾取有主物品 開/關
+take this one by hand, looting it can lock the quest	請手動拿取這一件，自動拾取可能會卡住任務
 takes effect next launch	下次啟動時生效
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	拾取引擎會掃描周圍環境，並拾取符合規則的物品。關閉表示不自動拾取；手動快捷拾取按鍵仍可正常生效。
+The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	寵物拾取之前，遊戲會問兩個問題，一個針對地上的散落物品，一個針對屍體，而這一項對兩個都回答否。寵物不會伸手去拿任何東西，所以事後不會有你的東西被刪除，你自己撿的東西也永遠不會被牽連。如果你只是不想讓寵物拾取，這是兩種做法中比較乾淨的一種。它是否管得到傭兵尚未測試。遊戲中這一類的拾取規則只有一條，而它的兩個問題都被回答為否，所以有可能管得到；寵物與同伴遵守過濾規則才是確定管得到的那個開關。
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	遊戲只有在判定你能夠觸及資源點時，才會填入其資料。「預載」機制會要求遊戲在遠距離就先做到這件事，這也正是能讓礦脈在原地被開採的原因。礦脈需要數秒才會回應，而灌木叢只需要一瞬間。
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	遊戲在移除已被拾取的物品時存在延遲。此機制可避免物品在淡出消失期間被重複提交拾取。
 The game treats this as stealing and will put a bounty on you.	遊戲會將此視為偷竊行為，並對你發布懸賞金。
@@ -286,10 +289,11 @@ The mod never swings a pickaxe. It drives the vein's own break sequence, and the
 Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	剝取你擊殺的動物的皮，每具屍骸一次。人歸在「屍體」下。剝皮所得不會依你的篩選器檢查。模組在它到手之前看不到它，所以這個開關要麼全有要麼全無。
 Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	搜刮你擊殺的人，每具屍體一次。動物歸在「屍骸」下。搜刮所得不會依你的篩選器檢查，所以這個開關同樣要麼全有要麼全無。
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	本次工作階段：已拾取 %ld 個，已採集 %ld 個，已捕獲 %ld 個，已搜刮 %ld 具遺骸
-Timber and branches on the ground and nodes that yield them.	地上的木材與樹枝，以及會產出它們的資源點。
+Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	地上的木料與樹枝，以及產出它們的資源點。其中大多數含有什麼，是直接從遊戲資料裡讀出來的，所以在類別頁籤中拒絕 wood 類別，會讓樹木留在原地，樹下的木料也一樣。若遊戲對某個資源點隻字未提，這個開關就是它唯一的控制手段。
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	若要放過特定物種，請在「物品」分頁把牠變成的物品設為「從不」，例如 Item_Tench、Item_Ricefish、Item_Iguana。模組會讀取遊戲角色資料表中該生物自身的欄位，因此在捕捉之前就已經知道自己看到的是哪個物種。少數特殊生物仍會退而求其次，改用其模型名稱來猜測，並僅依類別來捕捉。
 Treasure and keepsakes	寶物與紀念品
 Two buttons at once, never one: every single button already does something in this game. The mod only reads the pad, so the game still sees both buttons. Pick a pair that does nothing together, like the two shoulder buttons, or Back and a face button.	必須同時按下兩個按鍵，不可單鍵設定：因為本遊戲中每個單鍵皆已有對應功能。此模組僅讀取控制器輸入，遊戲仍能識別這兩個按鍵。請選擇一組同時按下時無衝突的組合鍵，例如兩個肩鍵（LB+RB），或是 Back 鍵搭配任一動作鍵。
+Two things that hold things. The chests, crates and drop-set nodes you open, which rarely answer the loot event. And anything on the ground whose job is to hold something: bottles, jars, clay pots, waterskins, vases and the storage boxes you place. Off by default, and off means a shelf of pottery is left where it stands. Reward boxes are not covered, since those are loot in their own right and belong to Treasure and keepsakes on the Classes tab.\n\nWhat comes out of a chest is not checked against your filters. The game hands the contents over in one go and the mod never sees them as objects, so for those this switch is all or nothing.	兩種裝東西的東西。一種是你會打開的箱子、板條箱與掉落組資源點，它們很少會回應拾取事件。另一種是地上那些本職就是盛裝東西的物件：瓶子、罐子、陶盆、水袋、花瓶，以及你自己擺放的儲物箱。預設關閉，關閉意味著一整架陶器會原封不動地留在那裡。獎勵箱不在此列，因為那本身就是戰利品，歸類別頁籤中的寶物與紀念品管。\n\n從箱子裡出來的東西不會拿去和你的過濾規則比對。遊戲會一次性把內容物交出來，模組從來看不到它們作為獨立物件的樣子，所以對這些東西而言，這個開關是要麼全收、要麼全不收。
 Unbound until you set it. The game calls taking owned goods stealing and puts a bounty on you for it, so this is the switch you want on for a moment and off again, which is a poor fit for a menu.	在你設定之前不會綁定任何按鍵。遊戲會把拾取有主物品視為偷竊並對你發布懸賞金，所以這是一個你會想開一下就關掉的開關，並不適合放在選單裡操作。
 Unidentified nodes	未識別資源點
 unidentified nodes off	未識別資源點已關閉
@@ -328,4 +332,7 @@ Writes MasterLooter.template.txt beside the plugin, holding every line the menu 
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	將目前的設定寫入 \"%s\"。你可以載入它，隨心修改後再儲存回去。
 Writes the settings as they are now, named %s.	將目前的設定命名為 %s 寫入。
 yes	是
+your rules refuse all ore, jewels and stone	你的規則拒絕了礦石、寶石與石頭
+your rules refuse all stone	你的規則拒絕了所有石頭
+your rules refuse everything this node holds	你的規則拒絕了這個資源點裡的一切
 yours, just out of your hand	你的物品，剛離手

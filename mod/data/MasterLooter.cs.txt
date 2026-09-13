@@ -32,6 +32,7 @@
 1 match%s	1 výsledek%s
 3 of 3	3 ze 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" už existuje. Přepsání se nejprve zeptá na potvrzení.
+A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Mazlíček sbírá, co se mu zlíbí, a hra na to nemá žádný přepínač. Zapnuto: vše, co mazlíček, žoldnéř nebo společník sebere a co by tvá pravidla předmětů, štítky, třídy nebo hranice hodnoty odmítly, se smaže z inventáře hned, jak tam dorazí, a hlášení řekne, co zmizelo. Questovní a chráněné předměty se nemažou nikdy a ničeho, co už v tašce máš, se to nedotkne.\n\nStojí za to vědět, než to zapneš: hra hlásí sebrání volného předmětu ze země společníkem tak, jako bys ho sebral ty sám, a nijak se ty dva případy nedají rozlišit. Takže dokud je někdo venku a aktivní, i něco, co sebereš rukou a co tvá vlastní pravidla odmítají, se smaže spolu s jeho nálezem. Když venku nikdo není, ničeho, co sebereš, se to nikdy nedotkne. Jestli si raději necháš všechno a roztřídíš si to sám, nech to vypnuté.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Kbelík od studny a podobné věci se nikdy nelootují, ale jejich aktivace donutí hru nabídnout interakci, takže je můžeš použít ručně.
 Abyss and Kuku	Abyss a Kuku
 Abyss gear, Kuku pots and their parts.	Vybavení Abyss, hrnce Kuku a jejich součásti.
@@ -57,12 +58,12 @@ Breaking drives the game's own state machine at the vein, the swing landing and 
 Butterflies, beetles, dragonflies, bees, spiders, scorpions, snails and the other small things the game files as insects. Species come from the creature table; a creature the table cannot name is only caught when every category it could belong to is on (a flyer could be a fish, an insect or a bird).	Motýli, brouci, vážky, včely, pavouci, štíři, šneci a další drobné tvory, které hra řadí mezi hmyz. Druhy pocházejí z tabulky tvorů; tvora, kterého tabulka nedokáže pojmenovat, mod uloví jen tehdy, když jsou zapnuté všechny kategorie, do kterých by mohl patřit (létající tvor může být ryba, hmyz nebo pták).
 captured	zachyceno
 Carcasses	Zdechliny
+Carcasses and bodies	Zdechliny a těla
 Bodies	Těla
 carcasses off	zdechliny vypnuty
 bodies off	těla vyp.
 Catching	Chytání
 Caught creatures, live or lying around; a creature the table can name follows its class rule. Crabs, shrimp and squid are seafood under Food and drink.	Ulovení tvorové, živí i ležící kolem; tvor, kterého tabulka dokáže pojmenovat, se řídí pravidlem své třídy. Krabi, krevety a olihně jsou plody moře, spadající pod Jídlo a pití.
-Chests, crates and drop-set nodes. They rarely respond to the loot event. Off by default.	Truhly, bedny a uzly typu drop-set. Na loot událost reagují jen zřídka. Ve výchozím stavu vypnuto.
 Class	Třída
 class %s	třída %s
 Classes	Třídy
@@ -72,6 +73,7 @@ Clears what this session worked out from your bag. Nodes named by the prefab tab
 Close	Zavřít
 container (off)	kontejner (vypnuto)
 Containers	Kontejnery
+containers off	kontejnery vypnuty
 Controller	Ovladač
 Copper	Měďáky
 Copy	Kopírovat
@@ -99,6 +101,7 @@ entity %08X	entity %08X
 entity %08X, %d items across every store	entity %08X, %d předmětů napříč všemi úložišti
 entity %08X, bag %d of %d slots, %d items across every store	entity %08X, batoh %d z %d slotů, %d předmětů napříč všemi úložišti
 Event descriptors	Popisovače událostí
+Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	Každý kámen: kusy rudy a kamene na zemi, žíly, balvany, hromady sutě a lomový kámen. Žíla se rozbije tam, kde stojí, a její obsah se sebere ze země, což je přesně to, co dělá tvůj krumpáč, a proč se vyplatí nosit lepší: bonus k výtěžnosti těžby z nástroje platí pro to, co vypadne, ne pro uzel. Každá žíla se udeří jednou a pak se nechá být, dokud ji hra nevrátí. Sahání po žílách začíná tak daleko, kam sken dohlédne, protože odpovídají v sekundách tam, kde keř odpoví ve zlomku.\n\nKámen míval vlastní přepínač a to rozdělení nikdy nedrželo: hra vede většinu lomového kamene pod hornictvím, takže vypnutí Kamene ho stejně nechávalo přicházet. Chceš-li si nechat rudu a kámen nechat ležet, odmítni třídu stone v záložce Třídy. To pokrývá Kámen, Jemný kámen, Bezchybný kámen a Krápník, a každá skála, o které hra říká, že neobsahuje nic jiného, pak zůstane stát, důlní skály a krápníky včetně. Žíla, která obsahuje i rudu nebo drahokam, se stále rozbíjí, protože odmítnout kámen neznamená odmítnout to, co leží vedle. Tam, kde hra uzel vůbec nepopisuje, je potřeba, aby ruda, drahokamy i kámen byly odmítnuty všechny, než se ten uzel přeskočí.
 Extra ore per vein	Extra ruda na žílu
 failed	selhalo
 fast-travel artifact	artefakt rychlého cestování
@@ -123,7 +126,7 @@ Gathering	Sbírání
 General	Obecné
 Ground items	Předměty na zemi
 Groups	Skupiny
-Herb, flower and mushroom nodes, and the same lying on the ground. Food crops have their own switch.	Uzly bylin, květin a hub, a totéž ležící na zemi. Plodiny mají vlastní přepínač.
+Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class on the Classes tab: herb and seed are separate there. That sorts what is lying on the ground item by item, and it reaches the node as well wherever the game says what the node holds: refuse herb and a herb patch is left alone. Plant nodes are a mixed lot, paying grain and crafting materials too, and for the ones the game does not describe this switch is the only control.	Uzly bylin, květin a hub a totéž ležící na zemi, semena včetně. Potravinové plodiny mají vlastní přepínač. Chceš-li si nechat byliny a semena nechat ležet, nebo naopak, odmítni třídu v záložce Třídy: herb a seed jsou tam zvlášť. To třídí kus po kuse to, co leží na zemi, a dosáhne to i na uzel všude tam, kde hra řekne, co uzel obsahuje: odmítni herb a záhon bylin zůstane nedotčený. Rostlinné uzly jsou různorodá směs a dávají i obilí a řemeslný materiál, a pro ty, které hra nepopisuje, je tento přepínač jediným ovládáním.
 hold two buttons (Escape cancels)	podrž dvě tlačítka (Escape zruší)
 Household clutter and collectibles, most of it worthless.	Domácí harampádí a sběratelské předměty, většinou bezcenné.
 How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.	Naplněnost batohu se čte přímo z něj, takže se upozornění objeví ve chvíli, kdy se zaplní, ať už zrovna lootuješ nebo ne. Pokud tahle čísla někdy přestanou dávat smysl, mod se přepne na sledování toho, co se stane po sebrání: tři po sobě jdoucí pokusy, které nikam nedorazí, upozornění vyvolají, a jeden úspěšný ho zase zruší.
@@ -139,7 +142,7 @@ Items	Předměty
 Items lying in the world, including drops from enemies.	Předměty ležící ve světě, včetně dropů od nepřátel.
 Items no shop will buy, across every class.	Předměty, které nekoupí žádný obchod, napříč všemi třídami.
 Items on the ground	Předměty ležící na zemi
-Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. This reads the item's own tags, so it covers anything picked up, gathered or broken open. Skinning a carcass is outside it: that yield arrives without the mod ever seeing what it is.	Předměty se štítkem quest zůstávají netknuté, takže hádanky a příběhové předměty se automaticky neberou. Toto čte vlastní štítky předmětu, takže to pokrývá cokoli sebraného, nasbíraného nebo rozbitého. Stahování kůže ze zdechliny je mimo tohle: jeho výnos dorazí, aniž by mod kdy viděl, co to je.
+Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.	Předměty označené jako questovní se nechávají být, aby se předměty z hádanek a z příběhu nebraly automaticky. Čte vlastní štítky předmětu, takže pokrývá vše, co sebereš, a každý uzel, jehož obsah umí mod pojmenovat. Dvě věci zůstávají mimo. O uzlu, který pojmenovat neumí, rozhoduje přepínač jeho druhu, protože tam není žádný předmět, ze kterého by se štítek dal přečíst. A stažení zdechliny vyplatí, aniž by mod kdy viděl, co přišlo.
 Items with an unknown value are never filtered by it.	Předměty s neznámou hodnotou tímto nikdy nejsou filtrovány.
 Keep the menu on screen while you play. %s brings it back, %s closes it.	Nech menu na obrazovce, zatímco hraješ. %s ho vrátí zpět, %s ho zavře.
 Keys	Klávesy
@@ -200,8 +203,7 @@ One click per family. The table below still sets single classes; a group shows a
 Open and close this menu	Otevřít a zavřít toto menu
 Open folder	Otevřít složku
 Opens the folder in Explorer. The log is rewritten every launch and is what to attach to a report.	Otevře složku v Průzkumníkovi. Log se přepisuje při každém spuštění a je to to, co přiložit k hlášení.
-Ore	Ruda
-Ore chunks on the ground and any node that yields ore, veins included. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.	Kusy rudy na zemi a jakýkoli uzel, který rudu vydává, žíly nevyjímaje. Žíla se rozbije tam, kde stojí, a její obsah se sebere z podlahy, což dělá i tvůj krumpáč, a proto se vyplatí nosit lepší krumpáč: bonus nástroje Mining Yield Up se uplatní na to, co vypadne, ne na uzel. Každá žíla je udeřena jednou a pak ponechána, dokud ji hra znovu nepřinese zpět. Aktivace žil začíná už na hranici dohledu skenu, protože jim odpověď trvá vteřiny, zatímco keři zlomek vteřiny.
+Ore and stone	Ruda a kámen
 ore off	ruda vypnuta
 Ore, gems, stone, timber, hides, herbs, trade goods and other crafting input.	Ruda, drahokamy, kámen, dřevo, kůže, byliny, obchodní zboží a další suroviny pro řemeslo.
 out of range	mimo dosah
@@ -262,11 +264,11 @@ skip: %s	přeskočit: %s
 Small animals	Malá zvířata
 small animals off	malá zvířata vypnuta
 Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Některé objekty ve světě nenesou čitelný název předmětu. Zapnuto: vzít je i tak. Vypnuto: nechat vše neidentifikované být.
+someone is wearing this; taking it would copy it	někdo to má na sobě; vzít to by to zkopírovalo
 stack at one point (storage contents)	hromada na jednom místě (obsah úložiště)
 Status	Stav
-Stone	Kámen
-stone off	kámen vypnut
-Stone on the ground and nodes that yield stone.	Kámen na zemi a uzly, které kámen vydávají.
+Stop pets looting	Zabránit mazlíčkům ve sbírání
+Stop pets looting at all	Zabránit mazlíčkům ve sbírání úplně
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Stoly, židle, postele, koberce, lampy, svíčky, obrazy, hrnce a zbytek zařízené místnosti, ať už to seberes z podlahy nebo to vezmeš z vlastního interakčního uzlu. Většina toho má hodnotu měďák nebo dva, ale koberce a luxusní postele se šplhají do tisíců, takže tohle zapni, než si zařídíš dům. Truhly a další věci, které něco obsahují, spadají místo toho pod Kontejnery. Ve výchozím stavu vypnuto.
 Tag	Štítek
 Tags	Štítky
@@ -275,10 +277,11 @@ Take goods that belong to someone	Brát věci, které někomu patří
 Take goods that belong to someone, on / off	Brát věci, které někomu patří, zapnuto / vypnuto
 Take items the database cannot name	Brát předměty, které databáze nedokáže pojmenovat
 Pets and companions follow the filters	Mazlíčci a společníci se řídí filtry
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands. Quest and protected items are never deleted. Something you pick up by hand in the same two seconds is judged by the same rules.	Mazlíček sbírá, co se mu zlíbí, a hra na to nemá žádný přepínač. Zapnuto: cokoli, co mazlíček nebo společník sebere a co by vaše pravidla pro předměty, štítky, třídy nebo cenový práh odmítla, se smaže z inventáře ve chvíli, kdy tam dorazí. Questové a chráněné předměty se nikdy nemažou. Co seberete ručně ve stejných dvou sekundách, posuzují stejná pravidla.
 Take owned goods on / off	Brát vlastněné věci zapnuto / vypnuto
+take this one by hand, looting it can lock the quest	vezmi tenhle rukou, sebrání může zablokovat quest
 takes effect next launch	projeví se až při dalším spuštění
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Engine skenuje okolí a bere, co pravidla dovolí. Vypnuto znamená, že se nic nebere automaticky; klávesa pro jednorázové sebrání pořád funguje.
+The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Hra položí dvě otázky, než mazlíček něco sebere, jednu na volný předmět na zemi a jednu na tělo, a tohle odpoví ne na obě. Mazlíček po ničem nesáhne, takže se ti potom nikdy nic nesmaže a tvé vlastní nálezy nejsou nikdy ve hře. Čistší z těch dvou odpovědí, pokud prostě nechceš, aby mazlíček sbíral. Jestli to dosáhne na žoldnéře, vyzkoušené nebylo. Hra nese jedno pravidlo sbírání tohoto druhu a na obě jeho otázky se odpovídá ne, takže možná ano; Mazlíčci a společníci se řídí filtry je ten přepínač, který to dělá jistě.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Hra naplní data uzlu jen tehdy, když si myslí, že na něj dosáhneš. Aktivace ji požádá, aby to udělala na dálku, a totéž umožňuje vytěžit rudnou žílu tam, kde stojí. Žílám trvá odpověď několik sekund, zatímco keři zlomek vteřiny.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Hra odstraňuje vzaté objekty se zpožděním. Tohle brání tomu, aby byl stejný objekt odeslán dvakrát, zatímco mizí.
 The game treats this as stealing and will put a bounty on you.	Hra tohle považuje za krádež a dá na tebe odměnu.
@@ -286,10 +289,11 @@ The mod never swings a pickaxe. It drives the vein's own break sequence, and the
 Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Stahování zvířat, která zabijete, jednou na mršinu. Lidé jsou pod Těla. Co stahování vynese, se neporovnává s vašimi filtry. Mod to nikdy nevidí dřív, než to dorazí, takže tento přepínač je všechno, nebo nic.
 Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Prohledávání lidí, které zabijete, jednou na tělo. Zvířata jsou pod Mršiny. Co prohledání vynese, se neporovnává s vašimi filtry, takže i tento přepínač je všechno, nebo nic.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Tato relace: %ld sebráno, %ld nasbíráno, %ld uloveno, %ld zdechlin
-Timber and branches on the ground and nodes that yield them.	Dřevo a větve na zemi a uzly, které je vydávají.
+Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Dřevo a větve na zemi a uzly, které je dávají. To, co většina z nich obsahuje, se čte přímo z herních dat, takže odmítnutí třídy wood v záložce Třídy nechá stromy stát a stejně tak dřevo pod nimi. Tam, kde hra o uzlu neříká nic, je tento přepínač jediné ovládání, které má.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Aby jeden druh zůstal netknutý, nastav, čím se stává, na nikdy v záložce Předměty: Item_Tench, Item_Ricefish, Item_Iguana. Mod čte vlastní řádek tvora v herní tabulce postav, takže ví, na jaký druh se dívá, ještě než něco uloví. Několik neobvyklých tvorů se stále spoléhá na odhad podle názvu modelu a loví se jen podle kategorie.
 Treasure and keepsakes	Poklady a suvenýry
 Two buttons at once, never one: every single button already does something in this game. The mod only reads the pad, so the game still sees both buttons. Pick a pair that does nothing together, like the two shoulder buttons, or Back and a face button.	Dvě tlačítka najednou, nikdy jedno: každé jednotlivé tlačítko už v této hře něco dělá. Mod jen čte ovladač, takže hra pořád vidí obě tlačítka. Vyber dvojici, která dohromady nic nedělá, například obě ramenní tlačítka, nebo Back a jedno z čelních tlačítek.
+Two things that hold things. The chests, crates and drop-set nodes you open, which rarely answer the loot event. And anything on the ground whose job is to hold something: bottles, jars, clay pots, waterskins, vases and the storage boxes you place. Off by default, and off means a shelf of pottery is left where it stands. Reward boxes are not covered, since those are loot in their own right and belong to Treasure and keepsakes on the Classes tab.\n\nWhat comes out of a chest is not checked against your filters. The game hands the contents over in one go and the mod never sees them as objects, so for those this switch is all or nothing.	Dvě věci, které něco obsahují. Truhly, bedny a uzly s kořistí, které otevíráš a které na událost sbírání odpovídají jen zřídka. A cokoli na zemi, jehož úkolem je něco obsahovat: lahve, sklenice, hliněné hrnce, měchy na vodu, vázy a bedny na zásoby, které sám postavíš. Ve výchozím stavu vypnuto, a vypnuto znamená, že police plná keramiky zůstane tam, kde je. Truhly s odměnou sem nepatří, protože ty jsou kořistí samy o sobě a spadají pod Poklady a suvenýry v záložce Třídy.\n\nTo, co vyjde z truhly, se proti tvým filtrům neprověřuje. Hra předá obsah najednou a mod ho nikdy nevidí jako objekty, takže pro ty je tento přepínač všechno nebo nic.
 Unbound until you set it. The game calls taking owned goods stealing and puts a bounty on you for it, so this is the switch you want on for a moment and off again, which is a poor fit for a menu.	Nepřiřazeno, dokud si to nenastavíš. Hra považuje braní vlastněných věcí za krádež a dá za to na tebe odměnu, takže tohle je přepínač, který chceš na chvíli zapnout a zase vypnout, což se do menu moc nehodí.
 Unidentified nodes	Neidentifikované uzly
 unidentified nodes off	neidentifikované uzly vypnuty
@@ -328,4 +332,7 @@ Writes MasterLooter.template.txt beside the plugin, holding every line the menu 
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	Zapíše nastavení tak, jak je teď, do \"%s\". Načti ho, změň, co chceš, a pak ho zase ulož.
 Writes the settings as they are now, named %s.	Zapíše nastavení tak, jak je teď, pod názvem %s.
 yes	ano
+your rules refuse all ore, jewels and stone	tvá pravidla odmítají rudu, drahokamy i kámen
+your rules refuse all stone	tvá pravidla odmítají veškerý kámen
+your rules refuse everything this node holds	tvá pravidla odmítají vše, co tento uzel obsahuje
 yours, just out of your hand	tvoje, právě ti to vypadlo z ruky

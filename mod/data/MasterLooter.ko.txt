@@ -31,6 +31,7 @@
 1 match%s	1개 일치%s
 3 of 3	3 중 3
 \"%s\" already exists. Saving over it asks first.	\"%s\"이(가) 이미 있습니다. 덮어쓰기 전에 먼저 확인합니다.
+A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	펫은 마음에 드는 것을 아무거나 주워 가며 게임에는 이를 막을 설정이 없습니다. 켜면, 펫과 용병, 동료가 주운 것 가운데 당신의 아이템 규칙, 태그, 분류, 가치 하한이 거부했을 것은 소지품에 들어오는 즉시 삭제되고, 무엇이 사라졌는지 알림이 알려 줍니다. 퀘스트 아이템과 보호된 아이템은 절대 삭제되지 않으며, 이미 가방에 있던 것에는 전혀 손대지 않습니다.\n\n켜기 전에 알아 둘 점이 있습니다. 동료가 땅에 있는 아이템을 주우면 게임은 그것을 당신이 직접 주운 것처럼 알리며, 둘을 구별할 방법이 없습니다. 그래서 동료를 데리고 다니는 동안에는 당신이 손으로 주운 것 가운데 당신 자신의 규칙이 거부하는 것도 동료 몫과 함께 삭제됩니다. 아무도 데리고 있지 않으면 당신이 주운 것에는 전혀 손대지 않습니다. 전부 가지고 가서 직접 정리하고 싶다면 이 설정은 꺼 두십시오.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	두레박 같은 것은 절대 자동으로 루팅되지 않지만, 활성화하면 게임이 상호작용을 제공하여 직접 손으로 사용할 수 있습니다.
 Abyss and Kuku	Abyss와 Kuku
 Abyss gear, Kuku pots and their parts.	Abyss 장비, Kuku 단지 및 그 부품.
@@ -56,12 +57,12 @@ Breaking drives the game's own state machine at the vein, the swing landing and 
 Butterflies, beetles, dragonflies, bees, spiders, scorpions, snails and the other small things the game files as insects. Species come from the creature table; a creature the table cannot name is only caught when every category it could belong to is on (a flyer could be a fish, an insect or a bird).	나비, 딱정벌레, 잠자리, 벌, 거미, 전갈, 달팽이 등 게임이 곤충으로 분류하는 작은 생물들. 종은 생물 표에서 가져오며, 표가 이름을 알 수 없는 생물은 해당할 수 있는 모든 분류가 켜져 있을 때만 포획됩니다 (날아다니는 것은 물고기, 곤충, 새 중 무엇이든 될 수 있습니다).
 captured	확보됨
 Carcasses	사체
+Carcasses and bodies	사체와 시신
 Bodies	시신
 carcasses off	사체 끄기
 bodies off	시신 끔
 Catching	포획
 Caught creatures, live or lying around; a creature the table can name follows its class rule. Crabs, shrimp and squid are seafood under Food and drink.	포획한 생물, 살아 있거나 주변에 놓인 것 모두 포함. 표에서 이름을 알 수 있는 생물은 해당 분류 규칙을 따릅니다. 게, 새우, 오징어는 "음식과 음료" 아래의 해산물로 분류됩니다.
-Chests, crates and drop-set nodes. They rarely respond to the loot event. Off by default.	상자, 궤짝, 드롭 설정 노드. 루팅 이벤트에 응답하는 경우가 드뭅니다. 기본값은 끔.
 Class	분류
 class %s	분류 %s
 Classes	분류
@@ -71,6 +72,7 @@ Clears what this session worked out from your bag. Nodes named by the prefab tab
 Close	닫기
 container (off)	용기 (꺼짐)
 Containers	용기
+containers off	용기 끄기
 Controller	컨트롤러
 Copper	구리
 Copy	복사
@@ -98,6 +100,7 @@ entity %08X	엔티티 %08X
 entity %08X, %d items across every store	엔티티 %08X, 모든 저장소에 걸쳐 아이템 %d개
 entity %08X, bag %d of %d slots, %d items across every store	엔티티 %08X, 가방 %d/%d 칸, 모든 저장소에 걸쳐 아이템 %d개
 Event descriptors	이벤트 디스크립터
+Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	모든 돌. 땅에 있는 광석과 돌 조각, 광맥, 바위덩이, 자갈 더미, 채석장 돌입니다. 광맥은 서 있는 자리에서 부서지고 그 내용물은 바닥에서 주워 올립니다. 곡괭이가 하는 일이 바로 이것이고, 더 좋은 곡괭이를 들고 다닐 만한 이유도 여기에 있습니다. 도구의 채굴량 증가는 떨어진 것에 적용되지 노드에는 적용되지 않습니다. 광맥은 한 번 내리친 뒤 게임이 되돌려 놓을 때까지 그대로 둡니다. 광맥에 손을 뻗는 거리는 탐색이 볼 수 있는 가장 먼 곳에서부터 시작합니다. 덤불은 순식간에 응답하지만 광맥은 응답에 몇 초가 걸리기 때문입니다.\n\n돌에는 한때 별도의 설정이 있었으나 그 구분은 끝내 유지되지 않았습니다. 게임이 채석장 돌 대부분을 채굴로 분류하는 탓에 돌을 꺼도 그대로 들어왔기 때문입니다. 광석은 챙기고 돌은 두고 가려면 분류 탭에서 stone 분류를 거부하십시오. 여기에는 돌, 질 좋은 돌, 완벽한 돌, 종유석이 들어가며, 게임이 그 밖에 아무것도 들어 있지 않다고 말하는 바위는 광산 바위와 종유석을 포함해 모두 그 자리에 남습니다. 광석이나 보석도 함께 든 광맥은 여전히 부숩니다. 돌을 거부하는 것이 그 옆에 있는 것까지 거부하는 것은 아니기 때문입니다. 게임이 노드를 전혀 설명하지 않는 경우에는 광석과 보석과 돌이 모두 거부되어야 비로소 그 노드를 지나칩니다.
 Extra ore per vein	광맥당 추가 광석
 failed	실패
 fast-travel artifact	빠른 이동 유물
@@ -122,7 +125,7 @@ Gathering	채집
 General	일반
 Ground items	바닥 아이템
 Groups	그룹
-Herb, flower and mushroom nodes, and the same lying on the ground. Food crops have their own switch.	약초, 꽃, 버섯 노드와 바닥에 놓인 동일한 것들. 식용 농작물은 별도 스위치가 있습니다.
+Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class on the Classes tab: herb and seed are separate there. That sorts what is lying on the ground item by item, and it reaches the node as well wherever the game says what the node holds: refuse herb and a herb patch is left alone. Plant nodes are a mixed lot, paying grain and crafting materials too, and for the ones the game does not describe this switch is the only control.	약초와 꽃, 버섯 노드, 그리고 땅에 떨어진 같은 것들로 씨앗도 포함합니다. 식용 작물에는 별도의 설정이 있습니다. 약초는 챙기고 씨앗은 두고 가려면, 또는 그 반대로 하려면 분류 탭에서 분류를 거부하십시오. herb와 seed는 그곳에서 따로 나뉘어 있습니다. 이는 땅에 떨어진 것을 하나씩 가려내며, 게임이 노드의 내용물을 밝히는 곳에서는 노드에도 미칩니다. herb를 거부하면 약초 무더기는 그대로 남습니다. 식물 노드는 여러 가지가 섞여 있어 곡물과 제작 재료도 내놓으며, 게임이 설명하지 않는 노드에 대해서는 이 설정이 유일한 통제 수단입니다.
 hold two buttons (Escape cancels)	버튼 두 개를 누른 채로 (Escape로 취소)
 Household clutter and collectibles, most of it worthless.	생활 잡동사니와 수집품, 대부분 가치 없음.
 How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.	가방이 얼마나 찼는지는 가방 자체에서 읽어오므로, 루팅 중이든 아니든 가방이 가득 차는 순간 알림이 나타납니다. 이 수치가 더 이상 맞지 않게 되면 모드는 습득 이후를 지켜보는 방식으로 대체합니다: 연속 세 번 아무것도 얻지 못하면 알림이 뜨고, 한 번이라도 성공하면 알림이 사라집니다.
@@ -138,7 +141,7 @@ Items	아이템
 Items lying in the world, including drops from enemies.	적의 드롭을 포함해 세상에 놓여 있는 아이템.
 Items no shop will buy, across every class.	모든 분류에서 어떤 상점도 사들이지 않는 아이템.
 Items on the ground	바닥에 있는 아이템
-Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. This reads the item's own tags, so it covers anything picked up, gathered or broken open. Skinning a carcass is outside it: that yield arrives without the mod ever seeing what it is.	"퀘스트" 태그가 붙은 아이템은 건드리지 않으므로 퍼즐과 스토리 습득물이 자동으로 챙겨지지 않습니다. 아이템 자체의 태그를 읽으므로 줍거나 채집하거나 부순 것 모두에 적용됩니다. 사체 박피는 예외입니다: 그 산출물은 모드가 정체를 확인하기도 전에 들어옵니다.
+Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.	퀘스트 태그가 붙은 아이템은 그대로 두므로 수수께끼와 이야기용 아이템이 자동으로 수거되지 않습니다. 아이템 자체의 태그를 읽기 때문에 당신이 줍는 모든 것과, 내용물을 모드가 이름 지을 수 있는 모든 노드를 포함합니다. 두 가지는 여기서 벗어납니다. 이름을 알 수 없는 노드는 그 종류의 설정이 결정합니다. 거기에는 태그를 읽어 낼 아이템이 없기 때문입니다. 그리고 사체 가죽 벗기기는 모드가 무엇이 들어왔는지 한 번도 보지 못한 채 보상을 지급합니다.
 Items with an unknown value are never filtered by it.	가치를 알 수 없는 아이템은 이 기준으로 걸러지지 않습니다.
 Keep the menu on screen while you play. %s brings it back, %s closes it.	플레이 중에도 메뉴를 화면에 유지합니다. %s로 다시 불러오고, %s로 닫습니다.
 Keys	키
@@ -199,8 +202,7 @@ One click per family. The table below still sets single classes; a group shows a
 Open and close this menu	이 메뉴 열기/닫기
 Open folder	폴더 열기
 Opens the folder in Explorer. The log is rewritten every launch and is what to attach to a report.	탐색기에서 폴더를 엽니다. 로그는 실행할 때마다 새로 기록되며, 문제 보고 시 첨부할 파일입니다.
-Ore	광석
-Ore chunks on the ground and any node that yields ore, veins included. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.	바닥에 있는 광석 덩어리와 광맥을 포함해 광석을 산출하는 모든 노드. 광맥은 그 자리에서 깨져 내용물이 바닥에 떨어지며, 이는 곡괭이가 하는 일과 같고 더 좋은 곡괭이를 들고 다닐 가치가 있는 이유이기도 합니다: 도구의 채광량 증가 효과는 노드가 아니라 드롭된 결과물에 적용됩니다. 각 광맥은 한 번만 타격되며 게임이 다시 채워줄 때까지 그대로 둡니다. 광맥에 대한 활성화 시도는 스캔이 닿는 가장 먼 거리에서부터 시작됩니다. 덤불은 순식간에 반응하지만 광맥은 반응하는 데 몇 초가 걸리기 때문입니다.
+Ore and stone	광석과 돌
 ore off	광석 끄기
 Ore, gems, stone, timber, hides, herbs, trade goods and other crafting input.	광석, 보석, 돌, 목재, 가죽, 약초, 교역품 등 그 밖의 제작 재료.
 out of range	범위 밖
@@ -261,11 +263,11 @@ skip: %s	건너뜀: %s
 Small animals	작은 동물
 small animals off	작은 동물 끄기
 Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	일부 세계 오브젝트는 읽을 수 있는 아이템 이름이 없습니다. 켜면: 그래도 획득. 끄면: 식별되지 않은 것은 그대로 둠.
+someone is wearing this; taking it would copy it	누군가 착용 중입니다. 가져가면 복제됩니다
 stack at one point (storage contents)	한 지점에 쌓임 (보관함 내용물)
 Status	상태
-Stone	돌
-stone off	돌 끄기
-Stone on the ground and nodes that yield stone.	바닥에 있는 돌과 돌을 산출하는 노드.
+Stop pets looting	펫이 줍지 못하게 하기
+Stop pets looting at all	펫이 아예 줍지 못하게 하기
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	탁자, 의자, 침대, 카펫, 램프, 초, 그림, 단지 등 가구가 갖춰진 방을 이루는 나머지 것들로, 바닥에서 줍든 고유의 상호작용 노드에서 획득하든 마찬가지입니다. 대부분 구리 한두 닢 가치이지만 카펫과 고급 침대는 수천에 이르므로, 집을 꾸미기 전에 이 항목을 켜 두세요. 무언가를 담고 있는 상자 등은 대신 "용기"에 해당합니다. 기본값은 끔.
 Tag	태그
 Tags	태그
@@ -274,10 +276,11 @@ Take goods that belong to someone	타인 소유물 가져가기
 Take goods that belong to someone, on / off	타인 소유물 가져가기 켜기/끄기
 Take items the database cannot name	데이터베이스가 이름을 알 수 없는 아이템 가져가기
 Pets and companions follow the filters	펫과 동료가 필터를 따름
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands. Quest and protected items are never deleted. Something you pick up by hand in the same two seconds is judged by the same rules.	펫은 마음대로 줍고, 게임에는 이를 막는 설정이 없습니다. 켜짐: 펫이나 동료가 주운 것 중 아이템 규칙, 태그, 클래스, 가치 하한이 거부했을 물건은 인벤토리에 들어오는 즉시 삭제됩니다. 퀘스트 아이템과 보호된 아이템은 절대 삭제되지 않습니다. 같은 2초 안에 직접 주운 물건도 같은 규칙으로 판정됩니다.
 Take owned goods on / off	소유물 가져가기 켜기/끄기
+take this one by hand, looting it can lock the quest	이것은 직접 손으로 집으십시오. 자동으로 주우면 퀘스트가 막힐 수 있습니다
 takes effect next launch	다음 실행 시 적용됨
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	엔진이 주변을 스캔하여 규칙이 허용하는 것을 가져갑니다. 끄면 아무것도 자동으로 가져가지 않으며, 속성 루팅 키는 여전히 작동합니다.
+The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	게임은 펫이 무언가를 줍기 전에 두 가지를 묻습니다. 하나는 땅에 떨어진 아이템에 대해서, 다른 하나는 시신에 대해서이며, 이 설정은 둘 다에 아니요라고 답합니다. 펫이 아무것에도 손을 뻗지 않으므로 그 뒤에 당신의 물건이 삭제되는 일이 없고, 당신이 직접 주운 것이 문제가 되는 일도 없습니다. 그저 펫이 줍는 것을 원하지 않는다면 두 가지 중 이쪽이 더 깔끔한 답입니다. 용병에게까지 미치는지는 확인되지 않았습니다. 게임에는 이런 종류의 수거 규칙이 하나뿐이고 그 두 물음 모두에 아니요로 답하므로 미칠 수도 있습니다. 확실히 미치는 것은 펫과 동료가 필터를 따름 쪽입니다.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	게임은 손이 닿는다고 판단할 때만 노드의 데이터를 채웁니다. 활성화는 멀리서도 그렇게 하도록 요청하는 것으로, 이 덕분에 광맥도 그 자리에서 채굴할 수 있습니다. 덤불은 순식간에 반응하지만 광맥은 반응하는 데 몇 초가 걸립니다.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	게임은 딜레이를 두고 획득한 오브젝트를 제거합니다. 이는 오브젝트가 사라지는 동안 같은 것이 두 번 전송되는 것을 막습니다.
 The game treats this as stealing and will put a bounty on you.	게임은 이를 절도로 취급하며 현상금을 부과합니다.
@@ -285,10 +288,11 @@ The mod never swings a pickaxe. It drives the vein's own break sequence, and the
 Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	처치한 동물의 가죽 벗기기, 사체당 한 번. 사람은 시신 항목에 속합니다. 가죽 벗기기로 얻는 것은 필터로 확인되지 않습니다. 모드는 그것이 도착하기 전에 볼 수 없으므로 이 스위치는 전부 아니면 전무입니다.
 Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	처치한 사람 수색, 시신당 한 번. 동물은 사체 항목에 속합니다. 수색으로 얻는 것은 필터로 확인되지 않으므로 이 스위치도 전부 아니면 전무입니다.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	이번 세션: 습득 %ld개, 채집 %ld개, 포획 %ld개, 박피 %ld구
-Timber and branches on the ground and nodes that yield them.	바닥에 있는 목재와 나뭇가지, 그리고 이를 산출하는 노드.
+Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	땅에 있는 목재와 나뭇가지, 그리고 그것을 내놓는 노드. 그 대부분이 무엇을 담고 있는지는 게임 데이터에서 직접 읽어 오므로, 분류 탭에서 wood 분류를 거부하면 나무도 서 있는 그대로 남고 그 아래의 목재도 남습니다. 게임이 노드에 대해 아무 말도 하지 않는 곳에서는 이 설정이 가진 유일한 통제 수단입니다.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	특정 종을 건드리지 않으려면 "아이템" 탭에서 해당 종이 변하는 아이템을 "절대 안 함"으로 설정하세요: Item_Tench, Item_Ricefish, Item_Iguana. 이 모드는 게임의 캐릭터 표에서 생물 고유의 행을 읽으므로 무언가를 포획하기 전에 어떤 종인지 이미 알고 있습니다. 일부 특이한 생물은 여전히 모델 이름으로 추측하며 분류로만 포획됩니다.
 Treasure and keepsakes	보물과 기념품
 Two buttons at once, never one: every single button already does something in this game. The mod only reads the pad, so the game still sees both buttons. Pick a pair that does nothing together, like the two shoulder buttons, or Back and a face button.	반드시 버튼 두 개를 동시에, 하나만은 안 됩니다: 이 게임에서는 단일 버튼마다 이미 기능이 배정되어 있습니다. 이 모드는 패드 입력을 읽기만 하므로 게임도 두 버튼을 그대로 인식합니다. 함께 눌러도 아무 동작도 없는 조합을 고르세요. 예를 들어 양쪽 숄더 버튼, 또는 백 버튼과 페이스 버튼 하나.
+Two things that hold things. The chests, crates and drop-set nodes you open, which rarely answer the loot event. And anything on the ground whose job is to hold something: bottles, jars, clay pots, waterskins, vases and the storage boxes you place. Off by default, and off means a shelf of pottery is left where it stands. Reward boxes are not covered, since those are loot in their own right and belong to Treasure and keepsakes on the Classes tab.\n\nWhat comes out of a chest is not checked against your filters. The game hands the contents over in one go and the mod never sees them as objects, so for those this switch is all or nothing.	무언가를 담는 두 가지. 하나는 당신이 여는 상자와 궤짝, 전리품 노드로, 이들이 수거 처리에 응답하는 일은 드뭅니다. 다른 하나는 땅에 있으면서 무언가를 담는 것이 본분인 것들, 곧 병과 단지, 흙 항아리, 물주머니, 화병, 그리고 당신이 직접 놓는 보관함입니다. 기본값은 꺼짐이며, 꺼져 있으면 도자기가 늘어선 선반은 그 자리에 그대로 남습니다. 보상 상자는 여기에 들지 않습니다. 그것 자체가 전리품이며 분류 탭의 보물과 기념품에 속하기 때문입니다.\n\n상자에서 나온 것은 당신의 필터와 대조되지 않습니다. 게임이 내용물을 한 번에 건네주고 모드는 그것을 개별 객체로 보지 못하므로, 그것들에 대해 이 설정은 전부 아니면 전무입니다.
 Unbound until you set it. The game calls taking owned goods stealing and puts a bounty on you for it, so this is the switch you want on for a moment and off again, which is a poor fit for a menu.	설정하기 전까지는 지정되지 않습니다. 게임은 소유물을 가져가는 것을 절도로 간주해 현상금을 부과하므로, 이 스위치는 잠깐 켰다가 다시 꺼야 하는 성격이라 메뉴로 다루기에는 적합하지 않습니다.
 Unidentified nodes	미확인 노드
 unidentified nodes off	미확인 노드 끄기
@@ -327,4 +331,7 @@ Writes MasterLooter.template.txt beside the plugin, holding every line the menu 
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	현재 설정을 \"%s\"에 기록합니다. 불러온 뒤 원하는 대로 바꾸고 다시 저장하세요.
 Writes the settings as they are now, named %s.	현재 설정을 %s(이)라는 이름으로 기록합니다.
 yes	예
+your rules refuse all ore, jewels and stone	당신의 규칙이 광석과 보석과 돌을 모두 거부합니다
+your rules refuse all stone	당신의 규칙이 모든 돌을 거부합니다
+your rules refuse everything this node holds	당신의 규칙이 이 노드에 든 것을 전부 거부합니다
 yours, just out of your hand	본인 소유, 손에서 벗어났을 뿐

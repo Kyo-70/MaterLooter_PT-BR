@@ -30,6 +30,7 @@
 1 match%s	พบ 1 รายการ%s
 3 of 3	3 จาก 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" มีอยู่แล้ว การบันทึกทับจะถามยืนยันก่อนเสมอ
+A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	สัตว์เลี้ยงจะเก็บอะไรก็ได้ตามใจมัน และตัวเกมไม่มีสวิตช์สำหรับเรื่องนี้เลย เมื่อเปิด: สิ่งใดก็ตามที่สัตว์เลี้ยง ทหารรับจ้าง หรือเพื่อนร่วมทางเก็บขึ้นมา แล้วกฎไอเทม แท็ก ประเภท หรือขั้นต่ำของมูลค่าที่คุณตั้งไว้จะปฏิเสธ จะถูกลบออกจากกระเป๋าทันทีที่เข้ามา และจะมีข้อความบอกว่าอะไรหายไป ไอเทมเควสต์และไอเทมที่ถูกป้องกันจะไม่ถูกลบเด็ดขาด และของที่อยู่ในกระเป๋าอยู่แล้วจะไม่ถูกแตะต้อง\n\nสิ่งที่ควรรู้ก่อนเปิด: เมื่อเพื่อนร่วมทางเก็บไอเทมที่ตกอยู่บนพื้น เกมจะรายงานเหมือนกับว่าคุณเป็นคนเก็บเอง และไม่มีทางแยกสองกรณีนี้ออกจากกัน ดังนั้นตราบใดที่ยังมีเพื่อนร่วมทางออกมาอยู่ ของที่คุณเก็บเองกับมือแล้วกฎของคุณเองปฏิเสธ ก็จะถูกลบไปพร้อมกับของที่มันเก็บด้วย หากไม่มีใครออกมา ของที่คุณเก็บจะไม่ถูกแตะต้องเลย ถ้าคุณอยากเก็บทุกอย่างไว้แล้วคัดเอง ให้ปิดตัวเลือกนี้ไว้
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	ถังบ่อน้ำและสิ่งคล้ายกันจะไม่ถูกลูทเลย แต่การกระตุ้นมันจะทำให้เกมเสนอการโต้ตอบให้คุณใช้งานด้วยมือเอง
 Abyss and Kuku	Abyss และ Kuku
 Abyss gear, Kuku pots and their parts.	อุปกรณ์ Abyss, หม้อ Kuku และชิ้นส่วนของมัน
@@ -55,12 +56,12 @@ Breaking drives the game's own state machine at the vein, the swing landing and 
 Butterflies, beetles, dragonflies, bees, spiders, scorpions, snails and the other small things the game files as insects. Species come from the creature table; a creature the table cannot name is only caught when every category it could belong to is on (a flyer could be a fish, an insect or a bird).	ผีเสื้อ, ด้วง, แมลงปอ, ผึ้ง, แมงมุม, แมงป่อง, หอยทาก และสิ่งเล็ก ๆ อื่นที่เกมจัดเป็นแมลง ชนิดพันธุ์มาจากตารางสิ่งมีชีวิต สิ่งมีชีวิตที่ตารางระบุชื่อไม่ได้จะถูกจับก็ต่อเมื่อทุกหมวดที่มันอาจเป็นเปิดอยู่ทั้งหมด (สัตว์บินได้อาจเป็นปลา, แมลง หรือ นก)
 captured	จับสัญญาณได้แล้ว
 Carcasses	ซากสัตว์
+Carcasses and bodies	ซากสัตว์และศพ
 Bodies	ศพ
 carcasses off	ซากสัตว์: ปิด
 bodies off	ศพ ปิด
 Catching	การจับสัตว์
 Caught creatures, live or lying around; a creature the table can name follows its class rule. Crabs, shrimp and squid are seafood under Food and drink.	สัตว์ที่จับได้ ทั้งมีชีวิตและที่วางอยู่ สิ่งมีชีวิตที่ตารางระบุชื่อได้จะทำตามกฎของประเภทมัน ปู, กุ้ง และปลาหมึกจัดเป็นอาหารทะเลอยู่ในหมวดอาหารและเครื่องดื่ม
-Chests, crates and drop-set nodes. They rarely respond to the loot event. Off by default.	หีบ, ลัง และจุดเก็บของแบบดรอปเซ็ต มักไม่ตอบสนองต่อเหตุการณ์ลูท ปิดไว้เป็นค่าเริ่มต้น
 Class	ประเภท
 class %s	ประเภท %s
 Classes	ประเภท
@@ -70,6 +71,7 @@ Clears what this session worked out from your bag. Nodes named by the prefab tab
 Close	ปิด
 container (off)	กล่อง (ปิด)
 Containers	กล่อง
+containers off	กล่อง: ปิด
 Controller	คอนโทรลเลอร์
 Copper	ทองแดง
 Copy	คัดลอก
@@ -97,6 +99,7 @@ entity %08X	entity %08X
 entity %08X, %d items across every store	entity %08X, %d ไอเทมในทุกที่เก็บ
 entity %08X, bag %d of %d slots, %d items across every store	entity %08X, กระเป๋า %d จาก %d ช่อง, %d ไอเทมในทุกที่เก็บ
 Event descriptors	descriptor เหตุการณ์
+Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	หินทุกชนิด: เศษแร่และเศษหินบนพื้น สายแร่ ก้อนหินใหญ่ กองเศษหิน และหินจากเหมืองหิน สายแร่จะถูกทุบแตกตรงที่มันตั้งอยู่ แล้วเก็บของข้างในขึ้นจากพื้น ซึ่งก็คือสิ่งที่พลั่วขุดของคุณทำ และเป็นเหตุผลที่พลั่วขุดที่ดีกว่าคุ้มค่าแก่การพกติดตัว: โบนัสผลผลิตการทำเหมืองของเครื่องมือมีผลกับของที่ร่วงออกมา ไม่ใช่กับจุดเก็บของ สายแร่แต่ละจุดจะถูกตีครั้งเดียวแล้วปล่อยไว้จนกว่าเกมจะนำมันกลับมา การเอื้อมไปยังสายแร่จะเริ่มไกลเท่าที่การสแกนมองเห็น เพราะสายแร่ใช้เวลาหลายวินาทีกว่าจะตอบสนอง ในขณะที่พุ่มไม้ใช้เพียงเสี้ยววินาที\n\nหินเคยมีสวิตช์ของตัวเอง และการแยกแบบนั้นไม่เคยอยู่ตัว: เกมจัดหินจากเหมืองหินส่วนใหญ่ไว้ใต้หมวดการทำเหมือง การปิดหินจึงยังปล่อยให้มันเข้ามาอยู่ดี หากต้องการเก็บแร่แล้วทิ้งหินไว้ ให้ปฏิเสธประเภท stone ในแท็บประเภท ซึ่งครอบคลุมหิน หินคุณภาพดี หินไร้ตำหนิ และหินย้อย และหินทุกก้อนที่เกมบอกว่าไม่มีอย่างอื่นอยู่ข้างในจะถูกทิ้งไว้ที่เดิม รวมถึงหินในเหมืองและหินย้อยด้วย สายแร่ที่มีแร่หรืออัญมณีอยู่ด้วยจะยังถูกทุบต่อไป เพราะการปฏิเสธหินไม่ใช่การปฏิเสธสิ่งที่อยู่ข้าง ๆ มัน ในที่ที่เกมไม่ได้อธิบายจุดเก็บของไว้เลย ต้องปฏิเสธทั้งแร่ อัญมณี และหิน ทั้งหมด จุดนั้นจึงจะถูกข้ามไป
 Extra ore per vein	แร่ส่วนเสริมต่อสายแร่
 failed	ล้มเหลว
 fast-travel artifact	สิ่งประดิษฐ์เดินทางด่วน
@@ -121,7 +124,7 @@ Gathering	การเก็บเกี่ยว
 General	ทั่วไป
 Ground items	ไอเทมบนพื้น
 Groups	กลุ่ม
-Herb, flower and mushroom nodes, and the same lying on the ground. Food crops have their own switch.	จุดเก็บสมุนไพร, ดอกไม้ และเห็ด รวมถึงที่วางอยู่บนพื้น พืชผลทางการเกษตรมีสวิตช์แยกของตัวเอง
+Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class on the Classes tab: herb and seed are separate there. That sorts what is lying on the ground item by item, and it reaches the node as well wherever the game says what the node holds: refuse herb and a herb patch is left alone. Plant nodes are a mixed lot, paying grain and crafting materials too, and for the ones the game does not describe this switch is the only control.	จุดเก็บสมุนไพร ดอกไม้ และเห็ด รวมถึงของแบบเดียวกันที่ตกอยู่บนพื้น เมล็ดพันธุ์ด้วย พืชอาหารมีสวิตช์ของตัวเอง หากต้องการเก็บสมุนไพรแล้วทิ้งเมล็ดไว้ หรือสลับกัน ให้ปฏิเสธประเภทในแท็บประเภท: herb กับ seed แยกกันอยู่ที่นั่น วิธีนี้จะคัดของที่ตกอยู่บนพื้นทีละชิ้น และยังไปถึงจุดเก็บของด้วยในทุกที่ที่เกมบอกว่าจุดนั้นมีอะไรอยู่: ปฏิเสธ herb แล้วกอสมุนไพรจะถูกปล่อยไว้ จุดเก็บพืชเป็นของคละกันหลายอย่าง ให้ทั้งธัญพืชและวัสดุงานฝีมือด้วย และสำหรับจุดที่เกมไม่ได้อธิบายไว้ สวิตช์นี้คือการควบคุมเพียงอย่างเดียว
 hold two buttons (Escape cancels)	กดสองปุ่มค้างไว้ (Escape ยกเลิก)
 Household clutter and collectibles, most of it worthless.	ของกระจุกกระจิกในบ้านและของสะสม ส่วนใหญ่ไม่มีค่าอะไร
 How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.	ความเต็มของกระเป๋าอ่านค่ามาจากกระเป๋าโดยตรง ดังนั้นข้อความแจ้งเตือนจะขึ้นทันทีที่กระเป๋าเต็ม ไม่ว่าคุณกำลังลูทอยู่หรือไม่ก็ตาม หากค่าตัวเลขเหล่านั้นผิดปกติ มอดจะย้อนกลับไปสังเกตสิ่งที่เกิดขึ้นหลังการเก็บของแทน: การเก็บของสามครั้งติดต่อกันที่ไม่ได้อะไรเลยจะแสดงข้อความแจ้งเตือน และเมื่อเก็บได้สำเร็จหนึ่งครั้งก็จะล้างข้อความนั้น
@@ -137,7 +140,7 @@ Items	ไอเทม
 Items lying in the world, including drops from enemies.	ไอเทมที่วางอยู่ในโลกเกม รวมถึงของที่ดรอปจากศัตรู
 Items no shop will buy, across every class.	ไอเทมที่ไม่มีร้านค้าใดรับซื้อ ทุกประเภท
 Items on the ground	ไอเทมบนพื้น
-Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. This reads the item's own tags, so it covers anything picked up, gathered or broken open. Skinning a carcass is outside it: that yield arrives without the mod ever seeing what it is.	ไอเทมที่ติดแท็กเควสต์จะถูกเว้นไว้ เพื่อไม่ให้ปริศนาและของเก็บในเนื้อเรื่องถูกเก็บอัตโนมัติ สิ่งนี้อ่านจากแท็กของไอเทมเอง จึงครอบคลุมทุกอย่างที่เก็บ, เก็บเกี่ยว หรือทุบเปิดออกมา การถลกหนังซากสัตว์ไม่อยู่ในนี้: ผลที่ได้มาถึงโดยที่มอดไม่เคยเห็นว่ามันคืออะไร
+Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.	ไอเทมที่ติดแท็กเควสต์จะถูกปล่อยไว้ เพื่อไม่ให้ไอเทมปริศนาและไอเทมเนื้อเรื่องถูกเก็บอัตโนมัติ มันอ่านแท็กของตัวไอเทมเอง จึงครอบคลุมทุกอย่างที่คุณเก็บ และทุกจุดเก็บของที่ม็อดเรียกชื่อของข้างในได้ มีสองอย่างที่อยู่นอกเหนือจากนี้ จุดเก็บของที่มันเรียกชื่อไม่ได้จะถูกตัดสินโดยสวิตช์ของชนิดนั้น เพราะตรงนั้นไม่มีไอเทมให้อ่านแท็ก และการชำแหละซากสัตว์จะจ่ายผลผลิตโดยที่ม็อดไม่เคยเห็นเลยว่าอะไรเข้ามา
 Items with an unknown value are never filtered by it.	ไอเทมที่ไม่ทราบมูลค่าจะไม่ถูกกรองด้วยเงื่อนไขนี้เลย
 Keep the menu on screen while you play. %s brings it back, %s closes it.	เปิดเมนูค้างไว้ขณะเล่น กด %s เพื่อเรียกกลับมา กด %s เพื่อปิด
 Keys	ปุ่ม
@@ -198,8 +201,7 @@ One click per family. The table below still sets single classes; a group shows a
 Open and close this menu	เปิดและปิดเมนูนี้
 Open folder	เปิดโฟลเดอร์
 Opens the folder in Explorer. The log is rewritten every launch and is what to attach to a report.	เปิดโฟลเดอร์ใน Explorer บันทึกจะถูกเขียนใหม่ทุกครั้งที่เปิดเกม และเป็นสิ่งที่ควรแนบไปกับรายงานปัญหา
-Ore	แร่
-Ore chunks on the ground and any node that yields ore, veins included. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.	ก้อนแร่บนพื้นและจุดเก็บของใด ๆ ที่ให้ผลผลิตเป็นแร่ รวมถึงสายแร่ด้วย สายแร่จะถูกทุบแตกตรงที่มันอยู่ แล้วเก็บสิ่งที่ได้ขึ้นจากพื้น ซึ่งเป็นสิ่งที่อีเต้าของคุณทำ และเป็นเหตุผลที่อีเต้าคุณภาพดีกว่าคุ้มค่าพกพา: โบนัส Mining Yield Up ของเครื่องมือใช้กับของที่หล่นลงมา ไม่ใช่กับตัวจุดเก็บของ สายแร่แต่ละเส้นจะถูกทุบครั้งเดียวแล้วปล่อยไว้จนกว่าเกมจะนำมันกลับมา การเอื้อมถึงสายแร่เริ่มไกลได้เท่าที่สแกนมองเห็น เพราะมันใช้เวลาหลายวินาทีในการตอบสนอง ขณะที่พุ่มไม้ใช้เวลาแค่เสี้ยวเดียว
+Ore and stone	แร่และหิน
 ore off	แร่: ปิด
 Ore, gems, stone, timber, hides, herbs, trade goods and other crafting input.	แร่, อัญมณี, หิน, ไม้ซุง, หนังสัตว์, สมุนไพร, สินค้าค้าขาย และวัตถุดิบงานฝีมืออื่น ๆ
 out of range	นอกระยะ
@@ -260,11 +262,11 @@ skip: %s	ข้าม: %s
 Small animals	สัตว์ขนาดเล็ก
 small animals off	สัตว์ขนาดเล็ก: ปิด
 Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	วัตถุในโลกเกมบางชิ้นไม่มีชื่อไอเทมที่อ่านได้ เปิด: เก็บไปเลย ปิด: เว้นสิ่งที่ระบุไม่ได้ทั้งหมดไว้
+someone is wearing this; taking it would copy it	มีคนสวมใส่สิ่งนี้อยู่ การหยิบมาจะทำให้เกิดของซ้ำ
 stack at one point (storage contents)	กองรวมที่จุดเดียว (เนื้อหาคลังเก็บ)
 Status	สถานะ
-Stone	หิน
-stone off	หิน: ปิด
-Stone on the ground and nodes that yield stone.	หินบนพื้นและจุดเก็บของที่ให้ผลผลิตเป็นหิน
+Stop pets looting	ห้ามสัตว์เลี้ยงเก็บของ
+Stop pets looting at all	ห้ามสัตว์เลี้ยงเก็บของโดยสิ้นเชิง
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	โต๊ะ, เก้าอี้, เตียง, พรม, โคมไฟ, เทียน, ภาพวาด, หม้อ และของที่เหลือในห้องที่ตกแต่งไว้ ไม่ว่าจะเก็บจากพื้นหรือเก็บจากจุดโต้ตอบของมันเอง ส่วนใหญ่มีค่าแค่หนึ่งหรือสองทองแดง แต่พรมและเตียงหรูอาจมีมูลค่าถึงหลักพัน จึงควรเปิดสวิตช์นี้ก่อนตกแต่งบ้าน หีบและสิ่งอื่นที่เก็บของไว้ข้างในจะขึ้นกับสวิตช์กล่องแทน ปิดไว้เป็นค่าเริ่มต้น
 Tag	แท็ก
 Tags	แท็ก
@@ -273,10 +275,11 @@ Take goods that belong to someone	เก็บของที่มีเจ้�
 Take goods that belong to someone, on / off	เก็บของที่มีเจ้าของ เปิด / ปิด
 Take items the database cannot name	เก็บไอเทมที่ฐานข้อมูลระบุชื่อไม่ได้
 Pets and companions follow the filters	สัตว์เลี้ยงและเพื่อนร่วมทางทำตามตัวกรอง
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands. Quest and protected items are never deleted. Something you pick up by hand in the same two seconds is judged by the same rules.	สัตว์เลี้ยงเก็บของตามใจชอบและเกมไม่มีสวิตช์สำหรับเรื่องนี้ เปิด: สิ่งใดที่สัตว์เลี้ยงหรือเพื่อนร่วมทางเก็บมา ซึ่งกฎไอเทม แท็ก คลาส หรือขั้นต่ำมูลค่าของคุณจะปฏิเสธ จะถูกลบออกจากช่องเก็บของทันทีที่มาถึง ไอเทมเควสต์และไอเทมที่ได้รับการคุ้มครองจะไม่ถูกลบเด็ดขาด สิ่งที่คุณเก็บเองภายในสองวินาทีเดียวกันจะถูกตัดสินด้วยกฎเดียวกัน
 Take owned goods on / off	เก็บของมีเจ้าของ เปิด / ปิด
+take this one by hand, looting it can lock the quest	หยิบชิ้นนี้ด้วยมือ การเก็บอัตโนมัติอาจทำให้เควสต์ค้าง
 takes effect next launch	มีผลตอนเปิดเกมครั้งถัดไป
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	เอนจินจะสแกนรอบตัวคุณและเก็บของตามที่กฎอนุญาต ปิด หมายความว่าจะไม่มีอะไรถูกเก็บอัตโนมัติเลย ปุ่มเก็บรวดยังใช้งานได้อยู่
+The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	เกมจะถามสองคำถามก่อนที่สัตว์เลี้ยงจะเก็บของ คำถามหนึ่งสำหรับไอเทมที่ตกอยู่บนพื้น และอีกคำถามสำหรับศพ และตัวเลือกนี้ตอบไม่ทั้งสองคำถาม สัตว์เลี้ยงจะไม่เอื้อมไปหยิบอะไรเลย ดังนั้นหลังจากนั้นจะไม่มีของของคุณถูกลบ และของที่คุณเก็บเองก็ไม่เคยตกอยู่ในข้อสงสัย นี่คือคำตอบที่สะอาดกว่าในสองแบบ หากคุณเพียงแค่ไม่อยากให้สัตว์เลี้ยงเก็บของ ส่วนที่ว่ามันครอบคลุมถึงทหารรับจ้างหรือไม่นั้นยังไม่ได้ทดสอบ เกมมีกฎการเก็บของชนิดนี้อยู่เพียงข้อเดียว และทั้งสองคำถามของมันถูกตอบว่าไม่ จึงเป็นไปได้ว่าครอบคลุม ส่วนสัตว์เลี้ยงและเพื่อนร่วมทางทำตามตัวกรองคือสวิตช์ที่ครอบคลุมแน่นอน
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	เกมจะเติมข้อมูลของจุดเก็บของก็ต่อเมื่อคิดว่าคุณเอื้อมถึงมันได้ การกระตุ้นคือการขอให้เกมทำแบบนั้นจากระยะไกล ซึ่งเป็นสิ่งเดียวกับที่ทำให้เก็บเกี่ยวสายแร่ได้ตรงที่มันอยู่ สายแร่ใช้เวลาหลายวินาทีในการตอบสนอง ขณะที่พุ่มไม้ใช้เวลาแค่เสี้ยวเดียว
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	เกมจะลบวัตถุที่ถูกเก็บไปหน่วงเวลาหนึ่ง สิ่งนี้ป้องกันไม่ให้วัตถุเดียวกันถูกส่งซ้ำสองครั้งระหว่างที่มันกำลังจางหาย
 The game treats this as stealing and will put a bounty on you.	เกมจะถือว่านี่คือการขโมยและจะตั้งค่าหัวรางวัลให้คุณ
@@ -284,10 +287,11 @@ The mod never swings a pickaxe. It drives the vein's own break sequence, and the
 Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	การถลกหนังสัตว์ที่คุณฆ่า หนึ่งครั้งต่อซาก คนอยู่ในหมวด ศพ สิ่งที่ได้จากการถลกหนังจะไม่ถูกตรวจสอบกับตัวกรองของคุณ ม็อดไม่เคยเห็นมันก่อนที่มันจะมาถึง ดังนั้นสวิตช์นี้จึงเป็นทั้งหมดหรือไม่มีเลย
 Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	การค้นตัวคนที่คุณฆ่า หนึ่งครั้งต่อศพ สัตว์อยู่ในหมวด ซากสัตว์ สิ่งที่ได้จากการค้นตัวจะไม่ถูกตรวจสอบกับตัวกรองของคุณ ดังนั้นสวิตช์นี้ก็เป็นทั้งหมดหรือไม่มีเลยเช่นกัน
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	เซสชันนี้: เก็บแล้ว %ld ชิ้น, เก็บเกี่ยวแล้ว %ld ชิ้น, จับได้แล้ว %ld ตัว, ซากสัตว์ %ld ตัว
-Timber and branches on the ground and nodes that yield them.	ไม้ซุงและกิ่งไม้บนพื้นและจุดเก็บของที่ให้ผลผลิตเป็นไม้
+Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	ไม้ซุงและกิ่งไม้บนพื้น รวมถึงจุดเก็บของที่ให้ของเหล่านั้น สิ่งที่ส่วนใหญ่ของมันมีอยู่ข้างในนั้นอ่านมาจากข้อมูลของตัวเกมเอง ดังนั้นการปฏิเสธประเภท wood ในแท็บประเภทจะทำให้ต้นไม้ยังคงยืนอยู่ และไม้ที่อยู่ใต้ต้นก็เช่นกัน ในที่ที่เกมไม่ได้บอกอะไรเกี่ยวกับจุดเก็บของเลย สวิตช์นี้คือการควบคุมเพียงอย่างเดียวที่มันมี
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	หากต้องการเว้นสัตว์บางชนิดไว้ ให้ตั้งค่าสิ่งที่มันกลายเป็นเป็นไม่เลยในแท็บไอเทม: Item_Tench, Item_Ricefish, Item_Iguana มอดอ่านแถวของสิ่งมีชีวิตนั้นในตารางตัวละครของเกมเอง จึงรู้ว่ากำลังเจอสัตว์ชนิดใดก่อนจะจับมันด้วยซ้ำ สัตว์แปลก ๆ บางชนิดยังคงต้องเดาจากชื่อโมเดลของมัน และถูกจับตามหมวดหมู่เท่านั้น
 Treasure and keepsakes	สมบัติและของที่ระลึก
 Two buttons at once, never one: every single button already does something in this game. The mod only reads the pad, so the game still sees both buttons. Pick a pair that does nothing together, like the two shoulder buttons, or Back and a face button.	กดสองปุ่มพร้อมกันเสมอ ห้ามปุ่มเดียว เพราะทุกปุ่มเดี่ยวมีหน้าที่ของตัวเองอยู่แล้วในเกมนี้ มอดอ่านค่าจากเกมแพดเท่านั้น เกมจึงยังคงเห็นทั้งสองปุ่มอยู่ เลือกคู่ปุ่มที่ไม่ทำอะไรเมื่อกดพร้อมกัน เช่นปุ่มบ่าทั้งสองข้าง หรือ Back กับปุ่มหน้าใดปุ่มหนึ่ง
+Two things that hold things. The chests, crates and drop-set nodes you open, which rarely answer the loot event. And anything on the ground whose job is to hold something: bottles, jars, clay pots, waterskins, vases and the storage boxes you place. Off by default, and off means a shelf of pottery is left where it stands. Reward boxes are not covered, since those are loot in their own right and belong to Treasure and keepsakes on the Classes tab.\n\nWhat comes out of a chest is not checked against your filters. The game hands the contents over in one go and the mod never sees them as objects, so for those this switch is all or nothing.	สองสิ่งที่บรรจุของ อย่างแรกคือหีบ ลัง และจุดชุดของรางวัลที่คุณเปิด ซึ่งไม่ค่อยตอบสนองต่อเหตุการณ์เก็บของ อย่างที่สองคือสิ่งใดก็ตามบนพื้นที่มีหน้าที่บรรจุอะไรบางอย่าง ได้แก่ ขวด โหล หม้อดิน ถุงน้ำ แจกัน และกล่องเก็บของที่คุณวางเอง ปิดไว้เป็นค่าเริ่มต้น และปิดหมายความว่าชั้นวางเครื่องปั้นดินเผาทั้งชั้นจะถูกทิ้งไว้ที่เดิม กล่องรางวัลไม่รวมอยู่ในนี้ เพราะกล่องเหล่านั้นเป็นของรางวัลในตัวเอง และอยู่ภายใต้สมบัติและของที่ระลึกในแท็บประเภท\n\nสิ่งที่ออกมาจากหีบจะไม่ถูกนำไปตรวจกับตัวกรองของคุณ เกมจะส่งของข้างในมาให้ทีเดียวทั้งหมด และม็อดไม่เคยเห็นมันในฐานะวัตถุแยกชิ้น ดังนั้นสำหรับของเหล่านั้น สวิตช์นี้จึงเป็นแบบเอาทั้งหมดหรือไม่เอาเลย
 Unbound until you set it. The game calls taking owned goods stealing and puts a bounty on you for it, so this is the switch you want on for a moment and off again, which is a poor fit for a menu.	ยังไม่ได้ผูกจนกว่าคุณจะตั้งค่า เกมเรียกการเก็บของมีเจ้าของว่าการขโมยและจะตั้งค่าหัวรางวัลให้คุณ สวิตช์นี้จึงเหมาะกับการเปิดชั่วครู่แล้วปิดกลับ ซึ่งไม่ค่อยเข้ากับรูปแบบเมนูนัก
 Unidentified nodes	จุดเก็บของที่ยังไม่ระบุชนิด
 unidentified nodes off	จุดเก็บของที่ยังไม่ระบุชนิด: ปิด
@@ -326,4 +330,7 @@ Writes MasterLooter.template.txt beside the plugin, holding every line the menu 
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	เขียนการตั้งค่าปัจจุบันลงใน \"%s\" โหลดมันขึ้นมา แก้ไขตามต้องการ แล้วบันทึกกลับ
 Writes the settings as they are now, named %s.	เขียนการตั้งค่าปัจจุบัน ตั้งชื่อว่า %s
 yes	ใช่
+your rules refuse all ore, jewels and stone	กฎของคุณปฏิเสธทั้งแร่ อัญมณี และหิน
+your rules refuse all stone	กฎของคุณปฏิเสธหินทั้งหมด
+your rules refuse everything this node holds	กฎของคุณปฏิเสธทุกอย่างที่จุดเก็บของนี้มีอยู่
 yours, just out of your hand	ของคุณเอง เพิ่งหลุดจากมือไป
