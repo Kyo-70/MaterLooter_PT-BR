@@ -2545,14 +2545,31 @@ namespace ml::loot
                 // the bytes and the wearer, because the run that reads them has
                 // to be readable afterwards, and the answer is whether the
                 // bandit still has his shield.
-                if (cfg.equipProbeRange > 0.0f && c.d > cfg.equipProbeRange)
+                // Distance was the wrong axis and the category is the right
+                // one. Across 1,944 sightings of this folder in three of
+                // Sov1737's sessions the split is total: every one of the 1,885
+                // at cat2 0x11 has a wearer recorded, and not one of the 59 at
+                // 0x00, 0x0F or 0x19 ever does, at any range or at any moment in
+                // the session. 301 of these entities were tracked from first
+                // sighting to last and not one ever gained a wearer or changed
+                // its category, so "the game had not handed the link over yet"
+                // does not survive the data.
+                //
+                // Sov's own reading of it, unprompted: the ones left behind are
+                // a shield on an armour stand and swords stuck in the ground.
+                // Scenery built from the same prefabs as real gear.
+                //
+                // 0x19 stays refused whatever this is set to. The Strongbow
+                // Gloves of 13 September are said to have come through
+                // unparented at 0x19 and duplicated, that log is not on this
+                // machine, and gloves are not scenery.
+                if (cfg.equipProbe && c.cat2 != 0x11 && c.cat2 != 0x19)
                 {
                     static volatile LONG s_said = 0;
                     if (InterlockedIncrement(&s_said) <= 60)
-                        LOG("[probe73] letting %s through at %.1f m, past the %.1f m mark: "
-                            "type %u cat %02X/%02X parent %08X %s",
+                        LOG("[probe73] letting %s through at %.1f m: type %u cat %02X/%02X parent %08X %s",
                             c.db ? c.db->Label() : (c.key[0] ? c.key : "something unnamed"),
-                            c.d, cfg.equipProbeRange, c.tid, c.cat, c.cat2, c.parent, c.node);
+                            c.d, c.tid, c.cat, c.cat2, c.parent, c.node);
                 }
                 else return skip("someone is wearing this; taking it would copy it");
             }
