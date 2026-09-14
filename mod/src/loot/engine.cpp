@@ -572,6 +572,11 @@ namespace ml::loot
     static std::unordered_map<uint64_t, ArmRec> g_armed;    // nodes we asked the game to fill
     static std::unordered_map<uint32_t, const char*> g_why; // last logged verdict per entity
     static int g_whyLines = 0;
+    // See the budget at the [why] emitter. The ceiling is a runaway guard for a
+    // session that never ends, not a working limit: at 120 a minute it is out of
+    // reach of any ordinary evening.
+    static constexpr int kWhyPerMinute = 120;
+    static constexpr int kWhyCeiling   = 60000;
     static std::unordered_map<uint32_t, DWORD> g_firstSeen; // eid -> when first listed
     static std::unordered_set<uint32_t>        g_containers;
     struct Spot { Vec3 p; uint16_t tid; DWORD when; uint32_t eid; };
@@ -4402,14 +4407,51 @@ namespace ml::loot
         // Say once per object why it was skipped, so a wrong verdict can be
         // read straight from the log without the verbose switch.
         const float diagRange = std::max(std::max(cfg.lootRange, cfg.gatherRange), std::max(cfg.catchRange, cfg.corpseRange));
-        for (size_t i = 0; i < list.size() && g_whyLines < 4000; ++i)
+        // A minute's worth at a time, rather than a total for the session.
+        //
+        // The old budget was 4,000 lines and nothing after them. In LuxDragon's
+        // log of 14 September 2026 it ran out at 09:10:32 and the session went on
+        // to 10:02:42, so fifty-two of its sixty-four minutes hold no verdict at
+        // all, and the question it had been sent to answer was about something
+        // that happened in the silent part. A session must never go permanently
+        // blind, whatever else this costs.
+        //
+        // 120 a minute is two a second. The dedupe below is per object and per
+        // reason, so a busy camp burns through a window and then falls quiet on
+        // its own as the same things stop being news; it is new scenery that
+        // costs, not standing still. An hour of that is about 1.8 MB, against
+        // the 1.0 MB the old cap allowed in a session of any length.
+        //
+        // These lines are written whether or not the verbose switch is on, which
+        // is the whole point of them, so the budget has to be a number somebody
+        // would accept without having asked for a big log.
+        static DWORD s_whyWindow = 0;
+        static int   s_whyInWindow = 0, s_whySkipped = 0;
+        if (now - s_whyWindow >= 60000)
+        {
+            // Say what was dropped rather than simply stopping. Going quiet
+            // without a word is what made the log above unreadable: it looks
+            // identical to nothing having happened.
+            if (s_whySkipped)
+                LOG("[why] and %d more in that minute, held back to keep the log a sensible size. "
+                    "Each object is written once per reason, so these are ones that had not been seen before.",
+                    s_whySkipped);
+            s_whyWindow = now;
+            s_whyInWindow = 0;
+            s_whySkipped = 0;
+        }
+        for (size_t i = 0; i < list.size() && g_whyLines < kWhyCeiling; ++i)
         {
             const Cand& k = list[i];
             const Verdict& v = verdicts[i];
             if (!k.filled || v.loot || k.d > diagRange) continue;
             auto it = g_why.find(k.eid);
             if (it != g_why.end() && it->second == v.why) continue;
+            // Out of budget: leave it unrecorded so it is written the moment
+            // there is room, rather than marked seen and lost for good.
+            if (s_whyInWindow >= kWhyPerMinute) { ++s_whySkipped; continue; }
             g_why[k.eid] = v.why;
+            ++s_whyInWindow;
             ++g_whyLines;
             // "mine" is the back-reference to the player actor found in the
             // item's own fields. Printed so a log can say whether Damiane's
