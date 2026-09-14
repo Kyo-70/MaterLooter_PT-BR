@@ -105,7 +105,7 @@ Event descriptors	事件描述符
 Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	所有石头：地上的矿石与石块、矿脉、巨石、碎石堆以及采石场的石料。矿脉会在原地被打碎，内容物从地上捡起，这正是你的镐子所做的事，也是值得带一把更好的镐子的原因：工具的采矿产出加成作用于掉落物，而不是资源点。每条矿脉只敲一次，之后就放着不管，直到游戏把它恢复。对矿脉的伸手从扫描所能看到的最远处就开始，因为灌木只要一瞬就能回应，矿脉却要数秒。\n\n石头曾经有过自己的开关，而这种划分从未站得住脚：游戏把大部分采石场石料归在采矿之下，所以把石头关掉，它照样会进来。想留下矿石、把石头丢在原地，请在类别页签中拒绝 stone 类别。这涵盖石头、优质石头、无瑕石头和钟乳石，凡是游戏说不含其他东西的岩石便会留在原处，矿洞岩石和钟乳石也在其中。同时含有矿石或宝石的矿脉仍会被打碎，因为拒绝石头并不等于拒绝它旁边的东西。若游戏对某个资源点完全没有描述，则需要矿石、宝石和石头全部被拒绝，才会略过那一个。
 Extra ore per vein	每条矿脉的额外矿石
 failed	失败
-fast-travel artifact	被封印的阿比斯神器
+fast-travel artifact	快速旅行阿比斯神器
 filter classes	过滤类别
 filter tags	过滤标签
 Filters	过滤规则
