@@ -1320,7 +1320,7 @@ namespace ml::loot
     }
 
     // What kind of thing a gather node is, from what it yields.
-    enum class GatherKind { Unknown, Plant, Crop, Ore, Stone, Wood, Item, Furniture, Container };
+    enum class GatherKind { Unknown, Plant, Crop, CampFarm, Ore, Stone, Wood, Item, Furniture, Container };
     // What an item counts as for the kind toggles. The classes come straight
     // from the item database (scripts/build_item_db.py): ore and jewel are
     // minerals from veins, stone from quarries, wood from trees and branches.
@@ -1330,6 +1330,14 @@ namespace ml::loot
     static GatherKind KindFromName(const std::string& kind)
     {
         if (kind == "plant") return GatherKind::Plant;
+        // The camp farm crops. Without this they read as Unknown and answer to
+        // Unidentified nodes, which is the switch they were stuck behind in the
+        // first place, so the table row would have bought nothing.
+        //
+        // Their own kind rather than Crop, because these are plants the player
+        // put there. Crops is on by default and sweeping somebody's farm as they
+        // walk past it is not a thing to start doing without being asked.
+        if (kind == "farm")  return GatherKind::CampFarm;
         if (kind == "ore")   return GatherKind::Ore;
         if (kind == "stone") return GatherKind::Stone;
         if (kind == "wood")  return GatherKind::Wood;
@@ -1502,6 +1510,7 @@ namespace ml::loot
         {
         case GatherKind::Plant:     return cfg.gatherPlants   ? nullptr : "plants off";
         case GatherKind::Crop:      return cfg.gatherCrops    ? nullptr : "crops off";
+        case GatherKind::CampFarm:  return cfg.gatherCampFarm ? nullptr : "your own camp farm (off)";
         // Stone has no switch of its own. Every rock answers to Ore, and
         // which stones to keep is an item rule now: the database gives
         // Stone, Fine Stone, Flawless Stone and Stalactite the class

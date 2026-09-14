@@ -92,6 +92,7 @@ namespace ml::Settings
         else if (k == "PickUpItems")      c.pickUpItems = Flag(v);
         else if (k == "GatherPlants")     c.gatherPlants = Flag(v);
         else if (k == "GatherCrops")      c.gatherCrops = Flag(v);
+        else if (k == "GatherCampFarm")   c.gatherCampFarm = Flag(v);
         else if (k == "GatherOre")        c.gatherOre = Flag(v);
         // Retired. Stone answers to Ore now, and a player who had this off
         // meant it, so the migration below turns that into the class rule
@@ -409,6 +410,7 @@ namespace ml::Settings
                  c.scansPerSec, c.perScan, c.burstPerKey, c.retryAfterMs); s += b;
         snprintf(b, sizeof b, "LootCorpses=%d\nSearchBodies=%d\nPickUpItems=%d\nGatherPlants=%d\nGatherCrops=%d\nGatherOre=%d\nGatherWood=%d\nGatherUnknown=%d\n",
                  c.lootCorpses, c.searchBodies, c.pickUpItems, c.gatherPlants, c.gatherCrops, c.gatherOre, c.gatherWood, c.gatherUnknown); s += b;
+        snprintf(b, sizeof b, "GatherCampFarm=%d\n", c.gatherCampFarm); s += b;
         snprintf(b, sizeof b, "CatchInsects=%d\nCatchFish=%d\nCatchAnimals=%d\nLootContainers=%d\nLootFurniture=%d\n",
                  c.catchInsects, c.catchFish, c.catchAnimals, c.lootContainers, c.lootFurniture); s += b;
         snprintf(b, sizeof b, "ScanRange=%.1f\nLootRange=%.1f\nGatherRange=%.1f\nCatchRange=%.1f\nCorpseRange=%.1f\nMinRange=%.2f\n",

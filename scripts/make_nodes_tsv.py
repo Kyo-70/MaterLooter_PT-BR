@@ -378,6 +378,23 @@ def kind_for(tags, name, prefab, folder=""):
         if any(w in prefab for w in CONTAINER_WORDS):
             return "container", "folder"
         return "pickup", "folder"
+    # A camp farm's growing crops, which carry no tag at all and no word the
+    # guesses above know. 61 camp_farm prefabs exist, 17 of them already have a
+    # kind from a tag or from a name with "tree" in it, 20 are the _seed
+    # prefabs held back above, and the remaining 24 reach here with nothing:
+    # ginseng, corn, grape, tomato, taro, figs, chaya, kudzu, opuntia, and the
+    # first phase of cacao, ensete, orange, peach, pear, pomegranate and rubber.
+    #
+    # Every one of them was an unidentified node, which is how LuxDragon walked
+    # past a ginseng on 14 September 2026 with that switch off. With it on they
+    # arrive along with every torch spark in the world, which is not a choice
+    # anybody should have to make about their own farm.
+    #
+    # Last in the order, after the folder test and every name guess, so this can
+    # only ever name something that had no kind at all. Seeds stay out: nothing
+    # here says whether taking one lifts what the player has planted.
+    if "camp_farm" in prefab and "_seed" not in prefab:
+        return "farm", False
     return "", False
 
 

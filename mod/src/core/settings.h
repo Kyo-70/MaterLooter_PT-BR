@@ -72,6 +72,21 @@ namespace ml
         // turning Plants off still left 44 of the game's 72 collection sockets
         // being harvested, sweet potatoes and barley among them.
         bool  gatherCrops    = true;
+        // A camp farm's growing crops, which are plants the player planted.
+        // Off, and set from the ini rather than the menu.
+        //
+        // 24 camp-farm prefabs carry no gimmick tag and no name the generator
+        // knows, so until they were named they were unidentified nodes and
+        // nobody with that switch off could reach them; LuxDragon walked past a
+        // ginseng that way on 14 September 2026. Naming them makes them
+        // reachable, and reachable by default would mean harvesting somebody's
+        // farm as they walked through it, which nobody asked for.
+        //
+        // Not in the menu because a menu string has to be translated into 28
+        // languages before the gate goes green again, and this was not worth
+        // holding a release for. Promote it when the next batch of strings goes
+        // through.
+        bool  gatherCampFarm = false;
         bool  gatherOre      = true;
         bool  gatherWood     = true;
         bool  gatherUnknown  = false;  // nodes whose yield has not been seen yet (learned from what you gather by hand)

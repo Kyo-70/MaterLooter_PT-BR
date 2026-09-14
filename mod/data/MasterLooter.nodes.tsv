@@ -363,18 +363,42 @@ gimmick_camp_farm_abyss_stone_01_phase02	wood		Camp farm abyss stone 01 phase02	
 gimmick_camp_farm_abyss_stone_01_phase03	plant		Abyssstone fruit	tag	0		0	0
 gimmick_camp_farm_apple_01_phase01	wood		Apple smalltree	name	0		0	0
 gimmick_camp_farm_apple_01_phase02	wood		Apple tree	tag	0		0	0
+gimmick_camp_farm_cacao_01_phase01	farm		Camp farm cacao 01 phase01	name	0		0	0
 gimmick_camp_farm_cacao_01_phase02	wood		Camp farm cacao 01 phase02	tag	0		0	0
+gimmick_camp_farm_chaya_01_phase01	farm		Camp farm chaya 01 phase01	name	0		0	0
+gimmick_camp_farm_chaya_01_phase02	farm		Camp farm chaya 01 phase02	name	0		0	0
 gimmick_camp_farm_coffeetree_01_phase01	wood		Camp farm coffeetree 01 phase01	name	0		0	0
 gimmick_camp_farm_coffeetree_01_phase02	wood		Camp farm coffeetree 01 phase02	name	0		0	0
+gimmick_camp_farm_corn_01_phase01	farm		Camp farm corn 01 phase01	name	0		0	0
+gimmick_camp_farm_corn_01_phase02	farm		Camp farm corn 01 phase02	name	0		0	0
+gimmick_camp_farm_ensete_01_phase01	farm		Camp farm ensete 01 phase01	name	0		0	0
 gimmick_camp_farm_ensete_01_phase02	wood		Camp farm ensete 01 phase02	tag	0		0	0
+gimmick_camp_farm_figs_01_phase01	farm		Camp farm figs 01 phase01	name	0		0	0
 gimmick_camp_farm_figs_01_phase02	wood		Camp farm figs 01 phase02	tag	0		0	0
+gimmick_camp_farm_ginseng_01_phase01	farm		Camp farm ginseng 01 phase01	name	0		0	0
+gimmick_camp_farm_ginseng_01_phase02	farm		Camp farm ginseng 01 phase02	name	0		0	0
 gimmick_camp_farm_glowflower_01_phase01	plant		Camp farm glowflower 01 phase01	name	0		0	0
 gimmick_camp_farm_glowflower_01_phase02	plant		Camp farm glowflower 01 phase02	name	0		0	0
+gimmick_camp_farm_grape_01_phase01	farm		Camp farm grape 01 phase01	name	0		0	0
+gimmick_camp_farm_grape_01_phase02	farm		Camp farm grape 01 phase02	name	0		0	0
+gimmick_camp_farm_kudzu_01_phase01	farm		Camp farm kudzu 01 phase01	name	0		0	0
+gimmick_camp_farm_kudzu_01_phase02	farm		Camp farm kudzu 01 phase02	name	0		0	0
+gimmick_camp_farm_opuntia_01_phase01	farm		Camp farm opuntia 01 phase01	name	0		0	0
+gimmick_camp_farm_opuntia_01_phase02	farm		Camp farm opuntia 01 phase02	name	0		0	0
+gimmick_camp_farm_orange_01_phase01	farm		Camp farm orange 01 phase01	name	0		0	0
 gimmick_camp_farm_orange_01_phase02	wood		Camp farm orange 01 phase02	tag	0		0	0
+gimmick_camp_farm_peach_01_phase01	farm		Camp farm peach 01 phase01	name	0		0	0
 gimmick_camp_farm_peach_01_phase02	wood		Camp farm peach 01 phase02	tag	0		0	0
+gimmick_camp_farm_pear_01_phase01	farm		Camp farm pear 01 phase01	name	0		0	0
 gimmick_camp_farm_pear_01_phase02	wood		Camp farm pear 01 phase02	tag	0		0	0
+gimmick_camp_farm_pomegranate_01_phase01	farm		Camp farm pomegranate 01 phase01	name	0		0	0
 gimmick_camp_farm_pomegranate_01_phase02	wood		Camp farm pomegranate 01 phase02	tag	0		0	0
+gimmick_camp_farm_rubber_01_phase01	farm		Camp farm rubber 01 phase01	name	0		0	0
 gimmick_camp_farm_rubber_01_phase02	wood		Camp farm rubber 01 phase02	tag	0		0	0
+gimmick_camp_farm_taro_01_phase01	farm		Camp farm taro 01 phase01	name	0		0	0
+gimmick_camp_farm_taro_01_phase02	farm		Camp farm taro 01 phase02	name	0		0	0
+gimmick_camp_farm_tomato_01_phase01	farm		Camp farm tomato 01 phase01	name	0		0	0
+gimmick_camp_farm_tomato_01_phase02	farm		Camp farm tomato 01 phase02	name	0		0	0
 gimmick_catched_flowerbutterfly_0001	pickup		Catched flowerbutterfly	tag	0		0	0
 gimmick_cave_break_stalac_02	ore		Cave break stalac	tag	0	Item_Rare_Collect_Stalactites	0	0
 gimmick_clifftree_01	wood		Clifftree	name	1		0	0
