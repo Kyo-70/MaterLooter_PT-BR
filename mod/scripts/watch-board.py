@@ -10,9 +10,17 @@ was already seen. The first run seeds the state and prints only a summary.
 
 What it sees: every comment on page one of the posts tab (a new comment
 anywhere bumps its thread to page one), every row on the bugs tab with its
-status, and every issue and issue comment on GitHub since the last pass.
-What it cannot see: replies inside a bugs-tab row, which load through a
-script call the page does not expose to a plain fetch.
+status, every reply inside those rows, and every issue and issue comment on
+GitHub since the last pass.
+
+Bug-row replies were the blind spot until 14 September 2026, and they cost two
+real findings in one day: symplexity's log proving the gear duplication was still
+live, and lsimo narrowing a crash to abyss gear crafting. Both sat inside rows
+whose only outward sign was a changed timestamp, and one of the rows was marked
+Fixed. The note here used to say the replies could not be fetched. They can: the
+page's own loadIssueReplies posts to a widget endpoint, and curl gets it with the
+headers jQuery would have sent. A row is only asked about when its timestamp
+moves, so a quiet pass still costs two requests.
 
 The Discord side needs the bot's token in DISCORD_BOT_TOKEN, in the
 environment or in keys.local.env beside this script; without it the forum
@@ -43,6 +51,9 @@ DISCORD_FORUM = "1547305334945615922"      # help-n-bug-reports
 DISCORD_FORUM_NAME = "help-n-bug-reports"
 SETH = "355497711568551947"
 DISCORD_SELF = {SETH, "1547307453107150979"}   # Seth, the bot
+# The same idea on the boards. Seth answers most rows himself, and his own reply
+# arriving back as a finding is noise that trains you to ignore the channel.
+SELF_NAMES = {"shin234"}
 
 
 # The site's edge starts answering 403 when the pages are asked for in quick
@@ -62,6 +73,29 @@ def fetch(url):
     _last_fetch[0] = time.time()
     r = subprocess.run(["curl", "-s", "-f", "-A", UA, "--max-time", "60", url],
                        capture_output=True)
+    if r.returncode != 0:
+        raise RuntimeError("curl exit %d" % r.returncode)
+    return r.stdout.decode("utf-8", "replace")
+
+
+def post(url, data, referer):
+    """POST a form and return the body. Same rate limit as fetch().
+
+    The site answers this endpoint 403 without the headers a browser's XHR
+    sends, which is what made it look unreachable: X-Requested-With is the one
+    that matters, and Referer and Origin cost nothing to send.
+    """
+    wait = FETCH_GAP - (time.time() - _last_fetch[0])
+    if wait > 0:
+        time.sleep(wait)
+    _last_fetch[0] = time.time()
+    r = subprocess.run(["curl", "-s", "-f", "-A", UA, "--max-time", "60",
+                        "-X", "POST", url,
+                        "-H", "X-Requested-With: XMLHttpRequest",
+                        "-H", "Referer: " + referer,
+                        "-H", "Origin: https://www.nexusmods.com",
+                        "-H", "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+                        "--data", data], capture_output=True)
     if r.returncode != 0:
         raise RuntimeError("curl exit %d" % r.returncode)
     return r.stdout.decode("utf-8", "replace")
@@ -88,14 +122,51 @@ def posts(page=MOD):
 
 
 def bugs(page=MOD):
-    """{issue id: (title, status)} for the bugs tab."""
+    """{issue id: (title, status, when)} for the bugs tab.
+
+    `when` is the row's own last-activity stamp, and it is the only thing on this
+    page that moves when somebody replies inside a row. The status can stay
+    Fixed and the title never changes, so without it a reply is invisible.
+    """
     h = fetch(page + "?tab=bugs")
     out = {}
     for m in re.finditer(r'id="issue_(\d+)"(.*?)</tr>', h, re.S):
         iid, body = m.group(1), m.group(2)
         t = re.search(r'class="issue-title"[^>]*>(.*?)</a>', body, re.S)
         s = re.search(r'inline-status"><span[^>]*>([^<]+)</span>', body)
-        out[iid] = (clean(t.group(1)) if t else "?", s.group(1).strip() if s else "?")
+        w = re.search(r'<time[^>]*>([^<]+)</time>', body)
+        out[iid] = (clean(t.group(1)) if t else "?",
+                    s.group(1).strip() if s else "?",
+                    clean(w.group(1)) if w else "")
+    return out
+
+
+def bug_replies(iid, page=MOD):
+    """[(reply id, author, when, text)] for one bugs-tab row, oldest first.
+
+    The opening report is in here too, under the issue id rather than a reply
+    id, so a brand new row reports its body and not just its title.
+    """
+    h = post("https://www.nexusmods.com/Core/Libs/Common/Widgets/ModBugReplyList",
+             "issue_id=" + str(iid), page + "?tab=bugs")
+    out = []
+    tile = re.compile(r'id="bug-(?:issue|reply)-tile-(\d+)"(.*?)(?=id="bug-(?:issue|reply)-tile-|\Z)', re.S)
+    for m in tile.finditer(h):
+        rid, body = m.group(1), m.group(2)
+        a = re.search(r'class="comment-name">\s*(?:<a[^>]*>)?\s*([^<]+?)\s*(?:</a>)?\s*<', body)
+        c = re.search(r'class="comment-content"[^>]*>(.*?)</div>\s*</li>', body, re.S)
+        if not c:
+            c = re.search(r'class="comment-content"[^>]*>(.*?)\Z', body, re.S)
+        when, text = "", ""
+        if c:
+            inner = c.group(1)
+            w = re.search(r'<time[^>]*>([^<]+)</time>', inner)
+            when = clean(w.group(1)) if w else ""
+            # Everything after the stamp is what they wrote. The stamp lives
+            # inside the content block, so stripping tags without cutting it out
+            # first prints the date twice.
+            text = clean(inner[inner.find("</time>") + len("</time>"):] if w else inner)
+        out.append((rid, a.group(1) if a else "?", when, text))
     return out
 
 
@@ -326,7 +397,43 @@ def once(st):
                 raise Held()
             b = bugs(page)
             old = st.get(bk, {})
-            for iid, (t, s) in b.items():
+            # Reply ids seen, flat across rows: the site numbers them globally,
+            # so there is nothing to gain from keeping them per row.
+            rk = bk + "_replies"
+            seen_replies = set(st.get(rk, []))
+            seeding_replies = rk not in st
+            asked = 0
+            for iid, (t, s, w) in sorted(b.items()):
+                was = old.get(iid)
+                # Ask a row for its replies when it is new, or when its own
+                # timestamp has moved. A row marked Fixed still counts: both
+                # findings of 14 September 2026 were replies on rows nobody had
+                # a reason to look at.
+                moved = was is None or (len(was) > 2 and was[2] != w)
+                if not (moved or seeding_replies):
+                    continue
+                try:
+                    replies = bug_replies(iid, page)
+                except Exception as e:
+                    print("%swatch: could not read the replies on row %s (%s). Nothing is lost, "
+                          "the next pass that gets through catches up." % (tag, iid, e))
+                    continue
+                asked += 1
+                for rid, who, rwhen, text in replies:
+                    if rid in seen_replies:
+                        continue
+                    seen_replies.add(rid)
+                    if not seeded or fresh or seeding_replies:
+                        continue
+                    if who.lower() in SELF_NAMES:
+                        continue
+                    lines.append("%snexus bug: reply on %s by %s, %s: %s [row: %s]"
+                                 % (tag, iid, who, rwhen, text[:500], t))
+            if seeding_replies and asked:
+                print("%swatch: bug-row replies seeded from %d row(s); only new ones are reported from here."
+                      % (tag, asked))
+            st[rk] = sorted(seen_replies)
+            for iid, (t, s, w) in b.items():
                 if not seeded or fresh:
                     continue
                 if iid not in old:
