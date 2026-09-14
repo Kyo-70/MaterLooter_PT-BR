@@ -259,12 +259,16 @@ Show a brief notice when auto-loot is toggled	切换自动拾取开关时显示�
 Showing current overrides. Type to search all %d items.	正在显示当前覆盖规则。输入可搜索全部 %d 件物品。
 Showing the nearest %d of %d. The rest are further away.	正在显示最近的 %d 个（共 %d 个）。其余对象距离更远。
 Skip all	全部跳过
+Skip quest equipment	跳过任务装备
+Quest equipment	任务装备
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	游戏标记为重要且没有商店收购的装备，涵盖所有分类。关闭后，任务用的工具会留在原地。
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	游戏标记为重要且没有商店收购的工具和装备：施肥喷雾器和润滑喷雾器、库库长枪、斥候戒指和项链，共180件，几乎全都只值一枚铜币。过早从地上捡起其中一件，可能让任务步骤乱了顺序。\n\n它是把两个标记合起来看的，所以只带其中一个的物品不在此列。田野喷雾器无法出售，但没有重要标记，仍然会被捡走。
 Skip items shops refuse to buy	跳过商店拒收的物品
 Skip quest items	跳过任务物品
 skip: %s	跳过：%s
 Small animals	小型动物
 small animals off	小型动物已关闭
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	部分世界对象不含可读的物品名称。开启：照样拾取。关闭：保留所有未识别对象。
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	部分世界对象不含可读的物品名称。开启：照样拾取。关闭：保留所有未识别对象。\n\n这只适用于散落在地上的物品。节点表背书的可拾取物，例如一堆硬币或一摞金条，无论此项如何设置都会被拾取：表中写有该预制件的名称，这本身就是识别，而里面的物品有没有名称是另一回事。它自己的类别开关仍然生效。
 someone is wearing this; taking it would copy it	有人正穿戴着这件；取走会复制它
 stack at one point (storage contents)	堆叠在单点 (容器内容物)
 Status	状态
@@ -336,4 +340,5 @@ yes	是
 your rules refuse all ore, jewels and stone	你的规则拒绝了矿石、宝石和石头
 your rules refuse all stone	你的规则拒绝了所有石头
 your rules refuse everything this node holds	你的规则拒绝了这个资源点里的一切
+part of a mechanism, not loose loot	机关的一部分，不是散落的战利品
 yours, just out of your hand	刚从你手中脱离，仍属于你

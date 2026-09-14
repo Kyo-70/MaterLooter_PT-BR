@@ -257,12 +257,16 @@ Show a brief notice when auto-loot is toggled	Hiện thông báo ngắn khi bậ
 Showing current overrides. Type to search all %d items.	Đang hiện các ghi đè hiện tại. Gõ để tìm trong tất cả %d vật phẩm.
 Showing the nearest %d of %d. The rest are further away.	Đang hiện %d gần nhất trong tổng số %d. Số còn lại ở xa hơn.
 Skip all	Bỏ qua tất cả
+Skip quest equipment	Bỏ qua trang bị nhiệm vụ
+Quest equipment	Trang bị nhiệm vụ
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Trang bị được trò chơi đánh dấu quan trọng mà không cửa hàng nào mua, ở mọi phân loại. Tắt thì công cụ nhiệm vụ được để nguyên tại chỗ.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Công cụ và trang bị được trò chơi đánh dấu là quan trọng mà không cửa hàng nào mua: bình phun phân bón và bình phun dầu bôi trơn, giáo Kuku, nhẫn và vòng cổ trinh sát. 180 món, gần như tất cả chỉ đáng một đồng đồng, và nhặt một món lên quá sớm có thể làm lệch thứ tự một bước nhiệm vụ.\n\nNó đọc cả hai dấu cùng lúc, nên món chỉ mang một trong hai thì không thuộc diện này. Bình Phun Đồng Ruộng không bán được nhưng không được đánh dấu quan trọng, và vẫn được nhặt.
 Skip items shops refuse to buy	Bỏ qua vật phẩm mà cửa hàng từ chối mua
 Skip quest items	Bỏ qua vật phẩm nhiệm vụ
 skip: %s	bỏ qua: %s
 Small animals	Động vật nhỏ
 small animals off	động vật nhỏ tắt
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Một số vật thể trong thế giới không mang tên vật phẩm có thể đọc được. Bật: vẫn lấy chúng. Tắt: để yên mọi thứ chưa xác định được.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Một số vật thể trong thế giới không mang tên vật phẩm có thể đọc được. Bật: vẫn lấy chúng. Tắt: để yên mọi thứ chưa xác định được.\n\nĐiều này chỉ áp dụng cho vật phẩm rơi rớt. Một vật nhặt được mà bảng điểm bảo chứng, chẳng hạn một đống tiền xu hay một chồng thỏi vàng, vẫn được nhặt dù tuỳ chọn này bật hay tắt: chính việc bảng nêu tên prefab mới là thứ nhận dạng nó, còn vật phẩm bên trong có tên hay không là chuyện khác. Công tắc phân loại của riêng nó vẫn có hiệu lực.
 someone is wearing this; taking it would copy it	có người đang mặc thứ này; lấy nó sẽ tạo ra một bản sao
 stack at one point (storage contents)	chồng tại một điểm (nội dung kho chứa)
 Status	Trạng thái
@@ -334,4 +338,5 @@ yes	có
 your rules refuse all ore, jewels and stone	quy tắc của bạn từ chối quặng, đá quý và đá
 your rules refuse all stone	quy tắc của bạn từ chối mọi loại đá
 your rules refuse everything this node holds	quy tắc của bạn từ chối mọi thứ điểm này chứa
+part of a mechanism, not loose loot	một phần của cơ cấu, không phải chiến lợi phẩm rơi rớt
 yours, just out of your hand	của bạn, vừa rời khỏi tay bạn

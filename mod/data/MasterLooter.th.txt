@@ -256,12 +256,16 @@ Show a brief notice when auto-loot is toggled	แสดงข้อความ�
 Showing current overrides. Type to search all %d items.	กำลังแสดงการแทนที่ปัจจุบัน พิมพ์เพื่อค้นหาไอเทมทั้งหมด %d รายการ
 Showing the nearest %d of %d. The rest are further away.	กำลังแสดง %d รายการที่ใกล้ที่สุดจากทั้งหมด %d รายการ ที่เหลืออยู่ไกลกว่านี้
 Skip all	ข้ามทั้งหมด
+Skip quest equipment	ข้ามอุปกรณ์เควส
+Quest equipment	อุปกรณ์เควส
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	อุปกรณ์ที่เกมทำเครื่องหมายว่าสำคัญและไม่มีร้านไหนรับซื้อ ครอบคลุมทุกประเภท ปิดไว้แล้วเครื่องมือเควสจะถูกทิ้งไว้ที่เดิม
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	เครื่องมือและอุปกรณ์ที่เกมทำเครื่องหมายว่าสำคัญและไม่มีร้านไหนรับซื้อ ได้แก่ เครื่องพ่นปุ๋ยและเครื่องพ่นน้ำมันหล่อลื่น หอกคุคุ แหวนและสร้อยคอลาดตระเวน รวม 180 ชิ้น เกือบทั้งหมดมีค่าเพียงเหรียญทองแดงเดียว และการเก็บขึ้นมาจากพื้นเร็วเกินไปอาจทำให้ขั้นตอนของเควสสลับลำดับ\n\nระบบอ่านเครื่องหมายทั้งสองอย่างร่วมกัน ของที่มีเพียงอย่างเดียวจึงไม่เข้าข่าย เครื่องพ่นภาคสนามขายไม่ได้แต่ไม่ได้ทำเครื่องหมายว่าสำคัญ จึงยังถูกเก็บอยู่
 Skip items shops refuse to buy	ข้ามไอเทมที่ร้านค้าไม่รับซื้อ
 Skip quest items	ข้ามไอเทมเควสต์
 skip: %s	ข้าม: %s
 Small animals	สัตว์ขนาดเล็ก
 small animals off	สัตว์ขนาดเล็ก: ปิด
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	วัตถุในโลกเกมบางชิ้นไม่มีชื่อไอเทมที่อ่านได้ เปิด: เก็บไปเลย ปิด: เว้นสิ่งที่ระบุไม่ได้ทั้งหมดไว้
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	วัตถุในโลกเกมบางชิ้นไม่มีชื่อไอเทมที่อ่านได้ เปิด: เก็บไปเลย ปิด: เว้นสิ่งที่ระบุไม่ได้ทั้งหมดไว้\n\nข้อนี้ใช้กับไอเทมที่วางอยู่เท่านั้น ของที่หยิบได้ซึ่งตารางโหนดรับรองไว้ เช่น กองเหรียญหรือกองแท่งทอง จะถูกเก็บไม่ว่าตั้งค่านี้ไว้อย่างไร เพราะการที่ตารางระบุชื่อ prefab ไว้คือสิ่งที่บอกว่ามันคืออะไร ส่วนไอเทมข้างในจะมีชื่อหรือไม่เป็นคนละเรื่องกัน สวิตช์หมวดหมู่ของมันเองยังคงมีผลอยู่
 someone is wearing this; taking it would copy it	มีคนสวมใส่สิ่งนี้อยู่ การหยิบมาจะทำให้เกิดของซ้ำ
 stack at one point (storage contents)	กองรวมที่จุดเดียว (เนื้อหาคลังเก็บ)
 Status	สถานะ
@@ -333,4 +337,5 @@ yes	ใช่
 your rules refuse all ore, jewels and stone	กฎของคุณปฏิเสธทั้งแร่ อัญมณี และหิน
 your rules refuse all stone	กฎของคุณปฏิเสธหินทั้งหมด
 your rules refuse everything this node holds	กฎของคุณปฏิเสธทุกอย่างที่จุดเก็บของนี้มีอยู่
+part of a mechanism, not loose loot	เป็นส่วนหนึ่งของกลไก ไม่ใช่ของที่ตกอยู่
 yours, just out of your hand	ของคุณเอง เพิ่งหลุดจากมือไป

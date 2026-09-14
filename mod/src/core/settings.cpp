@@ -121,6 +121,7 @@ namespace ml::Settings
         else if (k == "LootOwned")        c.lootOwned = Flag(v);
         else if (k == "SkipQuestItems")   c.skipQuestItems = Flag(v);
         else if (k == "SkipNoSell")       c.skipNoSell = Flag(v);
+        else if (k == "SkipQuestGear")    c.skipQuestGear = Flag(v);
         else if (k == "PetFilter")        c.petFilter = Flag(v);
         else if (k == "StopPetLooting")   c.stopPetLooting = Flag(v);
         else if (k == "MinValueCopper")   c.minValueCopper = std::max(0, atoi(v.c_str()));
@@ -370,6 +371,17 @@ namespace ml::Settings
         ++g_generation;
         LOG("Settings %s: %d class rules, %d tag rules, %d item rules.", present ? "loaded" : "defaulted (no ini yet)",
             static_cast<int>(c.classRule.size()), static_cast<int>(c.tagRule.size()), static_cast<int>(c.itemRule.size()));
+        // Every range and switch that decides whether a thing is reached, written
+        // down once. A report that something was taken "from further than I set"
+        // could not be checked against a log before this: the log knew what the
+        // mod did and never what it had been told to do.
+        LOG("Settings ranges: scan %.1f loot %.1f gather %.1f catch %.1f corpse %.1f arm %.1f min %.2f.",
+            c.scanRange, c.lootRange, c.gatherRange, c.catchRange, c.corpseRange, c.armRange, c.minRange);
+        LOG("Settings switches: ground %d plants %d crops %d ore %d wood %d furniture %d containers %d unknown %d "
+            "corpses %d bodies %d veins %d arm %d owned %d quest %d nosell %d questgear %d pet %d stoppet %d minvalue %d.",
+            c.pickUpItems, c.gatherPlants, c.gatherCrops, c.gatherOre, c.gatherWood, c.lootFurniture,
+            c.lootContainers, c.gatherUnknown, c.lootCorpses, c.searchBodies, c.gatherVeins, c.autoArm,
+            c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.petFilter, c.stopPetLooting, c.minValueCopper);
     }
 
     // The whole config as ini text: the live file, a preset and a backup are
@@ -402,8 +414,8 @@ namespace ml::Settings
                  c.scanRange, c.lootRange, c.gatherRange, c.catchRange, c.corpseRange, c.minRange); s += b;
         snprintf(b, sizeof b, "AutoArm=%d\nArmRange=%.1f\nArmContainers=%d\nGatherVeins=%d\n", c.autoArm, c.armRange, c.armContainers, c.gatherVeins); s += b;
         snprintf(b, sizeof b, "BreakOre=%d\nDrawWells=%d\n", c.breakOre, c.drawWells); s += b;
-        snprintf(b, sizeof b, "LootOwned=%d\nSkipQuestItems=%d\nSkipNoSell=%d\nMinValueCopper=%d\nTakeUnknownItems=%d\nPetFilter=%d\nStopPetLooting=%d\nDebugLog=%d\nConfigVersion=%d\n",
-                 c.lootOwned, c.skipQuestItems, c.skipNoSell, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.debugLog, c.configVersion); s += b;
+        snprintf(b, sizeof b, "LootOwned=%d\nSkipQuestItems=%d\nSkipNoSell=%d\nSkipQuestGear=%d\nMinValueCopper=%d\nTakeUnknownItems=%d\nPetFilter=%d\nStopPetLooting=%d\nDebugLog=%d\nConfigVersion=%d\n",
+                 c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.debugLog, c.configVersion); s += b;
         if (!c.deleteTestName.empty()) { snprintf(b, sizeof b, "DeleteTestName=%s\n", c.deleteTestName.c_str()); s += b; }
         s += "\n; class -> 1 loot, 0 skip (classes not listed are looted)\n[Classes]\n";
         for (const auto& kv : c.classRule) { s += kv.first; s += kv.second ? "=1\n" : "=0\n"; }

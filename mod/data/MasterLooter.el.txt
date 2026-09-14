@@ -259,12 +259,16 @@ Show a brief notice when auto-loot is toggled	Δείξε σύντομη ειδο
 Showing current overrides. Type to search all %d items.	Εμφανίζονται οι τρέχουσες παρακάμψεις. Πληκτρολόγησε για αναζήτηση σε όλα τα %d αντικείμενα.
 Showing the nearest %d of %d. The rest are further away.	Εμφανίζονται τα %d πιο κοντινά από %d. Τα υπόλοιπα είναι πιο μακριά.
 Skip all	Παράλειψη όλων
+Skip quest equipment	Παράλειψη εξοπλισμού αποστολών
+Quest equipment	Εξοπλισμός αποστολών
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Εξοπλισμός που το παιχνίδι σημειώνει ως σημαντικό και δεν αγοράζει κανένα μαγαζί, σε όλες τις κατηγορίες. Ανενεργό: τα εργαλεία αποστολών μένουν εκεί που είναι.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Εργαλεία και εξοπλισμός που το παιχνίδι σημειώνει ως σημαντικά και δεν τα αγοράζει κανένα μαγαζί: οι ψεκαστήρες λιπάσματος και λιπαντικού, τα δόρατα Kuku, τα δαχτυλίδια και τα κολιέ ανιχνευτή. 180 αντικείμενα, σχεδόν όλα αξίας ενός χάλκινου, και το να σηκώσεις ένα από το πάτωμα νωρίς μπορεί να βγάλει ένα βήμα αποστολής εκτός σειράς.\n\nΔιαβάζει τα δύο σημάδια μαζί, οπότε ένα αντικείμενο με μόνο το ένα δεν καλύπτεται. Ο ψεκαστήρας πεδίου δεν πωλείται και δεν είναι σημειωμένος ως σημαντικός, και εξακολουθεί να μαζεύεται.
 Skip items shops refuse to buy	Παράλειψε αντικείμενα που τα μαγαζιά αρνούνται να αγοράσουν
 Skip quest items	Παράλειψε αντικείμενα αποστολής
 skip: %s	παράλειψη: %s
 Small animals	Μικρά ζώα
 small animals off	μικρά ζώα ανενεργά
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Κάποια αντικείμενα του κόσμου δεν έχουν αναγνώσιμο όνομα αντικειμένου. Ενεργό: πάρ' τα ούτως ή άλλως. Ανενεργό: άφησε ό,τι είναι αταύτιστο.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Κάποια αντικείμενα του κόσμου δεν έχουν αναγνώσιμο όνομα αντικειμένου. Ενεργό: πάρ' τα ούτως ή άλλως. Ανενεργό: άφησε ό,τι είναι αταύτιστο.\n\nΑυτό αφορά μόνο μεμονωμένα αντικείμενα. Ένα αντικείμενο συλλογής για το οποίο εγγυάται ο πίνακας σημείων, όπως ένας σωρός νομισμάτων ή μια στοίβα ράβδων χρυσού, λαμβάνεται όπως και να έχει οριστεί αυτό: το ότι ο πίνακας ονομάζει το prefab είναι αυτό που το ταυτοποιεί, και το αν το αντικείμενο μέσα του έχει όνομα είναι ξεχωριστό ζήτημα. Ο δικός του διακόπτης κατηγορίας εξακολουθεί να ισχύει.
 someone is wearing this; taking it would copy it	κάποιος το φοράει· αν το πάρεις θα δημιουργηθεί αντίγραφο
 stack at one point (storage contents)	στοίβα σε ένα σημείο (περιεχόμενα αποθήκευσης)
 Status	Κατάσταση
@@ -336,4 +340,5 @@ yes	ναι
 your rules refuse all ore, jewels and stone	οι κανόνες σου απορρίπτουν μετάλλευμα, πολύτιμους λίθους και πέτρα
 your rules refuse all stone	οι κανόνες σου απορρίπτουν κάθε πέτρα
 your rules refuse everything this node holds	οι κανόνες σου απορρίπτουν ό,τι περιέχει αυτός ο κόμβος
+part of a mechanism, not loose loot	τμήμα μηχανισμού, όχι ελεύθερη λεία
 yours, just out of your hand	δικό σου, μόλις έξω από το χέρι σου

@@ -751,11 +751,13 @@ namespace ml::gui
         Section(TR("Filters"));
         dirty |= ImGui::Checkbox(TR("Skip quest items"), &c.skipQuestItems);
         Help(TR("Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived."));
+        dirty |= ImGui::Checkbox(TR("Skip quest equipment"), &c.skipQuestGear);
+        Help(TR("Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in."));
         dirty |= ImGui::Checkbox(TR("Skip items shops refuse to buy"), &c.skipNoSell);
         dirty |= ImGui::SliderInt(TR("Minimum value (copper)"), &c.minValueCopper, 0, 500, c.minValueCopper ? "%d" : "off");
         Help(TR("Items with an unknown value are never filtered by it."));
         dirty |= ImGui::Checkbox(TR("Take items the database cannot name"), &c.takeUnknownItems);
-        Help(TR("Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified."));
+        Help(TR("Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies."));
         dirty |= ImGui::Checkbox(TR("Stop pets looting at all"), &c.stopPetLooting);
         Help(TR("The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does."));
         dirty |= ImGui::Checkbox(TR("Pets and companions follow the filters"), &c.petFilter);
@@ -976,6 +978,10 @@ namespace ml::gui
             bool quest = !c.skipQuestItems;
             if (ImGui::Checkbox(TR("Quest items"), &quest)) { c.skipQuestItems = !quest; Settings::MarkDirty(); }
             if (ImGui::BeginItemTooltip()) { ImGui::TextUnformatted(TR("Anything tagged quest, across every class. Off keeps story pickups and puzzle pieces for your own hands.")); ImGui::EndTooltip(); }
+            ImGui::TableNextColumn();
+            bool qgear = !c.skipQuestGear;
+            if (ImGui::Checkbox(TR("Quest equipment"), &qgear)) { c.skipQuestGear = !qgear; Settings::MarkDirty(); }
+            if (ImGui::BeginItemTooltip()) { ImGui::TextUnformatted(TR("Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.")); ImGui::EndTooltip(); }
             ImGui::TableNextColumn();
             bool nosell = !c.skipNoSell;
             if (ImGui::Checkbox(TR("Unsellable items"), &nosell)) { c.skipNoSell = !nosell; Settings::MarkDirty(); }
@@ -1209,7 +1215,7 @@ namespace ml::gui
     {
         const State& st = State::Get();
         const loot::Status s = loot::GetStatus();
-        ImGui::Text(TR("Master Looter v%s for game build %s"), ML_VERSION, ML_GAME_BUILD);
+        ImGui::Text(TR("Master Looter v%s for game build %s"), ML_VERSION_FULL, ML_GAME_BUILD);
         LinkRow("Mod page", ML_MOD_PAGE);
         LinkRow("Source", ML_SOURCE_URL);
         ImGui::Text(TR("Settings: %ls"), Settings::Path().c_str());
@@ -1416,7 +1422,7 @@ namespace ml::gui
             ImGui::TextColored(kGold, TR("MASTER LOOTER"));
             ImGui::PopFont();
             ImGui::SameLine();
-            ImGui::TextColored(kTextDim, "  v%s", ML_VERSION);
+            ImGui::TextColored(kTextDim, "  v%s", ML_VERSION_FULL);
             const float closeW = ImGui::CalcTextSize("Close").x + ImGui::CalcTextSize("Watch").x + ImGui::GetStyle().FramePadding.x * 4 + ImGui::GetStyle().ItemSpacing.x;
             ImGui::SameLine();
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - closeW);

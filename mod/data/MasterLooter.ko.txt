@@ -257,12 +257,16 @@ Show a brief notice when auto-loot is toggled	자동 루팅 전환 시 짧은 �
 Showing current overrides. Type to search all %d items.	현재 재정의를 표시 중입니다. 입력하여 전체 %d개 아이템을 검색하세요.
 Showing the nearest %d of %d. The rest are further away.	가장 가까운 %d개(전체 %d개 중)를 표시 중입니다. 나머지는 더 멀리 있습니다.
 Skip all	전부 건너뛰기
+Skip quest equipment	퀘스트 장비 줍지 않기
+Quest equipment	퀘스트 장비
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	게임이 중요 표시를 하고 어느 상점도 사지 않는 장비를 모든 분류에서 대상으로 합니다. 끄면 퀘스트 도구는 그 자리에 남습니다.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	게임이 중요하다고 표시하고 어느 상점도 사지 않는 도구와 장비입니다. 비료 살포기와 윤활제 살포기, 쿠쿠 창, 정찰 반지와 목걸이 등 180개이며 거의 전부 동전 한 닢 값입니다. 바닥에서 미리 주워버리면 퀘스트 단계가 어긋날 수 있습니다.\n\n두 표시를 함께 읽기 때문에 한쪽만 가진 물건은 해당되지 않습니다. 필드 살포기는 팔 수 없지만 중요 표시가 없어 계속 들어옵니다.
 Skip items shops refuse to buy	상점이 사들이지 않는 아이템 건너뛰기
 Skip quest items	퀘스트 아이템 건너뛰기
 skip: %s	건너뜀: %s
 Small animals	작은 동물
 small animals off	작은 동물 끄기
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	일부 세계 오브젝트는 읽을 수 있는 아이템 이름이 없습니다. 켜면: 그래도 획득. 끄면: 식별되지 않은 것은 그대로 둠.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	일부 세계 오브젝트는 읽을 수 있는 아이템 이름이 없습니다. 켜면: 그래도 획득. 끄면: 식별되지 않은 것은 그대로 둠.\n\n이것은 바닥에 놓인 아이템에만 적용됩니다. 노드 표가 보증하는 습득물, 예를 들어 동전 더미나 금괴 더미는 이 설정과 관계없이 주워집니다. 표가 프리팹 이름을 가지고 있다는 것 자체가 식별이며, 안에 든 아이템에 이름이 없는지는 별개의 문제입니다. 해당 분류 스위치는 그대로 적용됩니다.
 someone is wearing this; taking it would copy it	누군가 착용 중입니다. 가져가면 복제됩니다
 stack at one point (storage contents)	한 지점에 쌓임 (보관함 내용물)
 Status	상태
@@ -334,4 +338,5 @@ yes	예
 your rules refuse all ore, jewels and stone	당신의 규칙이 광석과 보석과 돌을 모두 거부합니다
 your rules refuse all stone	당신의 규칙이 모든 돌을 거부합니다
 your rules refuse everything this node holds	당신의 규칙이 이 노드에 든 것을 전부 거부합니다
+part of a mechanism, not loose loot	장치의 일부이며 떨어진 전리품이 아닙니다
 yours, just out of your hand	본인 소유, 손에서 벗어났을 뿐

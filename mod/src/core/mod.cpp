@@ -237,7 +237,7 @@ namespace ml::Mod
                 }
             }
         }
-        LOG("Master Looter v%s for Crimson Desert %s starting (built %s %s%s).", ML_VERSION, ML_GAME_BUILD, __DATE__, __TIME__, stamp);
+        LOG("Master Looter v%s for Crimson Desert %s starting (built %s %s%s).", ML_VERSION_FULL, ML_GAME_BUILD, __DATE__, __TIME__, stamp);
         g_self = module;
         g_prevFilter = SetUnhandledExceptionFilter(&LastChance);
         AddVectoredExceptionHandler(1 /* first */, &FirstChance);

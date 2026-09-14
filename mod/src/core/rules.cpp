@@ -39,6 +39,18 @@ namespace ml::Rules
 
         if (item.klass == "dev") { v.loot = false; v.rule = "dev item"; return v; }
         if (cfg.skipQuestItems && item.HasTag("quest")) { v.loot = false; v.rule = "quest item"; return v; }
+        // LuxDragon, 13 September 2026: a Fertilizer Sprayer taken off the
+        // floor of a castle put a House Celeste quest step out of order, and
+        // he had to drop it and pick it up again to clear it. It carries no
+        // quest tag, so the switch above never saw it. What it does carry is
+        // important and no-sell together, and that pair is a good description
+        // of quest equipment: of the 180 items it covers beyond the quest tag,
+        // 179 sell for a single copper, and exactly one of them is named by
+        // any node in the table, the Abyss Artifact, which OffLimits already
+        // refuses by name. No sellable weapon is caught, because a weapon you
+        // can sell fails the second half.
+        if (cfg.skipQuestGear && item.HasTag("important") && item.HasTag("no-sell"))
+        { v.loot = false; v.rule = "quest equipment"; return v; }
         if (cfg.skipNoSell && item.HasTag("no-sell")) { v.loot = false; v.rule = "unsellable"; return v; }
         if (cfg.minValueCopper > 0 && item.value >= 0 && item.value < cfg.minValueCopper)
         {

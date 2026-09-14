@@ -259,12 +259,16 @@ Show a brief notice when auto-loot is toggled	Näytä lyhyt ilmoitus, kun automa
 Showing current overrides. Type to search all %d items.	Näytetään nykyiset poikkeukset. Kirjoita hakeaksesi kaikista %d esineestä.
 Showing the nearest %d of %d. The rest are further away.	Näytetään lähimmät %d/%d. Loput ovat kauempana.
 Skip all	Ohita kaikki
+Skip quest equipment	Ohita tehtävävarusteet
+Quest equipment	Tehtävävarusteet
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Varusteet, jotka peli merkitsee tärkeiksi ja joita mikään kauppa ei osta, kaikissa luokissa. Pois: tehtävätyökalut jäävät paikoilleen.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Työkalut ja varusteet, jotka peli merkitsee tärkeiksi ja joita mikään kauppa ei osta: lannoite- ja voiteluruiskut, Kuku-keihäät, tiedustelijan sormukset ja kaulakorut. 180 esinettä, lähes kaikki yhden kuparin arvoisia, ja yhden poimiminen maasta liian aikaisin voi sotkea tehtävän vaiheen.\n\nSe lukee molemmat merkinnät yhdessä, joten esine jossa on vain toinen niistä ei kuulu tähän. Peltoruisku on myyntikelvoton eikä merkitty tärkeäksi, ja tulee edelleen mukaan.
 Skip items shops refuse to buy	Ohita esineet, joita kaupat eivät osta
 Skip quest items	Ohita tehtäväesineet
 skip: %s	ohita: %s
 Small animals	Pienet eläimet
 small animals off	pienet eläimet pois päältä
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Joillakin maailman kohteilla ei ole luettavaa esineen nimeä. Päällä: ota ne silti. Pois päältä: jätä kaikki tunnistamaton rauhaan.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Joillakin maailman kohteilla ei ole luettavaa esineen nimeä. Päällä: ota ne silti. Pois päältä: jätä kaikki tunnistamaton rauhaan.\n\nTämä koskee vain irrallisia esineitä. Poimittava kohde, jonka pistetaulukko vahvistaa, kuten kolikkokasa tai pino kultaharkkoja, otetaan tästä asetuksesta riippumatta: se, että taulukko nimeää prefabin, on se mikä sen tunnistaa, ja onko sisällä olevalla esineellä nimeä on eri kysymys. Sen oma luokkakytkin pätee edelleen.
 someone is wearing this; taking it would copy it	joku pitää tätä yllään; sen ottaminen loisi siitä kopion
 stack at one point (storage contents)	pino yhdessä pisteessä (varaston sisältö)
 Status	Tila
@@ -336,4 +340,5 @@ yes	kyllä
 your rules refuse all ore, jewels and stone	sääntösi hylkäävät malmin, jalokivet ja kiven kaikki
 your rules refuse all stone	sääntösi hylkäävät kaiken kiven
 your rules refuse everything this node holds	sääntösi hylkäävät kaiken mitä tämä piste sisältää
+part of a mechanism, not loose loot	osa mekanismia, ei irrallista saalista
 yours, just out of your hand	sinun, juuri kädestäsi pudonnut

@@ -130,6 +130,12 @@ namespace ml
         bool  lootOwned      = false;  // take goods the game would call stealing
         bool  skipQuestItems = true;
         bool  skipNoSell     = false;
+        // Quest tools and gear: an item the game marks important that no shop
+        // will buy. Two tags read together, because either alone is wrong. The
+        // 654 important items are mostly weapons and armour people want, and
+        // the 1,052 unsellable ones are wider still; the 221 carrying both are
+        // almost entirely quest equipment worth a single copper.
+        bool  skipQuestGear  = true;
         int   minValueCopper = 0;      // 0 = no value floor
         bool  takeUnknownItems = true; // items our database cannot name
         // A pet or a companion loots whatever the game lets it, and nothing in

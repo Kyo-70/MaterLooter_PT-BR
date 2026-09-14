@@ -466,7 +466,10 @@ namespace ml::loot
     // It is never lootable and there can be two dozen pieces of it inside two
     // metres, which is enough to fill the Nearby list before anything in the
     // world is reached, so the list leaves it out.
-    struct Verdict { bool loot = false; bool own = false; Action act = Action::Take; const char* why = ""; char detail[40] = ""; };
+    // nodeReach: a pick-up the mod only knows about because the node table
+    // vouched for the prefab. It is sent as a pick-up but it is reached like a
+    // node, so it answers to the gather range and not the longer loot one.
+    struct Verdict { bool loot = false; bool own = false; bool nodeReach = false; Action act = Action::Take; const char* why = ""; char detail[40] = ""; };
 
     // Memories. Keys: instance id when the node has one (survives respawns),
     // otherwise the entity id.
@@ -1267,6 +1270,8 @@ namespace ml::loot
         if (kind == "stone") return GatherKind::Stone;
         if (kind == "wood")  return GatherKind::Wood;
         if (kind == "item")  return GatherKind::Item;
+        if (kind == "pickup") return GatherKind::Item;
+        if (kind == "container") return GatherKind::Container;
         return GatherKind::Unknown;
     }
 
@@ -1365,6 +1370,27 @@ namespace ml::loot
         return GatherKind::Item;
     }
 
+    // The one kind every item in the node's drop list belongs to, or Unknown
+    // where the list is empty, names something the database cannot, or holds
+    // two kinds at once. A list is a set of possibilities and not a promise, so
+    // it is evidence only where the whole set agrees, which is the same bar
+    // TableYieldRefused holds it to.
+    static GatherKind YieldListKind(const Cand& c)
+    {
+        if (!c.nodeType || c.nodeType->yields.empty()) return GatherKind::Unknown;
+        GatherKind agreed = GatherKind::Unknown;
+        for (const std::string& key : c.nodeType->yields)
+        {
+            const Item* it = ItemDb::ByStringKey(key.c_str());
+            if (!it) return GatherKind::Unknown;
+            const GatherKind one = KindOf(it);
+            if (one == GatherKind::Unknown) return GatherKind::Unknown;
+            if (agreed == GatherKind::Unknown) agreed = one;
+            else if (agreed != one) return GatherKind::Unknown;
+        }
+        return agreed;
+    }
+
     // What the node is, in order of how much it can be trusted: the prefab it
     // was placed from, the item it is already known to hold, then what one of
     // its kind yielded earlier this session.
@@ -1375,10 +1401,28 @@ namespace ml::loot
         // covers 44 of the 72 in the table, nearly all of them crops, so it is
         // not an answer on its own. Ask what the node yields before settling
         // for it; a real item still comes back as one.
-        if (kind == GatherKind::Unknown || kind == GatherKind::Item)
+        if (kind == GatherKind::Unknown || kind == GatherKind::Item || kind == GatherKind::Container)
         {
             const GatherKind byYield = KindOf(c.db ? c.db : NodeYield(c));
             if (byYield != GatherKind::Unknown) kind = byYield;
+        }
+        // And then the gimmick row's own drop list. item_key names the yield
+        // for 131 rows; the drop candidates cover 542, and for a pick-up socket
+        // that carries neither an item of its own nor a learned yield it is the
+        // only thing that ever says what the thing is. Thirteen cloth rows pay
+        // furniture and nine sockets pay a crop, and every one of the
+        // twenty-two answered to Ground items alone.
+        //
+        // Never for a row the table calls a container: what is inside a box
+        // does not change what the box is, and letting it would hand the 540
+        // container rows to their own contents. A container can still be
+        // refined by the line above, which reads the item the entity is rather
+        // than the things it holds, and that is the flowerpot case.
+        if ((kind == GatherKind::Item || kind == GatherKind::Unknown) &&
+            c.nodeType && c.nodeType->kind != "container")
+        {
+            const GatherKind agreed = YieldListKind(c);
+            if (agreed != GatherKind::Unknown) kind = agreed;
         }
         return kind;
     }
@@ -1526,6 +1570,7 @@ namespace ml::loot
     // Named, so the translation template's collector can find a reason that
     // reaches skip() through a variable rather than as a literal argument.
     static const char* const kReason_NodeAllRefused = "your rules refuse everything this node holds";
+    static const char* const kReason_NodeMechanism = "part of a mechanism, not loose loot";
     static const char* TableYieldRefused(const Cand& c, const Config& cfg)
     {
         if (!c.nodeType || c.nodeType->yields.empty()) return nullptr;
@@ -2288,14 +2333,26 @@ namespace ml::loot
         g_actorEid[comps] = k.eid;
         // An empty node close by that will not fill: dump which of its gimmick
         // slots hold pointers, so a node the game fills elsewhere shows up.
-        if (g_debugLog && inter && !k.item && !k.gather && k.cat2 == 0x00 && k.d < 4.0f)
+        if (g_debugLog && inter && !k.item && !k.gather && k.cat2 == 0x00 && k.d < 20.0f)
         {
-            static int s_dumps = 0;
-            const DWORD nowp = GetTickCount();
-            auto it = g_slotProbeAt.find(k.eid);
-            if (s_dumps < 40 && (it == g_slotProbeAt.end() || nowp - it->second > 3000))
+            static std::set<std::string> s_dumped;
+            const std::string pk = k.node[0] ? k.node : "(no prefab)";
+            if (s_dumped.size() < 24 && s_dumped.insert(pk).second)
             {
-                ++s_dumps; g_slotProbeAt[k.eid] = nowp;
+                // What the entity is made of, which is the question a coin pile
+                // has never been asked. A loose item that works carries item
+                // data on its gimmick; these carry a gimmick and nothing else,
+                // and the component list says whether that is the whole story.
+                char comp[600]; int cw = snprintf(comp, sizeof comp, "[probe] empty eid %08X %.1f m cat %02X/%02X components:", k.eid, k.d, k.cat, k.cat2);
+                for (unsigned off = 0; off < kComps_SlotsEnd && cw < 520; off += 8)
+                {
+                    const uintptr_t c = mem::Deref(comps, off);
+                    if (!c) continue;
+                    const char* n = mem::RttiShort(c);
+                    cw += snprintf(comp + cw, sizeof comp - cw, " +%X=%s", off, n ? n : "?");
+                }
+                LOG("%s", comp);
+                LOG("[probe] empty eid %08X prefab %s", k.eid, k.node[0] ? k.node : "(none)");
                 char line[1200]; int w = snprintf(line, sizeof line, "[probe] gimmick eid %08X %.1f m slots:", k.eid, k.d);
                 for (unsigned off = 0; off < 0x400 && w < 1100; off += 8)
                 {
@@ -2381,6 +2438,19 @@ namespace ml::loot
             // its cousins, which this does not touch; the same log shows a
             // Hartmann Plate Helm picked up that way in the same minute. The
             // prefix appears nowhere outside that folder, so it is the folder.
+            //
+            // The folder, and not the parent, and that was tested rather than
+            // assumed. A log of 13 September 2026 refused 82 of these in one
+            // session with no parent on any of them, which read as though the
+            // rule were catching gear nobody was wearing. Sov ran a build that
+            // let the unparented ones through: 27 were taken and his own axe
+            // and a shield duplicated in his bag. The same log settles why. One
+            // pair of Strongbow Gloves was refused 53 times as worn, each with
+            // a real parent and cat2 0x11, while four other instances of that
+            // same item came through with parent 0 and cat2 0x19, at one to
+            // four metres. Gloves are not loot lying on the ground. An
+            // unresolved parent is not an absent wearer, so the parent cannot
+            // carry this test and the folder has to.
             if (IStr(c.node, "gimmick_equip_")) return skip("someone is wearing this; taking it would copy it");
             if (IStr(c.node, "mission")) return skip("mission object");
             if (AttachedPart(c.node, c.nodeType)) return skip("part of a creature or a mechanism");
@@ -2397,7 +2467,17 @@ namespace ml::loot
             // These read the prefab path, so a gather node whose name happens to
             // carry one of the words is not a container: cd_box_mushroom_02 is a
             // plant. A node the table has already classified keeps its kind.
-            if (!c.nodeType)
+            // The row does not excuse the name. This was written as
+            // `!c.nodeType` alone, so the folder rule's 540 container rows
+            // switched the test off for the 164 prefabs it was aimed at: a
+            // dropset food box arrives carrying the item data of the apple
+            // inside it, takes the Take path on c.item, and its class decides,
+            // which is Crop and on. It read as container (off) until the row
+            // existed. Both sources have to say container for the name to be
+            // ignored, and all 164 of them do; the four that had a row at HEAD
+            // are three wood and one plant, which is the case the comment
+            // below is about and they stay exempt.
+            if (!c.nodeType || c.nodeType->kind == "container")
             {
                 // Only a last resort, for a node holding nothing the database
                 // can name. Anything identified is decided by its class below,
@@ -2476,6 +2556,22 @@ namespace ml::loot
         else if (cfg.gatherVeins && c.nodeType && c.nodeType->tagged &&
                  KindFromName(c.nodeType->kind) == GatherKind::Ore)
             v.act = Action::Gather;
+        // And a node the table vouches for as an item does not have to answer
+        // either, for the same reason: the pick-up event carries nothing but
+        // the target's id. These never answer arming at all, and the game's own
+        // data says why. interactioninfo has two families, Gimmick_PickUp at
+        // rows 14 to 25 and Gimmick_Collect at 28 to 34, and arming is the
+        // collect one: every arm that has ever filled in any log here came back
+        // as a gather node, and the gold bars, the loose coins, the firewood
+        // and the small stones are pick-ups. Arming them was the wrong verb, so
+        // it did nothing however close the player stood. LuxDragon, 13
+        // September 2026: forty-one arms across one hoard, one of them at half
+        // a metre, not one fill.
+        else if (c.nodeType && c.nodeType->tagged && c.nodeType->pickup)
+        {
+            v.act = Action::Take;
+            v.nodeReach = true;
+        }
         else return skip("not ready (node empty)");
 
         // Item rules from the database. A live key that our table knows gets the
@@ -2574,11 +2670,68 @@ namespace ml::loot
         default:
         {
             if (!cfg.pickUpItems) return skip("pick up off");
+            // A node the table vouches for arrives with no item of its own, so
+            // c.tid is zero, the item-rule block above is gated out, and the
+            // switch below reads a null database row. Both were holes: an item
+            // the player set to never was honoured when the same thing came out
+            // of a gather node and taken here, and a dry apple went into the
+            // bag with Crops off. Ask the same questions the Gather case asks,
+            // in the same order, and let the kind come off the node.
+            if (v.nodeReach)
+            {
+                const Item* yield = NodeYield(c);
+                if (yield)
+                {
+                    const Rules::Verdict r = Rules::Decide(*yield, cfg);
+                    if (!r.loot) { snprintf(v.detail, sizeof v.detail, "%s", r.detail.c_str()); v.loot = false; v.why = r.rule; return v; }
+                }
+                else
+                {
+                    if (const char* none = TableYieldRefused(c, cfg)) return skip(none);
+                    if (const char* none = KindRefused(NodeKind(c))) return skip(none);
+                    // A thing the game drives through states and triggers, that
+                    // nothing can be asked about. Twenty-eight prefabs: the
+                    // Demeniss knowledge tower's monument, globe, telescope and
+                    // quill, both Marni EMP capsule parts, the troll tower
+                    // cubes, the laser safe buttons, three kinetic tools, four
+                    // bombs and a trap. Sending Take at one of these reached
+                    // past every rule the mod has, because none of them has
+                    // item identity for the block above to work on, and a
+                    // longer list of names in OffLimits would only cover the
+                    // ones somebody had already walked into. Issue #41's shape.
+                    if (c.nodeType->driven) return skip(kReason_NodeMechanism);
+                    // Deliberately not gated on takeUnknownItems, though a
+                    // review found that setting unenforced here and the help
+                    // text ("leave anything unidentified") reads as though it
+                    // should be. It was enforced on 13 September 2026 and taken
+                    // back out the same evening: 366 of the 492 pick-up rows
+                    // name no item, so the gate refused coins, gold bars and
+                    // most of the rest, and LuxDragon's next run picked up
+                    // nothing at all.
+                    //
+                    // The switch has never reached a gather node or a node the
+                    // table vouches for. Anyone who turned it off did so to
+                    // keep unnamed junk out of the bag, and it has never cost
+                    // them a coin, so enforcing it here widens a decision they
+                    // already made without being asked. A prefab the game tags
+                    // as a pick-up is identified; the item inside it is what
+                    // has no name, and that is a different question. If this is
+                    // ever revisited, it wants its own switch rather than this
+                    // one.
+                }
+            }
             // Ore, stone and wood reach the ground as drops from broken nodes;
             // the same toggles cover the chunks. Furniture reaches it by being
             // smashed, and a table is furniture whether it is still standing or
             // lying in pieces, so it answers to the same switch either way.
-            switch (KindOf(c.db, true))
+            // NodeKind for a vouched pick-up, KindOf for everything else. The
+            // two agree wherever an item row exists; where one does not,
+            // KindOf(nullptr) is Unknown and every case below falls through,
+            // which is how thirteen cloth rows that yield furniture and four
+            // dried crops walked past their own switches. A node whose yield
+            // is still unknown stays Item and is unaffected, so nothing that
+            // the pick-up fix reached stops working.
+            switch (v.nodeReach ? NodeKind(c) : KindOf(c.db, true))
             {
             case GatherKind::Plant: if (!cfg.gatherPlants) return skip("plants off"); break;
             case GatherKind::Crop:  if (!cfg.gatherCrops)  return skip("crops off"); break;
@@ -2593,7 +2746,7 @@ namespace ml::loot
         }
         }
         const float lim = v.act == Action::Search ? cfg.corpseRange : v.act == Action::Catch ? cfg.catchRange
-                        : v.act == Action::Gather ? cfg.gatherRange : cfg.lootRange;
+                        : v.act == Action::Gather || v.nodeReach ? cfg.gatherRange : cfg.lootRange;
         if (lim > 0 && c.d > lim) return skip("out of range");
 
         if (!cfg.lootOwned && v.act != Action::Catch)
@@ -3885,6 +4038,15 @@ namespace ml::loot
                 for (Cand& k : list)
                 {
                     if (!k.filled || k.item || k.gather || !k.inter) continue;
+                    // A prefab the table vouches for as a loose item is a pick-up,
+                    // and arming is what the game does to a mine or a herb patch.
+                    // Forty-one arms across a hoard of gold bars, one of them at
+                    // half a metre, and not one of them filled; the verdict sends
+                    // the pick-up itself now. Leaving this in only spent arms on
+                    // something that was never going to answer them, and it did
+                    // so out to the arm range rather than the gather range the
+                    // player set. LuxDragon, 13 September 2026.
+                    if (k.nodeType && k.nodeType->tagged && k.nodeType->pickup) continue;
                     // Never ask the game to open a memory trigger, a puzzle mechanism or a
                     // fast-travel artifact. Refusing to loot one afterwards is too late.
                     if (OffLimits(k.node)) continue;
@@ -3937,7 +4099,8 @@ namespace ml::loot
                     if (!cfg.armContainers && g_containers.count(k.eid)) continue;
                     // Same as the verdict: a classified gather node is not a
                     // container, whatever words its prefab path happens to hold.
-                    if (k.node[0] && !k.nodeType && !cfg.lootContainers && (IStr(k.node, "_chest") || IStr(k.node, "_box") || IStr(k.node, "dropset"))) continue;
+                    if (k.node[0] && (!k.nodeType || k.nodeType->kind == "container") && !cfg.lootContainers &&
+                        (IStr(k.node, "_chest") || IStr(k.node, "_box") || IStr(k.node, "dropset"))) continue;
                     if (k.node[0] && !k.nodeType && !cfg.lootFurniture && IStr(k.node, "furniture")) continue;
                     const uint64_t key = Key(k);
                     if (g_searched.count(key)) continue;
@@ -4151,7 +4314,13 @@ namespace ml::loot
                     if (breakIt) snprintf(line, sizeof line, "break %s (%.1f m)", Label(k), k.d);
                     else         snprintf(line, sizeof line, "%s %s (%.1f m)", events::ActionName(v.act), Label(k), k.d);
                     PushRecent(line);
-                    LOG("[loot] %s eid %08X type %u %s%s%s", line, k.eid, k.tid, k.key[0] ? k.key : "", k.node[0] ? " node " : "", k.node[0] ? k.node : "");
+                    // The table row that let this through, so a session can be
+                    // read back to the rows rather than guessed at: which kind
+                    // it was filed under and whether the game's tag, a name
+                    // guess or a sighting put it there.
+                    LOG("[loot] %s eid %08X type %u parent %08X cat %02X/%02X %s%s%s%s", line, k.eid, k.tid, k.parent, k.cat, k.cat2, k.key[0] ? k.key : "",
+                        k.nodeType ? (" [" + k.nodeType->kind + "/" + (k.nodeType->tagged ? "vouched" : "name") + "]").c_str() : "",
+                        k.node[0] ? " node " : "", k.node[0] ? k.node : "");
                 }
             }
         }

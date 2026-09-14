@@ -256,12 +256,16 @@ Show a brief notice when auto-loot is toggled	自動ルートを切り替えた�
 Showing current overrides. Type to search all %d items.	現在の上書き設定を表示中です。入力すると全%d件のアイテムから検索できます。
 Showing the nearest %d of %d. The rest are further away.	最も近い%d件（全%d件中）を表示中です。残りはさらに遠くにあります。
 Skip all	全てスキップ
+Skip quest equipment	クエスト装備を拾わない
+Quest equipment	クエスト装備
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	ゲームが重要と印を付け、どの店も買い取らない装備を、すべての分類で対象にします。オフにすると、クエスト用の道具はその場に残ります。
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	ゲームが重要と印を付け、どの店も買い取らない道具と装備です。肥料散布器と潤滑剤散布器、ククの槍、斥候の指輪と首飾りなど180点で、ほぼすべてが銅貨1枚の価値しかありません。地面から早く拾ってしまうと、クエストの手順が前後することがあります。\n\n二つの印を合わせて見るため、片方しか持たない品は対象外です。フィールド散布器は売却できませんが重要の印がないので、これまでどおり拾います。
 Skip items shops refuse to buy	店が買い取らないアイテムをスキップ
 Skip quest items	クエストアイテムをスキップ
 skip: %s	スキップ：%s
 Small animals	小動物
 small animals off	小動物オフ
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	一部のワールドオブジェクトには読み取れるアイテム名がありません。オン：それでも取得します。オフ：未識別のものには手を付けません。
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	一部のワールドオブジェクトには読み取れるアイテム名がありません。オン：それでも取得します。オフ：未識別のものには手を付けません。\n\nこれは地面に落ちているアイテムのみが対象です。ノードテーブルが裏付けている拾得物、たとえば硬貨の山や金塊の山は、この設定にかかわらず拾います。テーブルがプレハブ名を持っていること自体が識別であり、中身のアイテムに名前がないかどうかは別の問題です。そのカテゴリのスイッチは引き続き適用されます。
 someone is wearing this; taking it would copy it	これは誰かが装備しています。取ると複製になります
 stack at one point (storage contents)	1か所に集積（格納物）
 Status	状態
@@ -333,4 +337,5 @@ yes	はい
 your rules refuse all ore, jewels and stone	あなたのルールは鉱石、宝石、石をすべて拒否しています
 your rules refuse all stone	あなたのルールは石をすべて拒否しています
 your rules refuse everything this node holds	あなたのルールはこの採集ポイントの中身をすべて拒否しています
+part of a mechanism, not loose loot	仕掛けの一部で、落ちている戦利品ではありません
 yours, just out of your hand	自分のもの、手から離れただけ

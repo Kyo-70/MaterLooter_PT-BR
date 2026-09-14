@@ -261,12 +261,16 @@ Show a brief notice when auto-loot is toggled	Vis et kort varsel når autoloot s
 Showing current overrides. Type to search all %d items.	Viser nåværende overstyringer. Skriv for å søke blant alle %d gjenstander.
 Showing the nearest %d of %d. The rest are further away.	Viser de %d nærmeste av %d. Resten er lenger unna.
 Skip all	Hopp over alt
+Skip quest equipment	Hopp over oppdragsutstyr
+Quest equipment	Oppdragsutstyr
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Utstyr spillet merker som viktig og som ingen butikk kjøper, på tvers av alle klasser. Av: oppdragsverktøy blir liggende.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Verktøy og utstyr spillet merker som viktig og som ingen butikk kjøper: gjødsel- og smøresprøytene, Kuku-spydene, speiderringene og -halskjedene. 180 gjenstander, nesten alle verdt en enkelt kobber, og å plukke opp en for tidlig kan bringe et oppdragstrinn ut av rekkefølge.\n\nDen leser de to merkene sammen, så en gjenstand med bare det ene er ikke dekket. Feltsprøyten kan ikke selges og er ikke merket som viktig, og kommer fortsatt inn.
 Skip items shops refuse to buy	Hopp over gjenstander butikker nekter å kjøpe
 Skip quest items	Hopp over questgjenstander
 skip: %s	hopp over: %s
 Small animals	Små dyr
 small animals off	små dyr av
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Noen objekter i verden har ikke noe lesbart gjenstandsnavn. På: ta dem likevel. Av: la alt uidentifisert være i fred.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Noen objekter i verden har ikke noe lesbart gjenstandsnavn. På: ta dem likevel. Av: la alt uidentifisert være i fred.\n\nDette gjelder bare løse gjenstander. En oppsamling som punkttabellen går god for, som en haug med mynter eller en stabel gullbarrer, blir tatt uansett hvordan dette er satt: at tabellen navngir prefaben er det som identifiserer den, og om gjenstanden inni har et navn er et eget spørsmål. Dens egen kategoribryter gjelder fortsatt.
 someone is wearing this; taking it would copy it	noen har dette på seg; å ta det ville kopiere det
 stack at one point (storage contents)	stables på ett sted (lagerinnhold)
 Status	Status
@@ -338,4 +342,5 @@ yes	ja
 your rules refuse all ore, jewels and stone	reglene dine avviser malm, edelstener og stein alt sammen
 your rules refuse all stone	reglene dine avviser all stein
 your rules refuse everything this node holds	reglene dine avviser alt dette punktet inneholder
+part of a mechanism, not loose loot	del av en mekanisme, ikke løst bytte
 yours, just out of your hand	ditt, rett utenfor hånden din

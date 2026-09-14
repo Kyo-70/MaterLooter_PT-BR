@@ -260,12 +260,16 @@ Show a brief notice when auto-loot is toggled	Покажи кратко изве
 Showing current overrides. Type to search all %d items.	Показват се текущите изключения. Пиши, за да търсиш във всички %d предмета.
 Showing the nearest %d of %d. The rest are further away.	Показват се най-близките %d от %d. Останалите са по-далеч.
 Skip all	Пропусни всичко
+Skip quest equipment	Пропускай куестово снаряжение
+Quest equipment	Куестово снаряжение
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Снаряжение, отбелязано като важно, което никой магазин не купува, във всички класове. Изключено: куестовите инструменти остават на място.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Инструменти и снаряжение, които играта отбелязва като важни и които никой магазин не купува: пръскачките за тор и смазка, копията Куку, разузнавачките пръстени и огърлици. 180 предмета, почти всички на стойност едно медно, и вземането на такъв от земята по-рано може да обърка стъпка от куест.\n\nПроверяват се двете отметки заедно, така че предмет само с една от тях не се покрива. Полевата пръскачка не се продава, но не е отбелязана като важна, и продължава да се взема.
 Skip items shops refuse to buy	Пропускай предмети, които магазините отказват да купят
 Skip quest items	Пропускай предметите за мисии
 skip: %s	пропусни: %s
 Small animals	Малки животни
 small animals off	малките животни изключени
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Някои обекти в света нямат четимо име на предмет. Включено: вземай ги въпреки това. Изключено: остави всичко неидентифицирано.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Някои обекти в света нямат четимо име на предмет. Включено: вземай ги въпреки това. Изключено: остави всичко неидентифицирано.\n\nТова важи само за отделни предмети. Предмет за вземане, за който таблицата с точки гарантира, като купчина монети или купчина златни кюлчета, се взема независимо от тази настройка: това, че таблицата назовава префаба, е което го идентифицира, а дали предметът вътре има име е отделен въпрос. Собственият му превключвател за категория продължава да важи.
 someone is wearing this; taking it would copy it	някой носи това; вземането му би го копирало
 stack at one point (storage contents)	купчина на едно място (съдържание на склад)
 Status	Състояние
@@ -337,4 +341,5 @@ yes	да
 your rules refuse all ore, jewels and stone	правилата ти отхвърлят рудата, скъпоценните камъни и камъка
 your rules refuse all stone	правилата ти отхвърлят всичкия камък
 your rules refuse everything this node holds	правилата ти отхвърлят всичко, което съдържа тази точка
+part of a mechanism, not loose loot	част от механизъм, а не разпиляна плячка
 yours, just out of your hand	твое, току-що изпуснато от ръката ти

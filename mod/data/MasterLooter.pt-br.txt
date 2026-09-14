@@ -263,12 +263,16 @@ Showing current overrides. Type to search all %d items.	Exibindo as substituiç�
 Showing the nearest %d of %d. The rest are further away.	Exibindo os %d mais próximos de %d. Os demais estão mais distantes.
 Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Esfola cada animal abatido uma única vez. Pessoas ficam na categoria Corpos. Os itens obtidos pelo esfolamento não são verificados pelos filtros. O mod não consegue vê-los antes que sejam recebidos, portanto esta opção é tudo ou nada.
 Skip all	Ignorar tudo
+Skip quest equipment	Ignorar equipamento de missão
+Quest equipment	Equipamento de missão
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Equipamento que o jogo marca como importante e que nenhuma loja compra, em todas as classes. Desligado: as ferramentas de missão ficam onde estão.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Ferramentas e equipamentos que o jogo marca como importantes e que nenhuma loja compra: os pulverizadores de fertilizante e de lubrificante, as lanças Kuku, os anéis e colares de batedor. 180 itens, quase todos valendo um único cobre, e pegar um do chão cedo demais pode tirar uma etapa de missão da ordem.\n\nEle lê as duas marcas juntas, então um item com apenas uma delas não é coberto. O Pulverizador de Campo não pode ser vendido e não está marcado como importante, e continua entrando.
 Skip items shops refuse to buy	Ignorar itens que as lojas se recusam a comprar
 Skip quest items	Ignorar itens de missão
 skip: %s	ignorar: %s
 Small animals	Animais pequenos
 small animals off	animais pequenos desativados
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Alguns objetos do mundo não têm um nome de item legível. Ativado: pegue-os mesmo assim. Desativado: deixe em paz tudo o que não for identificado.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Alguns objetos do mundo não têm um nome de item legível. Ativado: pegue-os mesmo assim. Desativado: deixe em paz tudo o que não for identificado.\n\nIsto vale apenas para itens soltos. Uma coleta que a tabela de pontos garante, como um monte de moedas ou uma pilha de barras de ouro, é pega de qualquer forma que isto esteja definido: o que a identifica é a tabela nomear o prefab, e se o item dentro dela tem nome é outra questão. O interruptor de categoria dela continua valendo.
 someone is wearing this; taking it would copy it	alguém está usando isto; pegá-lo criaria uma cópia
 stack at one point (storage contents)	pilha em um ponto (conteúdo armazenado)
 Status	Status
@@ -337,4 +341,5 @@ yes	sim
 your rules refuse all ore, jewels and stone	suas regras recusam minério, gemas e pedra
 your rules refuse all stone	suas regras recusam toda a pedra
 your rules refuse everything this node holds	suas regras recusam tudo o que este ponto contém
+part of a mechanism, not loose loot	parte de um mecanismo, não um saque solto
 yours, just out of your hand	seu, recém-saído da sua mão

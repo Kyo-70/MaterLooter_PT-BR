@@ -256,12 +256,16 @@ Show a brief notice when auto-loot is toggled	Tampilkan notifikasi singkat saat 
 Showing current overrides. Type to search all %d items.	Menampilkan override saat ini. Ketik untuk mencari semua %d item.
 Showing the nearest %d of %d. The rest are further away.	Menampilkan %d terdekat dari %d. Sisanya lebih jauh.
 Skip all	Lewati semua
+Skip quest equipment	Lewati perlengkapan misi
+Quest equipment	Perlengkapan misi
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	Perlengkapan yang ditandai penting oleh gim dan tidak dibeli toko mana pun, di semua kelas. Mati: peralatan misi dibiarkan di tempatnya.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Peralatan dan perlengkapan yang ditandai penting oleh gim dan tidak dibeli toko mana pun: penyemprot pupuk dan pelumas, tombak Kuku, cincin dan kalung pengintai. 180 barang, hampir semuanya bernilai satu tembaga, dan memungut satu dari tanah terlalu awal bisa mengacaukan langkah misi.\n\nIa membaca kedua tanda bersamaan, jadi barang yang hanya membawa salah satunya tidak tercakup. Penyemprot Lapangan tidak bisa dijual dan tidak ditandai penting, dan tetap terambil.
 Skip items shops refuse to buy	Lewati item yang ditolak semua toko
 Skip quest items	Lewati item quest
 skip: %s	lewati: %s
 Small animals	Hewan kecil
 small animals off	hewan kecil nonaktif
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Sebagian objek di dunia tidak punya nama item yang bisa dibaca. Aktif: tetap ambil. Nonaktif: biarkan semua yang tidak teridentifikasi.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Sebagian objek di dunia tidak punya nama item yang bisa dibaca. Aktif: tetap ambil. Nonaktif: biarkan semua yang tidak teridentifikasi.\n\nIni hanya berlaku untuk barang lepas. Barang pungut yang dijamin oleh tabel titik, seperti tumpukan koin atau tumpukan batangan emas, tetap diambil apa pun pengaturan ini: yang mengidentifikasinya adalah tabel yang menyebutkan prefab-nya, dan apakah barang di dalamnya punya nama adalah soal terpisah. Sakelar kategorinya sendiri tetap berlaku.
 someone is wearing this; taking it would copy it	ada yang memakainya; mengambilnya akan menyalinnya
 stack at one point (storage contents)	tumpukan di satu titik (isi penyimpanan)
 Status	Status
@@ -333,4 +337,5 @@ yes	ya
 your rules refuse all ore, jewels and stone	aturanmu menolak bijih, permata, dan batu
 your rules refuse all stone	aturanmu menolak semua batu
 your rules refuse everything this node holds	aturanmu menolak semua yang ada di node ini
+part of a mechanism, not loose loot	bagian dari mekanisme, bukan jarahan lepas
 yours, just out of your hand	milikmu, baru saja lepas dari tanganmu

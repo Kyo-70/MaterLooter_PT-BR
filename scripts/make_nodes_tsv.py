@@ -48,6 +48,81 @@ TAG_KIND = {
 # Tags above that override collect_botany when a row carries both.
 FRUIT_TAGS = ("catch_treefruit", "catch_berries", "catch_groundfruit", "catch_crops", "catch_vegetable")
 
+# What the player can pick up, which the game marks with a catch_ tag naming the
+# shape of the thing. Until 13 September 2026 only the five fruit tags above were
+# mapped and every other catch_ tag dropped the row out of the table, so 1,228
+# prefabs the game itself calls pickups arrived with no kind at all. NodeKind
+# then returned Unknown, GatherSwitchOff fell to its default, and the arm loop
+# would only touch them with "Unidentified nodes" on. An object of this sort
+# arrives empty and has to be armed before anything can read it, so with that
+# switch off it was refused as "not ready (node empty)" for ever. LuxDragon
+# reported the visible half: loose coins and gold bars never picked up, one of
+# the bars logged at half a metre.
+#
+# Grouped by the switch each belongs under, by counting the tags rather than
+# guessing from them:
+#   container  519 prefabs, the things you open
+#   item       409 prefabs, what you pick up in one hand
+#   left out   299 prefabs, pillars, flags, chairs, handles and worn equipment,
+#              none of which is loot, and catch_equip in particular is the worn
+#              gear family the verdict refuses outright.
+# No prefab carries an item tag and a container tag at once, checked, so the
+# order they are read in cannot change an answer. Tags are stripped before
+# matching: one row spells it "catch_dish " with a trailing space.
+CATCH_KIND = {
+    "catch_onehand": "pickup", "catch_dish": "pickup", "catch_cup": "pickup",
+    "catch_paper": "pickup", "catch_stick": "pickup", "catch_simple": "pickup",
+    "catch_quickpickup": "pickup", "catch_onebunch": "pickup",
+    "catch_mushroom": "pickup", "catch_pot": "pickup",
+    "catch_boxsmall": "container", "catch_boxmiddle": "container",
+    "catch_box": "container", "catch_barrel": "container",
+    "catch_sack": "container", "catch_itemcontainer": "container",
+}
+
+# The engine refuses these by name wherever a prefab has no row of its own, in
+# the verdict and again in the arm loop, and both tests are written against the
+# absence of a row. So a row has to carry the same answer the name would have
+# given, or adding one quietly removes the Containers switch from the thing.
+# Same three words as engine.cpp's two container tests.
+CONTAINER_WORDS = ("_chest", "_box", "dropset")
+
+# Held back from CATCH_KIND until somebody has watched what happens. Matched
+# against the prefab name, and only against the catch path: a camp farm's growth
+# phases carry collect tags and keep the kinds they already had.
+#
+# "camp_farm" is the 20 gimmick_camp_farm_*_seed prefabs. The game tags them
+# catch_onehand, which says a player picks one up in one hand and suggests a
+# loose seed, but nothing here says whether gathering one lifts something the
+# player has planted. Ground items is on by default, so getting this wrong would
+# empty somebody's farm without them asking for it. Test before mapping it.
+CATCH_SKIP = ("camp_farm",)
+
+# Tags held back for the same reason, named rather than mapped.
+#
+# "catch_bouquet" sits on twelve prefabs, and four of them are the wood and
+# bamboo branch sockets. Their own yields column names Wood_Branch_Usable and
+# its cousins, every one class wood, so filing them as item put them under
+# Ground items and turning Wood off stopped reaching them. The other eight look
+# like real bouquets. Separating the two wants the yields counted, which is the
+# rule this file already follows for a kind's contents, so it waits for that
+# rather than for a name guess.
+CATCH_HOLD = ("catch_bouquet",)
+
+# Prefabs the game tags as nothing whatsoever, which somebody has nonetheless
+# stood in front of and watched offer a pick-up. Written with src "seen", which
+# the loader counts as vouched the way it counts the game's own tag, since a
+# screenshot of the Take prompt plus a log is not a guess.
+#
+# Keep this list short and keep the evidence with each entry. LuxDragon, 13
+# September 2026: a screenshot of "Coins / Take" on a cave floor, and four logs
+# in which every one of these was refused as "not ready (node empty)", one at
+# 0.6 m. The minigame coins are deliberately absent: 22 gimmick_minigame_seotda_
+# prefabs and the ceelo and cushionball ones carry "coin" in the name and are
+# gambling props, so a name rule here would have swept them all in.
+# Empty: the folder rule at the end of kind_for covers the coin piles this
+# once held, and one rule with evidence behind it beats a list of two.
+SEEN_PICKUPS = {}
+
 # Fallback for gather nodes the table does not tag, read off the prefab name.
 # Ordered: the first hit wins. Never consulted for a gimmick_attach_ prefab;
 # see kind_for().
@@ -102,7 +177,12 @@ def prefab_key(path):
     return base
 
 
-KIND_NOUN = {"plant": "Plant", "ore": "Ore", "stone": "Stone", "wood": "Wood", "item": "Crop"}
+KIND_NOUN = {"plant": "Plant", "ore": "Ore", "stone": "Stone", "wood": "Wood", "item": "Crop",
+             "pickup": "Object", "container": "Container"}
+
+# Kinds that reached pretty() with no noun of their own, reported at the end of
+# a run. Add a kind to KIND_NOUN above and this stays empty.
+NOUNLESS = {}
 
 
 def pretty(name, kind):
@@ -119,6 +199,8 @@ def pretty(name, kind):
         s = s[:-len("_scenecollector")]
     s = re.sub(r"_\d+$", "", s).replace("_", " ").strip()
     if not s or len(s) > 32:
+        if kind not in KIND_NOUN:
+            NOUNLESS[kind] = NOUNLESS.get(kind, 0) + 1
         return KIND_NOUN.get(kind, "Node")
     return s[0].upper() + s[1:]
 
@@ -148,6 +230,28 @@ KIND_CLASSES = {
 
 
 def match_item(name, kind, by_key, by_name):
+    # The row's own key, before stem() takes it apart. STRIP_PREFIX eats
+    # "collection_" and STRIP_SUFFIX eats "_0001", so
+    # gimmick_collection_prop_cup_0001 reaches the candidates below as
+    # "prop_cup" and never gets the chance to match Collection_Prop_Cup_0001,
+    # which is its own name spelled out. That cost the Golden Goblet its class:
+    # with no item and no yield the engine could not tell it was a container,
+    # so it answered to Ground items alone and the Containers switch missed it.
+    #
+    # An exact hit on an item key is identity rather than a guess, so it is
+    # taken without the class filter the guesses below need. Measured against
+    # the shipped table: it resolves 251 rows, every one of them a pickup or
+    # container row that had no item at all, 250 of the 251 container-classed
+    # or furniture-tagged, and it contradicts none of the rows that already
+    # name an item. No row of any other kind gains one.
+    exact = name.lower()
+    for p in ("gimmick_", "cd_"):
+        if exact.startswith(p):
+            exact = exact[len(p):]
+            break
+    it = by_key.get(exact)
+    if it:
+        return it
     s = stem(name)
     for c in (s, s.replace("_", ""), s.split("_")[-1]):
         if len(c) < 3:
@@ -165,24 +269,46 @@ def match_item(name, kind, by_key, by_name):
 # Words that never appear on a mineable vein. Without these the ore guess
 # claims shop counters, decorative pipework, abyss puzzle platforms and a
 # fountain, all of which then get a 25 m reach and twelve arm calls.
+# A gimmick the game drives through states and triggers is a mechanism, not
+# something lying on the floor. A piece of loot's record holds its name, an id,
+# a catch tag and the common logout effect and nothing else; the Marni EMP
+# capsule holds GimmickOnEnterState and PreGimmickOn, and the Demeniss knowledge
+# tower holds UnnamedTrigger_0 beside its own shake parameters. Read from the
+# row's own strings, the way the tags and the break impulse already are.
+#
+# Checked against the whole table before it was trusted: of the 197 vouched
+# pick-ups that name no item at all, 40 carry one of these and every one of
+# them is a mechanism. Coins, gold bars, the breakable pot and the Golden
+# Goblet carry none, so the things the pick-up path exists for are untouched.
+DRIVEN_MARKERS = ("Trigger", "EnterState", "ExitState", "GimmickOn",
+                  "GimmickOff", "PreGimmick", "StateChange")
+
+# The column is written for pick-up rows only. The marker is presumably just as
+# true of a driven stone or plant, but the 197 rows counted above were pick-ups
+# and the verdict reads this on the pick-up path alone, so marking anything else
+# would be a claim wider than the count behind it.
+#
+# ...except inside the folder the game keeps loose pick-ups in, where a trigger
+# on an arrow or a smoke bomb is as likely to be the pick-up itself. Eight
+# prefabs sit there and they are left alone; the seventeen outside it are the
+# capsules, the tower props, the kinetic tools, the traps and the mechanic core.
+LOOSE_ITEM_FOLDER = "/00_common/item/"
+
 NOT_A_VEIN = ("pipe", "shop", "npctable", "store", "fountain", "airballoon",
               "platform", "battery", "conductor", "preset", "sandcrawler",
               "visione", "abyss", "magnet", "vehicle", "cannon", "furnace")
 
 
-def kind_for(tags, name, prefab):
+def kind_for(tags, name, prefab, folder=""):
     """The kind, and whether the game said so or the name merely suggested it."""
+    if prefab in SEEN_PICKUPS:
+        return SEEN_PICKUPS[prefab], "seen"
     for t in FRUIT_TAGS:
         if t in tags:
             return "item", True
     for t in tags:
         if t in TAG_KIND:
             return TAG_KIND[t], True
-    # Tags the table does not know still mean the game has classified this row,
-    # and as something other than a gather node. Guessing from the name here
-    # would be second-guessing it.
-    if tags:
-        return "", False
     # A gimmick_attach_ prefab is a piece bolted to a creature or a mechanism:
     # stoneworm and stonetoad plating, stoneowl bases, landspider queen rocks,
     # seraphim stones, thorny vines. None of them is something a player
@@ -191,6 +317,26 @@ def kind_for(tags, name, prefab):
     # mining spots under this prefix itself, so the guess can only add false
     # positives here, and it added 110 of them.
     if prefab.startswith("gimmick_attach_"):
+        return "", False
+    # A collect_ tag beats a catch_ one: a mine you also pick from by hand is
+    # still a mine. Sorted so a row carrying two of them answers the same way
+    # on every run, since `tags` is a set.
+    if not any(w in prefab for w in CATCH_SKIP):
+        for t in sorted(tags):
+            # Skip this tag, not the rest of them. A row carrying a held tag
+            # and a real one sorted after it would otherwise come out kindless.
+            # No row in the 13,906 does today, which is why this never showed.
+            if t.strip() in CATCH_HOLD:
+                continue
+            if t.strip() in CATCH_KIND:
+                kind = CATCH_KIND[t.strip()]
+                if kind == "pickup" and any(w in prefab for w in CONTAINER_WORDS):
+                    kind = "container"
+                return kind, True
+    # Tags the table does not know still mean the game has classified this row,
+    # and as something other than a gather node. Guessing from the name here
+    # would be second-guessing it.
+    if tags:
         return "", False
     low = name.lower()
     for kind, words in NAME_KIND:
@@ -206,6 +352,16 @@ def kind_for(tags, name, prefab):
             continue
         if any(w in low for w in words):
             return kind, False
+    # Nothing tagged it and nothing in the name says what it is. If it sits in
+    # the folder the game keeps loose pick-ups in, that is what it is: the
+    # probe of 13 September 2026 found a coin pile there built exactly like
+    # every other empty gimmick, and six of them were picked up once the table
+    # knew about them. Last in the order on purpose, so a dried herb keeps the
+    # plant its name earned it and only the unnameable reach this.
+    if "/00_common/item/" in folder:
+        if any(w in prefab for w in CONTAINER_WORDS):
+            return "container", "folder"
+        return "pickup", "folder"
     return "", False
 
 
@@ -266,6 +422,31 @@ def main():
         except (KeyError, ValueError):
             pass
     item_keys = set(by_num)
+    # Every tag any record gives a prefab, gathered before anything is decided.
+    # gimmick_box_bucket_02a_unbreak has two records, one tagged catch_pot and
+    # one tagged catch_barrel, and the loop below keeps the first basename it
+    # meets. That made the kind depend on the order the table happens to be in:
+    # the pot record comes first, so a barrel was filed as an item. Reading the
+    # union means both tags are on the table when kind_for is asked.
+    tags_by_base = collections.defaultdict(set)
+    # Same for the state and trigger markers, and for the same reason. 107
+    # prefabs have more than one gimmickinfo record and 104 of them disagree
+    # about whether a marker is there, so reading it off whichever record came
+    # first makes the answer depend on the order of the table. No row is
+    # affected today, because none of the 107 is a pick-up that names nothing;
+    # that is luck, and the tags above were read the same way until a bucket
+    # tagged catch_pot in one record and catch_barrel in another proved it.
+    driven_by_base = collections.defaultdict(bool)
+    for _key, rec in rows:
+        ss = strings(rec)
+        path = next((s[:s.find(".prefab") + len(".prefab")] for s in ss if ".prefab" in s), "")
+        if not path:
+            continue
+        base = prefab_key(path)
+        tags_by_base[base].update(s for s in ss if s.startswith(("collect", "catch")))
+        if LOOSE_ITEM_FOLDER not in path.lower():
+            driven_by_base[base] |= any(m in s for m in DRIVEN_MARKERS for s in ss)
+
     cand_by_path, freq = {}, collections.Counter()
     for _key, rec in rows:
         c = yield_candidates(rec, item_keys)
@@ -302,7 +483,8 @@ def main():
         # carry neither. Read from the row own strings, like the tags.
         breaks = any(s in ("SelfForceBreakImpulse", "BreakProjectileKey") for s in ss)
         base = prefab_key(path)
-        kind, vouched = kind_for(tags, name, base)
+        driven = driven_by_base[base]
+        kind, vouched = kind_for(tags_by_base.get(base, tags), name, base, path)
         if not kind:
             continue
         stats["tagged" if vouched else "by_name"] += 1
@@ -318,26 +500,33 @@ def main():
             stats["with_yields"] += 1
         out.append((base, kind, it["string_key"] if it else "",
                     it["name"] if it else pretty(name, kind),
-                    "tag" if vouched else "name",
+                    # kind_for returns True for the game's own tag, False for a
+                    # name guess, or the name of another source it trusts.
+                    vouched if isinstance(vouched, str) else ("tag" if vouched else "name"),
                     "1" if breaks else "0",
-                    " ".join(yields)))
+                    " ".join(yields),
+                    "1" if (driven and kind == "pickup" and not it and not yields) else "0"))
     out.sort()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="\n") as f:
         # src says whether the game's own gimmick tag gave the kind or the
         # generator guessed it from the prefab name. The engine spends the
         # long ore reach only on the ones the game vouches for.
-        f.write("prefab\tkind\titem_key\tname\tsrc\tbreaks\tyields\n")
+        f.write("prefab\tkind\titem_key\tname\tsrc\tbreaks\tyields\tdriven\n")
         for r in out:
             f.write("\t".join(r) + "\n")
     kinds = {}
-    for _, k, _, _, _, _, _ in out:
+    for _, k, _, _, _, _, _, _ in out:
         kinds[k] = kinds.get(k, 0) + 1
     print("gimmick rows %(rows)d, with a prefab path %(with_path)d, "
           "classified by tag %(tagged)d, by name %(by_name)d, item resolved %(with_item)d, "
           "drop candidates read %(with_yields)d" % stats)
     print("wrote %d rows to %s" % (len(out), os.path.relpath(OUT, HERE)))
     print("by kind: " + ", ".join("%s %d" % kv for kv in sorted(kinds.items())))
+    for k in sorted(NOUNLESS):
+        print("warning: kind %r has no entry in KIND_NOUN, so %d rows are named "
+              "\"Node\" and will read as \"Node node\" in the menu and the log"
+              % (k, NOUNLESS[k]))
     ore = [r for r in out if r[1] == "ore"]
     print("ore: %d rows, %d vouched for by the game's own tag, %d that do not break"
           % (len(ore), sum(1 for r in ore if r[4] == "tag"), sum(1 for r in ore if r[5] == "0")))

@@ -19,6 +19,18 @@ namespace ml
         // switch the node answers to; only the game's word buys the long
         // arming reach, since a guess once claimed shop counters and pipework.
         bool tagged = false;
+        // A pick-up rather than something the player collects. Both answer to
+        // the Ground items switch, and only one of them fills when it is armed.
+        bool pickup = false;
+        // The game drives this gimmick through states and triggers, and the
+        // table can say nothing about what it holds. A piece of loot's row
+        // carries a name, an id, a catch tag and the logout effect; the Marni
+        // EMP capsule carries GimmickOnEnterState, and the Demeniss knowledge
+        // tower carries UnnamedTrigger_0. Written for pick-up rows only, and
+        // only where nothing else could judge the thing, so a mechanism that
+        // pays out real loot is still loot. A table without the column leaves
+        // this false, which is how every build before this one behaved.
+        bool driven = false;
         // Whether the game will break this node when the mod drives the swing
         // and the break at it. The row says so itself: a vein carries
         // SelfForceBreakImpulse or a BreakProjectileKey, and the ore chunks a

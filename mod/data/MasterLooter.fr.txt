@@ -258,12 +258,16 @@ Show a brief notice when auto-loot is toggled	Afficher un bref avis quand le ram
 Showing current overrides. Type to search all %d items.	Affichage des substitutions actuelles. Tapez pour chercher parmi les %d objets.
 Showing the nearest %d of %d. The rest are further away.	Affichage des %d plus proches sur %d. Les autres sont plus loin.
 Skip all	Tout ignorer
+Skip quest equipment	Ignorer l'équipement de quête
+Quest equipment	Équipement de quête
+Gear marked important that no shop will buy, across every class. Off leaves quest tools where they lie.	L'équipement que le jeu marque comme important et qu'aucune boutique n'achète, toutes classes confondues. Désactivé : les outils de quête restent au sol.
+Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	Les outils et l'équipement que le jeu marque comme importants et qu'aucune boutique n'achète : les pulvérisateurs d'engrais et de lubrifiant, les lances Kuku, les bagues et colliers d'éclaireur. 180 objets, presque tous valant un seul cuivre, et en ramasser un trop tôt peut décaler une étape de quête.\n\nLes deux marques sont lues ensemble, donc un objet qui n'en porte qu'une seule n'est pas couvert. Le pulvérisateur de campagne est invendable et n'est pas marqué comme important, et il est toujours ramassé.
 Skip items shops refuse to buy	Ignorer les objets que les boutiques refusent d'acheter
 Skip quest items	Ignorer les objets de quête
 skip: %s	ignorer : %s
 Small animals	Petits animaux
 small animals off	petits animaux désactivés
-Some world objects carry no readable item name. On: take them anyway. Off: leave anything unidentified.	Certains éléments du monde ne portent aucun nom d'objet lisible. Activé : les prendre quand même. Désactivé : laisser tout ce qui est non identifié.
+Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	Certains éléments du monde ne portent aucun nom d'objet lisible. Activé : les prendre quand même. Désactivé : laisser tout ce qui est non identifié.\n\nCela ne concerne que les objets au sol. Un ramassage dont la table des points se porte garante, comme un tas de pièces ou une pile de lingots d'or, est pris quel que soit ce réglage : c'est le fait que la table nomme le prefab qui l'identifie, et que l'objet qu'il contient n'ait pas de nom est une autre question. Son propre interrupteur de catégorie s'applique toujours.
 someone is wearing this; taking it would copy it	quelqu'un porte ceci ; le prendre en ferait une copie
 stack at one point (storage contents)	empilé en un point (contenu de stockage)
 Status	État
@@ -335,4 +339,5 @@ yes	oui
 your rules refuse all ore, jewels and stone	tes règles refusent le minerai, les gemmes et la pierre
 your rules refuse all stone	tes règles refusent toute la pierre
 your rules refuse everything this node holds	tes règles refusent tout ce que contient ce point
+part of a mechanism, not loose loot	élément d'un mécanisme, pas un butin au sol
 yours, just out of your hand	à vous, tout juste sorti de votre main

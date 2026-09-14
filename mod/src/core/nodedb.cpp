@@ -54,8 +54,8 @@ namespace ml::NodeDb
             // it says what it can hand over, a five-column one has every node
             // breakable, which is what the mod did before that column existed,
             // and a four-column one counts every row as a guess.
-            std::string cols[7]; int c = 0;
-            for (const char* p = line.c_str(); *p && c < 7; ++p)
+            std::string cols[8]; int c = 0;
+            for (const char* p = line.c_str(); *p && c < 8; ++p)
             {
                 if (*p == '\t') { ++c; continue; }
                 if (*p == '\r' || *p == '\n') break;
@@ -64,8 +64,17 @@ namespace ml::NodeDb
             if (c < 3 || cols[0].empty() || cols[1].empty()) continue;
             NodeType n;
             n.prefab = cols[0]; n.kind = cols[1]; n.itemKey = cols[2]; n.name = cols[3];
-            n.tagged = cols[4] == "tag";
+            // "seen" is a prefab somebody watched the game offer a pick-up on,
+            // for the handful the game tags as nothing at all. It counts the
+            // same as the game's own tag: both are evidence, and a name guess
+            // is the only thing that is not.
+            // "tag" is the game's own word, "folder" is the loose-item folder
+            // it filed the prefab in. A name guess is the only one of the three
+            // that is not evidence, and it is the only one left out.
+            n.tagged = cols[4] == "tag" || cols[4] == "seen" || cols[4] == "folder";
+            n.pickup = n.kind == "pickup";
             n.breaks = c < 5 || cols[5] != "0";
+            n.driven = c >= 7 && cols[7] == "1";
             if (c >= 6 && !cols[6].empty())
             {
                 std::string one;
