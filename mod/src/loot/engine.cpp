@@ -806,6 +806,29 @@ namespace ml::loot
             }
     }
 
+    // Is the thing the scan is centred on a body the game has shown us being
+    // played? Type tag 04 with status category 0E, the pair issue #36 settled.
+    static bool PlayedHolder(uint32_t eid)
+    {
+        if (!eid) return false;
+        for (int i = 0; i < g_holderN; ++i) if (g_holders[i].eid == eid) return g_holders[i].played;
+        return false;
+    }
+
+    // Player-tagged actors seen lately, merged across scans. The actor manager
+    // hands the world over a few entities at a time, so "this pass saw one
+    // player-tagged actor" says nothing about how many there are; five separate
+    // rules for picking the player have failed on exactly that. Twelve seconds,
+    // to match g_seen, and cleared on a world change with it.
+    static std::unordered_map<uint32_t, DWORD> g_actorsSeen;
+    static void NoteActor(uint32_t eid, DWORD now) { g_actorsSeen[eid] = now; }
+    static int ActorsSeen(DWORD now)
+    {
+        for (auto it = g_actorsSeen.begin(); it != g_actorsSeen.end();)
+            it = (now - it->second > 12000) ? g_actorsSeen.erase(it) : std::next(it);
+        return static_cast<int>(g_actorsSeen.size());
+    }
+
     static void NoteHolderWorn(uint32_t parent, DWORD now)
     {
         for (int i = 0; i < g_holderN; ++i)
@@ -2404,7 +2427,17 @@ namespace ml::loot
         // moment, in a catch, and this then refused it for the next
         // forty-five seconds. Nothing alive is the player's kit coming back.
         if (!c.ai && WasOnMe(c, GetTickCount())) return skip("yours, just out of your hand");
-        if (c.item && c.parent && c.cat2 == 0x11) return skip("worn by someone");
+        // Category 0x11 is the game saying a thing is being worn, and that is
+        // enough by itself. Requiring a parent as well left a hole. Sov1737's
+        // log of 14 September 2026 on 1.6.17 refuses his own Black Sun 118
+        // times, parent A0100001 and the equip prefab both present, and then
+        // hands him three more copies of that same shield from entities with no
+        // parent and no prefab at all. With no prefab the /00_common/equip/ rule
+        // below cannot fire either, so nothing was left standing between them
+        // and Take. Across the archived logs 7,911 lines carry cat 00/11 and not
+        // one of them is unparented, so an unparented 0x11 is the scan reaching
+        // an entity before the game has filled its parent in, never loot.
+        if (c.item && c.cat2 == 0x11) return skip("worn by someone");
         if (game::InventoryHas(c.iid)) return skip("already in your bag");
         if (c.node[0])
         {
@@ -3356,8 +3389,10 @@ namespace ml::loot
         // The game keeps its own pointer to the character being played, and
         // reading it beats every rule the engine used to guess with. See
         // game::LocalPlayer.
+        bool gameSaysWho = false;
         if (const uintptr_t lp = game::LocalPlayer())
         {
+            gameSaysWho = true;
             uint32_t lpEid = 0;
             if (game::Eid(lp, &lpEid) && (lp != g_me || lpEid != g_meEid))
             {
@@ -3376,7 +3411,69 @@ namespace ml::loot
         // range for several seconds while the player is standing in a field is
         // the signature of measuring from the wrong actor.
         // Only when the game's own pointer could not be followed.
-        const bool reconsider = !g_me || (g_barrenSince && GetTickCount() - g_barrenSince > 4000);
+        // And on a timer while the centre is not a player-tagged actor. A
+        // holder is only ever taken because no actor had anything around it,
+        // which is a fact about one enumeration pass rather than about the
+        // session, and the barren clock can never undo it: a holder wins for
+        // being surrounded, so it is never barren. Issue #66.
+        //
+        // Every four seconds, not every scan. As Damiane the actor really is a
+        // fixture with nothing near it and the holder really is the answer, so
+        // this runs for the life of that session and has to stay cheap; it
+        // re-enumerates the world, which the ordinary scan has already done.
+        //
+        // And never against the game's own answer. The character being played is
+        // not always player-tagged, as the note above says and as Damiane proves,
+        // so where LocalPlayer has spoken this timer would have fought it: it
+        // would replace a confirmed centre with whatever A0 follower happened to
+        // be standing near some scenery, the next scan would put it back, and
+        // each flip calls ForgetBody. The barren branch is held off the same way,
+        // by LocalPlayer clearing g_barrenSince above; this needs saying outright
+        // because it is not routed through that clock.
+        static DWORD s_holderRepick = 0;
+        // And never off a played body. A holder carrying the played pair is
+        // the answer as Damiane and as Oongka, not a mistake to be recovered
+        // from, and moving off one costs the played flag and the hold through
+        // ForgetBody. This also keeps the timer, and the extra enumeration it
+        // pays for, out of those sessions entirely.
+        //
+        // g_bodyEid as well as g_meEid, because those two are not the same
+        // question. g_me can be sitting on some crowded piece of scenery
+        // while BestHolder has already put the scan on a played body, and a
+        // guard that only read g_meEid would rescue the one at the cost of
+        // the other.
+        const bool onGearHolder = !gameSaysWho && g_meEid
+                                  && static_cast<uint8_t>(g_meEid >> 24) != game::kTagPlayer
+                                  && !PlayedHolder(g_meEid) && !PlayedHolder(g_bodyEid)
+                                  && now - s_holderRepick > 4000;
+        if (onGearHolder) s_holderRepick = now;
+        const bool noPlayer = !g_me;
+        const bool barren = g_barrenSince && GetTickCount() - g_barrenSince > 4000;
+        // A centre the single-actor rule chose is held only while that rule is
+        // still true. The first pass of a session has no history behind it, so
+        // it can see one player-tagged actor in a world that has two, and a
+        // follower taken that way is a trap: being player-tagged it is out of
+        // the rescue timer's reach, and walking with the player it never goes
+        // barren. Once the window has met a second actor the choice is simply
+        // re-opened, and with the rule no longer firing the count decides, which
+        // is what would have happened with the fuller pass.
+        static uint32_t s_soleChoice = 0;
+        // Never against the game's own answer, the same reservation the
+        // rescue timer carries: where LocalPlayer has named the centre, no
+        // rule of ours gets to argue with it.
+        const bool soleDisproved = !gameSaysWho && s_soleChoice && s_soleChoice == g_meEid
+                                   && ActorsSeen(now) > 1;
+        // A pass the timer alone asked for is a rescue and nothing more: it may
+        // move the centre onto a player-tagged actor and it may do nothing else
+        // whatever. Letting it choose freely would be issue #66 wearing a new
+        // hat. As Damiane with no answer from LocalPlayer the centre is her body,
+        // scoring perhaps 106, and the aeroplane beside it scores 410; a re-pick
+        // with no margin hands the aeroplane the centre and calls ForgetBody on
+        // the way out, throwing away the played flag and the hold that
+        // BestHolder needs. Before this timer existed a settled centre was never
+        // re-contested at all, and that part was right.
+        const bool rescueOnly = !noPlayer && !barren && !soleDisproved;
+        const bool reconsider = noPlayer || onGearHolder || barren || soleDisproved;
         if (reconsider)
         {
             // Every player-tagged actor, and how much world is standing near
@@ -3388,7 +3485,7 @@ namespace ml::loot
             // take-or-steal check is worse: it asks that question about
             // followers too, and following it moved the scan to an actor with
             // nothing within forty metres.
-            struct Pick { uintptr_t ent; uint32_t eid; Vec3 pos; int around; };   // not 'near': windows.h defines it
+            struct Pick { uintptr_t ent; uint32_t eid; Vec3 pos; int around; bool tagged; };   // not 'near': windows.h defines it
             Pick cand[16]; int candN = 0;
             static Vec3 world[2048]; int worldN = 0;
             // Everything seen this pass, so a parent can be turned back into the
@@ -3403,7 +3500,30 @@ namespace ml::loot
                 Vec3 q; const bool ok = game::WorldPos(e, &q);
                 if (allN < 2048) all[allN++] = { e, eid, q, ok };
                 const uint8_t tag = static_cast<uint8_t>(eid >> 24);
-                if (tag == game::kTagPlayer && candN < 16 && ok) cand[candN++] = { e, eid, q, 0 };
+                if (tag == game::kTagPlayer)
+                {
+                    // Into the window before anything counts it. This pass is
+                    // the freshest evidence there is about who is in the world,
+                    // and it is fed in below rather than here, after the choice
+                    // has already been made. Without this a pass that shows only
+                    // a follower, while the window still remembers the identity,
+                    // counts one actor and hands that follower the centre.
+                    //
+                    // Noted whether or not its position could be read, since the
+                    // question here is how many actors exist, not which of them
+                    // can be scored.
+                    NoteActor(eid, now);
+                }
+                if (tag == game::kTagPlayer && ok)
+                {
+                    // Once each. The pools the roster walks overlap, and
+                    // bulldog218's line lists A0100001 nine times over: nine of
+                    // the sixteen slots spent on one actor, and any count of
+                    // "how many player-tagged actors are there" wrong by nine.
+                    bool dup = false;
+                    for (int i = 0; i < candN; ++i) if (cand[i].eid == eid) { dup = true; break; }
+                    if (!dup && candN < 16) cand[candN++] = { e, eid, q, 0, true };
+                }
                 else if (tag == game::kTagWorld && worldN < 2048 && ok) world[worldN++] = q;
                 // Who is wearing or carrying things. A dressed character is the
                 // one thing with a handful of items parented to it, and playing
@@ -3430,7 +3550,7 @@ namespace ml::loot
                     {
                         bool dup = false;
                         for (int c = 0; c < candN; ++c) if (cand[c].eid == want) dup = true;
-                        if (!dup) cand[candN++] = { all[i].ent, all[i].eid, all[i].pos, 0 };
+                        if (!dup) cand[candN++] = { all[i].ent, all[i].eid, all[i].pos, 0, false };
                         break;
                     }
             }
@@ -3444,7 +3564,19 @@ namespace ml::loot
             // player at all, a thin pass still beats no pick: a small interior
             // may never hand over fifty entities and waiting for ever would
             // leave the engine dead there.
-            if (allN < 50 && g_me)
+            //
+            // Decline to choose, rather than abandoning the scan to avoid
+            // choosing. Returning from here leaves Scan without looting
+            // anything, and the caller clears the burst flag before calling in,
+            // so a Loot-all press landing on one of these passes was simply
+            // swallowed. That was rare while this block was entered only when
+            // there was no player or the centre had gone barren; the four-second
+            // rescue above makes it routine. Emptying the candidate list has the
+            // same effect on the choice and none on the rest of the scan: with
+            // no candidates nothing is picked, and where there is no player at
+            // all the WorldPos test a few lines down returns anyway.
+            const bool thin = allN < 50 && g_me;
+            if (thin)
             {
                 static DWORD s_saidThin = 0;
                 if (g_debugLog && now - s_saidThin > 5000)
@@ -3452,7 +3584,7 @@ namespace ml::loot
                     s_saidThin = now;
                     LOG("[player] only %d entities in this pass, too few to choose from; waiting for a fuller one", allN);
                 }
-                return;
+                candN = 0;
             }
             const float lim = cfg.scanRange * cfg.scanRange;
             for (int i = 0; i < candN; ++i)
@@ -3461,10 +3593,109 @@ namespace ml::loot
                     const float dx = world[j].x - cand[i].pos.x, dy = world[j].y - cand[i].pos.y, dz = world[j].z - cand[i].pos.z;
                     if (dx * dx + dy * dy + dz * dz <= lim) ++cand[i].around;
                 }
-            int best = -1;
-            for (int i = 0; i < candN; ++i) if (best < 0 || cand[i].around > cand[best].around) best = i;
-            if (best >= 0)
+            // One player-tagged actor in the world, with anything at all near
+            // it, is you. Take it and do not let a gear holder outbid it.
+            //
+            // The raw count alone put bulldog218 on the Marni airplane for a
+            // whole session, 14 September 2026: the aeroplane's core carried 410
+            // objects within forty metres against the A0100001 actor's 106, took
+            // g_me and never gave it back, since a centre with 410 things round
+            // it is never barren and nothing re-picks. Every verdict for the
+            // next sixteen minutes read "worn or carried by you" or "on the
+            // player", because the aeroplane's parts all hang off its core. Two
+            // pick-ups in the session.
+            //
+            // Only when there is exactly one, and that restriction is the point.
+            // Preferring any player-tagged actor over any holder reads well and
+            // is wrong: as Damiane with Kliff following, Kliff is player-tagged
+            // and walks through a full world, so she would win every pass, and
+            // the note at the top of this function records where that leads. It
+            // is also a trap with no way out, since a centre that walks never
+            // goes barren and the body is dropped again within two seconds by
+            // the actor-walked test below. With a party in the world this falls
+            // through to the count exactly as it always has.
+            //
+            // Holders stay in the list for the case the fallback was written
+            // for: as Damiane the played body is not player-tagged and the
+            // identity fixture sits a kilometre from anything, scoring zero, so
+            // the single-actor rule does not fire and the count decides as
+            // before. Choosing the body over the actor is the job of g_bodyEid
+            // and BestHolder below, which have the margin, the hold and the
+            // played test that this pass has none of.
+            int sole = -1;
+            for (int i = 0; i < candN; ++i)
             {
+                if (!cand[i].tagged) continue;
+                if (sole >= 0) { sole = -2; break; }
+                sole = i;
+            }
+            if (sole >= 0 && cand[sole].around <= 0) sole = -1;
+            // And one pass is not a roster. The manager hands over a handful of
+            // entities on most ticks, so a pass showing one player-tagged actor
+            // is as likely to be a thin pass as a solo world, and picking a
+            // follower here is a trap with no way out: a centre that walks never
+            // goes barren, and the actor-walked test drops any body within two
+            // seconds. The window is merged across scans and is empty only
+            // before the first one has run.
+            if (sole >= 0 && ActorsSeen(now) > 1) sole = -1;
+            int best = sole >= 0 ? sole : -1;
+            const bool onHolder = best < 0;
+            if (onHolder)
+                for (int i = 0; i < candN; ++i) if (best < 0 || cand[i].around > cand[best].around) best = i;
+            // On a tie the one already being scanned around keeps it. Nothing
+            // above breaks a tie except enumeration order, and bulldog218's log
+            // has two holders on 410 apiece, so a draw is not hypothetical. It
+            // matters because this pass now re-runs every four seconds while the
+            // centre is a gear holder, which is the whole of a Damiane session,
+            // and a changed pick calls ForgetBody: that empties the holder table
+            // and with it the played flag and the 2.5 s hold. Swapping between
+            // two equal holders every four seconds would wipe that for ever.
+            int inc = -1;
+            for (int i = 0; i < candN; ++i) if (cand[i].eid == g_meEid) { inc = i; break; }
+            // An incumbent this pass never enumerated has not been beaten by
+            // anything; it simply was not on the list. Evicting it on that is
+            // how every one of these passes goes wrong, because the manager
+            // hands over a few entities at a time and any single pass can omit
+            // anyone. Hold until a pass arrives that can actually compare the
+            // two. Twelve seconds of never being enumerated is something else,
+            // an entity that has gone, and then the pass may choose freely.
+            static DWORD s_incSeenAt = 0;
+            if (inc >= 0) s_incSeenAt = now;
+            const bool incAbsent = !noPlayer && g_meEid && inc < 0
+                                   && s_incSeenAt && now - s_incSeenAt < 12000;
+            if (best >= 0 && inc >= 0 && inc != best && cand[inc].around == cand[best].around
+                && (cand[inc].tagged || !cand[best].tagged)) best = inc;
+            if (incAbsent)
+            {
+                static DWORD s_saidAbsent = 0;
+                if (g_debugLog && now - s_saidAbsent > 30000)
+                {
+                    s_saidAbsent = now;
+                    LOG("[player] %08X was not in this pass at all, so it keeps the centre; nothing here can be compared with it", g_meEid);
+                }
+            }
+            else if (rescueOnly && onHolder)
+            {
+                // No single player-tagged actor to be rescued onto, so hold
+                // still. A rescue that fell through to the count would be free
+                // to hand the centre to a follower or to the next crowded piece
+                // of scenery, which is the fault it exists to undo.
+                static DWORD s_saidHeld = 0;
+                if (g_debugLog && now - s_saidHeld > 30000)
+                {
+                    s_saidHeld = now;
+                    LOG("[player] still centred on %08X, a gear holder: no player-tagged actor has anything near it", g_meEid);
+                }
+            }
+            else if (best >= 0)
+            {
+                // The mark is dropped when the centre moves off the disputed
+                // actor, and not merely because a pass re-selected it. A pass
+                // that re-selects it may simply not have enumerated the
+                // alternatives, and clearing on that disarms the recovery for
+                // the session on the strength of one thin look at the world.
+                if (sole >= 0 && best == sole) s_soleChoice = cand[best].eid;
+                else if (cand[best].eid != s_soleChoice) s_soleChoice = 0;
                 const bool changed = g_meEid != cand[best].eid;
                 if (g_meEid && g_meEid != cand[best].eid) ForgetBody("the player actor was re-picked");
                 g_me = cand[best].ent; g_meEid = cand[best].eid;
@@ -3473,11 +3704,14 @@ namespace ml::loot
                     char line[240]; int w = 0;
                     for (int i = 0; i < candN && w < 200; ++i)
                         w += snprintf(line + w, sizeof line - w, " %08X:%d%s", cand[i].eid, cand[i].around, i == best ? "*" : "");
-                    LOG("[player] %d candidates (player-tagged plus the biggest gear holders), world objects within %.0f m of each:%s (* is the one being scanned around)",
-                        candN, cfg.scanRange, line);
+                    LOG("[player] %d candidates (player-tagged plus the biggest gear holders), world objects within %.0f m of each:%s (* is the one being scanned around%s)",
+                        candN, cfg.scanRange, line,
+                        onHolder ? ", a gear holder, because no player-tagged actor has anything near it" : "");
                 }
             }
-            g_barrenSince = 0;
+            // Not on a starved pass: nothing was judged, so the clock that says
+            // the centre has nothing around it has not been answered.
+            if (!thin) g_barrenSince = 0;
         }
         // Arm the ownership check the moment there is a player. It used to be
         // armed inside WouldSteal, the last test in Decide(), so a session
@@ -3628,6 +3862,7 @@ namespace ml::loot
             uint32_t eid = 0;
             if (!game::Eid(e, &eid)) return true;
             ++tagCount[eid >> 24];
+            if ((eid >> 24) == game::kTagPlayer) NoteActor(eid, now);
             if ((eid >> 24) != game::kTagWorld) return true;
             for (const Cand& c : list) if (c.eid == eid) return true; // one entity sits in several lists
             ++total;
@@ -3734,6 +3969,13 @@ namespace ml::loot
                 s_droppedRun += events::DropPending();
                 g_actorEid.clear();
                 g_seen.clear();
+                // g_actorsSeen deliberately survives this. One of the two
+                // triggers above is the player actor changing, which this
+                // mod's own re-pick sets off, so clearing the roster here
+                // would throw away the sightings that say the re-pick chose
+                // a follower, on every re-pick, for ever. It is the only
+                // thing cleared in this block that holds no pointer: ids and
+                // timestamps, which age out on their own in twelve seconds.
                 // A spill watch is a place and a moment in the world that has
                 // just gone. Whatever lies at those coordinates in the new one
                 // is not what that rock paid, and a wrong entry here is written
@@ -3879,7 +4121,15 @@ namespace ml::loot
         // never started, so Damiane's body was never picked. An actor that
         // walked in the last ten seconds is Kliff and never barren.
         if (inRange <= 2 && total > 8 && !(g_actorMovedAt && now - g_actorMovedAt < 10000)) { if (!g_barrenSince) g_barrenSince = now; }
-        else g_barrenSince = 0;
+        // A pass of eight objects or fewer clears nothing. It is not
+        // evidence that the centre has the world around it, any more than it
+        // is evidence of the opposite, which is why the line above will not
+        // start the clock on one either. This used to be reached only on
+        // scans that had not re-picked, because a starved re-pick returned
+        // out of the whole of Scan; now that it carries on, a run of thin
+        // passes would reset the clock over and over and the barren recovery
+        // would never come due.
+        else if (total > 8) g_barrenSince = 0;
         // The other way round. A body is held for as long as it keeps being
         // enumerated, and a parked body is enumerated for ever: swapping from
         // Damiane to Kliff left the scan centred on her body for the rest of
