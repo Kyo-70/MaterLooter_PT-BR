@@ -2758,7 +2758,15 @@ namespace ml::loot
         }
         default:
         {
-            if (!cfg.pickUpItems) return skip("pick up off");
+            // Ground items owns a thing lying loose. A node the table reached
+            // for owns its own switch instead, because it has a kind of its
+            // own and the player set that switch meaning it. Firewood is the
+            // case: it is reached with the pick-up verb now, and it is still
+            // wood, so turning Wood off has to stop it. Issue #63. For an
+            // ordinary pick-up the kind is Item and this asks Ground items,
+            // which is the same question it asked before.
+            if (v.nodeReach) { if (const char* off = GatherSwitchOff(NodeKind(c), cfg)) return skip(off); }
+            else if (!cfg.pickUpItems) return skip("pick up off");
             // A node the table vouches for arrives with no item of its own, so
             // c.tid is zero, the item-rule block above is gated out, and the
             // switch below reads a null database row. Both were holes: an item

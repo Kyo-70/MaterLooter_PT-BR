@@ -437,6 +437,11 @@ def main():
     # that is luck, and the tags above were read the same way until a bucket
     # tagged catch_pot in one record and catch_barrel in another proved it.
     driven_by_base = collections.defaultdict(bool)
+    # Whether the game files this prefab among its loose items. That is the
+    # game's own answer to "is this picked up or harvested", and it is the one
+    # signal that separates a stack of firewood from a tree. Unioned across
+    # records for the same reason the tags are.
+    loose_by_base = collections.defaultdict(bool)
     for _key, rec in rows:
         ss = strings(rec)
         path = next((s[:s.find(".prefab") + len(".prefab")] for s in ss if ".prefab" in s), "")
@@ -444,6 +449,7 @@ def main():
             continue
         base = prefab_key(path)
         tags_by_base[base].update(s for s in ss if s.startswith(("collect", "catch")))
+        loose_by_base[base] |= LOOSE_ITEM_FOLDER in path.lower()
         if LOOSE_ITEM_FOLDER not in path.lower():
             driven_by_base[base] |= any(m in s for m in DRIVEN_MARKERS for s in ss)
 
@@ -505,18 +511,37 @@ def main():
                     vouched if isinstance(vouched, str) else ("tag" if vouched else "name"),
                     "1" if breaks else "0",
                     " ".join(yields),
-                    "1" if (driven and kind == "pickup" and not it and not yields) else "0"))
+                    "1" if (driven and kind == "pickup" and not it and not yields) else "0",
+                    # Reached with the pick-up verb, whatever kind it is. A
+                    # collect_ tag beats a catch_ one when the two disagree
+                    # about what a thing is, and that is right: a mine you can
+                    # also pick from by hand is still a mine. It says nothing
+                    # about how to reach one. 120 firewood prefabs carry
+                    # collect_wood and catch_boxsmall at once and the mod
+                    # believed the first, so it armed them and waited, and a
+                    # pick-up never fills however long you stand there:
+                    # LuxDragon watched one take eight arms at three metres, and
+                    # it is the last prefab in this folder still doing it on the
+                    # release build. Issue #63.
+                    #
+                    # The folder decides, not the tag pair. 310 prefabs carry
+                    # both families and they include 89 trees and 16 mines,
+                    # which do fill when armed and must keep doing so. Of the
+                    # 450 rows the game files under the loose-item folder, 229
+                    # have a kind of their own: 141 wood, 81 container, 6 plant
+                    # and 1 stone. No ore and no tree among them.
+                    "1" if loose_by_base[base] else "0"))
     out.sort()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="\n") as f:
         # src says whether the game's own gimmick tag gave the kind or the
         # generator guessed it from the prefab name. The engine spends the
         # long ore reach only on the ones the game vouches for.
-        f.write("prefab\tkind\titem_key\tname\tsrc\tbreaks\tyields\tdriven\n")
+        f.write("prefab\tkind\titem_key\tname\tsrc\tbreaks\tyields\tdriven\tpickup\n")
         for r in out:
             f.write("\t".join(r) + "\n")
     kinds = {}
-    for _, k, _, _, _, _, _, _ in out:
+    for _, k, _, _, _, _, _, _, _ in out:
         kinds[k] = kinds.get(k, 0) + 1
     print("gimmick rows %(rows)d, with a prefab path %(with_path)d, "
           "classified by tag %(tagged)d, by name %(by_name)d, item resolved %(with_item)d, "

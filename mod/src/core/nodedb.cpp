@@ -54,8 +54,8 @@ namespace ml::NodeDb
             // it says what it can hand over, a five-column one has every node
             // breakable, which is what the mod did before that column existed,
             // and a four-column one counts every row as a guess.
-            std::string cols[8]; int c = 0;
-            for (const char* p = line.c_str(); *p && c < 8; ++p)
+            std::string cols[9]; int c = 0;
+            for (const char* p = line.c_str(); *p && c < 9; ++p)
             {
                 if (*p == '\t') { ++c; continue; }
                 if (*p == '\r' || *p == '\n') break;
@@ -72,7 +72,13 @@ namespace ml::NodeDb
             // it filed the prefab in. A name guess is the only one of the three
             // that is not evidence, and it is the only one left out.
             n.tagged = cols[4] == "tag" || cols[4] == "seen" || cols[4] == "folder";
-            n.pickup = n.kind == "pickup";
+            // The kind says what a thing is; this says how to reach it. They
+            // are not the same question, and firewood is where they part: the
+            // game files it as wood you collect and as a small box you pick up,
+            // both at once, so its kind is wood and its verb is Take. A table
+            // without the column leaves the two welded together, which is how
+            // every build before this one behaved. Issue #63.
+            n.pickup = n.kind == "pickup" || (c >= 8 && cols[8] == "1");
             n.breaks = c < 5 || cols[5] != "0";
             n.driven = c >= 7 && cols[7] == "1";
             if (c >= 6 && !cols[6].empty())
