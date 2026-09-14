@@ -151,6 +151,18 @@ namespace ml
         // layout on the way. This is how the delete was proved on 2760 and
         // how it is checked again after a game patch. Not in the menu.
         std::string deleteTestName;
+        // Issue #73. Let a piece of worn gear through when it is further away
+        // than this, and keep refusing it inside. Zero is off, which is every
+        // shipped build: the folder rule turns down all of it.
+        //
+        // The question is whether a shield fifteen metres off duplicates the way
+        // one at arm's length does. Sov1737's own gear was seen 803 times in one
+        // session and never got further than 6.1 m from him, so a shield at 12.9
+        // cannot be a copy of anything he wears; what nobody has tested is
+        // whether it is a copy of the bandit's. Eight is the number to try,
+        // clear of his 6.1 with a little room. Duplicates corrupt saves, so this
+        // is off unless somebody types it in, and it is not in the menu.
+        float equipProbeRange = 0.0f;
         int   configVersion  = 3;      // bumps when a default changes in a way old files should follow
 
         // [Classes] class -> 1 loot / 0 skip. Absent means loot.

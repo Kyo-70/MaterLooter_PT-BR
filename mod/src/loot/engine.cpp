@@ -2531,7 +2531,31 @@ namespace ml::loot
             // four metres. Gloves are not loot lying on the ground. An
             // unresolved parent is not an absent wearer, so the parent cannot
             // carry this test and the folder has to.
-            if (IStr(c.node, "gimmick_equip_")) return skip("someone is wearing this; taking it would copy it");
+            if (IStr(c.node, "gimmick_equip_"))
+            {
+                // Issue #73, off unless EquipProbeRange is set in the ini. The
+                // rule above turns down 35 pieces in one camp, and 24 of them
+                // stand further off than the player's own gear has ever been
+                // seen. Those cannot be copies of anything in the bag. Whether
+                // they are copies of the bandit's is the open question, and the
+                // test that earned this rule let everything through at once, so
+                // it could never have answered it.
+                //
+                // Every one that goes through gets a line naming the distance,
+                // the bytes and the wearer, because the run that reads them has
+                // to be readable afterwards, and the answer is whether the
+                // bandit still has his shield.
+                if (cfg.equipProbeRange > 0.0f && c.d > cfg.equipProbeRange)
+                {
+                    static volatile LONG s_said = 0;
+                    if (InterlockedIncrement(&s_said) <= 60)
+                        LOG("[probe73] letting %s through at %.1f m, past the %.1f m mark: "
+                            "type %u cat %02X/%02X parent %08X %s",
+                            c.db ? c.db->Label() : (c.key[0] ? c.key : "something unnamed"),
+                            c.d, cfg.equipProbeRange, c.tid, c.cat, c.cat2, c.parent, c.node);
+                }
+                else return skip("someone is wearing this; taking it would copy it");
+            }
             if (IStr(c.node, "mission")) return skip("mission object");
             if (AttachedPart(c.node, c.nodeType)) return skip("part of a creature or a mechanism");
             // Whatever arming refuses, the verdict refuses too. This was a
