@@ -65,6 +65,17 @@ namespace ml::loot
     // table lookup, no scan state touched. Fills `name` when it can.
     int  JudgeEntityForPet(uintptr_t ent, char* name, size_t n);
 
+    // What this entity is, in one phrase, for a log line written from a hook
+    // that has nothing but a pointer. Game thread. Names the item when the
+    // thing carries item data and falls back to the prefab.
+    void DescribeEntity(uintptr_t ent, char* out, size_t n);
+
+    // What the loot engine was doing, for the crash handler to print beside the
+    // faulting address. Reads plain statics and takes no lock: it is called
+    // from a vectored exception handler, on whatever thread has just died, and
+    // a lock that thread already holds would turn a crash report into a hang.
+    void DescribeEngineState(char* out, size_t n);
+
     void RequestBurst();             // loot everything allowed in range once
     void ForgetLearned();            // clear the learned node yields (file too)
     void SetAuto(bool on);           // same as Config.enabled, saved

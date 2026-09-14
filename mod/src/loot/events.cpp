@@ -507,6 +507,13 @@ namespace ml::events
     // by a call through a null function pointer that took the process. The
     // pending sends carry only entity ids, which are safer, but a recycled id
     // now names something else entirely, so those go too.
+    void PendingCounts(int* act, int* arm, int* drive)
+    {
+        if (act)   *act   = g_pendActN;
+        if (arm)   *arm   = g_pendArmN;
+        if (drive) *drive = g_pendDrvN;
+    }
+
     int DropPending()
     {
         Lock();

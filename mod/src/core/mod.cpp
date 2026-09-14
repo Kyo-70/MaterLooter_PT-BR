@@ -148,6 +148,15 @@ namespace ml::Mod
             LOG_ERR("[fault] first chance 0x%08X at %p (%s+0x%llX) thread %lu%s",
                     c, er->ExceptionAddress, mod, off,
                     static_cast<unsigned long>(GetCurrentThreadId()), access);
+            // Where it faulted without what we were doing has never been enough
+            // to answer a crash report. Issue #59 turns entirely on whether a
+            // teleport another mod drove was noticed here at all, and that is
+            // one number: how long ago the world change was.
+            {
+                char state[256] = "";
+                ml::loot::DescribeEngineState(state, sizeof state);
+                LOG_ERR("[fault] the loot engine at that moment: %s", state);
+            }
         }
         return EXCEPTION_CONTINUE_SEARCH;   // change nothing, only write it down
     }
@@ -194,6 +203,11 @@ namespace ml::Mod
             // Whose thread it is matters as much as where it faulted. Ours are
             // the scan worker and anything the overlay runs on; everything else
             // is the game calling into a hook.
+            {
+                char state[256] = "";
+                ml::loot::DescribeEngineState(state, sizeof state);
+                LOG_ERR("[crash] the loot engine at that moment: %s", state);
+            }
             LOG_ERR("[crash] this is the last line before the process goes. If the "
                     "module above is CrimsonDesert.exe the fault is in game code the "
                     "mod called into, not in the mod itself.");

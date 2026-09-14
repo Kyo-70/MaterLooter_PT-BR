@@ -738,8 +738,49 @@ namespace ml::loot::hooks
     // the body offers the pet's own looting interaction. The condition keeps
     // the interaction it is asking about as a 16-bit row at +0x18, so this
     // refuses that one row and hands every other question straight through.
+    // Which interactions the game offers on a thing, written down once per
+    // pair. Issue #57: Frostfang is taken off its rack by the mod, and the
+    // quest needs the player's own interaction, the one that plays an
+    // animation. Nothing in the mod can read an entity's interaction rows, but
+    // the game asks this question about whatever the player is standing near
+    // and hands the row in as its argument, so standing at the rack writes the
+    // answer down. interactioninfo's own numbering, checked against two rows
+    // this project already relies on: the pick-up family is 14 to 25, collect
+    // is 28 to 34, and 456 and 457 are EquipItem_EquipWeapon and its battle
+    // variant. Verbose only, and deduplicated rather than capped, so a minute
+    // spent beside one object still yields one line per interaction it offers.
+    static void NoteInteractionAsked(void* self, void* ctx)
+    {
+        if (!Settings::Get().debugLog) return;
+        unsigned short row = 0;
+        if (!mem::Read16(reinterpret_cast<uintptr_t>(self) + kOff_CondArg, &row)) return;
+
+        uintptr_t ent = 0;
+        for (int i = 0; i < 2 && !ent; ++i)
+            mem::ReadPtr(reinterpret_cast<uintptr_t>(ctx) + kOff_Ctx_Entity[i], &ent);
+        if (!ent) return;
+        uint32_t eid = 0;
+        if (!game::Eid(ent, &eid) || !eid) return;
+
+        static CRITICAL_SECTION s_lock; static bool s_ready = false;
+        static uint64_t s_seen[256]; static int s_seenN = 0;
+        const uint64_t pair = (static_cast<uint64_t>(eid) << 16) | row;
+        if (!s_ready) { InitializeCriticalSection(&s_lock); s_ready = true; }
+        bool known = false;
+        EnterCriticalSection(&s_lock);
+        for (int i = 0; i < s_seenN; ++i) if (s_seen[i] == pair) { known = true; break; }
+        if (!known && s_seenN < 256) s_seen[s_seenN++] = pair;
+        LeaveCriticalSection(&s_lock);
+        if (known || s_seenN >= 256) return;
+
+        char what[240] = "";
+        ml::loot::DescribeEntity(ent, what, sizeof what);
+        LOG("[inter] the game asked whether %s offers interaction row %u", what, row);
+    }
+
     static uint64_t hkHasInteraction(void* self, void* a2, void* a3, void* a4)
     {
+        NoteInteractionAsked(self, a2);
         if (Settings::Get().stopPetLooting)
         {
             unsigned short key = 0;

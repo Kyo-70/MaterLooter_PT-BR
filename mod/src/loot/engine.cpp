@@ -595,6 +595,16 @@ namespace ml::loot
     static uint32_t  g_meEid = 0, g_meRoute = 0;
     // When the scan last found nothing at all around the chosen actor.
     static DWORD g_barrenSince = 0;
+    // The last world change, kept for the crash handler. Issue #59: lsimo's
+    // game dies on teleporting and on going to bed, and the question the
+    // faulting address cannot answer is whether this mod had noticed the world
+    // change at all. A teleport driven by another mod need not raise anything
+    // the block below watches for, and then the purge that drops every stale
+    // component pointer never runs. Plain scalars on purpose, read without a
+    // lock from an exception handler.
+    static volatile DWORD g_changeAt = 0;
+    static char           g_changeWhy[64] = "";
+    static volatile float g_changeJumpM = 0.0f;
     // When the player actor itself last took a walking step (see Walked).
     // As Kliff the actor is the body and walks with the player. As Damiane
     // or Oongka it sits wherever the game put it, which is not one fixed
@@ -3146,6 +3156,48 @@ namespace ml::loot
     // which is the only place an entity's item identity lives. No gimmick, no
     // identity, and then the answer is -1 and the game decides as it always
     // did, with the old delete path still behind it as the backstop.
+    void DescribeEntity(uintptr_t ent, char* out, size_t n)
+    {
+        if (!out || !n) return;
+        out[0] = 0;
+        if (!ent) { snprintf(out, n, "nothing"); return; }
+        uint32_t eid = 0;
+        game::Eid(ent, &eid);
+        char item[64] = "", node[160] = "";
+        const uintptr_t comps = game::Comps(ent);
+        if (const uintptr_t gm = comps ? game::CompByClass(comps, kCls_Gimmick) : 0)
+        {
+            game::NodePrefab(gm, node, sizeof node);
+            if (const uintptr_t idata = mem::Deref(gm, kOff_Gimmick_ItemData))
+            {
+                uint16_t tid = 0;
+                if (mem::Read16(idata + 8, &tid) && tid)
+                    if (const Item* it = ItemDb::ByRow(tid))
+                        snprintf(item, sizeof item, "%s", it->name.c_str());
+            }
+        }
+        snprintf(out, n, "%08X %s%s%s", eid,
+                 item[0] ? item : "unnamed",
+                 node[0] ? " node " : "", node[0] ? node : "");
+    }
+
+    void DescribeEngineState(char* out, size_t n)
+    {
+        if (!out || !n) return;
+        int act = 0, arm = 0, drv = 0;
+        events::PendingCounts(&act, &arm, &drv);
+        const DWORD now = GetTickCount();
+        const DWORD ch = g_changeAt;
+        char change[128];
+        if (ch)
+            snprintf(change, sizeof change, "last world change %lu ms ago (%s, %.1f m)",
+                     static_cast<unsigned long>(now - ch), g_changeWhy, g_changeJumpM);
+        else
+            snprintf(change, sizeof change, "no world change seen this session");
+        snprintf(out, n, "queued: %d send, %d arm, %d drive; well run %s; %s; scan centre %08X",
+                 act, arm, drv, g_wellRun.active ? "LIVE" : "idle", change, g_bodyEid ? g_bodyEid : g_meEid);
+    }
+
     int JudgeEntityForPet(uintptr_t ent, char* name, size_t n)
     {
         if (name && n) name[0] = 0;
@@ -3945,6 +3997,9 @@ namespace ml::loot
             else if (g_me != s_lastMe) { why = "player actor changed (mount, cutscene or area)"; hold = 800; }
             if (why)
             {
+                g_changeAt = now;
+                g_changeJumpM = std::sqrt(jump2);
+                snprintf(g_changeWhy, sizeof g_changeWhy, "%s", why);
                 const bool wasHeld = now < s_holdUntil;
                 if (!wasHeld) s_holdSince = now;
                 if (now - s_holdSince <= 5000) { s_holdUntil = now + hold; snprintf(s_holdWhy, sizeof s_holdWhy, "%s", why); }

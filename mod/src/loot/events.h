@@ -62,6 +62,11 @@ namespace ml::events
     // a queued arm or drive holds a raw component pointer captured before it,
     // and the game frees those across a teleport. Issue #35.
     int DropPending();
+    // How much is queued, right now, without taking the lock. For the crash
+    // handler, which runs on whatever thread faulted and may be holding it.
+    // A torn read here costs a wrong number in one log line; a deadlock in an
+    // exception handler costs the report.
+    void PendingCounts(int* act, int* arm, int* drive);
     // Enqueue hook feeds every event here to learn the player's route id.
     void SpyEnqueue(uintptr_t ev);
 
