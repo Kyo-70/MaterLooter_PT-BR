@@ -45,10 +45,20 @@ namespace ml::Rules
         // quest tag, so the switch above never saw it. What it does carry is
         // important and no-sell together, and that pair is a good description
         // of quest equipment: of the 180 items it covers beyond the quest tag,
-        // 179 sell for a single copper, and exactly one of them is named by
-        // any node in the table, the Abyss Artifact, which OffLimits already
-        // refuses by name. No sellable weapon is caught, because a weapon you
-        // can sell fails the second half.
+        // 179 sell for a single copper. No sellable weapon is caught, because a
+        // weapon you can sell fails the second half.
+        //
+        // The 180th is the Abyss Artifact at 2,850 copper, and it does change
+        // behaviour: gimmick_catched_flowerbutterfly_0001 names it as its yield,
+        // so that node is now passed over where 1.6.16 gathered it. Left as it
+        // stands rather than carved out. The artifact is no-sell and no-discard,
+        // so those 2,850 copper can never be realised, and a butterfly socket
+        // naming an abyss artifact reads like a marker that matched rather than
+        // a drop anybody has seen. If a report says otherwise, the fix is in
+        // that row and not in this rule. An earlier version of this comment
+        // claimed OffLimits refuses the artifact by name; it does not, because
+        // OffLimits reads the node's prefab path and that prefab carries none
+        // of its words.
         if (cfg.skipQuestGear && item.HasTag("important") && item.HasTag("no-sell"))
         { v.loot = false; v.rule = "quest equipment"; return v; }
         if (cfg.skipNoSell && item.HasTag("no-sell")) { v.loot = false; v.rule = "unsellable"; return v; }

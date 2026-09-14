@@ -3134,7 +3134,7 @@ namespace ml::loot
         // lose the player something the filter has never been willing to
         // destroy. Not taking one is careful; keeping one out of the bag is not.
         const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
-                           strcmp(r.rule, "dev item") == 0;
+                           strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
         return (r.loot || spare) ? 0 : 1;
     }
 
@@ -3204,7 +3204,8 @@ namespace ml::loot
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) { LOG("[pet] +%lld of row %u, not in the item database: kept", delta, kv.first); ++kept; continue; }
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
-                const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 || strcmp(r.rule, "dev item") == 0;
+                const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
+                                   strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
                 if (r.loot || spare) { LOG("[pet] +%lld %s: kept (%s%s%s)", delta, it->name.c_str(), r.rule, r.detail.empty() ? "" : " ", r.detail.c_str()); ++kept; continue; }
                 char why[120]; snprintf(why, sizeof why, "pet loot, %s%s%s", r.rule, r.detail.empty() ? "" : " ", r.detail.c_str());
                 const long long sent = DeleteFromInventory(kv.first, delta, why); ++deleted;
@@ -3295,7 +3296,7 @@ namespace ml::loot
                 if (!it) continue;                      // unknown row: never touched
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
                 const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
-                                   strcmp(r.rule, "dev item") == 0;
+                                   strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
                 if (r.loot || spare) continue;
                 const long long sent = DeleteFromInventory(kv.first, delta, "companion loot, swept");
                 LOG("[pet] sweep: +%lld %s arrived with a companion out and the rules refuse it (%s%s%s)",
