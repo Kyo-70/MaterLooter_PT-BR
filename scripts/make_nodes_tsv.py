@@ -229,6 +229,22 @@ KIND_CLASSES = {
 }
 
 
+def refers_to(base, name, string_key):
+    """Does this node's own prefab or name refer to the item, loosely?
+
+    Loose on purpose: it decides whether to keep a yield, and a false no costs
+    nothing worse than the node falling back on its kind's switch, which is what
+    it did before the yields column existed.
+    """
+    ctx = set()
+    for src in (base, name):
+        ctx |= {w for w in re.split(r"[^a-z0-9]+", src.lower()) if len(w) > 3}
+    want = {w for w in re.split(r"[^a-z0-9]+", string_key.lower()) if len(w) > 3}
+    if ctx & want:
+        return True
+    return any(a.startswith(b) or b.startswith(a) for a in ctx for b in want)
+
+
 def match_item(name, kind, by_key, by_name):
     # The row's own key, before stem() takes it apart. STRIP_PREFIX eats
     # "collection_" and STRIP_SUFFIX eats "_0001", so
@@ -391,6 +407,40 @@ MARKERS = (0x01000000, 0xFFFF0000)
 MIN_ITEM_KEY = 1000
 BOILERPLATE_AT = 80
 
+# BOILERPLATE_AT asks whether one key turns up in too many records. These two ask
+# the question the other way round, about the record, and both came out of issue
+# #65: a flower butterfly was listed as yielding an Abyss Artifact, which made the
+# mod pass the node over with Skip quest equipment on.
+#
+# That row marker-matches thirteen item keys. Twelve are common enough to be
+# dropped, and the survivor was the artifact, so its one listed yield was not the
+# generator learning what a butterfly pays out. It was the frequency filter
+# handing back whichever of thirteen guesses happened to be rare.
+#
+# Two things had to be measured before either rule below, because the obvious
+# reading is wrong: 473 of the 542 rows that ship a yield have most of their
+# candidates discarded, and they are almost all correct (a mushroom box yields
+# Pine Mushroom, a fish basket yields Dried Fish). "Most were discarded" is the
+# normal case and is not evidence of anything. Nor is "the yield shares no word
+# with the node": a cereal sack yields Barley and a herb sack yields Parsley.
+
+# A record offering more than this many surviving candidates is a dropset or a
+# box and is declaring nothing. Counted before choosing the number: 517 rows list
+# one yield, 10 list two, 14 list three, and exactly one lists 33, which is
+# gimmick_item_dropset_treasurebox_01. There is nothing in between, so this hits
+# that row and nothing else.
+MAX_YIELDS = 4
+
+# An item the player cannot throw away is the kind a wrong yield does damage
+# with, because the mod refuses a node it believes holds one. 45 shipped yields
+# are marked no-discard, quest or important; 41 of them are on a node whose own
+# name says nothing about it, and those 41 read as a butterfly yielding an abyss
+# artifact, a drug bottle yielding a leather cloak, a kuku egg yielding riding
+# boots. The four the node does name are right every time: a graymane clue
+# yielding a Broken Graymane Token, a hand mirror yielding a Scorched HandMirror.
+# So one of these is kept only when the prefab or the row's name refers to it.
+GUARDED_TAGS = ("no-discard", "quest", "important")
+
 
 def yield_candidates(rec, item_keys):
     """Item keys in this record that wear a drop marker, in record order."""
@@ -410,7 +460,8 @@ def main():
     rows = cdtables.load_table("gimmickinfo")
     by_key, by_name = load_items()
     out, seen = [], set()
-    stats = {"rows": 0, "with_path": 0, "tagged": 0, "by_name": 0, "with_item": 0, "with_yields": 0}
+    stats = {"rows": 0, "with_path": 0, "tagged": 0, "by_name": 0, "with_item": 0, "with_yields": 0,
+             "yields_dropped_crowded": 0, "yields_dropped_guarded": 0}
 
     # Every row's candidates first, so the boilerplate can be counted before any
     # of it is written down.
@@ -502,6 +553,22 @@ def main():
             stats["with_item"] += 1
         yields = [by_num[v]["string_key"] for v in cand_by_path.get(base, [])
                   if freq[v] <= BOILERPLATE_AT]
+        # A record that offers this many is listing a loot table, not a yield.
+        if len(yields) > MAX_YIELDS:
+            stats["yields_dropped_crowded"] += 1
+            yields = []
+        kept = []
+        for y in yields:
+            row = by_key.get(y.lower())
+            guarded = row and (
+                set((row.get("tags") or "").split()) & set(GUARDED_TAGS)
+                or (row.get("important") or "").strip() in ("1", "True", "true")
+                or (row.get("discardable") or "").strip() in ("0", "False", "false"))
+            if guarded and not refers_to(base, name, y):
+                stats["yields_dropped_guarded"] += 1
+                continue
+            kept.append(y)
+        yields = kept
         if yields:
             stats["with_yields"] += 1
         out.append((base, kind, it["string_key"] if it else "",

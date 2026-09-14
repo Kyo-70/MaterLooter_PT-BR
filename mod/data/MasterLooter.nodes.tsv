@@ -375,7 +375,7 @@ gimmick_camp_farm_peach_01_phase02	wood		Camp farm peach 01 phase02	tag	0		0	0
 gimmick_camp_farm_pear_01_phase02	wood		Camp farm pear 01 phase02	tag	0		0	0
 gimmick_camp_farm_pomegranate_01_phase02	wood		Camp farm pomegranate 01 phase02	tag	0		0	0
 gimmick_camp_farm_rubber_01_phase02	wood		Camp farm rubber 01 phase02	tag	0		0	0
-gimmick_catched_flowerbutterfly_0001	pickup		Catched flowerbutterfly	tag	0	Abyss_Artifact	0	0
+gimmick_catched_flowerbutterfly_0001	pickup		Catched flowerbutterfly	tag	0		0	0
 gimmick_cave_break_stalac_02	ore		Cave break stalac	tag	0	Item_Rare_Collect_Stalactites	0	0
 gimmick_clifftree_01	wood		Clifftree	name	1		0	0
 gimmick_clifftree_01_index01	wood		Clifftree 01 index01	name	1		0	0
@@ -754,9 +754,9 @@ gimmick_door_dungeon_platform_jumping_01_reeddevil	plant		Plant	name	0		0	0
 gimmick_door_spot_tower_stone_0001_left	stone		Door spot tower stone 0001 left	name	0		0	0
 gimmick_door_spot_tower_stone_0001_right	stone		Door spot tower stone 0001 right	name	0		0	0
 gimmick_dpw_picture_01b	container	Collection_Prop_Picture_0066	Study - Emptiness	tag	0		0	0
-gimmick_drug_bottle_04	container		Drug bottle	tag	0	Ludvic_Leather_Cloak	0	0
-gimmick_drug_bottle_05	container		Drug bottle	tag	0	Ludvic_Leather_Cloak	0	0
-gimmick_drug_bottle_06	container		Drug bottle	tag	0	Ludvic_Leather_Cloak	0	0
+gimmick_drug_bottle_04	container		Drug bottle	tag	0		0	0
+gimmick_drug_bottle_05	container		Drug bottle	tag	0		0	0
+gimmick_drug_bottle_06	container		Drug bottle	tag	0		0	0
 gimmick_drug_leaves_01	plant		Drug leaves	name	0		0	0
 gimmick_drug_leaves_02	plant		Drug leaves	name	0		0	0
 gimmick_dungeon_stone_bridge_01	stone		Dungeon stone bridge	name	0		0	0
@@ -767,12 +767,12 @@ gimmick_dungeon_stone_hook_bridge_2m	stone		Stone hook bridge 2m	name	0		0	0
 gimmick_dungeon_stone_hook_bridge_3m	stone		Stone hook bridge 3m	name	0		0	0
 gimmick_dungeon_stone_hook_bridge_4m	stone		Stone hook bridge 4m	name	0		0	0
 gimmick_dungeon_stone_hook_bridge_5m	stone		Stone hook bridge 5m	name	0		0	0
-gimmick_egg_kuku_0001	container		Egg kuku	tag	0	riding_Leather_Boots	0	0
-gimmick_egg_wyvern_0001	container		Egg wyvern	tag	0	riding_Leather_Boots	0	0
+gimmick_egg_kuku_0001	container		Egg kuku	tag	0		0	0
+gimmick_egg_wyvern_0001	container		Egg wyvern	tag	0		0	0
 gimmick_electric_bomb_01	pickup		Battle electric bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0
-gimmick_equip_gimmick_pyogo_mushroom_backpack	plant		Plant	name	0	Pailune_Contribution_Flag Pyogo_Mushroom	0	0
-gimmick_equip_gimmick_songyi_mushroom_backpack	plant		Plant	name	0	Pailune_Contribution_Flag Songyi_Mushroom	0	0
-gimmick_equip_gimmick_ssari_mushroom_backpack	plant		Plant	name	0	Pailune_Contribution_Flag Ssari_Mushroom	0	0
+gimmick_equip_gimmick_pyogo_mushroom_backpack	plant		Plant	name	0	Pyogo_Mushroom	0	0
+gimmick_equip_gimmick_songyi_mushroom_backpack	plant		Plant	name	0	Songyi_Mushroom	0	0
+gimmick_equip_gimmick_ssari_mushroom_backpack	plant		Plant	name	0	Ssari_Mushroom	0	0
 gimmick_equip_rocket_backpack	stone		Equip rocket backpack	name	0		0	0
 gimmick_equip_rocket_helm	stone		Equip rocket helm	name	0		0	0
 gimmick_ex_dpf_cage_03	container		Dpf cage	tag	0		0	0
@@ -957,7 +957,7 @@ gimmick_in_dpw_picture_animal_22	container	Collection_Prop_Picture_0057	Notable 
 gimmick_in_dpw_picture_plais_01	container	Collection_Prop_Picture_0058	Masterpiece - Crown Prince Edward Thorel	tag	0		0	0
 gimmick_in_shops_hppotionwoodbox_01	container		In shops hppotionwoodbox	tag	1	Collection_Prop_Bottle_0001	0	0
 gimmick_installation_bomb_01	pickup		Installation bomb	tag	0		0	0
-gimmick_item_aircastle_cannonball_0001	pickup		Battle aircastle emp cannonball	tag	0	Quest_Paper_ContributionShop_Hernand Marni_Special_CannonBall	0	1
+gimmick_item_aircastle_cannonball_0001	pickup		Battle aircastle emp cannonball	tag	0	Marni_Special_CannonBall	0	1
 gimmick_item_arrow_memo_01	pickup		Item arrow memo	folder	0	Slave_Fabric_Boots Arrow	0	1
 gimmick_item_arrowbundle_0001	pickup		Item arrowbundle	tag	0		0	1
 gimmick_item_arrowbundle_0002	pickup		Item arrowbundle	tag	0		0	1
@@ -1108,7 +1108,7 @@ gimmick_item_dropset_food_0017	container		Item dropset food	tag	1	Bird_Meat	0	1
 gimmick_item_dropset_food_0018	container		Item dropset food	tag	1	High_Meat	0	1
 gimmick_item_dropset_food_0019	container		Item dropset food	tag	0	Freshly_Grilled_Bird Grilled_Vegetables	0	1
 gimmick_item_dropset_food_0020	container		Item dropset food	folder	0	Lavender	0	1
-gimmick_item_dropset_treasurebox_01	container		Item dropset treasurebox	folder	0	Quest_Crowman_Key_I Paper_ReventineMonastery_Document Pattern_Gold_Earring Detail_Gold_Ring Detail_Gold_Necklace Ancient_People_Earring Antumbra_DarkDeacon_Earring Pattern_Diamond_Earring Crafting_Blizzard_Necklace Ancient_People_Necklace Ludvic_Necklace Tarif_Necklace Optionary_Monk_Necklace Folorin_Earring WeatherWeaver_Necklace AbyssReward_WhiteHorn_Ring AbyssReward_EastWitch_Ring Antumbra_DarkDeacon_Necklace WhiteHorn_Earring Legendary_Titan_Ring Antumbra_DarkDeacon_Ring Legendary_Ogre_Ring Titan_Necklace Karanda_Necklace Hexe_Earring Stardust_Necklace SungroveManor_HomeKey StellenManor_ClosetKey Book_DrugFactory Mjordin_Lantern Recipe_Surasang_01 Recipe_Surasang_02 Recipe_Surasang_05	0	1
+gimmick_item_dropset_treasurebox_01	container		Item dropset treasurebox	folder	0		0	1
 gimmick_item_feces_01	pickup		Feces	folder	0		0	1
 gimmick_item_feces_02	pickup		Feces	folder	0		0	1
 gimmick_item_firewood_0001	wood		Firewood	tag	0	Wood	0	1
@@ -1393,7 +1393,7 @@ gimmick_item_trade_wool_03	pickup		Item trade wool	tag	0		0	1
 gimmick_item_weaponbox_0001	container	Collection_Prop_WeaponBox_0001	Firearms Box	tag	0		0	1
 gimmick_item_weaponbox_0002	container	Collection_Prop_WeaponBox_0002	Swords Box	tag	0		0	1
 gimmick_item_weaponbox_0003	container	Collection_Prop_WeaponBox_0003	Weapons Box	tag	0		0	1
-gimmick_item_wooddoll_0001	pickup		Item wooddoll	tag	0	Hexe_Wooden_Toy	0	1
+gimmick_item_wooddoll_0001	pickup		Item wooddoll	tag	0		0	1
 gimmick_jijeongta_leaf_0001	plant		Jijeongta leaf	tag	0		0	0
 gimmick_jijeongta_leaf_vegetation_0001	plant		Jijeongta leaf vegetation	name	0		0	0
 gimmick_jijeongta_leaf_vegetation_0002	plant		Jijeongta leaf vegetation	name	0		0	0
@@ -1447,9 +1447,9 @@ gimmick_laser_safe_03_button	pickup		Laser safe 03 button	tag	0		1	0
 gimmick_lifespring_0001	wood		Tariv guardiantree pear	name	0		0	0
 gimmick_liftable_pillar_02_stump	wood		Liftable pillar 02 stump	name	0		0	0
 gimmick_marni_chocolate_loginoutmachine_0003	wood		Marni chocolate loginoutmachine	name	0		0	0
-gimmick_marni_chocolate_product_02_index01	container		Container	tag	0	Ludvic_Leather_Cloak	0	0
-gimmick_marni_chocolate_product_02_index02	container		Container	tag	0	Ludvic_Leather_Cloak	0	0
-gimmick_marni_chocolate_product_02_index03	container		Container	tag	0	Ludvic_Leather_Cloak	0	0
+gimmick_marni_chocolate_product_02_index01	container		Container	tag	0		0	0
+gimmick_marni_chocolate_product_02_index02	container		Container	tag	0		0	0
+gimmick_marni_chocolate_product_02_index03	container		Container	tag	0		0	0
 gimmick_marni_emp_capsule_0001_parts01	pickup		Marni emp capsule 0001 parts01	tag	0		1	0
 gimmick_marni_emp_capsule_0001_parts02	pickup		Marni emp capsule 0001 parts02	tag	0		1	0
 gimmick_milepost_crimsondesert	plant		Milepost reeddevil	name	0		0	0
@@ -1499,7 +1499,7 @@ gimmick_nature_rock_dissolve_stone_basalt_01	stone		Fade rock	name	0		0	0
 gimmick_nature_rock_dissolve_stone_basalt_02	stone		Fade rock	name	0		0	0
 gimmick_nature_rock_dissolve_stone_core_01	stone		Nature rock dissolve stone core	name	0		0	0
 gimmick_nature_rock_dissolve_stone_part_01	stone		Nature rock dissolve stone part	name	0		0	0
-gimmick_nature_tree_stump_0001	wood		Nature tree stump	name	0	ReedDevil_Mask	0	0
+gimmick_nature_tree_stump_0001	wood		Nature tree stump	name	0		0	0
 gimmick_nature_wood_broken_tree_12_swamp_body	wood		Wood	name	0		0	0
 gimmick_nature_wood_broken_tree_12_swamp_parts01	wood		Wood	name	0		0	0
 gimmick_nature_wood_redwoodsierra_stump_02_swamp	wood		Wood	name	0		0	0
@@ -1542,7 +1542,7 @@ gimmick_protective_stone_01_attach	stone		Protective stone 01 attach	name	0		0	0
 gimmick_purple_bomb_01	pickup		Battle purple bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0
 gimmick_puzzle_basket_01	container		Basket	tag	1		0	0
 gimmick_puzzle_demeniss_bottom_kingtomb_door_01	stone		Gate dem stone kingtomb	name	0		0	0
-gimmick_puzzle_egg_01_kuku	container		Puzzle egg 01 kuku	tag	0	riding_Leather_Boots	0	0
+gimmick_puzzle_egg_01_kuku	container		Puzzle egg 01 kuku	tag	0		0	0
 gimmick_puzzle_egg_01_standstone	container		Puzzle egg 01 standstone	tag	0		0	0
 gimmick_puzzle_ice_block_break_01	ore		Puzzle ice block break	tag	0		0	0
 gimmick_puzzle_ice_wall_break_01	ore		Puzzle ice wall break	tag	0		0	0
@@ -1989,9 +1989,9 @@ gimmick_urdavha_water_bottle_01	container		Water bottle	tag	0		0	0
 gimmick_urdavha_water_bottle_02	container		Water bottle	tag	0		0	0
 gimmick_vine_bomb_01	pickup		Battle vine bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0
 gimmick_water_bomb_01	pickup		Battle water bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0
-gimmick_wood_firewood_0001	container		Wood firewood	tag	0	Ludvic_Leather_Cloak Wood	0	0
-gimmick_wood_firewood_set_0001	wood		Wood firewood set	name	0	ReedDevil_Mask	0	0
-gimmick_wood_firewood_set_0001_index01	wood		Wood firewood set 0001 index01	name	0	ReedDevil_Mask	0	0
+gimmick_wood_firewood_0001	container		Wood firewood	tag	0	Wood	0	0
+gimmick_wood_firewood_set_0001	wood		Wood firewood set	name	0		0	0
+gimmick_wood_firewood_set_0001_index01	wood		Wood firewood set 0001 index01	name	0		0	0
 gimmick_woodlog_set_05_01_pail	wood		Woodlog set 05 01 pail	name	0		0	0
 gimmick_woodlog_set_05_02_pail	wood		Woodlog set 05 02 pail	name	0		0	0
 gimmick_woodlog_set_05_03_pail	wood		Woodlog set 05 03 pail	name	0		0	0
