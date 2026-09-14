@@ -55,7 +55,7 @@ One scanner out of seventy-one flags `MasterLooter.asi` on 1.6.17. Webroot calls
 
 The number moves release to release without the code changing character: 1.2.1 scored four, 1.4.0 four, 1.5.0 two, 1.5.1 four, 1.6.0 two, 1.6.1 three, 1.6.2 three, 1.6.3 three, 1.6.4 four, 1.6.5 four, 1.6.6 four, 1.6.7 three, 1.6.8 four, 1.6.9 four, 1.6.10, the first signed build, two, 1.6.12 one, 1.6.13 one, 1.6.14 one, 1.6.15 two, 1.6.16 two and 1.6.17 one. Microsoft flagged every one of them up to the signature, went quiet for five releases, came back for two and has dropped off again; Symantec flagged every unsigned build and none since. Everything else comes and goes: Deep Instinct has left, CrowdStrike Falcon stayed three releases and dropped off on 1.6.6, Cynet appeared on 1.6.4, was gone by 1.6.5, came back on 1.6.6, left on 1.6.7, returned on 1.6.9 and left again with the signature, Webroot arrived on 1.6.5, a build whose one change is that it no longer creates a Direct3D device at startup, and Elastic arrived on 1.6.8 and was gone again on 1.6.9. That is what a model guessing looks like, as against a scanner recognising something.
 
-Reports for 1.6.17: [the plugin](https://www.virustotal.com/gui/file/c0d5a9b0605dcb9e7704d2085dddd5628904eef8e8d73939e361aae4e3533017) and [the package](https://www.virustotal.com/gui/file/276a23010723eb0b91b06812817d8c6a337db68fee01456862138d7b6c119951).
+Reports for 1.6.17: [the plugin](https://www.virustotal.com/gui/file/1a2487b7e39dfe7b91e5d6adcfcceab45d111fc529a8d768be74626b7ebdd062) and [the package](https://www.virustotal.com/gui/file/79aa62d47210f31d4783490479e5586bc9b7ed3c3b007013280c6f9f395032aa).
 
 The guess is easy to explain. The plugin is a DLL that a loader puts inside the game, and once there it rewrites instructions in memory, searches the game's code for byte patterns, reads the keyboard before the game does and draws over Direct3D 12. A trainer does the same things, so a model trained on trainers answers trainer, and a release a day old has no install history to argue back with.
 
@@ -63,11 +63,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.17:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.18:
 
-    276a23010723eb0b91b06812817d8c6a337db68fee01456862138d7b6c119951  MasterLooter-1.6.17-DMM.zip
-    011f9f59081bc722bcb5ae2fec65fa03ebea8665ec7f22ab8baa7fe13973044e  MasterLooter-1.6.17.zip
-    c0d5a9b0605dcb9e7704d2085dddd5628904eef8e8d73939e361aae4e3533017  MasterLooter.asi
+    79aa62d47210f31d4783490479e5586bc9b7ed3c3b007013280c6f9f395032aa  MasterLooter-1.6.18-DMM.zip
+    849ff2177cee8deb31e0c6c28df5163c7425ea9db50a72f915364d76564a453e  MasterLooter-1.6.18.zip
+    1a2487b7e39dfe7b91e5d6adcfcceab45d111fc529a8d768be74626b7ebdd062  MasterLooter.asi
 
 ## Controls
 
