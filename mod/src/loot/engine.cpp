@@ -976,8 +976,22 @@ namespace ml::loot
     static bool WasSeen(uint32_t eid);
     static const char* LastVerdict(uint32_t eid);
 
-    static std::unordered_map<uint16_t, uint16_t> g_learn;   // node type -> item row
-    struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; };
+    // A node's gather type id is not a kind of node. symplexity's log of 14
+    // September 2026 has type 50875 gathered as Timber fourteen times, as
+    // Firewood six times and as a Mine rock once, and type 50754 covers
+    // hickory, oak, cypress and an apple crop. So a bag diff that teaches this
+    // map anything teaches it about every other kind sharing the id: gathering
+    // firewood at 15:44 taught it that 50875 pays Timber, and from that minute
+    // every mine rock in the world read as wood, which symplexity allows, and
+    // the rocks he had refused by class came in for the next hour. Issue #72.
+    //
+    // So the prefab that taught it is kept beside the answer and has to match
+    // before the answer is used. The prefab is the identity; the type id is not,
+    // and on its own it is worse than knowing nothing.
+    struct Learned { uint16_t row = 0; std::string node; };
+    static std::unordered_map<uint16_t, Learned> g_learn;   // node type -> what one prefab of that type paid
+    static std::unordered_map<uint32_t, std::string> g_nodePrefab;  // eid -> prefab, beside g_nodeType
+    struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; std::string node; };
     static std::vector<PendSend> g_pend;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
@@ -1010,10 +1024,14 @@ namespace ml::loot
         if (DeleteFileW(path.c_str()))
             LOG("[learn] removed MasterLooter.learned.tsv: a node's type number changes between sessions, so remembered yields cannot be trusted");
     }
-    static const Item* LearnedYield(uint16_t nodeType)
+    static const Item* LearnedYield(uint16_t nodeType, const char* node)
     {
         auto it = g_learn.find(nodeType);
-        return it == g_learn.end() ? nullptr : ItemDb::ByRow(it->second);
+        if (it == g_learn.end()) return nullptr;
+        // An entry with no prefab recorded answers for nothing but itself.
+        if (it->second.node.empty()) return nullptr;
+        if (!node || !node[0] || it->second.node != node) return nullptr;
+        return ItemDb::ByRow(it->second.row);
     }
 
     // A pet's pick-up of a loose item reaches the queue as the PLAYER's own
@@ -1074,11 +1092,16 @@ namespace ml::loot
         for (int i = 0; i < sn; ++i)
         {
             uint16_t nodeType = 0;
-            if (seen[i].act == Action::Gather) { auto it = g_nodeType.find(seen[i].eid); if (it != g_nodeType.end()) nodeType = it->second; }
+            std::string nodePrefab;
+            if (seen[i].act == Action::Gather)
+            {
+                auto it = g_nodeType.find(seen[i].eid); if (it != g_nodeType.end()) nodeType = it->second;
+                auto ip = g_nodePrefab.find(seen[i].eid); if (ip != g_nodePrefab.end()) nodePrefab = ip->second;
+            }
             const Item* known = nullptr;
-            if (seen[i].act == Action::Gather && nodeType) known = LearnedYield(nodeType);
+            if (seen[i].act == Action::Gather && nodeType) known = LearnedYield(nodeType, nodePrefab.c_str());
             if (known) continue; // nothing new to learn from it
-            g_pend.push_back({ static_cast<DWORD>(seen[i].at), seen[i].act, nodeType, -1, false });
+            g_pend.push_back({ static_cast<DWORD>(seen[i].at), seen[i].act, nodeType, -1, false, nodePrefab });
             // Anything the player takes by hand that the mod passed over is worth
             // a line: it is the only way a missed object leaves a trace at all,
             // and it separates "never scanned" from "scanned and skipped".
@@ -1244,14 +1267,22 @@ namespace ml::loot
                 if (IsCreatureItem(it)) continue; // a creature came from a catch
             }
             const uint16_t nodeType = g_pend[unknown[0]].nodeType;
+            const std::string nodePrefab = g_pend[unknown[0]].node;
             bool same = true;
-            for (size_t i : unknown) if (g_pend[i].nodeType != nodeType) same = false;
+            // The prefab as well as the id. Several kinds of node share an id,
+            // so "every pending gather was this type" was never the same claim
+            // as "every pending gather was this kind of thing".
+            for (size_t i : unknown)
+                if (g_pend[i].nodeType != nodeType || g_pend[i].node != nodePrefab) same = false;
             if (!same || rose.size() > 1) continue; // ambiguous: wait for a cleaner sample
-            if (!g_learn.count(nodeType))
+            // Nothing is learned from a gather whose prefab went unrecorded,
+            // because nothing later can say which kind of node it was about.
+            if (!nodePrefab.empty() && !g_learn.count(nodeType))
             {
-                g_learn[nodeType] = type;
+                g_learn[nodeType] = { type, nodePrefab };
                 const Item* it = ItemDb::ByRow(type);
-                LOG("[learn] node type %u yields %s (%s)", nodeType, it ? it->Label() : "?", it ? it->klass.c_str() : "");
+                LOG("[learn] %s (node type %u) yields %s (%s)", nodePrefab.c_str(), nodeType,
+                    it ? it->Label() : "?", it ? it->klass.c_str() : "");
             }
             for (size_t k = unknown.size(); k-- > 0;) g_pend.erase(g_pend.begin() + static_cast<long>(unknown[k]));
         }
@@ -1336,7 +1367,7 @@ namespace ml::loot
         if (c.nodeType && !c.nodeType->itemKey.empty())
             if (const Item* it = ItemDb::ByStringKey(c.nodeType->itemKey.c_str())) return it;
         if (const Item* it = LearnedNodeYield(c.node)) return it;
-        return LearnedYield(c.gtid);
+        return LearnedYield(c.gtid, c.node);
     }
 
     static GatherKind KindOf(const Item* y, bool onGround = false)
@@ -2361,7 +2392,13 @@ namespace ml::loot
             // solving, and only with the debug log on.
             if (g_debugLog && !sp.exact) ProbeCreatureIdentity(k.eid, k.ent, comps, status, aiComp, k.cat2, sp.klass);
         }
-        if (k.gather && k.gtid) { if (g_nodeType.size() > 4096) g_nodeType.clear(); g_nodeType[k.eid] = k.gtid; }
+        if (k.gather && k.gtid)
+        {
+            if (g_nodeType.size() > 4096) g_nodeType.clear();
+            g_nodeType[k.eid] = k.gtid;
+            if (g_nodePrefab.size() > 4096) g_nodePrefab.clear();
+            if (k.node[0]) g_nodePrefab[k.eid] = k.node;
+        }
         if (g_actorEid.size() > 4096) g_actorEid.clear();
         g_actorEid[comps] = k.eid;
         // An empty node close by that will not fill: dump which of its gimmick
@@ -2397,7 +2434,7 @@ namespace ml::loot
                 LOG("%s", line);
             }
         }
-        if (g_debugLog && k.gather && k.gtid && !k.nodeType && !LearnedYield(k.gtid)) ProbeNodeIdentity(k, inter, idata, gdata);
+        if (g_debugLog && k.gather && k.gtid && !k.nodeType && !LearnedYield(k.gtid, k.node)) ProbeNodeIdentity(k, inter, idata, gdata);
         if (k.tid && k.item)
         {
             if (!game::ItemKeyForType(k.tid, k.key, sizeof k.key)) game::GimmickKeyForType(k.tid, k.key, sizeof k.key);
@@ -2694,7 +2731,16 @@ namespace ml::loot
             // and got stone: the yield was named all along and nothing ever
             // asked a rule about it. Ask here, where the answer is the same one
             // the block above would have given.
-            if (yield && !c.tid)
+            // Not "when tid is zero". The block above runs only when c.tid and
+            // c.db are both set, and c.db is filled nowhere else, so a node with
+            // a live tid whose row the item table cannot resolve was judged by
+            // nothing at all and then fell through this test as well.
+            // symplexity's mine rock carries type 50875, which is a gather type
+            // rather than an item row, so ItemDb::ByRow returned null and both
+            // halves declined to look at it. An exemption written as "the block
+            // above already judged this" is a claim about control flow, and this
+            // one was false.
+            if (yield && !c.db)
             {
                 const Rules::Verdict r = Rules::Decide(*yield, cfg);
                 if (!r.loot) { snprintf(v.detail, sizeof v.detail, "%s", r.detail.c_str()); v.loot = false; v.why = r.rule; return v; }
@@ -2821,7 +2867,7 @@ namespace ml::loot
         if (c.gather)
         {
             static char buf[96];
-            if (const Item* y = LearnedYield(c.gtid)) { snprintf(buf, sizeof buf, "%s node", y->Label()); return buf; }
+            if (const Item* y = LearnedYield(c.gtid, c.node)) { snprintf(buf, sizeof buf, "%s node", y->Label()); return buf; }
             if (c.node[0]) return c.node;
             if (c.tid) { snprintf(buf, sizeof buf, "node type %u", c.tid); return buf; }
         }
