@@ -82,6 +82,14 @@ target_compile_definitions(MasterLooter PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CR
 # does not depend on somebody editing a file on the machine under test.
 #   cmake -DML_FORCE_NO_WRAP=ON ...
 option(ML_FORCE_NO_WRAP "Force the swapchain wrapper off (test builds only)" OFF)
+set(ML_BUILD_TAG "" CACHE STRING "Suffix the plugin reports itself with, e.g. -equipcheck (test builds only)")
+if(NOT ML_BUILD_TAG STREQUAL "")
+    if(NOT ML_BUILD_TAG MATCHES "^-[A-Za-z0-9][A-Za-z0-9._-]*$")
+        message(FATAL_ERROR "ML_BUILD_TAG is \"${ML_BUILD_TAG}\". It has to read -name, with letters, digits, dot, dash or underscore after the leading dash.")
+    endif()
+    target_compile_definitions(MasterLooter PRIVATE ML_BUILD_TAG="${ML_BUILD_TAG}")
+    message(WARNING "ML_BUILD_TAG is \"${ML_BUILD_TAG}\": this build reports itself as a test build, not as the release.")
+endif()
 option(ML_NO_DRAW "Wrap as normal but never draw (test builds only)" OFF)
 option(ML_YIELD_PROBE "Log what the game's ore-count function is given (test builds only)" OFF)
 if(ML_YIELD_PROBE)

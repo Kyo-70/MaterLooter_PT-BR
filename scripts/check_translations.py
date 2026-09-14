@@ -183,6 +183,40 @@ def check(path, keys, want_gaps=False):
     return ok
 
 
+# Files that write the template's size out in words, and the pattern that
+# finds the number in each. Three of these went stale in one day on 13
+# September 2026, twice within an hour of each other, because adding a single
+# menu string moves the count and nothing was watching. The brief says to grep
+# for the old number by hand after any change; this is that instruction made
+# mechanical, which is the only form of it that has ever held.
+COUNT_IN_PROSE = [
+    (os.path.join(HERE, "..", "mod", "README.md"), r"all (\d+) strings"),
+    (os.path.join(HERE, "..", "CLAUDE.md"), r"(\d+) template strings"),
+]
+
+
+def check_counts(n):
+    """True when every file that writes the count writes the right one."""
+    ok = True
+    for path, pattern in COUNT_IN_PROSE:
+        if not os.path.exists(path):
+            continue          # CLAUDE.md is gitignored and not on every clone
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
+        found = re.findall(pattern, text)
+        if not found:
+            print("%s: no count matching %s, so nothing is being checked there"
+                  % (os.path.relpath(path, HERE), pattern))
+            ok = False
+            continue
+        for got in found:
+            if int(got) != n:
+                print("%s: says %s strings, the template has %d"
+                      % (os.path.relpath(path, HERE), got, n))
+                ok = False
+    return ok
+
+
 def main(argv):
     want_gaps = False
     if argv and argv[0] == "--gaps":
@@ -194,7 +228,7 @@ def main(argv):
         paths = [os.path.join(DATA, "MasterLooter.%s.txt" % a) for a in argv]
     if not want_gaps:
         print("template: %d strings" % len(keys))
-    ok = True
+    ok = check_counts(len(keys)) if not want_gaps else True
     for p in paths:
         if not os.path.exists(p):
             print("%s: no such file" % os.path.relpath(p, HERE))
