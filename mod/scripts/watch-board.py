@@ -428,10 +428,19 @@ def once(st):
             p = posts(page)
             seen = set(st.get(pk, []))
             for cid, (a, d, t) in p.items():
-                # Seth's own replies are not news; the watch exists for everyone else.
-                if seeded and not fresh and cid not in seen and a != "shin234":
+                # Seth's own replies are not news; the watch exists for everyone
+                # else. They are still written down, because not printing a thing
+                # and not knowing it happened are different, and conflating them
+                # is how advice gets given about a thread he answered this
+                # morning. Every pass rewrites these rather than only new ones,
+                # so a state reset does not leave the map stale.
+                if a.lower() in SELF_NAMES:
+                    answered["%spost %s" % (tag or "ml ", cid)] = d
+                    continue
+                if seeded and not fresh and cid not in seen:
                     lines.append("%snexus post: %s, %s: %s" % (tag, a, d, t))
             st[pk] = sorted(seen | set(p))[-400:]
+            st["answered"] = answered
         except Held:
             pass
         except Exception as e:  # a failed fetch is not news until it keeps failing
