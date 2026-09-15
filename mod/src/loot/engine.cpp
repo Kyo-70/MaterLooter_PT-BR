@@ -2794,15 +2794,35 @@ namespace ml::loot
         // offer a relative of it, and it has to be something that becomes an
         // item: no item row, nothing to catch, so leave it alone.
         const bool smallGame    = c.cat2 == 0x09 || c.cat2 == 0x05;
-        const bool groundLizard = c.cat2 == 0x08 &&
-                                  c.speciesExact && c.species && c.species->itemRow >= 0;
-        // Same bar as the lizards: the table has to name the creature outright
-        // as an insect that becomes an item. The byte alone admits nothing,
-        // because 0x07 is also what ambient effect creatures wear.
-        const bool insectByName = (c.cat2 == 0x07 || c.cat2 == 0x0F) &&
-                                  c.speciesExact && c.species && c.species->itemRow >= 0 &&
-                                  c.speciesClass && strcmp(c.speciesClass, "insect") == 0;
-        const bool catchable = (smallGame || groundLizard || insectByName) && !c.inter;
+        // Issue #78. The byte used to decide this and it cannot: one species
+        // does not wear one byte. A Black-Naped Oriole is at 07, at 01 and at
+        // 08 across the logs here and was reachable only at 08, refused as
+        // "creature" at the other two before any switch was asked. Blue Jay
+        // turns up at 01, 07 and 0C. Sparrow, Meadow Bunting, Three-Toed
+        // Woodpecker, White-Winged Redstart, Burrowing Toad and Northern Pike
+        // all sit in the refused pile carrying item rows, and the mod page
+        // promises birds under Small animals.
+        //
+        // So the test is the bar the insects already used, minus the byte: the
+        // creature table has to name the thing outright and it has to become an
+        // item. That is safe at any byte because the item row is itself the
+        // discriminator. Of the table's 1004 rows, 165 carry an item row and not
+        // one is a predator or livestock; the game gives an item row to what you
+        // can catch and pocket. 0x0C is the byte that would otherwise be
+        // alarming, being what bandits and beasts wear, and a bandit has no
+        // species row while a wolf has no item row.
+        //
+        // Counted across sixteen logs before it was written. At every byte the
+        // bar admits toads, frogs, flies, spiders, snails, squirrels, chipmunks,
+        // salamanders, four kinds of bird, two beetles, a pike and an iguana,
+        // and nothing else. No horse, cow, wolf, bandit or guard matches it.
+        //
+        // This subsumes the old groundLizard and insectByName, which were this
+        // same test with a byte list bolted on. smallGame keeps its byte-only
+        // path: 0x05 and 0x09 are mapped and admit things the table does not
+        // always name, so dropping it would lose catches.
+        const bool namedGame = c.speciesExact && c.species && c.species->itemRow >= 0;
+        const bool catchable = (smallGame || namedGame) && !c.inter;
         const bool beastCorpse = c.dead == 1 && (c.cat2 == 0x0C || c.ai);
         if (c.dead == 1 && !beastCorpse) return skip("corpse: loot drops separately");
         if (!catchable && c.dead != 1 && !c.inter && c.ai) return skip("creature");
