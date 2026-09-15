@@ -36,13 +36,20 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 STATE = os.path.join(REPO, "private", "watch-state.json")
 MOD = "https://www.nexusmods.com/crimsondesert/mods/3402"
 GLINT = "https://www.nexusmods.com/crimsondesert/mods/3472"
+FLIGHT = "https://www.nexusmods.com/crimsondesert/mods/3488"
 # (state suffix, line prefix, page). Master Looter keeps the bare "posts" and
 # "bugs" state keys it has always had, so a state file written before Glint
 # Spotter was added still reads and nothing is replayed. Anything from the
 # second board is prefixed, because it belongs to a different piece of work and
 # is meant to be handed straight over rather than acted on here.
-BOARDS = [("", "", MOD), ("_glint", "glint ", GLINT)]
-GH = "shin2344234/master-looter"
+BOARDS = [("", "", MOD), ("_glint", "glint ", GLINT), ("_flight", "flight ", FLIGHT)]
+# (state suffix, line prefix, repo), matching BOARDS so one pass tags every
+# line with the mod it belongs to and nothing has to be worked out from the
+# text. Master Looter keeps the bare key and the bare prefix.
+REPOS = [("", "", "shin2344234/master-looter"),
+         ("_glint", "glint ", "shin2344234/glint-spotter"),
+         ("_flight", "flight ", "shin2344234/flight-freedom")]
+GH = REPOS[0][2]
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128 Safari/537.36"
 INTERVAL = 600
 KEYFILE = os.path.join(HERE, "keys.local.env")
@@ -53,6 +60,12 @@ SETH = "355497711568551947"
 DISCORD_SELF = {SETH, "1547307453107150979"}   # Seth, the bot
 # The same idea on the boards. Seth answers most rows himself, and his own reply
 # arriving back as a finding is noise that trains you to ignore the channel.
+#
+# Hidden is not the same as unrecorded, and treating them as one cost something
+# on 15 September 2026: with his replies discarded there was no way to tell a
+# thread nobody had answered from one he had answered hours before, so advice
+# about who to go and write to was given blind and was wrong. They go into
+# state["answered"] now, keyed by row id, and are still never printed.
 SELF_NAMES = {"shin234"}
 
 
@@ -62,6 +75,26 @@ SELF_NAMES = {"shin234"}
 # and costs nothing, since a pass runs every ten minutes.
 _last_fetch = [0.0]
 FETCH_GAP = 4.0
+# The edge sheds a request now and then and answers 403 rather than a page. On
+# 15 September 2026 the bugs tab did that about half the time for a few minutes
+# while the posts tab was untouched, so a single refusal says nothing about
+# whether the page is reachable. Ask again before believing it.
+RETRIES = 3
+RETRY_GAP = (3.0, 9.0)
+
+
+def _run(args, what):
+    """Run curl up to RETRIES times, returning the body of the first success."""
+    last = 0
+    for attempt in range(RETRIES):
+        if attempt:
+            time.sleep(RETRY_GAP[min(attempt - 1, len(RETRY_GAP) - 1)])
+        r = subprocess.run(args, capture_output=True)
+        if r.returncode == 0:
+            return r.stdout.decode("utf-8", "replace")
+        last = r.returncode
+        _last_fetch[0] = time.time()
+    raise RuntimeError("curl exit %d after %d attempts (%s)" % (last, RETRIES, what))
 
 
 def fetch(url):
@@ -71,11 +104,7 @@ def fetch(url):
     if wait > 0:
         time.sleep(wait)
     _last_fetch[0] = time.time()
-    r = subprocess.run(["curl", "-s", "-f", "-A", UA, "--max-time", "60", url],
-                       capture_output=True)
-    if r.returncode != 0:
-        raise RuntimeError("curl exit %d" % r.returncode)
-    return r.stdout.decode("utf-8", "replace")
+    return _run(["curl", "-s", "-f", "-A", UA, "--max-time", "60", url], url)
 
 
 def post(url, data, referer):
@@ -89,16 +118,13 @@ def post(url, data, referer):
     if wait > 0:
         time.sleep(wait)
     _last_fetch[0] = time.time()
-    r = subprocess.run(["curl", "-s", "-f", "-A", UA, "--max-time", "60",
-                        "-X", "POST", url,
-                        "-H", "X-Requested-With: XMLHttpRequest",
-                        "-H", "Referer: " + referer,
-                        "-H", "Origin: https://www.nexusmods.com",
-                        "-H", "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
-                        "--data", data], capture_output=True)
-    if r.returncode != 0:
-        raise RuntimeError("curl exit %d" % r.returncode)
-    return r.stdout.decode("utf-8", "replace")
+    return _run(["curl", "-s", "-f", "-A", UA, "--max-time", "60",
+                 "-X", "POST", url,
+                 "-H", "X-Requested-With: XMLHttpRequest",
+                 "-H", "Referer: " + referer,
+                 "-H", "Origin: https://www.nexusmods.com",
+                 "-H", "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+                 "--data", data], url)
 
 
 def clean(s):
@@ -181,16 +207,29 @@ def gh(path):
 
 
 def github(since):
+    """Every repo, each line tagged with the mod it belongs to.
+
+    A repo that answers with an error is skipped for this pass rather than
+    killing the whole thing: one of the three being unreachable should not cost
+    the other two, and `since` is not advanced by a failed pass anyway.
+    """
     lines = []
-    for it in gh("repos/%s/issues?state=all&since=%s&per_page=50" % (GH, since)):
-        if it.get("pull_request"):
-            continue
-        if it["created_at"] > since and it["user"]["login"] != "shin2344234":
-            lines.append("github: new issue #%d by %s: %s" % (it["number"], it["user"]["login"], it["title"]))
-    for c in gh("repos/%s/issues/comments?since=%s&per_page=50" % (GH, since)):
-        if c["created_at"] > since and c["user"]["login"] != "shin2344234":
-            n = c["issue_url"].rsplit("/", 1)[-1]
-            lines.append("github: comment on #%s by %s: %s" % (n, c["user"]["login"], clean(c["body"])[:500]))
+    for _suffix, tag, repo in REPOS:
+        try:
+            for it in gh("repos/%s/issues?state=all&since=%s&per_page=50" % (repo, since)):
+                if it.get("pull_request"):
+                    continue
+                if it["created_at"] > since and it["user"]["login"] != "shin2344234":
+                    lines.append("%sgithub: new issue #%d by %s: %s"
+                                 % (tag, it["number"], it["user"]["login"], it["title"]))
+            for c in gh("repos/%s/issues/comments?since=%s&per_page=50" % (repo, since)):
+                if c["created_at"] > since and c["user"]["login"] != "shin2344234":
+                    n = c["issue_url"].rsplit("/", 1)[-1]
+                    lines.append("%sgithub: comment on #%s by %s: %s"
+                                 % (tag, n, c["user"]["login"], clean(c["body"])[:500]))
+        except Exception as e:
+            lines.append("watch: %s could not be read this pass (%s); the next pass picks it up"
+                         % (repo, str(e)[:80]))
     return lines
 
 
@@ -276,14 +315,19 @@ def dpost(channel, content, token):
 # lines are terse on purpose, since they are read by whoever is watching the
 # session; a message arriving on a phone has to stand on its own.
 SOURCES = [
-    ("glint nexus post: ", "Glint Spotter, posts tab", GLINT + "?tab=posts"),
-    ("glint nexus bug: ",  "Glint Spotter, bugs tab",  GLINT + "?tab=bugs"),
-    ("glint watch: ",      "Glint Spotter, the watcher itself", None),
-    ("nexus post: ",       "Master Looter, posts tab", MOD + "?tab=posts"),
-    ("nexus bug: ",        "Master Looter, bugs tab",  MOD + "?tab=bugs"),
-    ("github: ",           "GitHub",                   "https://github.com/" + GH + "/issues"),
-    ("discord: ",          "Discord, " + DISCORD_FORUM_NAME, None),
-    ("watch: ",            "The watcher itself",       None),
+    ("glint nexus post: ",  "Glint Spotter, posts tab", GLINT + "?tab=posts"),
+    ("glint nexus bug: ",   "Glint Spotter, bugs tab",  GLINT + "?tab=bugs"),
+    ("glint github: ",      "Glint Spotter, GitHub",    "https://github.com/shin2344234/glint-spotter/issues"),
+    ("glint watch: ",       "Glint Spotter, the watcher itself", None),
+    ("flight nexus post: ", "Flight Freedom, posts tab", FLIGHT + "?tab=posts"),
+    ("flight nexus bug: ",  "Flight Freedom, bugs tab",  FLIGHT + "?tab=bugs"),
+    ("flight github: ",     "Flight Freedom, GitHub",   "https://github.com/shin2344234/flight-freedom/issues"),
+    ("flight watch: ",      "Flight Freedom, the watcher itself", None),
+    ("nexus post: ",        "Master Looter, posts tab", MOD + "?tab=posts"),
+    ("nexus bug: ",         "Master Looter, bugs tab",  MOD + "?tab=bugs"),
+    ("github: ",            "Master Looter, GitHub",    "https://github.com/" + GH + "/issues"),
+    ("discord: ",           "Discord, " + DISCORD_FORUM_NAME + " (any of the three mods)", None),
+    ("watch: ",             "The watcher itself",       None),
 ]
 
 
@@ -352,6 +396,11 @@ def once(st):
     lines = []
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     seeded = bool(st)
+    # Rows Seth has answered himself, id -> when. Seeded from what was saved
+    # rather than started empty, because a row's replies are only re-read when
+    # its timestamp moves, so a fresh dict would forget every thread that had
+    # since gone quiet.
+    answered = dict(st.get("answered", {}))
     fails = st.setdefault("fails", {})
     # A page that has just refused us is left alone for a pass or two rather
     # than asked again on the dot, which is what turns a moment of edge
@@ -426,6 +475,7 @@ def once(st):
                     if not seeded or fresh or seeding_replies:
                         continue
                     if who.lower() in SELF_NAMES:
+                        answered["%s%s" % (tag or "ml ", iid)] = rwhen
                         continue
                     lines.append("%snexus bug: reply on %s by %s, %s: %s [row: %s]"
                                  % (tag, iid, who, rwhen, text[:500], t))
@@ -433,6 +483,7 @@ def once(st):
                 print("%swatch: bug-row replies seeded from %d row(s); only new ones are reported from here."
                       % (tag, asked))
             st[rk] = sorted(seen_replies)
+            st["answered"] = answered
             for iid, (t, s, w) in b.items():
                 if not seeded or fresh:
                     continue
