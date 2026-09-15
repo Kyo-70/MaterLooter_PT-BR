@@ -2615,7 +2615,20 @@ namespace ml::loot
         // one of them is unparented, so an unparented 0x11 is the scan reaching
         // an entity before the game has filled its parent in, never loot.
         if (c.item && c.cat2 == 0x11) return skip("worn by someone");
-        if (game::InventoryHas(c.iid)) return skip("already in your bag");
+        // "already in your bag" used to live here and it could never fire.
+        // A world entity's instance id and the ids inside the inventory are
+        // not the same numbering, so the lookup was always a miss. That is
+        // measured rather than reasoned: the duplicate probe of 15 September
+        // 2026 asked the question 133 times with a real non-zero id on the
+        // world object and found it in the bag on none of them, and the skip
+        // reason itself appears in none of the twelve logs on this machine.
+        // It cost a linear walk of up to 2,048 entries for every candidate of
+        // every scan to answer no.
+        //
+        // What it was reaching for is covered: g_done and the recent-spot
+        // table stop the same entity being asked for twice. If a real test
+        // is ever wanted, it has to come from something both sides share,
+        // and the instance id is not it.
         // Set when the worn-gear folder let this one through on its
         // category, read only by OffLimits below, which carries the same
         // prefix in its own list.
