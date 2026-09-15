@@ -606,6 +606,7 @@ namespace ml::loot
         Vec3      pos{};
         DWORD     at = 0;
         int       entriesBefore = 0;
+        int       walkedBefore = -1;   // slots the walk could read, -1 when it could not run
         long long stackBefore = 0;
         char      label[64] = "";
         char      node[192] = "";
@@ -615,11 +616,19 @@ namespace ml::loot
     // What the bag holds of one type, and whether one instance id is among
     // everything it holds. A fresh walk of every bucket, so it runs twice per
     // loot and never per scan.
-    static void BagHolding(uint16_t tid, uint32_t iid, int* entries, long long* stack, bool* hasIid)
+    // The holder is passed in rather than fetched. The first version called
+    // game::LocalPlayer(), which is not what the rest of the engine reads an
+    // inventory through: all six other calls pass g_me, the actor the scan is
+    // centred on, and as Damiane that is the played body while LocalPlayer is
+    // the identity. The walk came back empty and every line of the run reported
+    // it as "nothing reached the bag".
+    //
+    // Hence the slot count coming back out. A walk that saw nothing has to be
+    // able to say so, or the next broken reading becomes a finding again.
+    static int BagHolding(uintptr_t me, uint16_t tid, uint32_t iid, int* entries, long long* stack, bool* hasIid)
     {
         *entries = 0; *stack = 0; *hasIid = false;
-        const uintptr_t me = game::LocalPlayer();
-        if (!me) return;
+        if (!me) return -1;
         static game::InvEntry buf[4096];
         const int n = game::InventoryEntries(me, buf, 4096);
         for (int i = 0; i < n; ++i)
@@ -629,22 +638,23 @@ namespace ml::loot
             ++*entries;
             *stack += buf[i].count;
         }
+        return n;
     }
 
-    static void DupeOpen(uint32_t eid, uint32_t iid, uint16_t tid, const Vec3& pos,
+    static void DupeOpen(uintptr_t me, uint32_t eid, uint32_t iid, uint16_t tid, const Vec3& pos,
                          const char* label, const char* node, DWORD now)
     {
         if (!tid || g_dupeWatch.size() >= 32) return;
         DupeWatch w;
         w.eid = eid; w.iid = iid; w.tid = tid; w.pos = pos; w.at = now;
         bool has = false;
-        BagHolding(tid, 0, &w.entriesBefore, &w.stackBefore, &has);
+        w.walkedBefore = BagHolding(me, tid, 0, &w.entriesBefore, &w.stackBefore, &has);
         snprintf(w.label, sizeof w.label, "%s", label ? label : "");
         snprintf(w.node, sizeof w.node, "%s", node ? node : "");
         g_dupeWatch.push_back(w);
     }
 
-    static void DupeMature(DWORD now, const Vec3& centre, float scanRange)
+    static void DupeMature(uintptr_t me, DWORD now, const Vec3& centre, float scanRange)
     {
         for (size_t i = 0; i < g_dupeWatch.size();)
         {
@@ -652,7 +662,7 @@ namespace ml::loot
             if (now - w.at < 3000) { ++i; continue; }
 
             int entries = 0; long long stack = 0; bool hasIid = false;
-            BagHolding(w.tid, w.iid, &entries, &stack, &hasIid);
+            const int walked = BagHolding(me, w.tid, w.iid, &entries, &stack, &hasIid);
 
             const float dx = w.pos.x - centre.x, dy = w.pos.y - centre.y, dz = w.pos.z - centre.z;
             const float d = std::sqrt(dx * dx + dy * dy + dz * dz);
@@ -662,16 +672,19 @@ namespace ml::loot
             const bool gained = stack > w.stackBefore;
 
             const char* verdict;
-            if (!watching)        verdict = "moved out of range before the answer was due, so this one says nothing";
+            if (walked <= 0 || w.walkedBefore <= 0)
+                                  verdict = "the bag could not be read at either end, so this says nothing about the game";
+            else if (!watching)   verdict = "moved out of range before the answer was due, so this one says nothing";
             else if (gained && stillThere) verdict = "A COPY: the bag gained one and the world kept the original";
             else if (gained)      verdict = "moved, not copied";
             else if (stillThere)  verdict = "nothing reached the bag and the object is still there";
             else                  verdict = "the object is gone and nothing reached the bag, so it went somewhere else";
 
-            LOG("[dupe] %s type %u eid %08X iid %08X: bag %d -> %d entries, %lld -> %lld held; "
-                "world object %s; its instance id %s in the bag; %.1f m from the scan centre. %s%s%s",
+            LOG("[dupe] %s type %u eid %08X iid %08X: bag %d -> %d entries, %lld -> %lld held "
+                "(walked %d -> %d slots); world object %s; its instance id %s in the bag; "
+                "%.1f m from the scan centre. %s%s%s",
                 w.label[0] ? w.label : "something unnamed", w.tid, w.eid, w.iid,
-                w.entriesBefore, entries, w.stackBefore, stack,
+                w.entriesBefore, entries, w.stackBefore, stack, w.walkedBefore, walked,
                 stillThere ? "still there" : (watching ? "gone" : "out of range"),
                 hasIid ? "is" : "is not", d, verdict,
                 w.node[0] ? " | " : "", w.node[0] ? w.node : "");
@@ -3325,6 +3338,26 @@ namespace ml::loot
 
     // Delete `amount` of item row `tid` from the player's inventory, largest
     // stack first. Returns how many were asked for.
+    // What the filter will not destroy, whatever the rules say about picking
+    // it up off the ground. Declining to take something is caution; taking
+    // something out of the player's bag is a loss, so the bar is higher here
+    // than in Rules::Decide, and all three places that ask share this one
+    // answer: the prevention hook, the pick-up window and the sweep.
+    //
+    // Currency is on the list because of 15 September 2026, when 4,433 Copper
+    // and 4,290 Camp Weapons left Seth's bag as "pet loot, unsellable". Money
+    // is class currency and no-sell by definition, so SkipNoSell refuses it,
+    // and SkipNoSell governs what to pick up off the ground. Nothing should
+    // route that into a delete. no-discard is the game's own word for the same
+    // idea and travels with it.
+    static bool NeverDelete(const Item& it, const Rules::Verdict& r)
+    {
+        if (it.klass == "currency") return true;
+        if (it.HasTag("no-discard")) return true;
+        return strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
+               strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
+    }
+
     static long long DeleteFromInventory(uint16_t tid, long long amount, const char* why)
     {
         static game::InvEntry ents[4096]; static game::BucketInfo bks[64];
@@ -3430,14 +3463,13 @@ namespace ml::loot
         if (!it) return -1;
         if (name && n) snprintf(name, n, "%s", it->name.c_str());
         const Rules::Verdict r = Rules::Decide(*it, Settings::Get());
-        // Refuse only what the filter would have deleted. The three rules the
+        // Refuse only what the filter would have deleted. The rules the
         // sweep spares are spared here too: the mod refuses to take a quest,
         // protected or dev item itself out of caution, and turning that
         // caution into "the pet may not pick your quest item up either" would
         // lose the player something the filter has never been willing to
         // destroy. Not taking one is careful; keeping one out of the bag is not.
-        const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
-                           strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
+        const bool spare = NeverDelete(*it, r);
         return (r.loot || spare) ? 0 : 1;
     }
 
@@ -3455,6 +3487,39 @@ namespace ml::loot
             for (int i = 0; i < n; ++i) into[ents[i].tid] += ents[i].count;
             return GetTickCount();
         };
+        // A companion picks things up one or two at a time. A dozen kinds
+        // rising at once, or a single row rising by hundreds, is a bag being
+        // replaced rather than filled: a load the scan did not catch, a
+        // storage transfer, a quest handout, a camp paying out. Falls count as
+        // much as rises, because loading an older save brings back a smaller
+        // bag and the giveaway there is things vanishing that nobody spent.
+        //
+        // This was written for the sweep and only ever ran on the sweep. The
+        // pick-up window had no such test, so on 15 September 2026 a window
+        // that saw 45 kinds arrive and one row rise by 4,433 deleted two of
+        // them. Both callers ask this now.
+        const auto bagReplaced = [](const std::unordered_map<uint16_t, long long>& before,
+                                    const std::unordered_map<uint16_t, long long>& after,
+                                    int* risenOut, int* fallenOut, long long* biggestOut) -> bool
+        {
+            int risen = 0, fallen = 0; long long biggest = 0;
+            for (const auto& kv : after)
+            {
+                const auto b = before.find(kv.first);
+                const long long d = kv.second - (b == before.end() ? 0 : b->second);
+                if (d > 0) { ++risen; if (d > biggest) biggest = d; }
+            }
+            for (const auto& kv : before)
+            {
+                const auto f = after.find(kv.first);
+                if ((f == after.end() ? 0 : f->second) < kv.second) ++fallen;
+            }
+            if (risenOut) *risenOut = risen;
+            if (fallenOut) *fallenOut = fallen;
+            if (biggestOut) *biggestOut = biggest;
+            return risen > 4 || fallen > 4 || biggest > 200;
+        };
+
         events::PetPickup pp[64];
         int n = events::DrainPetPickups(pp, 32);
         for (const events::PetPickup& h : g_petHand) if (n < 64) pp[n++] = h;
@@ -3494,6 +3559,19 @@ namespace ml::loot
         {
             if (static_cast<long>(now - windowUntil) < 0) return;
             snapAt = snapshot(snap);
+            // The test the sweep has always made. Without it this path deleted
+            // 4,433 Copper out of a bag that had just gained 45 kinds.
+            {
+                int risen = 0, fallen = 0; long long biggest = 0;
+                if (bagReplaced(base, snap, &risen, &fallen, &biggest))
+                {
+                    LOG("[pet] the bag changed shape all at once during the window (%d kinds up, %d down, "
+                        "largest rise %lld): that is a bag being filled from somewhere else and not a companion "
+                        "looting, so nothing is deleted", risen, fallen, biggest);
+                    windowUntil = 0; tidN = 0; anyUnknown = false;
+                    return;
+                }
+            }
             int deleted = 0, kept = 0;
             char notice[240] = ""; int nw = 0;
             for (const auto& kv : snap)
@@ -3507,8 +3585,7 @@ namespace ml::loot
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) { LOG("[pet] +%lld of row %u, not in the item database: kept", delta, kv.first); ++kept; continue; }
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
-                const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
-                                   strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
+                const bool spare = NeverDelete(*it, r);
                 if (r.loot || spare) { LOG("[pet] +%lld %s: kept (%s%s%s)", delta, it->name.c_str(), r.rule, r.detail.empty() ? "" : " ", r.detail.c_str()); ++kept; continue; }
                 char why[120]; snprintf(why, sizeof why, "pet loot, %s%s%s", r.rule, r.detail.empty() ? "" : " ", r.detail.c_str());
                 const long long sent = DeleteFromInventory(kv.first, delta, why); ++deleted;
@@ -3567,21 +3644,7 @@ namespace ml::loot
             // being replaced rather than filled: a load the scan did not catch,
             // a storage transfer, a quest handout. Re-baseline and leave it.
             int risen = 0, fallen = 0; long long biggest = 0;
-            for (const auto& kv : fresh)
-            {
-                const auto b = snap.find(kv.first);
-                const long long d = kv.second - (b == snap.end() ? 0 : b->second);
-                if (d > 0) { ++risen; if (d > biggest) biggest = d; }
-            }
-            for (const auto& kv : snap)
-            {
-                const auto f = fresh.find(kv.first);
-                if ((f == fresh.end() ? 0 : f->second) < kv.second) ++fallen;
-            }
-            // Falls matter as much as rises. Loading an older save brings back
-            // a smaller bag, so the giveaway is not a flood of arrivals but
-            // things vanishing that no one spent.
-            if (risen > 4 || fallen > 4 || biggest > 200)
+            if (bagReplaced(snap, fresh, &risen, &fallen, &biggest))
             {
                 LOG("[pet] the bag changed shape at once (%d kinds up, %d down, largest rise %lld): that is a bag being "
                     "replaced and not a companion looting, so nothing is deleted and the baseline resets", risen, fallen, biggest);
@@ -3598,8 +3661,7 @@ namespace ml::loot
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) continue;                      // unknown row: never touched
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
-                const bool spare = strcmp(r.rule, "protected") == 0 || strcmp(r.rule, "quest item") == 0 ||
-                                   strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
+                const bool spare = NeverDelete(*it, r);
                 if (r.loot || spare) continue;
                 const long long sent = DeleteFromInventory(kv.first, delta, "companion loot, swept");
                 LOG("[pet] sweep: +%lld %s arrived with a companion out and the rules refuse it (%s%s%s)",
@@ -4882,12 +4944,12 @@ namespace ml::loot
                     LOG("[loot] %s eid %08X type %u parent %08X cat %02X/%02X %s%s%s%s", line, k.eid, k.tid, k.parent, k.cat, k.cat2, k.key[0] ? k.key : "",
                         k.nodeType ? (" [" + k.nodeType->kind + "/" + (k.nodeType->tagged ? "vouched" : "name") + "]").c_str() : "",
                         k.node[0] ? " node " : "", k.node[0] ? k.node : "");
-                    if (cfg.dupeProbe) DupeOpen(k.eid, k.iid, k.tid, k.pos, Label(k), k.node, now);
+                    if (cfg.dupeProbe) DupeOpen(g_me, k.eid, k.iid, k.tid, k.pos, Label(k), k.node, now);
                 }
             }
         }
 
-        if (cfg.dupeProbe) DupeMature(now, mp, cfg.scanRange);
+        if (cfg.dupeProbe) DupeMature(g_me, now, mp, cfg.scanRange);
 
         QueryPerformanceCounter(&t1);
         std::lock_guard<std::mutex> lk(g_mu);
