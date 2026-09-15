@@ -26,12 +26,14 @@
 
     The previous version is left listed, never archived. Archiving hides it,
     and people who need an older build (kfen72 asked, 9 September 2026) then
-    have nothing to download. What it should become is an Old files entry,
-    and the v3 API cannot do that: updateModFile changes the name and nothing
-    else, and the category enum for a new file has no old_version value. So
-    after -Apply, open Manage Files on the mod page and move the previous
-    version to Old files by hand. -ArchivePrevious is there for the one case
-    where an old build must be pulled outright.
+    have nothing to download. Nothing has to be done by hand for that: Nexus
+    demotes the previous file to old_version on its own once the new one goes
+    up as primary, and an old_version file keeps its download button and only
+    loses the headline slot. Checked on 1.6.21 by asking the API minutes after
+    publishing, and across the page: 1.6.0 through 1.6.20 all sit there and all
+    download. This used to say to go and move it by hand on Manage Files, which
+    was work that was never needed. -ArchivePrevious is the opt-in for pulling
+    a build outright, which is the thing Seth does not want.
 
 .EXAMPLE
     .\publish-nexus.ps1
@@ -45,9 +47,10 @@ param(
     # Override the version read from version.h.
     [string] $Version,
 
-    # Archive the previous version. Off by default: archiving hides it, and an
-    # older build should stay downloadable under Old files, which is a manual
-    # move on the site because the API cannot set that category.
+    # Archive the previous version. Off by default and meant to stay off:
+    # archiving hides a build, and older ones are kept downloadable on purpose.
+    # Nexus demotes the previous file to old_version by itself, so nothing is
+    # owed here.
     [switch] $ArchivePrevious
 )
 
@@ -139,5 +142,4 @@ if ($Apply) {
     Write-Host "Still manual, because the v3 API has no endpoint for either:" -ForegroundColor Yellow
     Write-Host "  the page description  -> private\nexus\nexus-description.bbcode"
     Write-Host ("  the update post       -> private\nexus\nexus-post-{0}.txt" -f $Version)
-    Write-Host "  the previous version  -> Manage Files, change its category to Old files (it is still listed as Main)"
 }
