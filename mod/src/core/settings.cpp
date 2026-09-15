@@ -130,6 +130,7 @@ namespace ml::Settings
         else if (k == "DebugLog")         c.debugLog = Flag(v);
         else if (k == "DeleteTestName")   c.deleteTestName = v;
         else if (k == "EquipProbe")       c.equipProbe = Flag(v);
+        else if (k == "DupeProbe")        c.dupeProbe = Flag(v);
         else if (k == "ConfigVersion")    c.configVersion = atoi(v.c_str());
     }
 
@@ -421,6 +422,7 @@ namespace ml::Settings
                  c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.debugLog, c.configVersion); s += b;
         if (!c.deleteTestName.empty()) { snprintf(b, sizeof b, "DeleteTestName=%s\n", c.deleteTestName.c_str()); s += b; }
         if (c.equipProbe) { snprintf(b, sizeof b, "EquipProbe=1\n"); s += b; }
+        if (c.dupeProbe)  { snprintf(b, sizeof b, "DupeProbe=1\n"); s += b; }
         s += "\n; class -> 1 loot, 0 skip (classes not listed are looted)\n[Classes]\n";
         for (const auto& kv : c.classRule) { s += kv.first; s += kv.second ? "=1\n" : "=0\n"; }
         s += "\n; tag -> 1 always loot, -1 never loot (wins over the class rule)\n[Tags]\n";

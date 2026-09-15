@@ -182,6 +182,10 @@ namespace ml
         // Duplicates corrupt saves, so this is off unless somebody types it in,
         // and it is not in the menu.
         bool  equipProbe = false;
+        // Issue #73. Watches the bag either side of every loot and says
+        // whether the world object survived it. Off; it walks every
+        // inventory bucket three seconds after each pick-up.
+        bool  dupeProbe = false;
         int   configVersion  = 3;      // bumps when a default changes in a way old files should follow
 
         // [Classes] class -> 1 loot / 0 skip. Absent means loot.

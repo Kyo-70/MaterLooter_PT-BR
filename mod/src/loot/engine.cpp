@@ -586,6 +586,99 @@ namespace ml::loot
     static std::unordered_map<uint32_t, Seen>  g_seen;      // merges the game's partial lists
 
     static bool WasSeen(uint32_t eid) { return g_seen.count(eid) != 0; }
+
+    // ------------------------------------------------- duplicate probe ----
+    // Issue #73. Looting a piece of worn gear used to be refused outright on
+    // the grounds that the game hands over a copy and leaves the original
+    // equipped, which is what mrbryan23 saw on 1.6.12. The evidence for that
+    // was a player counting items in a 240-slot bag, and so was the evidence
+    // against it on 15 September. This asks the bag directly.
+    //
+    // Three seconds is long enough for the game to have run the pick-up and
+    // short enough that the player is usually still standing there, which
+    // matters because the "is the world object still there" half is answered
+    // out of g_seen, and g_seen only knows about things inside scan range.
+    // Walking away is reported as not knowing rather than as a clean result.
+    struct DupeWatch
+    {
+        uint32_t  eid = 0, iid = 0;
+        uint16_t  tid = 0;
+        Vec3      pos{};
+        DWORD     at = 0;
+        int       entriesBefore = 0;
+        long long stackBefore = 0;
+        char      label[64] = "";
+        char      node[192] = "";
+    };
+    static std::vector<DupeWatch> g_dupeWatch;
+
+    // What the bag holds of one type, and whether one instance id is among
+    // everything it holds. A fresh walk of every bucket, so it runs twice per
+    // loot and never per scan.
+    static void BagHolding(uint16_t tid, uint32_t iid, int* entries, long long* stack, bool* hasIid)
+    {
+        *entries = 0; *stack = 0; *hasIid = false;
+        const uintptr_t me = game::LocalPlayer();
+        if (!me) return;
+        static game::InvEntry buf[4096];
+        const int n = game::InventoryEntries(me, buf, 4096);
+        for (int i = 0; i < n; ++i)
+        {
+            if (iid && buf[i].iid == iid) *hasIid = true;
+            if (buf[i].tid != tid) continue;
+            ++*entries;
+            *stack += buf[i].count;
+        }
+    }
+
+    static void DupeOpen(uint32_t eid, uint32_t iid, uint16_t tid, const Vec3& pos,
+                         const char* label, const char* node, DWORD now)
+    {
+        if (!tid || g_dupeWatch.size() >= 32) return;
+        DupeWatch w;
+        w.eid = eid; w.iid = iid; w.tid = tid; w.pos = pos; w.at = now;
+        bool has = false;
+        BagHolding(tid, 0, &w.entriesBefore, &w.stackBefore, &has);
+        snprintf(w.label, sizeof w.label, "%s", label ? label : "");
+        snprintf(w.node, sizeof w.node, "%s", node ? node : "");
+        g_dupeWatch.push_back(w);
+    }
+
+    static void DupeMature(DWORD now, const Vec3& centre, float scanRange)
+    {
+        for (size_t i = 0; i < g_dupeWatch.size();)
+        {
+            DupeWatch& w = g_dupeWatch[i];
+            if (now - w.at < 3000) { ++i; continue; }
+
+            int entries = 0; long long stack = 0; bool hasIid = false;
+            BagHolding(w.tid, w.iid, &entries, &stack, &hasIid);
+
+            const float dx = w.pos.x - centre.x, dy = w.pos.y - centre.y, dz = w.pos.z - centre.z;
+            const float d = std::sqrt(dx * dx + dy * dy + dz * dz);
+            const bool watching = d <= scanRange;
+            auto it = g_seen.find(w.eid);
+            const bool stillThere = it != g_seen.end() && it->second.when > w.at + 500;
+            const bool gained = stack > w.stackBefore;
+
+            const char* verdict;
+            if (!watching)        verdict = "moved out of range before the answer was due, so this one says nothing";
+            else if (gained && stillThere) verdict = "A COPY: the bag gained one and the world kept the original";
+            else if (gained)      verdict = "moved, not copied";
+            else if (stillThere)  verdict = "nothing reached the bag and the object is still there";
+            else                  verdict = "the object is gone and nothing reached the bag, so it went somewhere else";
+
+            LOG("[dupe] %s type %u eid %08X iid %08X: bag %d -> %d entries, %lld -> %lld held; "
+                "world object %s; its instance id %s in the bag; %.1f m from the scan centre. %s%s%s",
+                w.label[0] ? w.label : "something unnamed", w.tid, w.eid, w.iid,
+                w.entriesBefore, entries, w.stackBefore, stack,
+                stillThere ? "still there" : (watching ? "gone" : "out of range"),
+                hasIid ? "is" : "is not", d, verdict,
+                w.node[0] ? " | " : "", w.node[0] ? w.node : "");
+
+            g_dupeWatch.erase(g_dupeWatch.begin() + static_cast<long>(i));
+        }
+    }
     static const char* LastVerdict(uint32_t eid)
     {
         auto it = g_why.find(eid);
@@ -4789,9 +4882,12 @@ namespace ml::loot
                     LOG("[loot] %s eid %08X type %u parent %08X cat %02X/%02X %s%s%s%s", line, k.eid, k.tid, k.parent, k.cat, k.cat2, k.key[0] ? k.key : "",
                         k.nodeType ? (" [" + k.nodeType->kind + "/" + (k.nodeType->tagged ? "vouched" : "name") + "]").c_str() : "",
                         k.node[0] ? " node " : "", k.node[0] ? k.node : "");
+                    if (cfg.dupeProbe) DupeOpen(k.eid, k.iid, k.tid, k.pos, Label(k), k.node, now);
                 }
             }
         }
+
+        if (cfg.dupeProbe) DupeMature(now, mp, cfg.scanRange);
 
         QueryPerformanceCounter(&t1);
         std::lock_guard<std::mutex> lk(g_mu);
