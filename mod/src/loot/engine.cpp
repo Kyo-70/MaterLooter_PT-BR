@@ -2197,7 +2197,7 @@ namespace ml::loot
         return IStr(node, "gimmick_attach_");
     }
 
-    static bool OffLimits(const char* node)
+    static bool OffLimits(const char* node, bool probeEquip = false)
     {
         if (!node || !node[0]) return false;
         // "puzzle" earns its place: the game tags gimmick_puzzle_ice_wall_break,
@@ -2215,7 +2215,15 @@ namespace ml::loot
         // verdict's line says what taking one of them costs.
         static const char* kWords[] = { "visione", "quest", "artifact", "abyssruins", "mission", "puzzle", "woodthorn",
                                         "equip_openclose", "gimmick_equip_" };
-        for (const char* w : kWords) if (IStr(node, w)) return true;
+        for (const char* w : kWords)
+        {
+            // The probe of issue #73 lifts the worn-gear folder and nothing
+            // else. "equip_openclose" is left in the list on purpose: those two
+            // prefabs are Beloth's helm and cloak, a quest can soft lock on
+            // them, and they are not what the probe is asking about.
+            if (probeEquip && strcmp(w, "gimmick_equip_") == 0) continue;
+            if (IStr(node, w)) return true;
+        }
         return false;
     }
 
@@ -2500,6 +2508,8 @@ namespace ml::loot
         // an entity before the game has filled its parent in, never loot.
         if (c.item && c.cat2 == 0x11) return skip("worn by someone");
         if (game::InventoryHas(c.iid)) return skip("already in your bag");
+        // Set only by the issue #73 probe, read only by OffLimits below.
+        bool probedEquip = false;
         if (c.node[0])
         {
             if (IStr(c.node, "visione") || IStr(c.node, "quest") || IStr(c.node, "artifact")) return skip("quest or memory trigger");
@@ -2577,8 +2587,14 @@ namespace ml::loot
                 // Gloves of 13 September are said to have come through
                 // unparented at 0x19 and duplicated, that log is not on this
                 // machine, and gloves are not scenery.
+                // Two copies of this rule exist and the first probe lifted
+                // one of them. Sov1737's run of 15 September let 60 pieces past
+                // the test above and OffLimits turned 23 of them down four
+                // lines later as "puzzle or protected mechanism", so what came
+                // back measured this code and never reached the game.
                 if (cfg.equipProbe && c.cat2 != 0x11 && c.cat2 != 0x19)
                 {
+                    probedEquip = true;
                     static volatile LONG s_said = 0;
                     if (InterlockedIncrement(&s_said) <= 60)
                         LOG("[probe73] letting %s through at %.1f m: type %u cat %02X/%02X parent %08X %s",
@@ -2596,7 +2612,7 @@ namespace ml::loot
             // stone_wall_break), and because OffLimits stops them being armed
             // they never fill, fall through to the ore branch below, and were
             // reaching the vein break. The mod was swinging at an ice wall.
-            if (OffLimits(c.node)) return skip("puzzle or protected mechanism");
+            if (OffLimits(c.node, probedEquip)) return skip("puzzle or protected mechanism");
             // Kept in step with OffLimits(), which stops arming touching the same
             // things. The words above are the detail this one summarises.
             // These read the prefab path, so a gather node whose name happens to
