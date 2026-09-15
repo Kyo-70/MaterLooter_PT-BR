@@ -93,6 +93,64 @@ TICS = [
     (r"\bwrong on the (?:first|second|last) (?:point|count|half)\b", 'wrong on the second point'),
 ]
 
+# The opening move of a reply, which is its own failure and was not checked
+# until Sov1737 named it on 15 September 2026: "Gotta love how LLMs always lead
+# with 'this is now solved', 'you did great', 'this is the fix'." He was reading
+# a reply that opened "Your last message solved it." and the build under it was
+# broken, so the verdict was wrong as well as unearned.
+#
+# These are matched against the FIRST sentence only. Telling a reporter they
+# were right is fine in the body, where it comes after the evidence. Leading
+# with it is the tell, and it is also where the claim is least likely to have
+# been checked.
+FIRST_SENTENCE = [
+    (r"\b(?:solved|solves) it\b", "opening with a verdict"),
+    (r"\bthat(?:'s| is) it\b", "opening with a verdict"),
+    (r"\b(?:found|nailed|cracked) it\b", "opening with a verdict"),
+    (r"\byou(?:'re| are|'ve| have)? (?:were )?(?:right|correct|spot on|onto)\b",
+     "opening by telling the reporter they were right"),
+    (r"\byou (?:nailed|called|spotted|caught)\b",
+     "opening by telling the reporter they were right"),
+    (r"\b(?:good|great|nice|excellent|brilliant|perfect) (?:catch|call|find|question|report|spot|work)\b",
+     "opening with praise"),
+    (r"\bthanks? (?:for|so much)\b", "opening with thanks"),
+    (r"\bthis is (?:the|your) (?:fix|answer|cause|culprit)\b",
+     "opening with a verdict"),
+    (r"\b(?:now|already) (?:solved|fixed|sorted|resolved)\b",
+     "opening with a verdict"),
+    (r"\bgood news\b", "opening with a verdict"),
+]
+
+# Declaring a build good before anybody has played it. A changelog saying a
+# thing is fixed is the genre working correctly, and the first version of this
+# rule failed nine documents that were all right, so it is narrow now: only the
+# forms that hand somebody an untested build and tell them it works.
+#
+# The equip probe of 14 September was introduced as the answer and was refused
+# four lines later by a second copy of its own rule, so the reporter spent an
+# evening measuring my code. Say what a build changes. Let them say whether it
+# worked.
+FIX_CLAIM = [
+    (r"\b(?:this|that|here) is (?:the|your) (?:fix|solution)\b",
+     "declaring a build good before it is played"),
+    (r"\bproblem solved\b", "declaring a build good before it is played"),
+    (r"\bthat should (?:do it|be it|sort it)\b",
+     "declaring a build good before it is played"),
+    (r"\b(?:this|it) (?:should|will) (?:fix|solve|sort) (?:it|this|that|the)\b",
+     "declaring a build good before it is played"),
+    (r"\byou (?:should|will) (?:now )?(?:see|get|find) (?:it|them) (?:work|pick)",
+     "declaring a build good before it is played"),
+]
+
+# Praise as filler. Crediting a reporter by name is house style and stays; this
+# is the chat-assistant reflex of grading their message before answering it.
+PRAISE = [
+    r"\b(?:exactly|absolutely|completely) right\b",
+    r"\byou (?:nailed|absolutely nailed) (?:it|this)\b",
+    r"\b(?:great|excellent|brilliant|perfect|fantastic) (?:report|catch|question|find|work|point)\b",
+    r"\bthat(?:'s| is) (?:a )?(?:great|excellent|really good) (?:point|question|catch)\b",
+]
+
 # Saying "I got this wrong" once is candour. Five times in one document is a
 # mannerism, and it reads as performance.
 CONFESSION = r"\b(?:my own|my fault|I was wrong|I had assumed|I never checked|I should have|I failed)\b"
@@ -136,6 +194,11 @@ def strip_exempt(text):
     # Markdown blockquotes and bbcode [quote] both carry someone else's words.
     text = re.sub(r"^\s*>.*$", " ", text, flags=re.M)
     text = re.sub(r"\[quote.*?\[/quote\]", " ", text, flags=re.S | re.I)
+    # A row of equals or dashes with a label in it separates one reply from the
+    # next. It is not a sentence and it was being read as one document's
+    # opening line.
+    text = re.sub(r"^.*={6,}.*$", " ", text, flags=re.M)
+    text = re.sub(r"^\s*[-=_*]{4,}\s*$", " ", text, flags=re.M)
     return text
 
 
@@ -186,6 +249,21 @@ def check(path):
     for pat, why in TICS:
         for m in re.finditer(pat, flat):
             hard.append("tic: %s -> ...%s..." % (why, m.group(0)[:60]))
+
+    ss_all = [x for x in sentences(body)
+              if len(re.findall(r"[A-Za-z]", x)) >= max(8, len(x) * 0.4)]
+    if ss_all:
+        opening = ss_all[0].lower()
+        for pat, why in FIRST_SENTENCE:
+            m = re.search(pat, opening)
+            if m:
+                hard.append("%s: %r" % (why, ss_all[0][:70]))
+    for pat, why in FIX_CLAIM:
+        for m in re.finditer(pat, flat):
+            hard.append("%s -> ...%s..." % (why, m.group(0)[:60]))
+    for pat in PRAISE:
+        for m in re.finditer(pat, flat):
+            warn.append("praise as filler: ...%s..." % m.group(0)[:60])
 
     n_conf = len(re.findall(CONFESSION, flat))
     if n_conf > 2:
@@ -286,7 +364,8 @@ BY_EYE = """
 Now the part no script can do. Reread the whole piece and answer these:
 
   1. Does the opening line say something, or does it announce the shape of the
-     piece? Cut it if it is announcing.
+     piece? Cut it if it is announcing. The verdict openers are mechanical now;
+     this question is about the ones no list has caught yet.
   2. Does the last paragraph add anything, or restate and then moralise? End on
      what the reader does next.
   3. Read the previous two documents of this kind. Does this one share their
