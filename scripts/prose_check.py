@@ -74,8 +74,8 @@ TICS = [
     (r"which is what .{0,40} looks like", 'which is what X looks like'),
     (r"\bis the tell\b", 'is the tell'),
     (r"\bthe giveaway (?:was|is)\b", 'the giveaway was'),
-    (r"\bI would rather\b", 'performed honesty: I would rather'),
-    (r"\b(?:my own fault|my fault|I was wrong|I had it wrong)\b", 'narrating my own error'),
+    (r"\bi would rather\b", 'performed honesty: I would rather'),
+    (r"\b(?:my own fault|my fault|i was wrong|i had it wrong)\b", 'narrating my own error'),
     (r"\bwhich is worse than\b", 'which is worse than'),
     (r"\brather than a theory\b", 'rather than a theory'),
     (r"\bthe whole (?:design|point|trick|of it)\b", 'the whole X'),
@@ -150,6 +150,23 @@ PRAISE = [
     r"\b(?:great|excellent|brilliant|perfect|fantastic) (?:report|catch|question|find|work|point)\b",
     r"\bthat(?:'s| is) (?:a )?(?:great|excellent|really good) (?:point|question|catch)\b",
 ]
+
+# TICS and PHRASES are matched against text that has already been lowercased,
+# so a capital letter inside one of these patterns makes the rule dead and
+# silent. `\bI would rather\b` sat here unable to match anything until 15
+# September 2026, when a reply went out carrying the very phrase it is for and
+# this script passed it. One of twenty was dead and nothing said so.
+#
+# DeadRules() reports any pattern that cannot match its own lowercase form.
+# --all runs it, so the next one announces itself.
+def DeadRules():
+    out = []
+    for pat, why in TICS:
+        bare = re.sub(r"\\[a-zA-Z]", "", pat)
+        if any(ch.isupper() for ch in bare):
+            out.append((pat, why))
+    return out
+
 
 # Saying "I got this wrong" once is candour. Five times in one document is a
 # mannerism, and it reads as performance.
@@ -383,6 +400,9 @@ def main():
         d = os.path.join(root, "docs")
         args = [os.path.join(d, f) for f in sorted(os.listdir(d))
                 if f.endswith((".txt", ".bbcode")) and "template" not in f]
+    for pat, why in DeadRules():
+        print("  BROKEN RULE  %s can never match, the text is lowercased first (%s)"
+              % (pat, why))
     failed = False
     for p in args:
         hard, warn = check(p)
