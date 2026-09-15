@@ -2711,10 +2711,33 @@ namespace ml::loot
                 // 0x11 stays refused because every one of the 6,194 sightings of
                 // it that could be checked had a wearer.
                 //
+                // 0x01 joined them on 15 September 2026, and it is the one
+                // byte here chosen from a single reporter rather than from a
+                // population. docwat232's Spada Sword is taken off a stand
+                // during a quest, and taking it any other way leaves the quest
+                // with a step that can no longer happen; his own log shows
+                // 1.6.5 gathering it. In eighteen logs 0x01 appears inside this
+                // folder exactly twice, both of them that sword. So the whole
+                // byte costs 2 of the 569 sightings the narrowed rule lets
+                // through, and the two are the ones that break something.
+                //
+                // Frostfang and the Plate Helm of the Shadows, which are what
+                // issue #57 is actually about, were never at risk: every one of
+                // the 96 sightings of a stand prefab across these logs reads
+                // 0x11 with a real wearer, so 1.6.21 never reached them. This
+                // is the neighbouring case, not that one.
+                //
+                // The obvious wider rule was measured first and would have been
+                // a disaster. All four quest pieces carry the tag "docking",
+                // and so do 563 of the 567 folder sightings at the allowed
+                // bytes, Bekker Shields and Glenmore Swords included. Refusing
+                // that tag here would have undone issue #73 the day after it
+                // shipped.
+                //
                 // EquipStrict in the ini brings the whole folder back for anyone
                 // whose game disagrees, so a report does not have to wait for a
                 // build.
-                if (cfg.equipStrict || c.cat2 == 0x11 || c.cat2 == 0x19)
+                if (cfg.equipStrict || c.cat2 == 0x11 || c.cat2 == 0x19 || c.cat2 == 0x01)
                     return skip("someone is wearing this; taking it would copy it");
                 unwornEquip = true;
             }
