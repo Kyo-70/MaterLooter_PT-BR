@@ -129,7 +129,7 @@ namespace ml::Settings
         else if (k == "TakeUnknownItems") c.takeUnknownItems = Flag(v);
         else if (k == "DebugLog")         c.debugLog = Flag(v);
         else if (k == "DeleteTestName")   c.deleteTestName = v;
-        else if (k == "EquipProbe")       c.equipProbe = Flag(v);
+        else if (k == "EquipStrict")      c.equipStrict = Flag(v);
         else if (k == "DupeProbe")        c.dupeProbe = Flag(v);
         else if (k == "ConfigVersion")    c.configVersion = atoi(v.c_str());
     }
@@ -421,7 +421,7 @@ namespace ml::Settings
         snprintf(b, sizeof b, "LootOwned=%d\nSkipQuestItems=%d\nSkipNoSell=%d\nSkipQuestGear=%d\nMinValueCopper=%d\nTakeUnknownItems=%d\nPetFilter=%d\nStopPetLooting=%d\nDebugLog=%d\nConfigVersion=%d\n",
                  c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.debugLog, c.configVersion); s += b;
         if (!c.deleteTestName.empty()) { snprintf(b, sizeof b, "DeleteTestName=%s\n", c.deleteTestName.c_str()); s += b; }
-        if (c.equipProbe) { snprintf(b, sizeof b, "EquipProbe=1\n"); s += b; }
+        if (c.equipStrict) { snprintf(b, sizeof b, "EquipStrict=1\n"); s += b; }
         if (c.dupeProbe)  { snprintf(b, sizeof b, "DupeProbe=1\n"); s += b; }
         s += "\n; class -> 1 loot, 0 skip (classes not listed are looted)\n[Classes]\n";
         for (const auto& kv : c.classRule) { s += kv.first; s += kv.second ? "=1\n" : "=0\n"; }

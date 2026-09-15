@@ -181,7 +181,11 @@ namespace ml
         //
         // Duplicates corrupt saves, so this is off unless somebody types it in,
         // and it is not in the menu.
-        bool  equipProbe = false;
+        // Issue #73. Refuses every prefab in the worn-gear folder the way
+        // 1.6.12 to 1.6.20 did, instead of refusing the two categories the
+        // game actually marks as worn. Here for anyone whose game does
+        // duplicate, so they need no build from me to stop it.
+        bool  equipStrict = false;
         // Issue #73. Watches the bag either side of every loot and says
         // whether the world object survived it. Off; it walks every
         // inventory bucket three seconds after each pick-up.

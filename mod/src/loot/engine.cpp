@@ -2303,7 +2303,7 @@ namespace ml::loot
         return IStr(node, "gimmick_attach_");
     }
 
-    static bool OffLimits(const char* node, bool probeEquip = false)
+    static bool OffLimits(const char* node, bool unwornEquip = false)
     {
         if (!node || !node[0]) return false;
         // "puzzle" earns its place: the game tags gimmick_puzzle_ice_wall_break,
@@ -2323,11 +2323,13 @@ namespace ml::loot
                                         "equip_openclose", "gimmick_equip_" };
         for (const char* w : kWords)
         {
-            // The probe of issue #73 lifts the worn-gear folder and nothing
-            // else. "equip_openclose" is left in the list on purpose: those two
-            // prefabs are Beloth's helm and cloak, a quest can soft lock on
-            // them, and they are not what the probe is asking about.
-            if (probeEquip && strcmp(w, "gimmick_equip_") == 0) continue;
+            // The verdict has already decided this piece is not being worn,
+            // so the folder entry below would refuse it twice over. This was
+            // two copies of one rule and lifting only the first of them cost
+            // Sov1737 an evening on 15 September. "equip_openclose" stays in
+            // the list whatever happens: those two prefabs are Beloth's helm
+            // and cloak and a quest can soft lock on them.
+            if (unwornEquip && strcmp(w, "gimmick_equip_") == 0) continue;
             if (IStr(node, w)) return true;
         }
         return false;
@@ -2614,8 +2616,10 @@ namespace ml::loot
         // an entity before the game has filled its parent in, never loot.
         if (c.item && c.cat2 == 0x11) return skip("worn by someone");
         if (game::InventoryHas(c.iid)) return skip("already in your bag");
-        // Set only by the issue #73 probe, read only by OffLimits below.
-        bool probedEquip = false;
+        // Set when the worn-gear folder let this one through on its
+        // category, read only by OffLimits below, which carries the same
+        // prefix in its own list.
+        bool unwornEquip = false;
         if (c.node[0])
         {
             if (IStr(c.node, "visione") || IStr(c.node, "quest") || IStr(c.node, "artifact")) return skip("quest or memory trigger");
@@ -2663,20 +2667,10 @@ namespace ml::loot
             // carry this test and the folder has to.
             if (IStr(c.node, "gimmick_equip_"))
             {
-                // Issue #73, off unless EquipProbeRange is set in the ini. The
-                // rule above turns down 35 pieces in one camp, and 24 of them
-                // stand further off than the player's own gear has ever been
-                // seen. Those cannot be copies of anything in the bag. Whether
-                // they are copies of the bandit's is the open question, and the
-                // test that earned this rule let everything through at once, so
-                // it could never have answered it.
+                // Issue #73, settled on 15 September 2026, and the category is
+                // the rule now rather than the folder.
                 //
-                // Every one that goes through gets a line naming the distance,
-                // the bytes and the wearer, because the run that reads them has
-                // to be readable afterwards, and the answer is whether the
-                // bandit still has his shield.
-                // Distance was the wrong axis and the category is the right
-                // one. Across 1,944 sightings of this folder in three of
+                // Across 1,944 sightings of this folder in three of
                 // Sov1737's sessions the split is total: every one of the 1,885
                 // at cat2 0x11 has a wearer recorded, and not one of the 59 at
                 // 0x00, 0x0F or 0x19 ever does, at any range or at any moment in
@@ -2689,25 +2683,27 @@ namespace ml::loot
                 // a shield on an armour stand and swords stuck in the ground.
                 // Scenery built from the same prefabs as real gear.
                 //
-                // 0x19 stays refused whatever this is set to. The Strongbow
-                // Gloves of 13 September are said to have come through
-                // unparented at 0x19 and duplicated, that log is not on this
-                // machine, and gloves are not scenery.
-                // Two copies of this rule exist and the first probe lifted
-                // one of them. Sov1737's run of 15 September let 60 pieces past
-                // the test above and OffLimits turned 23 of them down four
-                // lines later as "puzzle or protected mechanism", so what came
-                // back measured this code and never reached the game.
-                if (cfg.equipProbe && c.cat2 != 0x11 && c.cat2 != 0x19)
-                {
-                    probedEquip = true;
-                    static volatile LONG s_said = 0;
-                    if (InterlockedIncrement(&s_said) <= 60)
-                        LOG("[probe73] letting %s through at %.1f m: type %u cat %02X/%02X parent %08X %s",
-                            c.db ? c.db->Label() : (c.key[0] ? c.key : "something unnamed"),
-                            c.d, c.tid, c.cat, c.cat2, c.parent, c.node);
-                }
-                else return skip("someone is wearing this; taking it would copy it");
+                // Measured rather than argued. The duplicate probe read the bag
+                // at both ends of every loot in a bandit camp: 154 measurements,
+                // no copies. Every piece left the world and added exactly one to
+                // the bag. Three Bekker Shields came out of that camp on three
+                // entity ids with the bag climbing 0, 1, 2, 3, which is what
+                // three shields look like and not what one shield coming back
+                // looks like. Two of them wore cat2 0x16 and behaved like the
+                // rest.
+                //
+                // 0x19 stays refused. The Strongbow Gloves of 13 September are
+                // said to have come through unparented at 0x19 and duplicated,
+                // that log is not on this machine, and gloves are not scenery.
+                // 0x11 stays refused because every one of the 6,194 sightings of
+                // it that could be checked had a wearer.
+                //
+                // EquipStrict in the ini brings the whole folder back for anyone
+                // whose game disagrees, so a report does not have to wait for a
+                // build.
+                if (cfg.equipStrict || c.cat2 == 0x11 || c.cat2 == 0x19)
+                    return skip("someone is wearing this; taking it would copy it");
+                unwornEquip = true;
             }
             if (IStr(c.node, "mission")) return skip("mission object");
             if (AttachedPart(c.node, c.nodeType)) return skip("part of a creature or a mechanism");
@@ -2718,7 +2714,7 @@ namespace ml::loot
             // stone_wall_break), and because OffLimits stops them being armed
             // they never fill, fall through to the ore branch below, and were
             // reaching the vein break. The mod was swinging at an ice wall.
-            if (OffLimits(c.node, probedEquip)) return skip("puzzle or protected mechanism");
+            if (OffLimits(c.node, unwornEquip)) return skip("puzzle or protected mechanism");
             // Kept in step with OffLimits(), which stops arming touching the same
             // things. The words above are the detail this one summarises.
             // These read the prefab path, so a gather node whose name happens to
