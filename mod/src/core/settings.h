@@ -86,7 +86,7 @@ namespace ml
         // languages before the gate goes green again, and this was not worth
         // holding a release for. Promote it when the next batch of strings goes
         // through.
-        bool  gatherCampFarm = false;
+        bool  gatherCampFarm = true;
         bool  gatherOre      = true;
         bool  gatherWood     = true;
         bool  gatherUnknown  = false;  // nodes whose yield has not been seen yet (learned from what you gather by hand)
@@ -190,7 +190,7 @@ namespace ml
         // whether the world object survived it. Off; it walks every
         // inventory bucket three seconds after each pick-up.
         bool  dupeProbe = false;
-        int   configVersion  = 3;      // bumps when a default changes in a way old files should follow
+        int   configVersion  = 6;      // bumps when a default changes in a way old files should follow
 
         // [Classes] class -> 1 loot / 0 skip. Absent means loot.
         std::map<std::string, int> classRule;

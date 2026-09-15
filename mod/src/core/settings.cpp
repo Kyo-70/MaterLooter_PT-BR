@@ -346,7 +346,32 @@ namespace ml::Settings
             c.configVersion = 5;
             migrated = true;
         }
-        if (!fromFile) c.configVersion = 5;
+        // 1.6.20 named a camp farm's 24 unlabelled crops and left them off,
+        // on the grounds that a mod should not start harvesting somebody's farm
+        // because a table row changed. LuxDragon pointed out on the posts tab
+        // that this was only half a position: the other 17 camp-farm prefabs
+        // carried tags of their own and were being collected the whole time, so
+        // a fruit tree was harvested at one growth phase and skipped at the
+        // next. Every phase of everything planted in a camp is one kind now and
+        // the switch is on, which is the consistent half of what he asked for.
+        //
+        // The default alone reaches nobody: Save() writes GatherCampFarm on
+        // every save, so a 1.6.20 file already says 0 whether its owner chose
+        // that or not. Setting it here rather than clearing it means anyone who
+        // had turned it on by hand stays on.
+        if (fromFile && c.configVersion < 6)
+        {
+            if (!c.gatherCampFarm)
+            {
+                c.gatherCampFarm = true;
+                LOG("Settings migrated to version 6: camp farm crops are collected, and every growth phase of one "
+                    "now answers to that one switch instead of some of them answering to Plants and Wood. Turn "
+                    "Camp farms off in the ini if you would rather harvest your own.");
+            }
+            c.configVersion = 6;
+            migrated = true;
+        }
+        if (!fromFile) c.configVersion = 6;
         return migrated;
     }
 
