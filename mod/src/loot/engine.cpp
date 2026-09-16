@@ -1202,6 +1202,19 @@ namespace ml::loot
         const int sn = events::DrainSeen(seen, 32);
         for (int i = 0; i < sn; ++i)
         {
+            // A carcass or body searched by hand is empty now, so it joins the
+            // same never-again set the mod's own searches go into. Before this
+            // only the mod's searches were remembered: on 16 September 2026 Seth
+            // skinned a Pigeon by hand with Carcasses off, turned the switch on,
+            // and 55 seconds later the mod searched the same carcass again.
+            // Searching an emptied carcass is the known way to duplicate items.
+            // Only player-tagged raisers reach this queue, so a mercenary's
+            // search counts too, and the mod's own sends never do.
+            if (seen[i].act == Action::Search)
+            {
+                g_searched.insert(seen[i].eid);
+                g_retiredEid.insert(seen[i].eid);
+            }
             uint16_t nodeType = 0;
             std::string nodePrefab;
             if (seen[i].act == Action::Gather)
