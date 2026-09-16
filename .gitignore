@@ -49,3 +49,4 @@ secrets.*
 build-nowrap/
 build-nodraw/
 build-probe/
+mod/build-lsp/
