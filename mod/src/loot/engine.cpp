@@ -1980,32 +1980,13 @@ namespace ml::loot
     // so a wrong id is a no-op rather than damage.
     enum WellPart { WellWinch = 0, WellWinchPart = 1, WellBucket = 2 };
     struct WellStep { uint32_t atMs; uint8_t part; uint32_t ev; };
-    // Timings are milliseconds from the first transition of the captured run.
-    // The repeats of D08DADE4 and EB0F048C are what the log showed, and the log
-    // caps at three samples per id, so the real run may hold more of them. If a
-    // replay stalls part way that is the first thing to suspect.
-    static const WellStep kWellRun[] = {
-        {     0, WellWinch,     0x92A049DE },
-        {     9, WellWinchPart, 0xA4078B62 },
-        {  1470, WellWinch,     0xA327105E },
-        {  1479, WellWinch,     0xD08DADE4 },
-        {  3013, WellWinch,     0xD08DADE4 },
-        {  4553, WellWinch,     0xD08DADE4 },
-        {  5106, WellWinch,     0xA327105E },
-        {  5293, WellWinch,     0xEB0F048C },
-        {  6828, WellWinch,     0xEB0F048C },
-        {  8184, WellWinch,     0xA327105E },
-        {  8238, WellWinch,     0xA809EFDF },
-        {  8247, WellWinchPart, 0xF00346BD },
-        {  8663, WellWinch,     0x0F7569ED },
-        {  8673, WellWinchPart, 0xF00346BD },
-        { 11115, WellBucket,    0x003ECC59 },
-    };
-    static constexpr int kWellRunSteps = static_cast<int>(sizeof kWellRun / sizeof kWellRun[0]);
+    // The captured hand draw, fifteen transitions over eleven seconds with every
+    // id and timing, is in docs/investigations/WELL.md. It lived here as a table
+    // until nothing referenced it.
 
     // What the mod actually drives, and why it is one step and not fifteen.
     //
-    // Winding the winch works: the run above was driven back to back nineteen
+    // Winding the winch works: the captured run was driven back to back nineteen
     // times in two minutes and paid out every time. It is also unusable. A run
     // holds the well for eleven seconds, the cooldown is a second, so the well
     // is never free, and a player who reaches for the handle mid-run has it
@@ -3703,7 +3684,6 @@ namespace ml::loot
                 snap.swap(fresh); snapAt = freshAt; return;
             }
 
-            int swept = 0;
             char notice[240] = ""; int nw = 0;
             for (const auto& kv : fresh)
             {
@@ -3718,7 +3698,6 @@ namespace ml::loot
                 const long long sent = DeleteFromInventory(kv.first, delta, "companion loot, swept");
                 LOG("[pet] sweep: +%lld %s arrived with a companion out and the rules refuse it (%s%s%s)",
                     delta, it->name.c_str(), r.rule, r.detail.empty() ? "" : " ", r.detail.c_str());
-                ++swept;
                 if (sent > 0 && nw < static_cast<int>(sizeof notice) - 40)
                     nw += snprintf(notice + nw, sizeof notice - nw, "%s%lld %s", nw ? ", " : "", sent, it->name.c_str());
             }
