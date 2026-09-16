@@ -2313,8 +2313,17 @@ namespace ml::loot
         // put on themselves; see the verdict's own line for the report behind it.
         // "gimmick_equip_" is the whole family those two belong to, and the
         // verdict's line says what taking one of them costs.
+        // "effect_gimmick" is the folder of torch flames, lamp lights and
+        // campfire sparks. None is in the node table and none has ever paid out,
+        // so with Unidentified nodes on they read as nodes nobody has learned
+        // yet. A reporter's 1.6.23 log of 16 September 2026 sent 355 gathers to
+        // 258 of them in 70 minutes, the same ones again every half minute, all
+        // "not ready (node empty)", and the game crashed in its own code ten
+        // seconds after the last. Nothing ties the crash to them, but driving an
+        // interaction on something that is not loot is how the woodthorn vines
+        // broke, so they are never touched.
         static const char* kWords[] = { "visione", "quest", "artifact", "abyssruins", "mission", "puzzle", "woodthorn",
-                                        "equip_openclose", "gimmick_equip_" };
+                                        "equip_openclose", "gimmick_equip_", "effect_gimmick" };
         for (const char* w : kWords)
         {
             // The verdict has already decided this piece is not being worn,
