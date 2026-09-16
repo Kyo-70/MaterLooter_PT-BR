@@ -122,10 +122,16 @@ namespace ml::events
     // the exe and not among the 67 descriptors the resolver answers for under
     // the mask the game keeps in DESC_MASK. Either it lives under another
     // mask or the lookup does not serve it at all. Ask every bit, once, and
-    // name what answers. Debug logging only; nothing is sent.
+    // name what answers. Nothing is sent.
+    //
+    // Behind DescriptorDump rather than the verbose log since 16 September
+    // 2026. It writes up to 649 lines at launch and it answered its question
+    // when #32 closed, while verbose is the setting every reporter is asked to
+    // turn on. docwat232's log that morning was cut off by the paste site 37
+    // seconds in, with this dump filling the whole of it.
     static void ProbeDescriptorMasks(uint32_t knownMask)
     {
-        if (!Settings::Get().debugLog) return;
+        if (!Settings::Get().descriptorDump) return;
         const game::Fns& f = game::F();
         uint32_t masks[34]; int nm = 0;
         for (int bit = 0; bit < 32; ++bit) masks[nm++] = 1u << bit;
@@ -194,11 +200,14 @@ namespace ml::events
         }
         LOG("[desc] %d event descriptors in this build.", static_cast<int>(g_descMap.size()));
         // The ones that could plausibly carry mining an uncracked vein, so
-        // the names are in the log next to whatever the spy catches.
+        // the names are in the log next to whatever the spy catches. Around 70
+        // lines, and behind DescriptorDump with the mask sweep: it is a list to
+        // browse when hunting a new event, and nothing reads it in a bug report.
         static const char* kOfInterest[] = { "Interaction", "Gimmick", "Break", "Drop", "PickUp", "Gather", "Collect" };
-        for (const DescName& d : g_descMap)
-            for (const char* k : kOfInterest)
-                if (strstr(d.cls.c_str(), k)) { LOG("[desc] 0x%04X size %-3u %s", d.id, d.size, d.cls.c_str()); break; }
+        if (Settings::Get().descriptorDump)
+            for (const DescName& d : g_descMap)
+                for (const char* k : kOfInterest)
+                    if (strstr(d.cls.c_str(), k)) { LOG("[desc] 0x%04X size %-3u %s", d.id, d.size, d.cls.c_str()); break; }
         g_descFound = 0;
         for (const auto& row : g_desc)
         {

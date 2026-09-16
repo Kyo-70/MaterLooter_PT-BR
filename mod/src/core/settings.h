@@ -190,6 +190,14 @@ namespace ml
         // whether the world object survived it. Off; it walks every
         // inventory bucket three seconds after each pick-up.
         bool  dupeProbe = false;
+        // Issue #32's mask sweep and the descriptor browse list, which used to
+        // ride on the verbose log and cost 720 lines at every launch. Verbose is
+        // the mode every log anybody sends is taken in, and that dump filled a
+        // paste site's whole budget before the reporter had taken a step, so it
+        // has its own key now and is off. What the verbose log still says
+        // without it: how many descriptors this build has, any that moved, the
+        // three the mod sends, and any it could not find.
+        bool  descriptorDump = false;
         int   configVersion  = 6;      // bumps when a default changes in a way old files should follow
 
         // [Classes] class -> 1 loot / 0 skip. Absent means loot.
