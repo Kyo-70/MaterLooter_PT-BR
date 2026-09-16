@@ -175,9 +175,9 @@ namespace ml
         // not one of the 59 at 0x00, 0x0F or 0x19 ever does; 301 of those
         // entities were followed from first sighting to last and none changed.
         // Sov1737 reads them the same way from the other side: a shield on an
-        // armour stand, swords stuck in the ground. 0x19 stays refused whatever
-        // this is set to, because the gloves of 13 September are said to have
-        // arrived that way and gloves are not scenery.
+        // armour stand, swords stuck in the ground. Since 1.6.24 the folder
+        // refuses 0x11 and 0x01 and takes 0x19, a weapon left behind after a
+        // kill or a disarm (issue #69); this key brings the whole folder back.
         //
         // Duplicates corrupt saves, so this is off unless somebody types it in,
         // and it is not in the menu.

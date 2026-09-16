@@ -2699,11 +2699,21 @@ namespace ml::loot
                 // looks like. Two of them wore cat2 0x16 and behaved like the
                 // rest.
                 //
-                // 0x19 stays refused. The Strongbow Gloves of 13 September are
-                // said to have come through unparented at 0x19 and duplicated,
-                // that log is not on this machine, and gloves are not scenery.
                 // 0x11 stays refused because every one of the 6,194 sightings of
                 // it that could be checked had a wearer.
+                //
+                // 0x19 is taken since 1.6.24, issue #69. It is a weapon left on
+                // the ground after its wielder died or was disarmed: in a fight
+                // on 16 September 2026 seventeen of them landed in this folder
+                // at 0x19, unparented, seconds after the kills, and every one was
+                // refused as worn. A test build let 0x19 through with the dupe
+                // probe reading the bag either side of each pickup, across several
+                // bandit camps: 16 pickups, all "moved, not copied", covering
+                // swords, axes, maces, bows, shields and a mask, and 59 clean
+                // readings in the session with no copy. It had only been refused
+                // on a report that Strongbow Gloves duplicated at 0x19 on 13
+                // September, from a log that is not on this machine. No gloves
+                // dropped in the test, so gloves are the one kind unmeasured.
                 //
                 // 0x01 joined them on 15 September 2026, and it is the one
                 // byte here chosen from a single reporter rather than from a
@@ -2731,7 +2741,7 @@ namespace ml::loot
                 // EquipStrict in the ini brings the whole folder back for anyone
                 // whose game disagrees, so a report does not have to wait for a
                 // build.
-                if (cfg.equipStrict || c.cat2 == 0x11 || c.cat2 == 0x19 || c.cat2 == 0x01)
+                if (cfg.equipStrict || c.cat2 == 0x11 || c.cat2 == 0x01)
                     return skip("someone is wearing this; taking it would copy it");
                 unwornEquip = true;
             }
