@@ -191,16 +191,25 @@ def check(path, keys, want_gaps=False):
 # mechanical, which is the only form of it that has ever held.
 COUNT_IN_PROSE = [
     (os.path.join(HERE, "..", "mod", "README.md"), r"all (\d+) strings"),
-    (os.path.join(HERE, "..", "CLAUDE.md"), r"(\d+) template strings"),
 ]
+
+# Notes kept at the root outside git carry the count too. They are not on
+# every clone, so each one is checked only when it writes a count at all.
+ROOT_NOTES = (os.path.join(HERE, "..", "*.md"), r"(\d+) template strings")
 
 
 def check_counts(n):
     """True when every file that writes the count writes the right one."""
     ok = True
+    notes, note_pattern = ROOT_NOTES
+    for path in sorted(glob.glob(notes)):
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            for got in re.findall(note_pattern, fh.read()):
+                if int(got) != n:
+                    print("%s: says %s strings, the template has %d"
+                          % (os.path.relpath(path, HERE), got, n))
+                    ok = False
     for path, pattern in COUNT_IN_PROSE:
-        if not os.path.exists(path):
-            continue          # CLAUDE.md is gitignored and not on every clone
         with open(path, encoding="utf-8", errors="replace") as fh:
             text = fh.read()
         found = re.findall(pattern, text)
