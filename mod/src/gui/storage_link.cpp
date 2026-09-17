@@ -37,6 +37,7 @@ namespace ml::psm
             a.pauseInput     = reinterpret_cast<void (*)(uint32_t)>(get("PsmPauseInput"));
             a.keyText        = reinterpret_cast<int (*)(PsmKey, char*, int)>(get("PsmKeyText"));
             a.padText        = reinterpret_cast<int (*)(PsmPad, char*, int)>(get("PsmPadText"));
+            a.fixedSlots     = reinterpret_cast<int (*)(int)>(GetProcAddress(h, "PsmFixedSlots"));   // optional
             if (!a.apiVersion)
             {
                 snprintf(g_why, sizeof g_why, "found, but it has no interface (an older build)");

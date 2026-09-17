@@ -1580,6 +1580,15 @@ namespace ml::gui
             ImGui::TextUnformatted(api->storageName(i));
             if (i == 0) Help("The total, purchased expansions and story slots included. The left end keeps the game's size.");
             s_rowLabel.Next();
+            if (const int fixed = api->fixedSlots ? api->fixedSlots(i) : 0)
+            {
+                ImGui::Text("%d", fixed);
+                Help("This chest holds one of each collectible, so its slots cannot be changed.");
+                ImGui::SameLine();
+                if (sz.liveCapacity >= 0) ImGui::TextDisabled(TR("now %d of %d used"), sz.liveUsed, sz.liveCapacity);
+                ImGui::PopID();
+                continue;
+            }
             // The left end of the slider is the game's own size, stored as 0.
             int floor = sz.known ? sz.gameDefault : 1;
             if (i == 0 && sz.known) floor += status.learnedExpansions;

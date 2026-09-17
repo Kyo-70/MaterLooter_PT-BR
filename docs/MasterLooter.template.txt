@@ -336,6 +336,7 @@ The game treats this as stealing and will put a bounty on you.
 The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	
 The total, purchased expansions and story slots included. The left end keeps the game's size.	
+This chest holds one of each collectible, so its slots cannot be changed.	
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	
 This tab needs a build of Private Storage Master that matches this version of Master Looter.	
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	

@@ -24,6 +24,7 @@ namespace ml::psm
         void        (*pauseInput)(uint32_t);
         int         (*keyText)(PsmKey, char*, int);
         int         (*padText)(PsmPad, char*, int);
+        int         (*fixedSlots)(int);   // optional, null on a plugin built before it
     };
 
     // Null until the plugin is found with a matching interface. Cheap to call
