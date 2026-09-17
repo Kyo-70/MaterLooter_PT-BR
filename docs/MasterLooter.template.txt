@@ -15,6 +15,7 @@
 %-18s %s (%zu hits)%s	
 %d classes	
 %d items, %d classes, %d tags	
+%d last time	
 %d line(s) were ignored: their %%d or %%s placeholders did not match the English, and using them would print the wrong values.	
 %d matches%s	
 %d node kinds learned this session. Nodes are named by the prefab they were placed from; anything that table misses is identified the first time it yields something. A node's type number changes between sessions, so nothing is remembered after you quit.	
@@ -28,13 +29,16 @@
 1 match%s	
 3 of 3	
 \"%s\" already exists. Saving over it asks first.	
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
+a Master Looter key	
+a Master Looter shortcut	
 A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	
 Abyss and Kuku	
 Abyss gear, Kuku pots and their parts.	
 Accessories	
 allowed	
-already in your bag	
+also %s	
 always	
 always beats the class rule; never beats always	
 Ammunition	
@@ -66,6 +70,7 @@ Classes
 Clear	
 Clear overrides	
 Clears what this session worked out from your bag. Nodes named by the prefab table are unaffected.	
+Click again to reset	
 Close	
 container (off)	
 Containers	
@@ -86,6 +91,7 @@ Damaged gear
 Dead zone around you	
 Decision	
 default	
+Detailed log	
 DirectX 12 hooks	
 does not respond	
 Draw water from wells	
@@ -98,6 +104,7 @@ entity %08X, %d items across every store
 entity %08X, bag %d of %d slots, %d items across every store	
 Event descriptors	
 Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	
 Extra ore per vein	
 failed	
 fast-travel artifact	
@@ -108,6 +115,7 @@ Fish
 fish off	
 Fish, and whatever else you catch in the water: crabs, shrimp, squid, starfish and seahorses.	
 Food and drink	
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	
 Forget	
 found	
 Furniture	
@@ -116,6 +124,8 @@ furniture node (off)
 furniture off	
 Game functions	
 Game functions did not resolve; see Status.	
+game size (%d)	
+Game window	
 Game-thread pump	
 gather node	
 Gathering	
@@ -124,9 +134,12 @@ General
 Ground items	
 Groups	
 Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class on the Classes tab: herb and seed are separate there. That sorts what is lying on the ground item by item, and it reaches the node as well wherever the game says what the node holds: refuse herb and a herb patch is left alone. Plant nodes are a mixed lot, paying grain and crafting materials too, and for the ones the game does not describe this switch is the only control.	
+hold a button, then press the one that opens it (Escape cancels)	
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	
 hold two buttons (Escape cancels)	
 Household clutter and collectibles, most of it worthless.	
 How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.	
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	
 How often the scene is read. The scan runs on its own thread; only the final take costs the game a fraction of a millisecond.	
 incomplete	
 Insects	
@@ -141,13 +154,18 @@ Items no shop will buy, across every class.
 Items on the ground	
 Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.	
 Items with an unknown value are never filtered by it.	
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	
 Keep the menu on screen while you play. %s brings it back, %s closes it.	
 Keys	
 Keys and tools	
 Language	
 Language \"%s\": %d line(s) translated, %d seen this session.	
+Last error	
 learned from the game	
+Leave every size alone	
+left as the game has them	
 Load	
+load a save to see it	
 loaded	
 locked	
 Log	
@@ -178,27 +196,35 @@ no
 no interaction node	
 Nodes the prefab table does not name and that have not yielded anything yet this session. Off (the default) leaves them alone. On makes the mod gather them to find out, which means a plant can be taken while Plants is off.	
 none	
+none seen	
 not found yet	
+not found, bound keys also reach the game	
 not in item database	
 not ready (node empty)	
 not resolved yet	
 not started	
 not yet	
+nothing	
 Nothing else is drawn while the menu is closed.	
 nothing taken yet this session	
+now %d of %d used	
 Object	
 object	
 Objects are listed nearest first, with the rule that decided each one. Empty nodes read as not ready until the game or arming fills them. What you are wearing and carrying is left out.	
 Objects closer than this are treated as your own equipment. A safety net; your gear is also recognised by other means.	
 Objects per burst press	
 Objects per scan	
+off, see the error below	
+off, the mod is disabled	
 on the player	
+on XInput slot %d	
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	
 One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	
 Open and close this menu	
 Open folder	
+Open now	
 Opens the folder in Explorer. The log is rewritten every launch and is what to attach to a report.	
 Ore and stone	
 ore off	
@@ -222,6 +248,13 @@ Player equipment.
 Player not found in the scene yet.	
 Presets	
 press a key (Escape cancels)	
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	
+Private Storage expansions	
+Private Storage Master %s for game build %s	
+Private Storage Master on	
+Private Storage Master refused the change	
+Private Storage Master: %s	
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	
 Protected by default: a memory chip starts a memory scene when taken, and a puzzle part breaks its puzzle. Turn on only if you want them auto-taken.	
 protected item name	
 Puts every setting and rule back to what it was at that moment.	
@@ -233,12 +266,15 @@ Ranges (metres)
 Rats, squirrels, birds, lizards, frogs and salamanders: anything else the game puts in the bag whole.	
 Reaching nodes	
 Read from the file beside the plugin, not the copy inside it.	
+read from the save	
 Rebind	
 Recent loot	
 Refresh	
+Reload from the ini	
 Reload now	
 Replaces every setting and every class, tag and item rule with what the preset holds, and writes it to MasterLooter.ini. Nothing of the current settings is kept, so back them up first if you want them.	
 Reset all tags	
+Reset to defaults	
 resolved	
 Retry the same object after (ms)	
 Route id	
@@ -254,10 +290,15 @@ search item name or key (3+ letters)
 Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	
 Sending events	
 Set	
+set	
+set this launch	
+Settings file	
 Settings: %ls	
 Show a brief notice when auto-loot is toggled	
 Showing current overrides. Type to search all %d items.	
 Showing the nearest %d of %d. The rest are further away.	
+Size changes take effect the next time the game starts.	
+Sizes	
 Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	
 Skip all	
 Skip items shops refuse to buy	
@@ -266,12 +307,16 @@ Skip quest items
 skip: %s	
 Small animals	
 small animals off	
+Some changes take effect the next time the game starts.	
 Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	
 someone is wearing this; taking it would copy it	
 stack at one point (storage contents)	
 Status	
 Stop pets looting	
 Stop pets looting at all	
+Storage	
+Storage keys	
+Storage sizes	
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	
 Tag	
 Tags	
@@ -282,13 +327,17 @@ Take items the database cannot name
 Take owned goods on / off	
 take this one by hand, looting it can lock the quest	
 takes effect next launch	
+the capacity dump	
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	
 The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	
 The game treats this as stealing and will put a bounty on you.	
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	
+The total, purchased expansions and story slots included. The left end keeps the game's size.	
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	
 Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	
@@ -322,17 +371,21 @@ What to collect
 Winds the handle for you and takes what comes up, by driving the same state transitions the game drives when you hold the interact button. A well raises no loot event at all, so this is a replay of a captured sequence rather than the game being asked for anything. Off by default, because a well it gets wrong is a well left standing without its bucket.	
 Wood	
 wood off	
+working	
 World (actor manager)	
 worn by someone	
 Worn gear that enemies drop as they die. Cheap and heavy, but plentiful.	
 worn or carried by you	
 worth %lld copper	
 Wrap the swapchain	
+Write the size dump to the log	
 Write translation template	
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	
 Writes MasterLooter.template.txt beside the plugin, holding every line the menu has shown this session. Open every tab first, since a line only appears once it has been drawn. Translate the right-hand side of each record, save it as MasterLooter.<language>.txt, and put that language here.	
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	
 Writes the settings as they are now, named %s.	
 yes	
+your own camp farm (off)	
 your rules refuse all ore, jewels and stone	
 your rules refuse all stone	
 your rules refuse everything this node holds	

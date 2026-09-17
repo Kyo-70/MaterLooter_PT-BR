@@ -58,6 +58,7 @@ add_library(MasterLooter SHARED
     src/hooks/input.cpp
     src/hooks/xinput_hook.cpp
     src/gui/menu.cpp
+    src/gui/storage_link.cpp
     src/loot/mem.cpp
     src/loot/game.cpp
     src/loot/events.cpp
