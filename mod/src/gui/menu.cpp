@@ -27,6 +27,7 @@
 #include "../loot/hooks.h"
 #include "../loot/mem.h"
 #include "../version.h"
+#include "storage_link.h"
 
 namespace ml::gui
 {
@@ -318,6 +319,11 @@ namespace ml::gui
             else { st.menuOpen = false; st.menuWatch = false; }
         }
         s_watchWas = watch;
+
+        // While the menu has input, Private Storage Master ignores its storage
+        // keys, so binding Ctrl+F1 on the Storage tab does not open storage too.
+        if (st.Captures())
+            if (const psm::Api* api = psm::Get()) api->pauseInput(300);
 
         const bool esc = front && KeyDown(VK_ESCAPE);
         if (esc && !s_escWas && st.Captures() && !st.textCapture && !st.rebindCapture)
@@ -1322,6 +1328,308 @@ namespace ml::gui
         ImGui::EndChild();
     }
 
+    // --- Storage tab --------------------------------------------------------
+    // Private Storage Master's settings, when that plugin is installed. It has
+    // no menu of its own and owns its ini; this tab reads and writes through
+    // its exported interface (storage_link.h) and never touches the file.
+    static PsmSettings s_psm{};
+    static bool        s_psmFetched = false;
+    static char        s_psmWhy[256] = "";
+    static unsigned    s_psmPadWidest = 0, s_psmPadLast = 0, s_psmPadPrev = 0;
+    constexpr int      kPsmKeyTarget = 200;   // g_rebindTarget for key rows, 200..209
+    constexpr int      kPsmPadTarget = 220;   // pad rows, 220..228
+
+    static const char* const kPsmHelp[PSM_STORAGES] = {
+        "Private Storage, the storage box at camp.",
+        "The Gatherables Chest in your house.",
+        "The Wardrobe in your house.",
+        "The Kuku Cooler in your house.",
+        "The Collectibles Chest in your house. It takes one of each collectible.",
+        "Camp Straw, the camp feed bin.",
+        "Bird Feed, the bird feeder at camp.",
+        "Camp Provisions, the warehouse for packaged trade goods kept at town warehouse keepers.",
+        "Abyss gear storage, which the game calls the Kuku Pot bag.",
+    };
+
+    static void PsmFetch(const psm::Api* api)
+    {
+        s_psm.size = sizeof s_psm;
+        if (api->getSettings(&s_psm)) s_psmFetched = true;
+    }
+
+    static void PsmApply(const psm::Api* api)
+    {
+        s_psm.size = sizeof s_psm;
+        char why[256] = {};
+        if (api->applySettings(&s_psm, why, sizeof why)) s_psmWhy[0] = 0;
+        else snprintf(s_psmWhy, sizeof s_psmWhy, "%s", why[0] ? why : TR("Private Storage Master refused the change"));
+        // It turns a duplicate binding off, so show what it kept.
+        PsmFetch(api);
+    }
+
+    static int PsmBits(unsigned v)
+    {
+        int n = 0;
+        for (; v; v &= v - 1) ++n;
+        return n;
+    }
+
+    // Who else uses this key: another storage, the dump key, or one of Master Looter's own.
+    static const char* PsmKeyClash(const psm::Api* api, int row, PsmKey k, const Config& c)
+    {
+        if (!k.vk) return nullptr;
+        for (int i = 0; i <= PSM_STORAGES; ++i)
+        {
+            if (i == row) continue;
+            const PsmKey o = i < PSM_STORAGES ? s_psm.keys[i] : s_psm.dumpKey;
+            if (o.vk == k.vk && o.mods == k.mods) return i < PSM_STORAGES ? api->storageName(i) : TR("the capacity dump");
+        }
+        if (k.mods) return nullptr;
+        if (k.vk == c.menuKey || k.vk == c.keyToggle || k.vk == c.keyBurst || k.vk == c.keyWatch || k.vk == c.keyOwned)
+            return TR("a Master Looter key");
+        return nullptr;
+    }
+
+    static const char* PsmPadClash(const psm::Api* api, int row, PsmPad p, const Config& c)
+    {
+        if (!p.press) return nullptr;
+        for (int i = 0; i < PSM_STORAGES; ++i)
+            if (i != row && s_psm.pads[i].press == p.press && s_psm.pads[i].hold == p.hold) return api->storageName(i);
+        const unsigned mask = static_cast<unsigned>(p.hold | p.press);
+        if (mask == c.padMenu || mask == c.padToggle || mask == c.padOwned || mask == c.padBurst || mask == c.padWatch)
+            return TR("a Master Looter shortcut");
+        return nullptr;
+    }
+
+    // Key with Ctrl, Shift or Alt. Master Looter's own KeyRow takes a bare key;
+    // storage keys are usually Ctrl+F-something, so this one keeps the modifiers.
+    static bool PsmKeyRow(const psm::Api* api, const char* label, const char* help, PsmKey& key, int target, int row, const Config& c)
+    {
+        State& st = State::Get();
+        bool changed = false;
+        ImGui::PushID(target);
+        ImGui::TextUnformatted(label);
+        if (help) Help(help);
+        s_rowLabel.Next();
+        char text[48];
+        api->keyText(key, text, sizeof text);
+        ImGui::TextUnformatted(text);
+        s_rowValue.Next();
+        if (st.rebindCapture && g_rebindTarget == target)
+        {
+            ImGui::TextColored(Accent(), TR("press a key, with Ctrl, Shift or Alt if you want (Escape cancels)"));
+            for (int k = 0x08; k < 0xFF; ++k)
+            {
+                if (k == VK_SHIFT || k == VK_CONTROL || k == VK_MENU || (k >= VK_LSHIFT && k <= VK_RMENU) || k == VK_LWIN || k == VK_RWIN) continue;
+                if (!KeyDown(k)) continue;
+                if (k != VK_ESCAPE)
+                {
+                    key.vk = static_cast<uint8_t>(k);
+                    key.mods = static_cast<uint8_t>((KeyDown(VK_CONTROL) ? PSM_MOD_CTRL : 0) | (KeyDown(VK_SHIFT) ? PSM_MOD_SHIFT : 0) |
+                                                    (KeyDown(VK_MENU) ? PSM_MOD_ALT : 0));
+                    changed = true;
+                }
+                st.rebindCapture = false;
+                g_rebindTarget = -1;
+                break;
+            }
+        }
+        else if (!st.rebindCapture)
+        {
+            if (ImGui::SmallButton(TR("Rebind"))) { st.rebindCapture = true; g_rebindTarget = target; }
+            if (key.vk) { ImGui::SameLine(); if (ImGui::SmallButton(TR("Clear"))) { key = PsmKey{}; changed = true; } }
+            if (const char* clash = PsmKeyClash(api, row, key, c)) { ImGui::SameLine(); ImGui::TextColored(kWarn, TR("also %s"), clash); }
+        }
+        ImGui::PopID();
+        return changed;
+    }
+
+    // A storage combo is held buttons plus one pressed button, and the order
+    // matters: LB+LS is hold LB, click the stick. Capture remembers which
+    // button went down last and makes that the pressed one.
+    static bool PsmPadRow(const psm::Api* api, const char* label, PsmPad& pad, int target, int row, const Config& c)
+    {
+        State& st = State::Get();
+        bool changed = false;
+        ImGui::PushID(target);
+        ImGui::TextUnformatted(label);
+        s_rowLabel.Next();
+        char text[48];
+        api->padText(pad, text, sizeof text);
+        ImGui::TextDisabled("%s", text);
+        s_rowValue.Next();
+        if (st.rebindCapture && g_rebindTarget == target)
+        {
+            const unsigned held = hooks::PadButtons();
+            const unsigned fresh = held & ~s_psmPadPrev;
+            if (fresh)
+            {
+                s_psmPadLast = fresh & (~fresh + 1);
+                s_psmPadWidest |= held;
+            }
+            s_psmPadPrev = held;
+            const bool done = !held && PsmBits(s_psmPadWidest) >= 2;
+            if (KeyDown(VK_ESCAPE)) { st.rebindCapture = false; g_rebindTarget = -1; s_psmPadWidest = s_psmPadLast = s_psmPadPrev = 0; }
+            else if (done)
+            {
+                pad.press = static_cast<uint16_t>(s_psmPadLast);
+                pad.hold = static_cast<uint16_t>(s_psmPadWidest & ~s_psmPadLast);
+                changed = true;
+                st.rebindCapture = false;
+                g_rebindTarget = -1;
+                s_psmPadWidest = s_psmPadLast = s_psmPadPrev = 0;
+            }
+            else if (!held && s_psmPadWidest) s_psmPadWidest = s_psmPadLast = 0;   // one button is not a combo, start over
+            else if (s_psmPadWidest)
+            {
+                PsmPad preview{static_cast<uint16_t>(s_psmPadWidest & ~s_psmPadLast), static_cast<uint16_t>(s_psmPadLast)};
+                api->padText(preview, text, sizeof text);
+                ImGui::TextColored(Accent(), TR("%s, let go to keep it"), text);
+            }
+            else ImGui::TextColored(Accent(), TR("hold a button, then press the one that opens it (Escape cancels)"));
+        }
+        else if (!st.rebindCapture)
+        {
+            if (ImGui::SmallButton(TR("Set"))) { st.rebindCapture = true; g_rebindTarget = target; s_psmPadWidest = s_psmPadLast = 0; s_psmPadPrev = hooks::PadButtons(); }
+            if (pad.press) { ImGui::SameLine(); if (ImGui::SmallButton(TR("Clear"))) { pad = PsmPad{}; changed = true; } }
+            if (const char* clash = PsmPadClash(api, row, pad, c)) { ImGui::SameLine(); ImGui::TextColored(kWarn, TR("also %s"), clash); }
+        }
+        ImGui::PopID();
+        return changed;
+    }
+
+    static void TabStorage(Config& c)
+    {
+        const psm::Api* api = psm::Get();
+        if (!api)
+        {
+            ImGui::TextColored(kWarn, TR("Private Storage Master: %s"), psm::Why());
+            ImGui::TextWrapped("%s", TR("This tab needs a build of Private Storage Master that matches this version of Master Looter."));
+            return;
+        }
+
+        PsmStatus status{};
+        status.size = sizeof status;
+        api->getStatus(&status);
+        // Take the plugin's settings fresh unless a slider or field here is mid-edit,
+        // so a hand edit of the ini and Reload show up.
+        if (!s_psmFetched || !ImGui::IsAnyItemActive()) PsmFetch(api);
+
+        ImGui::Text(TR("Private Storage Master %s for game build %s"), status.version, status.gameVersion);
+        ImGui::TextDisabled("%s", TR("Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once."));
+        if (s_psmWhy[0]) ImGui::TextColored(kWarn, "%s", s_psmWhy);
+        if (status.restartNeeded) ImGui::TextColored(kGold, "%s", TR("Some changes take effect the next time the game starts."));
+
+        Section(TR("Status"));
+        OnOff("Storage keys", status.storageReady != 0, "working", status.enabled ? "off, see the error below" : "off, the mod is disabled");
+        OnOff("Storage sizes", status.capacityHooked != 0, "set this launch", "left as the game has them");
+        OnOff("Game window", status.keyWindowFound != 0, "found", "not found, bound keys also reach the game");
+        ImGui::TextUnformatted(TR("Controller")); s_statusLabel.Next();
+        if (status.padSlot >= 0) ImGui::TextColored(kGood, TR("on XInput slot %d"), status.padSlot);
+        else ImGui::TextColored(kMuted, "%s", TR("none seen"));
+        ImGui::TextUnformatted(TR("Open now")); s_statusLabel.Next();
+        ImGui::TextUnformatted(status.openStorage >= 0 ? api->storageName(status.openStorage) : TR("nothing"));
+        if (status.oldModLoaded)
+            ImGui::TextColored(kWarn, "%s", TR("PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one."));
+        if (status.imported)
+            ImGui::TextDisabled("%s", TR("The key bindings were brought over from PrivateStorageAnywhere.ini on the first run."));
+        if (status.lastError[0])
+        {
+            ImGui::TextUnformatted(TR("Last error")); s_statusLabel.Next();
+            ImGui::TextColored(kWarn, "%s", status.lastError);
+        }
+
+        Section(TR("General"));
+        {
+            bool enabled = s_psm.enabled != 0;
+            if (ImGui::Checkbox(TR("Private Storage Master on"), &enabled)) { s_psm.enabled = enabled; PsmApply(api); }
+            ImGui::SameLine();
+            ImGui::TextDisabled("%s", TR("takes effect next launch"));
+            bool debug = s_psm.debugLog != 0;
+            if (ImGui::Checkbox(TR("Detailed log"), &debug)) { s_psm.debugLog = debug; PsmApply(api); }
+            Help("Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.");
+        }
+
+        Section(TR("Keys"));
+        ImGui::TextDisabled("%s", TR("A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it."));
+        bool dirty = false;
+        for (int i = 0; i < PSM_STORAGES; ++i)
+            dirty |= PsmKeyRow(api, api->storageName(i), kPsmHelp[i], s_psm.keys[i], kPsmKeyTarget + i, i, c);
+        dirty |= PsmKeyRow(api, TR("Write the size dump to the log"), nullptr, s_psm.dumpKey, kPsmKeyTarget + PSM_STORAGES, PSM_STORAGES, c);
+
+        Section(TR("Controller"));
+        ImGui::TextDisabled("%s", TR("Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held."));
+        for (int i = 0; i < PSM_STORAGES; ++i)
+            dirty |= PsmPadRow(api, api->storageName(i), s_psm.pads[i], kPsmPadTarget + i, i, c);
+        if (dirty) PsmApply(api);
+
+        Section(TR("Sizes"));
+        ImGui::TextColored(kGoldDim, "%s", TR("Size changes take effect the next time the game starts."));
+        {
+            bool alone = s_psm.leaveCapacityAlone != 0;
+            if (ImGui::Checkbox(TR("Leave every size alone"), &alone)) { s_psm.leaveCapacityAlone = alone; PsmApply(api); }
+            Help("For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.");
+        }
+        ImGui::BeginDisabled(s_psm.leaveCapacityAlone != 0);
+        for (int i = 0; i < PSM_STORAGES; ++i)
+        {
+            PsmSize sz{};
+            sz.size = sizeof sz;
+            api->getSize(i, &sz);
+            ImGui::PushID(300 + i);
+            ImGui::TextUnformatted(api->storageName(i));
+            if (i == 0) Help("The total, purchased expansions and story slots included. The left end keeps the game's size.");
+            s_rowLabel.Next();
+            // The left end of the slider is the game's own size, stored as 0.
+            int floor = sz.known ? sz.gameDefault : 1;
+            if (i == 0 && sz.known) floor += status.learnedExpansions;
+            if (floor < 1) floor = 1;
+            if (floor > PSM_MAX_SLOTS) floor = PSM_MAX_SLOTS;
+            int value = s_psm.slots[i] > floor ? s_psm.slots[i] : floor;
+            char fmt[64];
+            if (value <= floor) snprintf(fmt, sizeof fmt, "%s", TR("game size (%d)"));
+            else snprintf(fmt, sizeof fmt, "%s", "%d");
+            ImGui::SetNextItemWidth(260 * g_scale);
+            if (ImGui::SliderInt("##slots", &value, floor, PSM_MAX_SLOTS, fmt, ImGuiSliderFlags_AlwaysClamp))
+                s_psm.slots[i] = value <= floor ? 0 : value;
+            if (ImGui::IsItemDeactivatedAfterEdit()) PsmApply(api);
+            ImGui::SameLine();
+            if (sz.liveCapacity >= 0) ImGui::TextDisabled(TR("now %d of %d used"), sz.liveUsed, sz.liveCapacity);
+            else ImGui::TextDisabled("%s", TR("load a save to see it"));
+            ImGui::PopID();
+        }
+        {
+            ImGui::TextUnformatted(TR("Private Storage expansions")); s_rowLabel.Next();
+            int mode = s_psm.privateStorageExpansions < 0 ? 0 : 1;
+            if (ImGui::RadioButton(TR("read from the save"), mode == 0) && mode != 0) { s_psm.privateStorageExpansions = -1; PsmApply(api); }
+            ImGui::SameLine();
+            if (ImGui::RadioButton(TR("set"), mode == 1) && mode != 1) { s_psm.privateStorageExpansions = status.learnedExpansions; PsmApply(api); }
+            if (mode == 1)
+            {
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(120 * g_scale);
+                int n = s_psm.privateStorageExpansions;
+                if (ImGui::InputInt("##exp", &n, 10, 100)) s_psm.privateStorageExpansions = n < 0 ? 0 : (n > PSM_MAX_SLOTS ? PSM_MAX_SLOTS : n);
+                if (ImGui::IsItemDeactivatedAfterEdit()) PsmApply(api);
+            }
+            else { ImGui::SameLine(); ImGui::TextDisabled(TR("%d last time"), status.learnedExpansions); }
+            Help("How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.");
+        }
+        ImGui::EndDisabled();
+        if (ImGui::Button(TR("Write the size dump to the log"))) api->writeDump();
+        Help("Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.");
+
+        Section(TR("Settings file"));
+        if (ImGui::Button(TR("Reload from the ini"))) { api->reloadSettings(); PsmFetch(api); s_psmWhy[0] = 0; }
+        ImGui::SameLine();
+        if (ConfirmButton("psm-defaults", TR("Reset to defaults"), TR("Click again to reset"), true))
+        {
+            PsmSettings d{};
+            d.size = sizeof d;
+            if (api->getDefaults(&d)) { s_psm = d; PsmApply(api); }
+        }
+    }
+
     // The only thing drawn while the menu is closed: a notice that fades out.
     static void DrawNotice()
     {
@@ -1457,6 +1765,16 @@ namespace ml::gui
                     const bool sel = ImGui::BeginTabItem(label);
                     ImGui::PopFont();
                     if (sel) { ImGui::Dummy(ImVec2(0, 4 * g_scale)); t.fn(c); ImGui::EndTabItem(); }
+                }
+                // Right of Status, and only when Private Storage Master is installed.
+                if (psm::Installed())
+                {
+                    char label[96];
+                    snprintf(label, sizeof label, "%s###Storage", TR("Storage"));
+                    ImGui::PushFont(g_fontHead);
+                    const bool sel = ImGui::BeginTabItem(label);
+                    ImGui::PopFont();
+                    if (sel) { ImGui::Dummy(ImVec2(0, 4 * g_scale)); TabStorage(c); ImGui::EndTabItem(); }
                 }
                 ImGui::EndTabBar();
             }
