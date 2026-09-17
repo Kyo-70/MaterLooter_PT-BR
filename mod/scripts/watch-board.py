@@ -37,18 +37,21 @@ STATE = os.path.join(REPO, "private", "watch-state.json")
 MOD = "https://www.nexusmods.com/crimsondesert/mods/3402"
 GLINT = "https://www.nexusmods.com/crimsondesert/mods/3472"
 FLIGHT = "https://www.nexusmods.com/crimsondesert/mods/3488"
+PSM = "https://www.nexusmods.com/crimsondesert/mods/3521"
 # (state suffix, line prefix, page). Master Looter keeps the bare "posts" and
 # "bugs" state keys it has always had, so a state file written before Glint
 # Spotter was added still reads and nothing is replayed. Anything from the
 # second board is prefixed, because it belongs to a different piece of work and
 # is meant to be handed straight over rather than acted on here.
-BOARDS = [("", "", MOD), ("_glint", "glint ", GLINT), ("_flight", "flight ", FLIGHT)]
+BOARDS = [("", "", MOD), ("_glint", "glint ", GLINT), ("_flight", "flight ", FLIGHT),
+          ("_psm", "psm ", PSM)]
 # (state suffix, line prefix, repo), matching BOARDS so one pass tags every
 # line with the mod it belongs to and nothing has to be worked out from the
 # text. Master Looter keeps the bare key and the bare prefix.
 REPOS = [("", "", "shin2344234/master-looter"),
          ("_glint", "glint ", "shin2344234/glint-spotter"),
-         ("_flight", "flight ", "shin2344234/flight-freedom")]
+         ("_flight", "flight ", "shin2344234/flight-freedom"),
+         ("_psm", "psm ", "shin2344234/private-storage-master")]
 GH = REPOS[0][2]
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128 Safari/537.36"
 INTERVAL = 600
@@ -56,6 +59,13 @@ KEYFILE = os.path.join(HERE, "keys.local.env")
 DISCORD_GUILD = "1547304303646089296"
 DISCORD_FORUM = "1547305334945615922"      # help-n-bug-reports
 DISCORD_FORUM_NAME = "help-n-bug-reports"
+# Plain text channels watched message by message, for a mod whose talk happens
+# in its own channel instead of the forum. (channel id, name, line prefix).
+# Each keeps its last message id under "discord_ch_<id>" and seeds itself
+# quietly the first pass it is seen, so adding one replays nothing.
+DISCORD_CHANNELS = [
+    ("1550158204841889852", "private-storage-master", "psm "),
+]
 SETH = "355497711568551947"
 DISCORD_SELF = {SETH, "1547307453107150979"}   # Seth, the bot
 # The same idea on the boards. Seth answers most rows himself, and his own reply
@@ -281,6 +291,29 @@ def discord(st, seeded, token):
     return lines
 
 
+def discord_channels(st, token):
+    """New messages in the plain channels listed in DISCORD_CHANNELS."""
+    lines = []
+    for cid, name, tag in DISCORD_CHANNELS:
+        key = "discord_ch_" + cid
+        last = st.get(key)
+        if last is None:
+            msgs = dapi("/channels/%s/messages?limit=1" % cid, token)
+            st[key] = msgs[0]["id"] if msgs else "0"
+            lines.append("%swatch: discord #%s seeded; only new messages are reported from here" % (tag, name))
+            continue
+        msgs = dapi("/channels/%s/messages?limit=100&after=%s" % (cid, last), token)
+        for m in sorted(msgs, key=lambda m: int(m["id"])):
+            a = m.get("author") or {}
+            if a.get("id") in DISCORD_SELF:
+                continue
+            body = clean(m.get("content", "")) or ("(%d attachment(s))" % len(m.get("attachments", [])))
+            lines.append("%sdiscord: #%s by %s: %s" % (tag, name, a.get("username", "?"), body[:500]))
+        if msgs:
+            st[key] = max([last] + [m["id"] for m in msgs], key=int)
+    return lines
+
+
 def updates_channel():
     """Where a pass's findings are posted, alongside printing them. Read from
     the environment or keys.local.env rather than written down here: the channel
@@ -323,10 +356,15 @@ SOURCES = [
     ("flight nexus bug: ",  "Flight Freedom, bugs tab",  FLIGHT + "?tab=bugs"),
     ("flight github: ",     "Flight Freedom, GitHub",   "https://github.com/shin2344234/flight-freedom/issues"),
     ("flight watch: ",      "Flight Freedom, the watcher itself", None),
+    ("psm nexus post: ",    "Private Storage Master, posts tab", PSM + "?tab=posts"),
+    ("psm nexus bug: ",     "Private Storage Master, bugs tab",  PSM + "?tab=bugs"),
+    ("psm github: ",        "Private Storage Master, GitHub",    "https://github.com/shin2344234/private-storage-master/issues"),
+    ("psm discord: ",       "Discord, #private-storage-master",  None),
+    ("psm watch: ",         "Private Storage Master, the watcher itself", None),
     ("nexus post: ",        "Master Looter, posts tab", MOD + "?tab=posts"),
     ("nexus bug: ",         "Master Looter, bugs tab",  MOD + "?tab=bugs"),
     ("github: ",            "Master Looter, GitHub",    "https://github.com/" + GH + "/issues"),
-    ("discord: ",           "Discord, " + DISCORD_FORUM_NAME + " (any of the three mods)", None),
+    ("discord: ",           "Discord, " + DISCORD_FORUM_NAME + " (any of the four mods)", None),
     ("watch: ",             "The watcher itself",       None),
 ]
 
@@ -521,6 +559,7 @@ def once(st):
     if token:
         try:
             lines.extend(discord(st, "discord" in st, token))
+            lines.extend(discord_channels(st, token))
         except Exception as e:
             fails["discord"] = fails.get("discord", 0) + 1
             if fails["discord"] == 3:
