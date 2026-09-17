@@ -81,6 +81,7 @@ namespace ml::NodeDb
             n.pickup = n.kind == "pickup" || (c >= 8 && cols[8] == "1");
             n.breaks = c < 5 || cols[5] != "0";
             n.driven = c >= 7 && cols[7] == "1";
+            n.statePick = c >= 9 && cols[9] == "1";
             if (c >= 6 && !cols[6].empty())
             {
                 std::string one;

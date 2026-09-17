@@ -469,7 +469,16 @@ namespace ml::loot
     // nodeReach: a pick-up the mod only knows about because the node table
     // vouched for the prefab. It is sent as a pick-up but it is reached like a
     // node, so it answers to the gather range and not the longer loot one.
-    struct Verdict { bool loot = false; bool own = false; bool nodeReach = false; Action act = Action::Take; const char* why = ""; char detail[40] = ""; };
+    struct Verdict { bool loot = false; bool own = false; bool nodeReach = false; bool pick = false; Action act = Action::Take; const char* why = ""; char detail[40] = ""; };
+
+    // The event the game itself sends at a plant that is picked by hand, read
+    // out of LuxDragon's log of 17 September 2026: three Palmar Leaves picked
+    // by hand, each one this event on the plant's own gimmick component. It is
+    // also the event the well bucket takes water on, which is the same shape of
+    // thing. The plants it is sent to are the ones the node table marks, never
+    // a name written here.
+    static constexpr uint32_t kPickEvent = 0x003ECC59;
+    static bool StatePick(const NodeType* t) { return t && t->statePick; }
 
     // Memories. Keys: instance id when the node has one (survives respawns),
     // otherwise the entity id.
@@ -2937,6 +2946,13 @@ namespace ml::loot
             v.act = Action::Take;
             v.nodeReach = true;
         }
+        // A plant the game only gives up through its own state event. It never
+        // fills, so every other branch above has already declined it.
+        else if (StatePick(c.nodeType))
+        {
+            v.act = Action::Gather;
+            v.pick = true;
+        }
         else return skip("not ready (node empty)");
 
         // Item rules from the database. A live key that our table knows gets the
@@ -4794,6 +4810,8 @@ namespace ml::loot
                     // fills on its own once the player is close, so nothing is lost by
                     // leaving the whole thing alone.
                     if (IsMechanism(k.node)) continue;
+                    // Arming one of these has never filled and never will.
+                    if (StatePick(k.nodeType)) continue;
                     // Arming used to consult no looting switch whatsoever. It
                     // reached for a node whose kind the player had turned off,
                     // and the verdict that would have refused it never ran,
@@ -4993,6 +5011,33 @@ namespace ml::loot
                     // chunks it drops carry neither. NotAVein is the net under
                     // that, for a node the table does not know and for anything
                     // a later game patch changes.
+                    if (v.pick)
+                    {
+                        const uintptr_t gc = game::CompByClass(game::Comps(k.ent), kCls_Gimmick);
+                        const char* pn = gc ? mem::RttiShort(gc) : nullptr;
+                        if (!gc || !pn || !strstr(pn, "GimmickActorComponent"))
+                        {
+                            held("its gimmick component no longer reads as one");
+                            continue;
+                        }
+                        if (!events::DriveEvent(gc, kPickEvent, g_meEid, g_me, k.eid))
+                        {
+                            static int s_pickErr = 0;
+                            if (s_pickErr < 8) { ++s_pickErr; LOG_ERR("[pick] eid %08X could not be queued", k.eid); }
+                            continue;
+                        }
+                        // One pick per plant, the way a hand pick works: the
+                        // game rolls for the yield and a miss uses the plant up
+                        // just the same. LuxDragon, 17 September 2026: "if
+                        // there were 10 interactions, but only 3 gave leaves...
+                        // your mod found those 3".
+                        g_searched.insert(key);
+                        g_retiredEid.insert(k.eid);
+                        ++taken;
+                        if (cfg.debugLog)
+                            LOG("[pick] drove the game's own pick at eid %08X %.1f m: %s", k.eid, k.d, k.node);
+                        continue;
+                    }
                     const bool breakIt = cfg.breakOre && v.act == Action::Gather && k.nodeType &&
                                          k.nodeType->tagged && KindFromName(k.nodeType->kind) == GatherKind::Ore &&
                                          k.nodeType->breaks && !NotAVein(k.node);

@@ -39,6 +39,13 @@ namespace ml
         // bismuth look intermittent. A table without the column leaves this
         // true, so the old behaviour and the learning fallback still apply.
         bool breaks = true;
+        // Picked by driving the game's own state event at the gimmick, the
+        // way water is drawn from a well bucket, because the collect
+        // interaction arming uses never reaches it. Palmar Leaves and kudzu
+        // vines are the two the game builds this way. A table without the
+        // column leaves this false, which is how every build before this one
+        // behaved: it armed them forever and picked nothing.
+        bool statePick = false;
         // Everything the gimmick row says this node can hand over, as item
         // string keys. The itemKey above is one item the generator could name
         // from the prefab, and 835 of the 966 rows have none; this is read out

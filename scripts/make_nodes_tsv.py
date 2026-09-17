@@ -557,7 +557,24 @@ def main():
         # self-break impulse or a break projectile; the chunks a vein drops
         # carry neither. Read from the row own strings, like the tags.
         breaks = any(s in ("SelfForceBreakImpulse", "BreakProjectileKey") for s in ss)
+        # A plant the game hands over by changing its own state, and never
+        # through the collect interaction arming uses. Its handler drops on
+        # entering GimmickOn rather than on an attack or a collect, so arming
+        # it does nothing at all: LuxDragon armed Palmar Leaves 270 times in
+        # one session on 17 September 2026 and not one filled, while three he
+        # picked by hand each showed the state event on the plant. Driving that
+        # event picks them, confirmed in his game the same evening.
+        #
+        # Six records in the whole file drop on entering GimmickOn, and the two
+        # tagged collect_botany are these plants; the other four are a digging
+        # spot, two totems and a memo. The tag is what keeps this to plants.
         base = prefab_key(path)
+        # The row's handler XML arrives as one string per line, so it is joined
+        # back together before the state is read out of it.
+        handler = chr(10).join(ss)
+        statepick = ("collect_botany" in (tags_by_base.get(base) or tags)
+                     and any('Type="Drop"' in g for g in
+                             re.findall(r"<GimmickOn[^>]*>(.*?)</GimmickOn>", handler, re.S)))
         driven = driven_by_base[base]
         kind, vouched = kind_for(tags_by_base.get(base, tags), name, base, path)
         if not kind:
@@ -615,18 +632,20 @@ def main():
                     # 450 rows the game files under the loose-item folder, 229
                     # have a kind of their own: 141 wood, 81 container, 6 plant
                     # and 1 stone. No ore and no tree among them.
-                    "1" if loose_by_base[base] else "0"))
+                    "1" if loose_by_base[base] else "0",
+                    "1" if statepick else "0"))
     out.sort()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="\n") as f:
         # src says whether the game's own gimmick tag gave the kind or the
         # generator guessed it from the prefab name. The engine spends the
         # long ore reach only on the ones the game vouches for.
-        f.write("prefab\tkind\titem_key\tname\tsrc\tbreaks\tyields\tdriven\tpickup\n")
+        f.write("prefab\tkind\titem_key\tname\tsrc\tbreaks\tyields\tdriven\tpickup\tstatepick\n")
         for r in out:
             f.write("\t".join(r) + "\n")
     kinds = {}
-    for _, k, _, _, _, _, _, _, _ in out:
+    for row in out:
+        k = row[1]
         kinds[k] = kinds.get(k, 0) + 1
     print("gimmick rows %(rows)d, with a prefab path %(with_path)d, "
           "classified by tag %(tagged)d, by name %(by_name)d, item resolved %(with_item)d, "
