@@ -1644,11 +1644,30 @@ namespace ml::loot
     // gather range says.
     static constexpr float kTreeReachM = 10.0f;
     static constexpr float kTreeSpeedMps = 12.0f;
+    static constexpr DWORD kSettleMs = 5000;
     static const char* TreeUnsafe(GatherKind kind, float dist)
     {
         if (kind != GatherKind::Wood) return nullptr;
         if (dist > kTreeReachM) return "tree further than 10 m (a falling tree can outlive the area it is in)";
         if (g_moveSpeed > kTreeSpeedMps) return "moving too fast to start felling a tree";
+        if (g_changeAt && GetTickCount() - g_changeAt < kSettleMs) return "the world just changed; trees wait a few seconds";
+        return nullptr;
+    }
+
+    // The same limits for an ore break, which drives the game's state machine
+    // through a raw component pointer. c4123456's third crash, 17 September
+    // 2026, on the tree-guard build: the player covered 987.5 m in one scan
+    // flying away from a camp, and three seconds later the mod drove a break at
+    // an iron vein 45.7 m away. The drive faulted inside the game at once, and
+    // the component it was aimed at no longer had RTTI, so the area had been
+    // unloaded between the scan that saw the vein and the break. A vein is broken
+    // only close by, at a walking or riding pace, and not in the first seconds
+    // after the world changes.
+    static const char* BreakUnsafe(float dist, DWORD now)
+    {
+        if (dist > kTreeReachM) return "vein further than 10 m; breaks are driven close by";
+        if (g_moveSpeed > kTreeSpeedMps) return "moving too fast to break a vein";
+        if (g_changeAt && now - g_changeAt < kSettleMs) return "the world just changed; breaks wait a few seconds";
         return nullptr;
     }
 
@@ -4981,13 +5000,23 @@ namespace ml::loot
                     if (breakIt && !NodeYield(k) && WatchingSpillFor(k.node, now) &&
                         held("waiting to see what the last one of these paid")) continue;
                     if (breakIt)
+                        if (const char* unsafe = BreakUnsafe(k.d, now)) { held(unsafe); continue; }
+                    if (breakIt)
                     {
                         // Drive the game's own state machine at the node: the swing
                         // landing, then the break. The transition is what spawns the
                         // ore, so the vein empties itself and then disappears, which
                         // the drop event on its own never made it do.
                         const uintptr_t gc = game::CompByClass(game::Comps(k.ent), kCls_Gimmick);
-                        if (!gc || !events::DriveBreak(gc, g_meEid, g_me, k.eid, k.pos.x, k.pos.y, k.pos.z))
+                        // A component the game has freed has lost its vtable
+                        // name. Ask before driving it, not after the fault.
+                        const char* gcName = gc ? mem::RttiShort(gc) : nullptr;
+                        if (!gcName || !strstr(gcName, "GimmickActorComponent"))
+                        {
+                            held("its gimmick component no longer reads as one; the area is unloading");
+                            continue;
+                        }
+                        if (!events::DriveBreak(gc, g_meEid, g_me, k.eid, k.pos.x, k.pos.y, k.pos.z))
                         {
                             // Its own budget: the shared hold log is spent on
                             // "still filling" long before a break failure would show.
