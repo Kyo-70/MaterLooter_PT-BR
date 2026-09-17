@@ -8,6 +8,9 @@ namespace ml::Log
     // MasterLooter.log next to the plugin. A copy of recent lines is always kept
     // for the Status tab.
     void Write(const char* level, const char* fmt, ...);
+    // The same, but gives up rather than wait when another thread holds the
+    // log. For the crash path, where the holder may be the thread that died.
+    bool TryWrite(const char* level, const char* fmt, ...);
     void Claim();
     bool Claimed();
     void Shutdown();

@@ -68,6 +68,90 @@ namespace ml::Mod
         *isSelf = (h == g_self);
     }
 
+    // A dump of the process the moment a thread runs out of stack.
+    //
+    // A stack overflow leaves nothing behind otherwise: no event in the
+    // Application log and no WER dump, because a thread with no stack left
+    // never reaches the crash reporter, and attaching a debugger to catch one
+    // can change the timing enough that it stops happening. So the dump is
+    // written from inside, by a thread started at load that waits for this one
+    // job. The overflowing thread only records where it is and waits;
+    // everything that needs stack happens on the dump thread.
+    //
+    // The dump thread writes the file before it logs anything, and then logs
+    // only if the log is free. The thread that ran out of stack may be the one
+    // holding the log, and waiting on it would hold the game up for the whole
+    // two-minute wait instead of letting it die.
+    //
+    // This is what named the startup crash of 16 and 17 September 2026: the
+    // Steam overlay's factory wrapper calling itself 149,018 times under DLSS
+    // frame generation, with no other mod on the stack.
+    static HANDLE g_dumpAsk = nullptr;
+    static HANDLE g_dumpDone = nullptr;
+    static EXCEPTION_POINTERS* g_dumpXp = nullptr;
+    static DWORD g_dumpThread = 0;
+
+    // dbghelp.h declares this under pack(4), so the pointer sits at offset 4.
+    // Laid out the default way it lands at 8 and every dump fails with 998.
+#pragma pack(push, 4)
+    struct DumpExceptionInfo { DWORD ThreadId; EXCEPTION_POINTERS* ExceptionPointers; BOOL ClientPointers; };
+#pragma pack(pop)
+    typedef BOOL (WINAPI* MiniDumpWriteDumpFn)(HANDLE, DWORD, HANDLE, int, DumpExceptionInfo*, void*, void*);
+
+    static DWORD WINAPI DumpWaiter(LPVOID)
+    {
+        // Loaded here, now, rather than when the overflow comes: a thread out
+        // of stack is no place to load a library.
+        const HMODULE dbghelp = LoadLibraryW(L"dbghelp.dll");
+        const auto write = dbghelp ? reinterpret_cast<MiniDumpWriteDumpFn>(GetProcAddress(dbghelp, "MiniDumpWriteDump")) : nullptr;
+        if (!write) { LOG_ERR("[crash] dbghelp.dll not loaded; no dump on a stack overflow this session"); return 0; }
+        LOG("[crash] a stack overflow writes MasterLooter-overflow-*.dmp beside the log.");
+        if (WaitForSingleObject(g_dumpAsk, INFINITE) != WAIT_OBJECT_0) return 0;
+
+        SYSTEMTIME st{}; GetLocalTime(&st);
+        wchar_t name[64];
+        swprintf(name, 64, L"MasterLooter-overflow-%02d%02d%02d.dmp", st.wHour, st.wMinute, st.wSecond);
+        const std::wstring path = Paths::File(name);
+        const HANDLE f = CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+        BOOL ok = FALSE;
+        DWORD err = 0;
+        int used = 0;
+        DWORD errs[3] = {};
+        int tried = 0;
+        if (f != INVALID_HANDLE_VALUE)
+        {
+            DumpExceptionInfo mei{ g_dumpThread, g_dumpXp, FALSE };
+            // Richest first. Some of these walk memory the overflow has left
+            // unreadable and give up with error 998, so each failure falls back
+            // to less, down to a plain minidump, which still holds every
+            // thread's stack and the module list: all the walk needs.
+            const int types[] = {
+                0x00000001 /* WithDataSegs */ | 0x00000040 /* WithIndirectlyReferencedMemory */ |
+                    0x00000020 /* WithUnloadedModules */ | 0x00000100 /* WithProcessThreadData */ |
+                    0x00001000 /* WithThreadInfo */ | 0x00000004 /* WithHandleData */,
+                0x00000020 /* WithUnloadedModules */ | 0x00001000 /* WithThreadInfo */,
+                0x00000000 /* Normal */,
+            };
+            for (int type : types)
+            {
+                SetFilePointer(f, 0, nullptr, FILE_BEGIN);
+                SetEndOfFile(f);
+                ok = write(GetCurrentProcess(), GetCurrentProcessId(), f, type, &mei, nullptr, nullptr);
+                if (ok) { used = type; break; }
+                err = GetLastError();
+                errs[tried++] = err;
+            }
+            CloseHandle(f);
+            for (int i = 0; i < tried; ++i)
+                Log::TryWrite("error", "[crash] dump type 0x%X failed, error 0x%08lX", types[i], static_cast<unsigned long>(errs[i]));
+        }
+        else err = GetLastError();
+        if (ok) Log::TryWrite("error", "[crash] stack overflow on thread %lu: dump type 0x%X written to %ls", static_cast<unsigned long>(g_dumpThread), used, path.c_str());
+        else Log::TryWrite("error", "[crash] stack overflow on thread %lu: no dump, error 0x%08lX", static_cast<unsigned long>(g_dumpThread), static_cast<unsigned long>(err));
+        SetEvent(g_dumpDone);
+        return 0;
+    }
+
     // A vectored handler, because the top-level filter did not fire.
     //
     // SetUnhandledExceptionFilter has one global slot. The game installs its
@@ -90,6 +174,21 @@ namespace ml::Mod
         // Only the codes that kill a process. A game raises C++ exceptions and
         // other first-chance noise constantly and none of it is interesting.
         const DWORD c = er->ExceptionCode;
+
+        // First, before anything that uses stack, and before the check that
+        // skips this module's own faults: an overflow is worth a dump wherever
+        // it lands.
+        if (c == EXCEPTION_STACK_OVERFLOW && g_dumpAsk)
+        {
+            static volatile LONG s_dumped = 0;
+            if (InterlockedIncrement(&s_dumped) == 1)
+            {
+                g_dumpXp = xp;
+                g_dumpThread = GetCurrentThreadId();
+                SetEvent(g_dumpAsk);
+                WaitForSingleObject(g_dumpDone, 120000);
+            }
+        }
         if (c != EXCEPTION_ACCESS_VIOLATION &&
             c != EXCEPTION_ILLEGAL_INSTRUCTION &&
             c != EXCEPTION_PRIV_INSTRUCTION &&
@@ -256,6 +355,14 @@ namespace ml::Mod
         g_prevFilter = SetUnhandledExceptionFilter(&LastChance);
         AddVectoredExceptionHandler(1 /* first */, &FirstChance);
         LOG("[crash] handlers armed: vectored plus top-level filter.");
+        if (HostIsGame())
+        {
+            g_dumpAsk = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+            g_dumpDone = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+            const HANDLE t = (g_dumpAsk && g_dumpDone) ? CreateThread(nullptr, 0, &DumpWaiter, nullptr, 0, nullptr) : nullptr;
+            if (t) CloseHandle(t);
+            else { g_dumpAsk = nullptr; LOG_ERR("[crash] the dump thread did not start; no dump on a stack overflow"); }
+        }
 
         // Say when this is Wine. Two Linux reports arrived without the word
         // in them, and under Proton the only log that records a driver abort

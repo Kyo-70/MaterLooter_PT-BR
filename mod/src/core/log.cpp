@@ -26,17 +26,9 @@ namespace ml::Log
         return b;
     }
 
-    void Write(const char* level, const char* fmt, ...)
+    // Caller holds g_mu.
+    static void Append(const std::string& line)
     {
-        char msg[2048];
-        va_list ap;
-        va_start(ap, fmt);
-        vsnprintf(msg, sizeof msg, fmt, ap);
-        va_end(ap);
-
-        std::string line = "[" + Stamp() + "] [" + level + "] " + msg;
-
-        std::lock_guard<std::mutex> lk(g_mu);
         g_recent.push_back(line);
         if (g_recent.size() > kKeep) g_recent.pop_front();
         if (g_file)
@@ -50,6 +42,34 @@ namespace ml::Log
             g_pending.push_back(line);
             if (g_pending.size() > kKeep) g_pending.pop_front();
         }
+    }
+
+    void Write(const char* level, const char* fmt, ...)
+    {
+        char msg[2048];
+        va_list ap;
+        va_start(ap, fmt);
+        vsnprintf(msg, sizeof msg, fmt, ap);
+        va_end(ap);
+
+        const std::string line = "[" + Stamp() + "] [" + level + "] " + msg;
+        std::lock_guard<std::mutex> lk(g_mu);
+        Append(line);
+    }
+
+    bool TryWrite(const char* level, const char* fmt, ...)
+    {
+        char msg[2048];
+        va_list ap;
+        va_start(ap, fmt);
+        vsnprintf(msg, sizeof msg, fmt, ap);
+        va_end(ap);
+
+        const std::string line = "[" + Stamp() + "] [" + level + "] " + msg;
+        std::unique_lock<std::mutex> lk(g_mu, std::try_to_lock);
+        if (!lk.owns_lock()) return false;
+        Append(line);
+        return true;
     }
 
     // Keep the last dozen sessions instead of one. A log is the only evidence
