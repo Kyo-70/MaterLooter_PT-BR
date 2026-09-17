@@ -716,6 +716,11 @@ namespace ml::loot
     static volatile DWORD g_changeAt = 0;
     static char           g_changeWhy[64] = "";
     static volatile float g_changeJumpM = 0.0f;
+
+    // How fast the scan centre moved between the last two scans, metres a
+    // second. A teleport reads as a huge number for one scan, which only means
+    // one scan's worth of trees wait.
+    static volatile float g_moveSpeed = 0.0f;
     // When the player actor itself last took a walking step (see Walked).
     // As Kliff the actor is the body and walks with the player. As Damiane
     // or Oongka it sits wherever the game put it, which is not one fixed
@@ -1628,6 +1633,25 @@ namespace ml::loot
     // the verdict will refuse is work done for nothing at best, and on a
     // damaging thorn it half-transitions the vine and leaves the volume that
     // hurts the player standing in thin air. Issue #41.
+    // A felled tree keeps falling for several seconds after the gather is sent,
+    // and a player flying past has left that part of the map by the time it
+    // lands. c4123456, bugs tab, 16 and 17 September 2026: two crashes in the
+    // game's own code, each about seven seconds after the mod started on a big
+    // oak 12.6 m and 15.8 m away with the gather range at 50, and the same route
+    // flown with Wood off did not crash. The same session felled 135 trees
+    // without trouble, so it is a race and not every tree. A tree is only
+    // started close by and at a pace no faster than a gallop, whatever the
+    // gather range says.
+    static constexpr float kTreeReachM = 10.0f;
+    static constexpr float kTreeSpeedMps = 12.0f;
+    static const char* TreeUnsafe(GatherKind kind, float dist)
+    {
+        if (kind != GatherKind::Wood) return nullptr;
+        if (dist > kTreeReachM) return "tree further than 10 m (a falling tree can outlive the area it is in)";
+        if (g_moveSpeed > kTreeSpeedMps) return "moving too fast to start felling a tree";
+        return nullptr;
+    }
+
     static const char* GatherSwitchOff(GatherKind kind, const Config& cfg)
     {
         switch (kind)
@@ -2963,6 +2987,7 @@ namespace ml::loot
         {
             const GatherKind kind = NodeKind(c);
             if (const char* off = GatherSwitchOff(kind, cfg)) return skip(off);
+            if (const char* tree = TreeUnsafe(kind, c.d)) return skip(tree);
             const Item* yield = c.db ? c.db : NodeYield(c);
             // The item-rule block above is gated on c.tid, and a vein the table
             // vouches for is routed to Gather before it has answered, when tid
@@ -4404,6 +4429,13 @@ namespace ml::loot
                 }
             }
         }
+        static DWORD s_lastScanAt = 0;
+        if (s_havePrev && now > s_lastScanAt)
+        {
+            const float mx = mp.x - s_lastPos.x, my = mp.y - s_lastPos.y, mz = mp.z - s_lastPos.z;
+            g_moveSpeed = std::sqrt(mx * mx + my * my + mz * mz) * 1000.0f / static_cast<float>(now - s_lastScanAt);
+        }
+        s_lastScanAt = now;
         s_lastPos = mp; s_lastMe = g_me; s_havePrev = true;
 
         // What the scan actually saw, and where from. A world full of objects
@@ -4751,6 +4783,7 @@ namespace ml::loot
                     // 28 times in one session.
                     const GatherKind armKind = NodeKind(k);
                     if (GatherSwitchOff(armKind, cfg)) continue;
+                    if (TreeUnsafe(armKind, k.d)) continue;
                     // And both of the questions the verdict asks, for the same
                     // reason arming consults the switches at all: nothing here
                     // has filled yet, so the verdict's own item-rule block is
