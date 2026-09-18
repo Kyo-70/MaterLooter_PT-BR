@@ -482,7 +482,15 @@ namespace ml::loot
 
     // Memories. Keys: instance id when the node has one (survives respawns),
     // otherwise the entity id.
-    static uint64_t Key(const Cand& c) { return c.iid ? (0x100000000ull | c.iid) : c.eid; }
+    // Instance ids seen on more than one world object at once. A stack dropped
+    // from the bag comes down as several objects that all carry the stack's
+    // id: on 18 September 2026 a pile of Palmar Pills dropped by hand came back
+    // one per retry delay, because one send put the id on the retry timer and
+    // held the rest of that stack, and their tries added up until the mod gave
+    // one up as not responding while it lay there. Those objects are keyed by
+    // entity.
+    static std::unordered_set<uint32_t> g_sharedIid;
+    static uint64_t Key(const Cand& c) { return c.iid && !g_sharedIid.count(c.iid) ? (0x100000000ull | c.iid) : c.eid; }
     struct Done { DWORD when; int tries; };
     static std::unordered_map<uint64_t, Done>  g_done;      // recently sent
     static std::unordered_set<uint64_t>        g_searched;  // never again this session
@@ -4631,14 +4639,34 @@ namespace ml::loot
             Fill(k);
             ++detailed;
             if (k.tid && k.db) { if (g_tidByEid.size() > 8192) g_tidByEid.clear(); g_tidByEid[k.eid] = k.tid; }
-            // Now that Fill has read the instance id, Key() means what it says.
-            // Anything already retired is noted by entity as well, so the next
-            // scan takes the shortcut above instead of filling it again. Before
-            // this the shortcut compared a raw entity id against a set keyed by
-            // instance id, so it never matched for an object that had one and
-            // every such object was filled again on every scan of the session.
-            if (g_searched.count(Key(k))) { k.banned = true; g_retiredEid.insert(k.eid); }
         }
+        // Any instance id on two objects in this scan is shared from now on, and
+        // it has to be known before the check below, or one sibling's retirement
+        // retires them all.
+        {
+            std::unordered_map<uint32_t, uint32_t> firstEid;
+            for (const Cand& k : list)
+            {
+                if (!k.filled || !k.iid) continue;
+                const auto r = firstEid.emplace(k.iid, k.eid);
+                if (r.second || r.first->second == k.eid || !g_sharedIid.insert(k.iid).second) continue;
+                static int s_said = 0;
+                if (s_said < 20)
+                {
+                    ++s_said;
+                    LOG("[scan] %s: instance id %08X is on more than one object (%08X and %08X), so each is tracked by its own entity id",
+                        Label(k), k.iid, r.first->second, k.eid);
+                }
+            }
+        }
+        // Now that Fill has read the instance id, Key() means what it says.
+        // Anything already retired is noted by entity as well, so the next
+        // scan takes the shortcut above instead of filling it again. Before
+        // this the shortcut compared a raw entity id against a set keyed by
+        // instance id, so it never matched for an object that had one and
+        // every such object was filled again on every scan of the session.
+        for (Cand& k : list)
+            if (k.filled && !k.banned && g_searched.count(Key(k))) { k.banned = true; g_retiredEid.insert(k.eid); }
         // Note what is hanging off the player while it still is, so that it is
         // still recognisable in the seconds after it stops being. Filled above,
         // so the item row is read and can be held against the id later.
