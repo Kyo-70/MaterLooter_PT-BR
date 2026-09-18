@@ -1126,20 +1126,31 @@ namespace ml::loot
     static std::unordered_map<uint16_t, Learned> g_learn;   // node type -> what one prefab of that type paid
     static std::unordered_map<uint32_t, std::string> g_nodePrefab;  // eid -> prefab, beside g_nodeType
     // mine: sent by this mod. The rest came off the player's own hands, and
-    // only what this mod picked up is ever offered to storage.
-    struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; std::string node; bool mine = false; };
+    // only what this mod picked up is ever offered to storage. yieldRow: what a
+    // gather of this mod's is known to pay, -1 when nothing names it.
+    struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; std::string node; bool mine = false; int yieldRow = -1; };
     static std::vector<PendSend> g_pend;
+    // The last time anything was done by hand. Kept apart from g_pend because a
+    // hand gather of a node whose yield is already learned never goes into
+    // g_pend at all, and auto-store has to know about it all the same.
+    static DWORD g_lastHandAt = 0;
     // This mod's own sends of a named item, for auto-store alone, kept until a
     // rise of that item uses each one up. The game can hold a run of pick-ups
     // and hand them over together: on 18 September 2026 a camp clear reached
     // nothing for eight seconds and then landed all at once, and everything
     // sent before the last four seconds had already left g_pend, so Fang,
-    // bones, bread and a feather came in unclaimed and stayed in the bag. A
-    // twelve-second list fixed that run; Seth asked for no time limit at all.
-    // One entry per world object, so a pick-up the mod sends again after
-    // six seconds is not counted twice, and the oldest go first past 512.
-    struct OwnSend { uint16_t row; uint32_t eid; };
+    // bones, bread and a feather came in unclaimed and stayed in the bag.
+    //
+    // No clock runs while the object is still in the world, because the game
+    // can hold a batch for seconds. Once it is gone the entry has half a minute
+    // to be matched and is then dropped: a pick-up that never landed (a full bag,
+    // someone else took it) used to leave an entry that claimed the next
+    // purchase, craft or hand pick-up of the same item, and /vet proved it.
+    // One entry per world object, so a pick-up sent again is not counted
+    // twice, and the oldest go first past 512.
+    struct OwnSend { uint16_t row; uint32_t eid; DWORD sentAt; DWORD lastSeen; };
     static std::vector<OwnSend> g_ownSends;
+    static constexpr DWORD kOwnGoneMs = 30000;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
 
@@ -1312,6 +1323,7 @@ namespace ml::loot
         // too, so nodes get identified without the mod ever gathering them.
         static events::Seen seen[32];
         const int sn = events::DrainSeen(seen, 32);
+        if (sn > 0) g_lastHandAt = now ? now : 1;
         for (int i = 0; i < sn; ++i)
         {
             // A carcass or body searched by hand is empty now, so it joins the
@@ -1453,12 +1465,17 @@ namespace ml::loot
             State::Get().Notify(msg, 5000, true);
         }
         // Auto-store, for every rise. What this mod sent by name and has not
-        // yet seen arrive explains up to that many units; a rise no send names,
-        // a node's yield or what a body held, is this mod's too when its own
-        // nameless sends are the only ones waiting, since nothing done by hand
-        // in the last four seconds could have brought it. Anything else rising,
-        // a craft, a quest reward or an item taken out of storage on purpose,
-        // is left where it is.
+        // yet seen arrive explains up to that many units. A rise no send names
+        // is this mod's too when one of its own nameless sends could have paid
+        // it: a gather whose yield is known pays that item and nothing else,
+        // while a body search or a gather nothing names could pay anything.
+        // That holds only while nothing has been done by hand in the last four
+        // seconds and only for sends made since the last world change. Anything
+        // else rising, a craft, a purchase, a quest reward or an item taken out
+        // of storage on purpose, is left where it is.
+        g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
+                                        [now](const OwnSend& o) { return now - o.lastSeen > kOwnGoneMs; }), g_ownSends.end());
+        const bool handRecent = g_lastHandAt && now - g_lastHandAt < 4000;
         for (uint16_t type : rose)
         {
             const auto g = gained.find(type);
@@ -1471,11 +1488,13 @@ namespace ml::loot
             }
             if (ours < rise)
             {
-                bool mineOpen = false, handOpen = false;
+                bool couldPay = false, handOpen = handRecent;
                 for (const PendSend& p : g_pend)
                 {
-                    if (!p.mine) handOpen = true;
-                    else if (p.itemRow < 0) mineOpen = true;
+                    if (!p.mine) { handOpen = true; continue; }
+                    if (p.itemRow >= 0) continue;
+                    if (g_changeAt && static_cast<LONG>(p.at - g_changeAt) < 0) continue;
+                    if (p.yieldRow < 0 || p.yieldRow == type) couldPay = true;
                 }
                 // Never a document or a quest item this way. Those are handed
                 // out, not picked up: on 18 September 2026 two supply contracts
@@ -1483,7 +1502,7 @@ namespace ml::loot
                 // were offered, and they live in an inventory of their own.
                 const Item* it = ItemDb::ByRow(type);
                 const bool handedOut = it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos);
-                if (mineOpen && !handOpen && !handedOut) ours = rise;
+                if (couldPay && !handOpen && !handedOut) ours = rise;
             }
             if (ours > 0 && psm::Deposit(type, ours) && g_debugLog)
             {
@@ -4518,6 +4537,7 @@ namespace ml::loot
         std::sort(list.begin(), list.end(), [](const Cand& a, const Cand& b) { return a.d < b.d; });
         g_present.clear();
         for (const Cand& c : list) g_present.insert(c.eid);
+        for (OwnSend& o : g_ownSends) if (g_present.count(o.eid)) o.lastSeen = now;
 
         // Scene transitions: the list is swapped before positions settle, and a
         // dozen objects can all read as "0.6 m away" for a moment. Hold fire.
@@ -4578,6 +4598,12 @@ namespace ml::loot
                 g_spillWatch.clear();
                 // The bag that comes back after this is not the bag we sampled.
                 InvalidateBagBaseline();
+                // Auto-store's own sends. A pick-up made just before mounting can
+                // land just after, so those stay; anything older is from the
+                // world that just went, and after a save load the whole bag can
+                // read as risen, which an old entry would otherwise claim.
+                g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
+                                                [now](const OwnSend& o) { return now - o.sentAt > 5000; }), g_ownSends.end());
                 // A well run is the fourth holder of a raw component pointer and
                 // the queues were only three of them. Winding a well is eleven
                 // seconds of timed transitions spread over many scans, and
@@ -5191,6 +5217,12 @@ namespace ml::loot
                         g_searched.insert(key);
                         g_retiredEid.insert(k.eid);
                         ++taken;
+                        // The pick is this mod's gather like any other, so what
+                        // it pays is credited to it and auto-store can see it.
+                        {
+                            const Item* y = NodeYield(k);
+                            g_pend.push_back({ now, Action::Gather, k.gtid, -1, false, std::string(), true, y ? y->row : -1 });
+                        }
                         if (cfg.debugLog)
                             LOG("[pick] drove the game's own pick at eid %08X %.1f m: %s", k.eid, k.d, k.node);
                         continue;
@@ -5255,12 +5287,20 @@ namespace ml::loot
                     }
                     else if (!events::Send(v.act, k.eid, g_meEid, route, 0)) { held("the game refused the event"); continue; }
                     ++taken;
-                    g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false, std::string(), true });
-                    if (k.db && k.db->row >= 0 &&
-                        std::none_of(g_ownSends.begin(), g_ownSends.end(), [&](const OwnSend& o) { return o.eid == k.eid; }))
                     {
-                        if (g_ownSends.size() >= 512) g_ownSends.erase(g_ownSends.begin());
-                        g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid });
+                        const Item* y = v.act == Action::Gather ? NodeYield(k) : nullptr;
+                        g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false,
+                                           std::string(), true, y ? y->row : -1 });
+                    }
+                    if (k.db && k.db->row >= 0)
+                    {
+                        auto o = std::find_if(g_ownSends.begin(), g_ownSends.end(), [&](const OwnSend& e) { return e.eid == k.eid; });
+                        if (o != g_ownSends.end()) { o->sentAt = now; o->lastSeen = now; }
+                        else
+                        {
+                            if (g_ownSends.size() >= 512) g_ownSends.erase(g_ownSends.begin());
+                            g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid, now, now });
+                        }
                     }
                     InterlockedIncrement(&g_session[static_cast<int>(v.act)]);
                     // Wide enough for a name and a distance. At 80 a long prefab
