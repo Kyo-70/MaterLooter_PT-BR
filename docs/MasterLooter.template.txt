@@ -33,7 +33,7 @@ A backup is written when the game starts with settings changed since the last on
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
 a Master Looter shortcut	
-A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, silver never moves, and what no storage takes stays in the bag.	
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, nothing on the never-move list moves, and what no storage takes stays in the bag.	
 A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	
 Abyss and Kuku	
@@ -51,7 +51,7 @@ Arm mechanism containers too
 Arm nodes ourselves	
 Arming ignores walls. Keep it short or you will gather through the wall of the next room. Ore is the exception and is always reached for at up to 25 m, because a vein takes seconds to answer and asking only once you are on top of it means it opens too late to be any use.	
 Arming range	
-At most one line a second, naming each storage and how many went into it. Off, it goes to the log only.	
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	
 Auto-loot enabled	
 Auto-loot on / off	
 Backups	
@@ -300,7 +300,6 @@ Route id
 Rule	
 Save now	
 Saved as \"%s\": a preset name keeps letters, digits, spaces, dashes and underscores.	
-Say on screen what was stored	
 Say so on screen when the bag stops taking things	
 scan %.1f ms	
 Scan radius	
@@ -315,6 +314,7 @@ set this launch
 Settings file	
 Settings: %ls	
 Show a brief notice when auto-loot is toggled	
+Show a notice when loot is stored	
 Showing current overrides. Type to search all %d items.	
 Showing the nearest %d of %d. The rest are further away.	
 Size changes take effect the next time the game starts.	

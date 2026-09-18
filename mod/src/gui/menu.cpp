@@ -1735,7 +1735,9 @@ namespace ml::gui
             if (ImGui::Checkbox(TR("Put what Master Looter picks up into storage"), &on)) { s_psmAuto.enabled = on; PsmApplyAuto(api); }
             Help("A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. "
                  "Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, "
-                 "silver never moves, and what no storage takes stays in the bag.");
+                 "nothing on the never-move list moves, and what no storage takes stays in the bag.");
+            if (ImGui::Checkbox(TR("Show a notice when loot is stored"), &c.notifyAutoStore)) Settings::MarkDirty();
+            Help("At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.");
             ImGui::BeginDisabled(!on);
             ImGui::TextDisabled("%s", TR("Each item goes to the first storage in this list that takes it."));
             for (const int i : kPsmAutoOrder)
@@ -1751,8 +1753,6 @@ namespace ml::gui
             ImGui::EndDisabled();
             PsmNeverMoveList(api);
             ImGui::EndDisabled();
-            if (ImGui::Checkbox(TR("Say on screen what was stored"), &c.notifyAutoStore)) Settings::MarkDirty();
-            Help("At most one line a second, naming each storage and how many went into it. Off, it goes to the log only.");
         }
 
         Section(TR("Keys"));
