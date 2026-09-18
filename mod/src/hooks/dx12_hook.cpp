@@ -818,6 +818,35 @@ namespace ml::hooks
 
         ImGui_ImplDX12_NewFrame();
         ImGui_ImplWin32_NewFrame();
+        // The Win32 backend takes the display size from the window's client
+        // rect. ImGui renders into the offscreen target, which is the size of
+        // the swapchain. Where the game runs at one resolution inside a window
+        // of another those two differ, and since the DX12 backend builds its
+        // viewport from the display size, everything past the target's own
+        // width and height is dropped by the rasterizer with nothing to say so.
+        // 4istoryBR's log of 17 September 2026 is a 1600x900 chain in a
+        // 2560x1440 window: the menu opened with its cursor at 1280,720 and the
+        // cursor disappeared every time it crossed 1600 across or 900 down.
+        // Building the frame in the target's own size fixes it, and the rest of
+        // the menu already assumes that space, since InitStyle takes the UI
+        // scale from the swapchain height.
+        if (g_scWidth && g_scHeight)
+        {
+            ImGuiIO& io = ImGui::GetIO();
+            const float tw = static_cast<float>(g_scWidth), th = static_cast<float>(g_scHeight);
+            if (io.DisplaySize.x != tw || io.DisplaySize.y != th)
+            {
+                static UINT s_saidW = 0, s_saidH = 0;
+                if (s_saidW != g_scWidth || s_saidH != g_scHeight)
+                {
+                    s_saidW = g_scWidth; s_saidH = g_scHeight;
+                    LOG("[overlay] the window is %.0fx%.0f and the target this mod draws into is %ux%u, so the menu is built at the target's size and stretched with the rest of the frame.",
+                        io.DisplaySize.x, io.DisplaySize.y, g_scWidth, g_scHeight);
+                }
+                io.DisplaySize = ImVec2(tw, th);
+            }
+            input::SetOverlaySize(tw, th);
+        }
         gui::FeedInput();   // after the backend's own cursor poll, before the frame is built
         ImGui::NewFrame();
 

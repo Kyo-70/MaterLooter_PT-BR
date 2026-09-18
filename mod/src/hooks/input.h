@@ -23,4 +23,9 @@ namespace ml::input
     // Render thread, once per frame while the menu is open: hands ImGui the
     // virtual cursor position and any raw-input button state.
     void FeedMouse(ImGuiIO& io);
+    // The size of the target the menu is drawn into, which is the swapchain's
+    // and not always the window's. The virtual cursor is kept in window
+    // coordinates, because that is what the raw deltas and the OS cursor are
+    // in, and scaled into this on the way to ImGui.
+    void SetOverlaySize(float w, float h);
 }

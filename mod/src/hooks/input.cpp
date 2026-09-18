@@ -42,6 +42,11 @@ namespace ml::input
     static void Lock()   { EnterCriticalSection(&g_cs); }
     static void Unlock() { LeaveCriticalSection(&g_cs); }
 
+    // Zero until the render path has a swapchain, which means no scaling.
+    static float g_ovW = 0.0f, g_ovH = 0.0f;
+
+    void SetOverlaySize(float w, float h) { g_ovW = w; g_ovH = h; }
+
     static void ClientSize(int* w, int* h)
     {
         RECT rc = {};
@@ -94,8 +99,12 @@ namespace ml::input
 
     void FeedMouse(ImGuiIO& io)
     {
+        int cw = 0, chh = 0;
+        ClientSize(&cw, &chh);
+        const float sx = (g_ovW > 0.0f && cw > 0) ? g_ovW / static_cast<float>(cw) : 1.0f;
+        const float sy = (g_ovH > 0.0f && chh > 0) ? g_ovH / static_cast<float>(chh) : 1.0f;
         Lock();
-        io.AddMousePosEvent(g_vx, g_vy);
+        io.AddMousePosEvent(g_vx * sx, g_vy * sy);
         for (int b = 0; b < 5; ++b)
         {
             for (int i = 0; i < g_pendingButtons[b][0]; ++i) io.AddMouseButtonEvent(b, true);
@@ -117,10 +126,9 @@ namespace ml::input
             ++g_dbgLines;
             POINT os = {};
             if (oGetCursorPos) oGetCursorPos(&os);
-            int w, h; ClientSize(&w, &h);
-            LOG("[input] cursor: %ld raw moves, %ld legacy moves, %ld button messages | virtual %.0f,%.0f | ImGui %.0f,%.0f of %.0fx%.0f | client %dx%d | OS cursor %ld,%ld",
+            LOG("[input] cursor: %ld raw moves, %ld legacy moves, %ld button messages | virtual %.0f,%.0f fed as %.0f,%.0f | ImGui %.0f,%.0f of %.0fx%.0f | client %dx%d | OS cursor %ld,%ld",
                 InterlockedExchange(&g_dbgInput, 0), InterlockedExchange(&g_dbgMove, 0), InterlockedExchange(&g_dbgButton, 0),
-                vx, vy, io.MousePos.x, io.MousePos.y, io.DisplaySize.x, io.DisplaySize.y, w, h, os.x, os.y);
+                vx, vy, vx * sx, vy * sy, io.MousePos.x, io.MousePos.y, io.DisplaySize.x, io.DisplaySize.y, cw, chh, os.x, os.y);
         }
     }
 
