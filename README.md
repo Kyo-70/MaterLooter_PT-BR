@@ -63,11 +63,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.26:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.27:
 
-    97775ed3b743588a6b293ccd7270b84cf267669c5d38c348168328db8874c42a  MasterLooter-1.6.26-DMM.zip
-    0c2b1d081a36d8df2b839f1c19ef6f0f179461f3e714ff6b4e85270ab8cc6db5  MasterLooter-1.6.26.zip
-    5a69dfc29a712f4d05defec5a65bd333459f827c77f0e03b63755f65f6bae6dd  MasterLooter.asi
+    3f8a1cd3ea245a5e4b9ac4f4ad8ed93d0582ebd0acda3a306bf85fe4a18d7c77  MasterLooter-1.6.27-DMM.zip
+    dd1db78de006f14a07a823fb705c7f288cbcfca5b7c7813634e277f58ab54cbc  MasterLooter-1.6.27.zip
+    18d979b307c8eced5b2aad6b1c0d0db5754c3a8117deee2bfd5c11e2ace68c09  MasterLooter.asi
 
 ## Controls
 
@@ -77,6 +77,8 @@ If Defender or your browser quarantines the download, restore it and exclude the
 - While the menu is interactive the game does not see the keyboard, mouse or controller. Key releases still pass so nothing sticks.
 
 All four keys are rebindable in the menu under General, and they also sit in `MasterLooter.ini` beside the plugin as `MenuKey`, `KeyToggle`, `KeyBurst` and `KeyWatch`, written as virtual-key codes. Edit the file and save it and the change is picked up about a second later without a restart, which is the quickest way to clear a clash with another ASI mod. Each of the four also takes a controller shortcut of two buttons at once rather than one, since every single button already does something in this game.
+
+Hold Ctrl or Alt and none of these keys fire. That keeps Private Storage Master's Ctrl+F10 from toggling auto-loot as well. Shift is left alone because the game sprints on it, and controller shortcuts work as they always did.
 
 The menu keeps a pointer of its own rather than borrowing the game's, so clicks land where you point in fullscreen and in borderless windowed mode alike. On builds before 1.6.16 the two could come apart, and dragging the pointer into the top left corner was the way to put them back. Thanks to LuxDragon for finding that workaround and to Sov for the log that explained it.
 
