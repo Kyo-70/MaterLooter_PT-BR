@@ -35,6 +35,8 @@ namespace ml::psm
         // The never-move list, optional and both or neither.
         int         (*getNeverMove)(uint16_t*, int, int);
         int         (*applyNeverMove)(const uint16_t*, int, char*, int);
+        // Whether the player is in free play now, optional.
+        int         (*freePlay)(void);
     };
 
     // Null until the plugin is found with a matching interface. Cheap to call
@@ -55,4 +57,9 @@ namespace ml::psm
     bool Deposit(uint16_t item, long long gained);
     // Finished deposits, oldest first; 0 when there is nothing or no plugin.
     int  DepositResults(PsmDepositResult* out, int max);
+    // 1 in free play, 0 in a shop, a menu, a storage or anything else, and -1
+    // when Private Storage Master does not say.
+    int  FreePlay();
+    // Auto-store switched on and able to move things on this game version.
+    bool AutoStoreOn();
 }

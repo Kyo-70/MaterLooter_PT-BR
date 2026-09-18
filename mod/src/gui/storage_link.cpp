@@ -57,6 +57,7 @@ namespace ml::psm
             a.applyNeverMove = reinterpret_cast<int (*)(const uint16_t*, int, char*, int)>(GetProcAddress(h, "PsmApplyNeverMove"));   // optional
             if (!a.getNeverMove || !a.applyNeverMove || !a.getAutoStore)   // both or neither, and only beside auto-store
                 a.getNeverMove = nullptr, a.applyNeverMove = nullptr;
+            a.freePlay       = reinterpret_cast<int (*)(void)>(GetProcAddress(h, "PsmFreePlay"));   // optional
             if (!a.apiVersion)
             {
                 snprintf(g_why, sizeof g_why, "found, but it has no interface (an older build)");
@@ -111,6 +112,21 @@ namespace ml::psm
     {
         const Api* a = Get();
         return a && a->depositResults ? a->depositResults(out, max) : 0;
+    }
+
+    int FreePlay()
+    {
+        const Api* a = Get();
+        return a && a->freePlay ? (a->freePlay() != 0 ? 1 : 0) : -1;
+    }
+
+    bool AutoStoreOn()
+    {
+        const Api* a = Get();
+        if (!a || !a->getAutoStore) return false;
+        PsmAutoStore s{};
+        s.size = sizeof s;
+        return a->getAutoStore(&s, 0) && s.enabled && s.available;
     }
 
     const char* Why() { return g_why; }

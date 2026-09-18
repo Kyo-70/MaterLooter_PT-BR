@@ -1154,9 +1154,20 @@ namespace ml::loot
     // A rise of one item, seen by LearnFromInventory and judged by
     // AutoStorePass. fallback: one of this mod's nameless sends could have paid
     // it and nothing was done by hand, judged while those sends were pending.
-    struct HeldRise { uint16_t row; long long units; DWORD at; bool fallback; };
+    // inPlay: the player was in free play when the rise was first seen. A rise
+    // seen in a shop, a crafting screen, a menu or a storage is a purchase, a
+    // craft or something taken out on purpose, and is never offered. credited:
+    // units already judged to be this mod's, waiting for Private Storage
+    // Master to take them, which it refuses outside free play; they are
+    // offered again until it does, for twenty seconds.
+    struct HeldRise { uint16_t row; long long units; DWORD at; bool fallback; bool inPlay; long long credited = 0; };
     static std::vector<HeldRise> g_heldRises;
     static constexpr DWORD kRiseHoldMs = 4000;
+    static constexpr DWORD kRiseRetryMs = 20000;
+    // The last time Private Storage Master said the player was out of free play.
+    // A rise seen within a second of that is treated as seen outside it, since
+    // the bag is read a scan behind the screen.
+    static DWORD g_notFreeAt = 0;
     // What the player touched by hand, by entity, for four seconds.
     struct HandTouch { uint32_t eid; DWORD at; };
     static std::vector<HandTouch> g_handTouches;
@@ -1486,12 +1497,15 @@ namespace ml::loot
         // Private Storage Master refuses a deposit outside free play, which is
         // what keeps a shop from landing inside that window.
         {
+            const int fp = psm::FreePlay();
+            if (fp == 0) g_notFreeAt = now ? now : 1;
+            const bool inPlay = fp != 0 && !(g_notFreeAt && now - g_notFreeAt < 1000);
             bool handOpen = g_lastHandAt && now - g_lastHandAt < 4000;
             for (const PendSend& p : g_pend) if (!p.mine) handOpen = true;
             for (uint16_t type : rose)
             {
                 const auto g = gained.find(type);
-                HeldRise h{ type, g != gained.end() && g->second > 0 ? g->second : 1, now, false };
+                HeldRise h{ type, g != gained.end() && g->second > 0 ? g->second : 1, now, false, inPlay };
                 // Never a document or a quest item this way. Those are handed
                 // out, not picked up: on 18 September 2026 two supply contracts
                 // came in during a camp clear with the mod's gathers pending and
@@ -3960,17 +3974,15 @@ namespace ml::loot
         if (now - snapAt >= 400) snapAt = snapshot(snap);
     }
 
-    static void OfferToStore(uint16_t row, long long units, const char* how)
+    static const char* RowName(uint16_t row)
     {
-        if (units <= 0 || !psm::Deposit(row, units) || !g_debugLog) return;
         const Item* it = ItemDb::ByRow(row);
-        LOG("[store] offered %lld %s to Private Storage Master (%s)", units,
-            it && !it->name.empty() ? it->name.c_str() : "unnamed item", how);
+        return it && !it->name.empty() ? it->name.c_str() : "unnamed item";
     }
 
     // Judges the rises LearnFromInventory held, after this scan has read the
     // world and checked it for a change.
-    static void AutoStorePass(DWORD now)
+    static void AutoStorePass(DWORD now, const Vec3& centre, float scanRange)
     {
         g_handTouches.erase(std::remove_if(g_handTouches.begin(), g_handTouches.end(),
                                            [now](const HandTouch& t) { return now - t.at > 4000; }), g_handTouches.end());
@@ -3986,12 +3998,28 @@ namespace ml::loot
             if (r != g_tidByEid.end()) handRows.insert(r->second);
         }
         // Every object in scan range is seen by every scan, so one not seen for
-        // a second and a half has gone from the world, landed or otherwise.
-        for (OwnSend& o : g_ownSends)
+        // a second and a half has gone from the world, landed or otherwise. One
+        // last seen near the edge of the range may only have been left behind,
+        // which says nothing about whether it landed, so its entry is dropped
+        // rather than trusted. The mod picks up within a few metres, and a
+        // delivered object vanishes close to the player.
+        const float edge = scanRange > 8.0f ? scanRange - 5.0f : scanRange * 0.5f;
+        for (auto o = g_ownSends.begin(); o != g_ownSends.end();)
         {
-            const auto sn = g_seen.find(o.eid);
-            if (sn != g_seen.end() && now - sn->second.when < 1500) o.goneAt = 0;
-            else if (!o.goneAt) o.goneAt = now ? now : 1;
+            const auto sn = g_seen.find(o->eid);
+            if (sn != g_seen.end() && now - sn->second.when < 1500) { o->goneAt = 0; ++o; continue; }
+            if (!o->goneAt)
+            {
+                bool nearby = false;
+                if (sn != g_seen.end())
+                {
+                    const float dx = sn->second.pos.x - centre.x, dy = sn->second.pos.y - centre.y, dz = sn->second.pos.z - centre.z;
+                    nearby = dx * dx + dy * dy + dz * dz < edge * edge;
+                }
+                if (!nearby) { o = g_ownSends.erase(o); continue; }
+                o->goneAt = now ? now : 1;
+            }
+            ++o;
         }
         g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
                                         [now](const OwnSend& o) { return o.goneAt && now - o.goneAt > kOwnGoneMs; }), g_ownSends.end());
@@ -4005,26 +4033,56 @@ namespace ml::loot
             // includes the scan that noticed the change, whose bag was read
             // before the change was.
             const LONG sinceChange = g_changeAt ? static_cast<LONG>(h.at - g_changeAt) : 0x7FFFFFFF;
-            if ((sinceChange > -static_cast<LONG>(kRiseHoldMs) && sinceChange <= 3000) || handRows.count(h.row))
+            if ((sinceChange > -static_cast<LONG>(kRiseHoldMs) && sinceChange <= 3000) || handRows.count(h.row) || !h.inPlay)
             {
                 g_heldRises.erase(g_heldRises.begin() + static_cast<long>(i));
                 continue;
             }
-            long long ours = 0;
             bool lying = false;   // a target of this kind is still in the world
-            for (auto o = g_ownSends.begin(); o != g_ownSends.end() && ours < h.units;)
+            for (auto o = g_ownSends.begin(); o != g_ownSends.end() && h.units > 0;)
             {
                 if (o->row != h.row) { ++o; continue; }
                 if (!o->goneAt) { lying = true; ++o; continue; }
-                ++ours;
+                ++h.credited;
+                --h.units;
                 o = g_ownSends.erase(o);
             }
-            OfferToStore(h.row, ours, "its target is gone");
-            h.units -= ours;
             // Still more than the gone targets explain, while one of this kind
             // lies there: it may be on its way, so wait for it a while.
-            if (h.units > 0 && lying && now - h.at < kRiseHoldMs) { ++i; continue; }
-            if (h.units > 0 && h.fallback) OfferToStore(h.row, h.units, "a nameless send of the mod's could have paid it");
+            const bool waiting = h.units > 0 && lying && now - h.at < kRiseHoldMs;
+            if (!waiting && h.units > 0)
+            {
+                if (h.fallback) h.credited += h.units;
+                h.units = 0;
+            }
+            if (h.credited > 0)
+            {
+                if (psm::Deposit(h.row, h.credited))
+                {
+                    if (g_debugLog) LOG("[store] offered %lld %s to Private Storage Master", h.credited, RowName(h.row));
+                    h.credited = 0;
+                }
+                else if (psm::FreePlay() == 0 && now - h.at < kRiseRetryMs)
+                {
+                    // Out of free play for now, a menu or a storage opened just
+                    // after the pick-up landed. Offered again next scan.
+                }
+                else
+                {
+                    // Auto-store switched off is the ordinary reason and says
+                    // nothing. Anything else is worth a line: a full queue, or
+                    // out of free play for longer than the retry allows.
+                    static int s_refusedSaid = 0;
+                    if (psm::AutoStoreOn() && (g_debugLog || s_refusedSaid < 10))
+                    {
+                        ++s_refusedSaid;
+                        LOG("[store] Private Storage Master did not take %lld %s; it stays in the bag",
+                            h.credited, RowName(h.row));
+                    }
+                    h.credited = 0;
+                }
+            }
+            if (waiting || h.credited > 0) { ++i; continue; }
             g_heldRises.erase(g_heldRises.begin() + static_cast<long>(i));
         }
     }
@@ -4842,7 +4900,7 @@ namespace ml::loot
         }
         const bool settling = now < s_holdUntil;
         (void)total;
-        AutoStorePass(now);
+        AutoStorePass(now, mp, cfg.scanRange);
 
         // Details for everything close enough to matter.
         float maxRange = std::max(std::max(cfg.lootRange, cfg.gatherRange), std::max(cfg.catchRange, cfg.corpseRange));
