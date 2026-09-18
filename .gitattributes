@@ -1,0 +1,4 @@
+# The menu translations and the compiled-in tables are LF on every machine.
+# check_translations.py flags a CR, and core.autocrlf would add one on checkout.
+mod/data/*.txt text eol=lf
+mod/data/*.tsv text eol=lf
