@@ -33,6 +33,7 @@ A backup is written when the game starts with settings changed since the last on
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
 a Master Looter shortcut	
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, silver never moves, and what no storage takes stays in the bag.	
 A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	
 Abyss and Kuku	
@@ -48,6 +49,7 @@ Arm mechanism containers too
 Arm nodes ourselves	
 Arming ignores walls. Keep it short or you will gather through the wall of the next room. Ore is the exception and is always reached for at up to 25 m, because a vein takes seconds to answer and asking only once you are on top of it means it opens too late to be any use.	
 Arming range	
+At most one line a second, naming each storage and how many went into it. Off, it goes to the log only.	
 Auto-loot enabled	
 Auto-loot on / off	
 Backups	
@@ -96,6 +98,7 @@ Detailed log
 DirectX 12 hooks	
 does not respond	
 Draw water from wells	
+Each item goes to the first storage in this list that takes it.	
 Engine	
 English	
 English. %d line(s) seen this session.	
@@ -202,6 +205,7 @@ none seen
 not found yet	
 not found, bound keys also reach the game	
 not in item database	
+Not on this game version: Private Storage Master could not find the move it needs.	
 not ready (node empty)	
 not resolved yet	
 not started	
@@ -221,8 +225,10 @@ off, the mod is disabled
 on the player	
 on XInput slot %d	
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	
+Only move what was picked up	
 Open and close this menu	
 Open folder	
 Open now	
@@ -253,12 +259,14 @@ press a key, with Ctrl, Shift or Alt if you want (Escape cancels)
 Private Storage expansions	
 Private Storage Master %s for game build %s	
 Private Storage Master did not hand over its defaults	
+Private Storage Master did not hand over its store loot settings.	
 Private Storage Master on	
 Private Storage Master refused the change	
 Private Storage Master: %s	
 PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	
 Protected by default: a memory chip starts a memory scene when taken, and a puzzle part breaks its puzzle. Turn on only if you want them auto-taken.	
 protected item name	
+Put what Master Looter picks up into storage	
 Puts every setting and rule back to what it was at that moment.	
 puzzle or protected mechanism	
 Quest equipment	
@@ -283,6 +291,7 @@ Route id
 Rule	
 Save now	
 Saved as \"%s\": a preset name keeps letters, digits, spaces, dashes and underscores.	
+Say on screen what was stored	
 Say so on screen when the bag stops taking things	
 scan %.1f ms	
 Scan radius	
@@ -319,6 +328,8 @@ Stop pets looting at all
 Storage	
 Storage keys	
 Storage sizes	
+Store loot	
+Storing loot needs a newer Private Storage Master.	
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	
 Tag	
 Tags	

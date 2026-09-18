@@ -24,6 +24,7 @@
 #include "../core/rules.h"
 #include "../core/settings.h"
 #include "../core/state.h"
+#include "../gui/storage_link.h"
 
 namespace ml::loot
 {
@@ -1124,7 +1125,9 @@ namespace ml::loot
     struct Learned { uint16_t row = 0; std::string node; };
     static std::unordered_map<uint16_t, Learned> g_learn;   // node type -> what one prefab of that type paid
     static std::unordered_map<uint32_t, std::string> g_nodePrefab;  // eid -> prefab, beside g_nodeType
-    struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; std::string node; };
+    // mine: sent by this mod. The rest came off the player's own hands, and
+    // only what this mod picked up is ever offered to storage.
+    struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; std::string node; bool mine = false; };
     static std::vector<PendSend> g_pend;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
@@ -1215,9 +1218,85 @@ namespace ml::loot
                        strcmp(why, "below value floor") == 0 || strcmp(why, "unsellable") == 0);
     }
 
+    // Auto-store. Private Storage Master moves what this mod picked up into the
+    // storage it belongs in; this side only says what arrived and reports what
+    // went where. Its results are read once a second and shown as one line, so a
+    // camp clear reads "Stored 40 items: ..." once and not forty times.
+    static const char* DepositReason(int r)
+    {
+        switch (r)
+        {
+        case PSM_DEPOSIT_STORED:              return "stored";
+        case PSM_DEPOSIT_NO_STORAGE_TAKES_IT: return "no storage takes it";
+        case PSM_DEPOSIT_STORAGE_FULL:        return "every storage that takes it is full";
+        case PSM_DEPOSIT_NEVER_MOVED:         return "on the never-move list";
+        case PSM_DEPOSIT_LOCKED:              return "the stack is locked";
+        case PSM_DEPOSIT_NOT_IN_BAG:          return "it never showed up in the bag";
+        case PSM_DEPOSIT_OFF:                 return "auto-store is off";
+        case PSM_DEPOSIT_BUSY:                return "too many at once";
+        default:                              return "an unknown reason";
+        }
+    }
+
+    static void DrainDeposits(DWORD now)
+    {
+        static DWORD s_last = 0;
+        if (now - s_last < 1000) return;
+        s_last = now;
+        PsmDepositResult res[64];
+        const int n = psm::DepositResults(res, 64);
+        if (n <= 0) return;
+        const psm::Api* api = psm::Get();
+        long long perStorage[PSM_STORAGES] = {};
+        long long total = 0;
+        int kept = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            const PsmDepositResult& r = res[i];
+            const Item* it = ItemDb::ByRow(r.item);
+            if (r.reason == PSM_DEPOSIT_STORED && r.storage >= 0 && r.storage < PSM_STORAGES && r.moved > 0)
+            {
+                perStorage[r.storage] += r.moved;
+                total += r.moved;
+                if (g_debugLog)
+                    LOG("[store] %lld %s went to %s", static_cast<long long>(r.moved), it && !it->name.empty() ? it->name.c_str() : "unnamed item",
+                        api ? api->storageName(r.storage) : "storage");
+                continue;
+            }
+            ++kept;
+            // Stays in the bag. Worth a line when the verbose log is on, and a
+            // full storage always, since that is the one a player can fix.
+            static int s_fullSaid = 0;
+            if (g_debugLog || (r.reason == PSM_DEPOSIT_STORAGE_FULL && s_fullSaid < 20))
+            {
+                if (r.reason == PSM_DEPOSIT_STORAGE_FULL) ++s_fullSaid;
+                LOG("[store] %s stayed in the bag: %s", it && !it->name.empty() ? it->name.c_str() : "an unnamed item", DepositReason(r.reason));
+            }
+        }
+        if (!total) return;
+        char msg[256];
+        int len = snprintf(msg, sizeof msg, "Stored %lld item%s:", total, total == 1 ? "" : "s");
+        bool first = true;
+        for (int s = 0; s < PSM_STORAGES && len > 0 && len < static_cast<int>(sizeof msg) - 1; ++s)
+        {
+            if (!perStorage[s]) continue;
+            len += snprintf(msg + len, sizeof msg - len, "%s %s %lld", first ? "" : ",",
+                            api ? api->storageName(s) : "storage", perStorage[s]);
+            first = false;
+        }
+        LOG("[store] %s%s", msg, kept ? " (some stayed in the bag)" : "");
+        if (Settings::Get().notifyAutoStore)
+        {
+            char shown[272];
+            snprintf(shown, sizeof shown, "Master Looter: %s", msg);
+            State::Get().Notify(shown, 3500);
+        }
+    }
+
     // Diff the bag against the last scan and attribute every rise to a pending send.
     static void LearnFromInventory(DWORD now)
     {
+        DrainDeposits(now);
         // What the player gathered or caught by hand counts as a pending send
         // too, so nodes get identified without the mod ever gathering them.
         static events::Seen seen[32];
@@ -1373,14 +1452,37 @@ namespace ml::loot
             // what made a full bag out of a productive minute.
             long long units = 1;
             { const auto g = gained.find(type); if (g != gained.end() && g->second > 1) units = g->second; }
+            const long long rise = units;
             bool credited = false, landed = false;
+            long long ours = 0;   // units one of this mod's own sends explains
             for (; units > 0; --units)
             {
                 auto known = std::find_if(g_pend.begin(), g_pend.end(), [type](const PendSend& p) { return p.itemRow == type; });
                 if (known == g_pend.end()) break;
                 if (known->act == Action::Take) landed = true;
+                if (known->mine) ++ours;
                 g_pend.erase(known);
                 credited = true;
+            }
+            // Auto-store. A rise no send names, a node's yield or what a body
+            // held, is this mod's too when its own nameless sends are the only
+            // ones waiting: nothing done by hand in the last four seconds could
+            // have brought it. Anything else rising, a craft, a quest reward or
+            // an item taken out of storage on purpose, is left where it is.
+            if (ours < rise)
+            {
+                bool mineOpen = false, handOpen = false;
+                for (const PendSend& p : g_pend)
+                {
+                    if (!p.mine) handOpen = true;
+                    else if (p.itemRow < 0) mineOpen = true;
+                }
+                if (mineOpen && !handOpen) ours = rise;
+            }
+            if (ours > 0 && psm::Deposit(type, ours) && g_debugLog)
+            {
+                const Item* it = ItemDb::ByRow(type);
+                LOG("[store] offered %lld %s to Private Storage Master", ours, it && !it->name.empty() ? it->name.c_str() : "unnamed item");
             }
             if (landed)
             {
@@ -5126,7 +5228,7 @@ namespace ml::loot
                     }
                     else if (!events::Send(v.act, k.eid, g_meEid, route, 0)) { held("the game refused the event"); continue; }
                     ++taken;
-                    g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false });
+                    g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false, std::string(), true });
                     InterlockedIncrement(&g_session[static_cast<int>(v.act)]);
                     // Wide enough for a name and a distance. At 80 a long prefab
                     // path consumed the buffer and the distance was truncated away,

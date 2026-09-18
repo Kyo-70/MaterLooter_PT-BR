@@ -1347,6 +1347,12 @@ namespace ml::gui
     // when the plugin exports both halves and the last read succeeded.
     static PsmKeyBlock s_psmBlock{};
     static bool        s_psmBlockOk = false;
+    // Auto-store, from a Private Storage Master that exports it. Valid only
+    // when the last read succeeded.
+    static PsmAutoStore s_psmAuto{};
+    static bool         s_psmAutoOk = false;
+    // The order it offers an item to the storages, so the list reads as it works.
+    static const int kPsmAutoOrder[] = { 4, 8, 1, 3, 6, 5, 2, 0 };
     constexpr int      kPsmPadTarget = 220;   // pad rows, 220..228
 
     static const char* const kPsmHelp[PSM_STORAGES] = {
@@ -1369,6 +1375,25 @@ namespace ml::gui
         if (api->getSettings(&s_psm)) s_psmFetched = true;
         s_psmBlock.size = sizeof s_psmBlock;
         s_psmBlockOk = api->getKeyBlock && api->getKeyBlock(&s_psmBlock, 0);
+        s_psmAuto.size = sizeof s_psmAuto;
+        s_psmAutoOk = api->getAutoStore && api->getAutoStore(&s_psmAuto, 0);
+    }
+
+    static bool PsmApplyAuto(const psm::Api* api, const char* what = "auto-store")
+    {
+        s_psmAuto.size = sizeof s_psmAuto;
+        char why[256] = {};
+        const bool ok = api->applyAutoStore(&s_psmAuto, why, sizeof why) != 0;
+        if (Settings::Get().debugLog)
+            LOG("[storage] %s %s: on %d, storages %d %d %d %d %d %d %d %d %d, only what was picked up %d%s%s", what,
+                ok ? "saved" : "refused", s_psmAuto.enabled, s_psmAuto.storages[0], s_psmAuto.storages[1], s_psmAuto.storages[2],
+                s_psmAuto.storages[3], s_psmAuto.storages[4], s_psmAuto.storages[5], s_psmAuto.storages[6], s_psmAuto.storages[7],
+                s_psmAuto.storages[8], s_psmAuto.onlyGained, why[0] ? " | " : "", why);
+        if (ok) s_psmWhy[0] = 0;
+        else snprintf(s_psmWhy, sizeof s_psmWhy, "%s", why[0] ? why : TR("Private Storage Master refused the change"));
+        // Read back what it kept.
+        PsmFetch(api);
+        return ok;
     }
 
     static bool PsmApplyBlock(const psm::Api* api, const char* what = "key block")
@@ -1609,6 +1634,39 @@ namespace ml::gui
                 Help("Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.");
         }
 
+        Section(TR("Store loot"));
+        if (!api->getAutoStore)
+            ImGui::TextDisabled("%s", TR("Storing loot needs a newer Private Storage Master."));
+        else if (!s_psmAutoOk)
+            ImGui::TextColored(kWarn, "%s", TR("Private Storage Master did not hand over its store loot settings."));
+        else
+        {
+            const bool avail = s_psmAuto.available != 0;
+            if (!avail) ImGui::TextColored(kWarn, "%s", TR("Not on this game version: Private Storage Master could not find the move it needs."));
+            ImGui::BeginDisabled(!avail);
+            bool on = s_psmAuto.enabled != 0;
+            if (ImGui::Checkbox(TR("Put what Master Looter picks up into storage"), &on)) { s_psmAuto.enabled = on; PsmApplyAuto(api); }
+            Help("A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. "
+                 "Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, "
+                 "silver never moves, and what no storage takes stays in the bag.");
+            ImGui::BeginDisabled(!on);
+            ImGui::TextDisabled("%s", TR("Each item goes to the first storage in this list that takes it."));
+            for (const int i : kPsmAutoOrder)
+            {
+                ImGui::PushID(400 + i);
+                bool st = s_psmAuto.storages[i] != 0;
+                if (ImGui::Checkbox(api->storageName(i), &st)) { s_psmAuto.storages[i] = st; PsmApplyAuto(api); }
+                ImGui::PopID();
+            }
+            bool only = s_psmAuto.onlyGained != 0;
+            if (ImGui::Checkbox(TR("Only move what was picked up"), &only)) { s_psmAuto.onlyGained = only; PsmApplyAuto(api); }
+            Help("On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.");
+            ImGui::EndDisabled();
+            ImGui::EndDisabled();
+            if (ImGui::Checkbox(TR("Say on screen what was stored"), &c.notifyAutoStore)) Settings::MarkDirty();
+            Help("At most one line a second, naming each storage and how many went into it. Off, it goes to the log only.");
+        }
+
         Section(TR("Keys"));
         ImGui::TextDisabled("%s", TR("A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it."));
         bool dirty = false;
@@ -1721,6 +1779,16 @@ namespace ml::gui
                 {
                     s_psmBlock = b;
                     if (!PsmApplyBlock(api, "reset to defaults, key block") && !refused[0]) snprintf(refused, sizeof refused, "%s", s_psmWhy);
+                }
+            }
+            if (api->getAutoStore)
+            {
+                PsmAutoStore a{};
+                a.size = sizeof a;
+                if (api->getAutoStore(&a, 1))
+                {
+                    s_psmAuto = a;
+                    if (!PsmApplyAuto(api, "reset to defaults, auto-store") && !refused[0]) snprintf(refused, sizeof refused, "%s", s_psmWhy);
                 }
             }
             if (refused[0]) snprintf(s_psmWhy, sizeof s_psmWhy, "%s", refused);

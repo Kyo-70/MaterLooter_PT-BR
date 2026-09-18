@@ -27,6 +27,11 @@ namespace ml::psm
         int         (*fixedSlots)(int);   // optional, null on a plugin built before it
         int         (*getKeyBlock)(PsmKeyBlock*, int);                // optional, 1.0.1 and later
         int         (*applyKeyBlock)(const PsmKeyBlock*, char*, int); // optional, 1.0.1 and later
+        // Auto-store, optional and all four or none.
+        int         (*getAutoStore)(PsmAutoStore*, int);
+        int         (*applyAutoStore)(const PsmAutoStore*, char*, int);
+        int         (*deposit)(uint16_t, int64_t);
+        int         (*depositResults)(PsmDepositResult*, int);
     };
 
     // Null until the plugin is found with a matching interface. Cheap to call
@@ -40,4 +45,11 @@ namespace ml::psm
     // Found in the process, usable or not. The Storage tab shows either way,
     // with the reason when it cannot be used.
     bool Installed();
+
+    // For the loot engine, from its own thread. False when the plugin or its
+    // auto-store exports are missing, or it did not queue the deposit (auto-store
+    // off, the move missing on this game version, or its queue full).
+    bool Deposit(uint16_t item, long long gained);
+    // Finished deposits, oldest first; 0 when there is nothing or no plugin.
+    int  DepositResults(PsmDepositResult* out, int max);
 }

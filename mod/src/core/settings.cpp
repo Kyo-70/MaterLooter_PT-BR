@@ -68,6 +68,7 @@ namespace ml::Settings
         else if (k == "MenuKey")          c.menuKey = Key(v, 0x2D);
         else if (k == "ShowHud")          c.showHud = Flag(v);
         else if (k == "NotifyBagFull")    c.notifyBagFull = Flag(v);
+        else if (k == "NotifyAutoStore")  c.notifyAutoStore = Flag(v);
         else if (k == "WrapSwapChain")    c.wrapSwapChain = Flag(v);
         else if (k == "HookDX12")         c.hookDX12 = Flag(v);
         else if (k == "EnableDred")       c.enableDred = Flag(v);
@@ -434,6 +435,7 @@ namespace ml::Settings
         s += "[MasterLooter]\n";
         snprintf(b, sizeof b, "Enabled=%d\nMenuKey=%d\nShowHud=%d\nNotifyBagFull=%d\nKeyToggle=%d\nKeyBurst=%d\nKeyWatch=%d\n",
                  c.enabled, c.menuKey, c.showHud, c.notifyBagFull, c.keyToggle, c.keyBurst, c.keyWatch); s += b;
+        snprintf(b, sizeof b, "NotifyAutoStore=%d\n", c.notifyAutoStore); s += b;
         snprintf(b, sizeof b, "WrapSwapChain=%d\n", c.wrapSwapChain); s += b;
         snprintf(b, sizeof b, "HookDX12=%d\n", c.hookDX12); s += b;
         snprintf(b, sizeof b, "EnableDred=%d\n", c.enableDred); s += b;

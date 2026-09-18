@@ -14,6 +14,7 @@ namespace ml
         int   menuKey        = 0x2D;   // VK_INSERT
         bool  showHud        = true;   // brief on-screen notice when auto-loot is toggled
         bool  notifyBagFull  = true;   // say so on screen when things stop reaching the bag
+        bool  notifyAutoStore = true;  // say on screen what Private Storage Master put away
         // Wrap the swapchain so the overlay draws under DLSS frame generation.
         // Off falls back to the plain present hook, which costs the overlay only
         // when frame generation is on, and takes this mod off a path other
