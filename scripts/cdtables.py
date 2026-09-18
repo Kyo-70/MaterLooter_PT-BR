@@ -455,6 +455,13 @@ def parse_item(rec, trace=False, r=None):
     it["push_inventory_type_116"] = [r.u16("push_inventory_type_%d_116" % i) for i in range(8)]
     it["item_push_inventory_contents_type_113"] = r.u8("item_push_inventory_contents_type_113")
     it["trailing_u8_113"] = r.u8("trailing_u8_113")
+    # Game 1.0.0.2944 (17 September 2026) appends two bytes to every record.
+    # The first is 0x15 on the 59 trade goods packed into a vehicle and 0xFF on
+    # everything else, so it reads as an inventory type with 0xFF for none; the
+    # second has been zero on every item. Earlier builds end the record here.
+    if r.p < len(rec):
+        it["vehicle_pack_inventory_u8_2944"] = r.u8("vehicle_pack_inventory_u8_2944")
+        it["trailing_u8_2944"] = r.u8("trailing_u8_2944")
     it["_end"] = r.p
     it["_len"] = len(rec)
     return it, r

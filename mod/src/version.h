@@ -18,6 +18,6 @@
 #define ML_BUILD_TAG ""
 #endif
 #define ML_VERSION_FULL ML_VERSION ML_BUILD_TAG
-#define ML_GAME_BUILD "2.02.00"
+#define ML_GAME_BUILD "2.03.00"
 #define ML_MOD_PAGE "https://www.nexusmods.com/crimsondesert/mods/3402"
 #define ML_SOURCE_URL "https://github.com/shin2344234/master-looter"

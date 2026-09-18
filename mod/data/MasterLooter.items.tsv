@@ -96,7 +96,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 94	1002229	Quest_Paper_Her_Harveston	Haverson's Poster	poster	document poster quest tier-0 wild	0	27
 95	1002230	Quest_Paper_Her_Drianna	Driana's Poster	poster	document poster quest tier-0 wild	0	27
 96	1002231	Quest_Paper_Her_Gloin	Galen's Poster	poster	document poster quest tier-0 wild	0	27
-97	1002232	Quest_Paper_Her_Matilda	Matilda's Poster	poster	document poster quest tier-0 wild	0	27
+97	1002232	Quest_Paper_Her_Matilda	Mathilde's Poster	poster	document poster quest tier-0 wild	0	27
 98	1002233	Quest_Paper_Her_Adelina	Adrina's Poster	poster	document poster quest tier-0 wild	0	27
 99	1001894	Quest_Paper_Dem_Mariana	Mariana's Poster	poster	document poster quest tier-0 wild	0	27
 100	1002192	Quest_Paper_Dem_Trollmag	Trolmagg's Poster	poster	document poster quest tier-0 wild	0	27
@@ -447,7 +447,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 445	1004279	Book_Chaser_Journal	Tracker's Torn Journal	book	book document quest tier-0 wild	0	200
 446	1004280	Book_Tariv_Storybook	Tariv Fairytale	book	book document quest tier-0 wild	0	200
 447	1004283	Book_Heresy_Manual_01	Heretical Religion Guidebook	book	book document quest tier-0 wild	0	200
-448	1004284	Book_Pursuers_Journal_01	Pursuing Soldiers' Journal	book	book document quest tier-0 wild	0	200
+448	1004284	Book_Pursuers_Journal_01	Pursuers' Journal	book	book document quest tier-0 wild	0	200
 449	1004285	Book_Confidential_Record_01	Classified Investigation Records	book	book document quest tier-0 wild	0	200
 450	1004288	Book_Technician_Journal	Kidnapped Engineer's Journal	book	book document quest tier-0 wild	0	200
 451	1004289	Book_MarniAirship_Journal	Marni Airship Journal	book	book document quest tier-0 wild	0	200
@@ -594,7 +594,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 592	1001121	Collection_Prop_FlowerPot_0002	Flower Basket	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
 593	1001122	Collection_Prop_FlowerPot_0003	Daisy Flower Basket	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
 594	1001132	Collection_Prop_FlowerPot_0004	Yellow Blue-Eyed Grass Basket	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
-595	1001440	Collection_Prop_FlowerPot_0007	Ornamental Plant Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
+595	1001440	Collection_Prop_FlowerPot_0007	Alocasia Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
 596	1001442	Collection_Prop_FlowerPot_0009	Violet Flower Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
 597	1000878	Collection_Prop_FlowerPot_0001	Flower Basket	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	2
 598	1001441	Collection_Prop_FlowerPot_0008	Colorful Gerbera Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	5
@@ -609,7 +609,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 607	1000554	Collection_Prop_FlowerPot_0031	Small Plant Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	25
 608	1000628	Collection_Prop_FlowerPot_0027	Chalice Bush Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	25
 609	1004001	Item_cd_ex_dpf_flowerpot_61_housing	Apple Tree Pot	flower-pot	decoration flower-pot furniture gimmick housing-only stackable tier-0	0	37
-610	1004002	Item_cd_ex_dpf_flowerpot_21_housing	Small Wooden Flower Pot	flower-pot	decoration flower-pot furniture gimmick housing-only stackable tier-0	0	25
+610	1004002	Item_cd_ex_dpf_flowerpot_21_housing	Small Tree Pot	flower-pot	decoration flower-pot furniture gimmick housing-only stackable tier-0	0	25
 611	1004004	Item_cd_ex_dpf_flowerpot_23_housing	Laurel Pot	flower-pot	decoration flower-pot furniture gimmick housing-only stackable tier-0	0	25
 612	1000517	Collection_Prop_FlowerPot_0025	Purple Flower-Shaped Cactus Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	75
 613	1000548	Collection_Prop_FlowerPot_0020	Leafy Pot	flower-pot	collectible decoration flower-pot furniture knowledge stackable tier-0	0	75
@@ -727,7 +727,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 725	1001458	Collection_Prop_Bottle_0010	Round Blue Container	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
 726	1001459	Collection_Prop_Bottle_0011	Round Blue Container	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
 727	1001464	Collection_Prop_Bottle_0016	Portable Blue Water Bottle	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
-728	1001484	Collection_Prop_Bottle_0036	Long Crimson Water Bottle	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
+728	1001484	Collection_Prop_Bottle_0036	Long Red Water Bottle	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
 729	1001487	Collection_Prop_Bottle_0039	Long Blue Water Bottle	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
 730	1001681	Collection_Prop_Bottle_0043	White Iron Water Bottle	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
 731	1001708	Collection_Prop_Bottle_0049	Indigo Bottle	container	collectible container decoration furniture household knowledge stackable tier-0	0	7
@@ -769,7 +769,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 767	1001549	Collection_Prop_Cup_0017	Plain Wooden Beer Mug	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
 768	1001537	Collection_Prop_Cup_0005	Brass Goblet	container	collectible container decoration furniture household knowledge stackable tier-0	0	6
 769	1001542	Collection_Prop_Cup_0010	Decorative Brass Goblet	container	collectible container decoration furniture household knowledge stackable tier-0	0	6
-770	1001544	Collection_Prop_Cup_0012	Worn Decorative Silver Mug	container	collectible container decoration furniture household knowledge stackable tier-0	0	6
+770	1001544	Collection_Prop_Cup_0012	Worn Decorative Silver Goblet	container	collectible container decoration furniture household knowledge stackable tier-0	0	6
 771	1001545	Collection_Prop_Cup_0013	Large Multipurpose Vessel	container	collectible container decoration furniture household knowledge stackable tier-0	0	6
 772	1001547	Collection_Prop_Cup_0015	Artisan's Metal Goblet	container	collectible container decoration furniture household knowledge stackable tier-0	0	8
 773	1001535	Collection_Prop_Cup_0003	Bronze Goblet	container	collectible container decoration furniture household knowledge stackable tier-0	0	8
@@ -788,7 +788,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 786	1001507	Collection_Prop_Ceramic_0019	Water Pot	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
 787	1001508	Collection_Prop_Ceramic_0020	Grain Jar	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
 788	1001513	Collection_Prop_Ceramic_0025	Water Jug	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
-789	1002299	Collection_Prop_Ceramic_0050	Cylindrical Ocher Jar	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
+789	1002299	Collection_Prop_Ceramic_0050	Cylindrical Red Clay Jar	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
 790	1002300	Collection_Prop_Ceramic_0051	Cylindrical Clay Jar	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
 791	1002301	Collection_Prop_Ceramic_0052	Old Round Jar	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
 792	1002302	Collection_Prop_Ceramic_0053	Brown Round Jar	container	collectible container decoration furniture household knowledge stackable tier-0	0	3
@@ -972,8 +972,8 @@ row	key	string_key	name	class	tags	tier	value_copper
 970	1003973	Item_in_dff_bed_06	Dark Timberham Bed	furniture	furniture housing-only stackable tier-0	0	75
 971	1003974	Item_in_dff_bed_06_dem	Bright Timberham Bed	furniture	furniture housing-only stackable tier-0	0	75
 972	1003975	Item_dff_luxuryfurniture_bed_01	Cozy Bed	furniture	furniture housing-only stackable tier-0	0	1750
-973	1003993	Item_Background_Breakable_Wood_280	Mechanical Clockwork Chair	furniture	furniture no-discard stackable tier-0	0	800
-974	1003994	Item_gimmick_dff_luxuryfurniture_sofa_02	Luxury Gilded Sofa	furniture	furniture gimmick housing-only stackable tier-0	0	2500
+973	1003993	Item_Background_Breakable_Wood_280	Mechanical Cogwheel Chair	furniture	furniture no-discard stackable tier-0	0	800
+974	1003994	Item_gimmick_dff_luxuryfurniture_sofa_02	Luxurious Gilded Sofa	furniture	furniture gimmick housing-only stackable tier-0	0	2500
 975	1003995	Item_gimmick_dff_luxuryfurniture_stool_01	Luxurious Gilded Side Chair	furniture	furniture gimmick housing-only stackable tier-0	0	200
 976	1003996	Item_gimmick_dff_luxuryfurniture_chair_02	Lion-Crested Chair	furniture	furniture gimmick housing-only stackable tier-0	0	75
 977	1003997	Item_gimmick_dff_luxuryfurniture_chair_troll_03	Large Arched Chair	furniture	furniture gimmick housing-only stackable tier-0	0	200
@@ -995,12 +995,12 @@ row	key	string_key	name	class	tags	tier	value_copper
 993	1004017	Item_Background_Breakable_Wood_323	Small Timberton Table	furniture	furniture housing-only stackable tier-0	0	375
 994	1004018	Item_Background_Breakable_Wood_323_index01	Small Bright Timberton Table	furniture	furniture housing-only stackable tier-0	0	375
 995	1004022	Item_gimmick_in_dff_stand_0001	Small Whitesand Table	furniture	furniture gimmick housing-only stackable tier-0	0	525
-996	1004023	Item_Background_Breakable_Wood_297	Adorned Storage Chest	furniture	furniture housing-only stackable tier-0	0	37
+996	1004023	Item_Background_Breakable_Wood_297	Adorned Storage	furniture	furniture housing-only stackable tier-0	0	37
 997	1004024	Item_gimmick_dff_luxuryfurniture_table_01	Arched Corridor Table	furniture	furniture gimmick housing-only stackable tier-0	0	800
-998	1004025	Item_gimmick_dff_luxuryfurniture_table_0001	Whitesand Arched Corridor Decorative Table	furniture	furniture gimmick housing-only stackable tier-0	0	600
+998	1004025	Item_gimmick_dff_luxuryfurniture_table_0001	Whitesand Arched Corridor Table	furniture	furniture gimmick housing-only stackable tier-0	0	600
 999	1004026	Item_gimmick_dff_luxuryfurniture_table_02	Dark Lion Head Table	furniture	furniture gimmick housing-only stackable tier-0	0	800
-1000	1004027	Item_Background_Breakable_Wood_302	Mirrored Wooden Dresser	furniture	furniture housing-only stackable tier-0	0	75
-1001	1004028	Item_gimmick_in_dff_dressingtable_0001	Mirrored Whitesand Dresser	furniture	furniture gimmick housing-only stackable tier-0	0	625
+1000	1004027	Item_Background_Breakable_Wood_302	Wooden Dressing Table	furniture	furniture housing-only stackable tier-0	0	75
+1001	1004028	Item_gimmick_in_dff_dressingtable_0001	Whitesand Dressing Table	furniture	furniture gimmick housing-only stackable tier-0	0	625
 1002	1004029	Item_Background_Breakable_Wood_303	Luxurious Gilded Table	furniture	furniture housing-only stackable tier-0	0	125
 1003	1004030	Item_Background_Breakable_Wood_310	Round Red Fabric Table	furniture	furniture housing-only stackable tier-0	0	37
 1004	1004031	Item_Background_Breakable_Wood_311	Large Round Red Fabric Table	furniture	furniture housing-only stackable tier-0	0	62
@@ -1094,7 +1094,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 1092	1001869	Item_Iguana	Iguana	animal	animal knowledge reptile stackable tier-0	0	3
 1093	1001298	Item_Chameleon	Chameleon	animal	animal knowledge reptile stackable tier-0	0	3
 1094	1001870	Item_Hila_Lizard	Heloderma Lizard	animal	animal knowledge reptile stackable tier-0	0	3
-1095	1001872	Item_Frilled_Lizard	Frilled-neck Lizard	animal	animal knowledge reptile stackable tier-0	0	3
+1095	1001872	Item_Frilled_Lizard	Frilled-Neck Lizard	animal	animal knowledge reptile stackable tier-0	0	3
 1096	1001775	Item_BlueJay	Blue Jay	animal	animal bird knowledge no-sell stackable tier-0	0	1
 1097	1001779	Item_Sparrow	Sparrow	animal	animal bird knowledge no-sell stackable tier-0	0	1
 1098	1001780	Item_Oriole	Black-Naped Oriole	animal	animal bird knowledge no-sell stackable tier-0	0	1
@@ -1103,7 +1103,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 1101	1001851	Item_BlackTail_Flycatcher	Desert Wheatear	animal	animal bird knowledge no-sell stackable tier-0	0	1
 1102	1001852	Item_Oxpecker	Yellow-Billed Oxpecker	animal	animal bird knowledge no-sell stackable tier-0	0	1
 1103	1001855	Item_Wood_Pecker	Three-Toed Woodpecker	animal	animal bird knowledge no-sell stackable tier-0	0	1
-1104	1001856	Item_WhiteWing_Flycatcher	White-winged Redstart	animal	animal bird knowledge no-sell stackable tier-0	0	1
+1104	1001856	Item_WhiteWing_Flycatcher	White-Winged Redstart	animal	animal bird knowledge no-sell stackable tier-0	0	1
 1105	1002853	Item_Longtailedtit	Long-Tailed Tit	animal	animal bird knowledge no-sell stackable tier-0	0	1
 1106	1001245	Item_dragonfly	Dragonfly	insect	alchemy-material dragonfly insect knowledge material reagent stackable tier-0	0	10
 1107	1000583	Item_DiademSpider	Golden Silk Spider	insect	alchemy-material arachnid insect knowledge material reagent stackable tier-0	0	10
@@ -1157,7 +1157,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 1155	1000126	Item_Desert_Orange_tip	Scarlet Leafwing Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
 1156	1001931	Item_Lycaena_Phlaeas	Spotted Lycaenid Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
 1157	1001004	Item_Crimson_Patch	Crimson Patch Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
-1158	1001882	Item_Red_Spotted_Purple	Red-spotted Purple Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
+1158	1001882	Item_Red_Spotted_Purple	Red-Spotted Purple Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
 1159	1000883	Item_Regal_Fritillary	Regal Fritillary Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
 1160	1001003	Item_Diana_Fritillary	Diana Fritillary Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
 1161	1000172	Item_Common_Buckeye	Buckeye Butterfly	insect	alchemy-material butterfly insect knowledge material reagent stackable tier-0	0	10
@@ -2046,7 +2046,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 2044	1003257	Paper_GoldleafGuildhouse_Clue_VII	Merchant Delivery Seal	keepsake	keepsake quest tier-0 wild	0	27
 2045	1004377	Hexe_Wooden_Toy	Wooden Soldier Figurine	keepsake	keepsake knowledge quest tier-0 wild	0	27
 2046	1004068	Hexe_Ring	Hexe Pendant	keepsake	keepsake knowledge quest tier-0 wild	0	27
-2047	1004070	Family_Crest_Surcoat	A Surcoat Embroidered with a Family Crest	keepsake	keepsake knowledge quest tier-0 wild	0	27
+2047	1004070	Family_Crest_Surcoat	Surcoat Embroidered with a House Crest	keepsake	keepsake knowledge quest tier-0 wild	0	27
 2048	1004373	Broken_Graymane_Token	Shattered Greymane Token	keepsake	keepsake knowledge quest tier-0 wild	0	27
 2049	1005404	Grace_HiddenDagger	Hidden Dagger	keepsake	keepsake knowledge quest tier-0 wild	0	27
 2050	1005405	Imp_Banquet_Horn	Sawed-Off Horns	keepsake	keepsake knowledge quest tier-0 wild	0	27
@@ -2198,7 +2198,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 2196	1004244	Quest_Paper_Heresy_Registry	Heretic Register	document	document quest tier-0 wild	0	27
 2197	1004260	Quest_Paper_UltimateWeapon_Blueprint_01	Ultimate Weapon Interior Blueprint	document	document quest tier-0 wild	0	27
 2198	1004261	Quest_Paper_UltimateWeapon_Blueprint_02	Ultimate Weapon Exterior Blueprint	document	document quest tier-0 wild	0	27
-2199	1004262	Quest_Paper_Orc_TechnicalList	Orc Engineers	document	document quest tier-0 wild	0	27
+2199	1004262	Quest_Paper_Orc_TechnicalList	Orc Technician List	document	document quest tier-0 wild	0	27
 2200	1004263	Quest_Paper_CaliburnSoldiers_Letter	Righteous Inquisitor's Letter	document	document quest tier-0 wild	0	27
 2201	1004071	Zoo_Entry_Ticket	Wildlife Park Ticket	document	document quest tier-0 wild	0	27
 2202	1005411	Paper_WhiteCrow_Witch_Letter	White Crow's Letter	document	document quest tier-0 wild	0	27
@@ -2697,7 +2697,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 2695	1003839	Riding_Wolf_Tooth	Fang of Silver Fang	treasure	important knowledge mount-summon no-discard no-sell tier-0 treasure wild	0	1
 2696	1003840	Riding_Deer_Horn	Snowwhite Deer's Antlers	treasure	important knowledge mount-summon no-discard no-sell tier-0 treasure wild	0	1
 2697	1003841	Riding_AlpineIbex_Horn	Icicle Edge Alpine Ibex Horn	treasure	important knowledge mount-summon no-discard no-sell tier-0 treasure wild	0	1
-2698	1003842	Riding_Warthog_Tooth	Rock Tusk Warthog's Tusk	treasure	important knowledge mount-summon no-discard no-sell tier-0 treasure wild	0	1
+2698	1003842	Riding_Warthog_Tooth	Rock Tusk Warthog Tusk	treasure	important knowledge mount-summon no-discard no-sell tier-0 treasure wild	0	1
 2699	1003920	Pet_Phoenix_Feather	Phoenix Feather	treasure	important knowledge mount-summon no-discard no-sell tier-0 treasure wild	0	1
 2700	1003843	Riding_Bear_Amulet	Sigil of Solidarity (White Bear)	treasure	important mount-summon no-discard no-sell tier-0 treasure wild	0	1
 2701	1003844	Riding_Wolf_Amulet	Sigil of Solidarity (Silver Fang)	treasure	important mount-summon no-discard no-sell tier-0 treasure wild	0	1
@@ -3496,12 +3496,12 @@ row	key	string_key	name	class	tags	tier	value_copper
 3494	1002456	Item_AbyssGear_SKill_Lv2_Box	Unidentified Abyss Gear	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
 3495	1002474	Item_AbyssGear_SKill_Lv3_Box	Unidentified Abyss Gear	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
 3496	1002540	Item_AbyssGear_Special_Box	Unidentified Abyss Gear	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
-3497	1004379	Item_AbyssGear_Recipe_Box_I	Unidentified Abyss Gear Recipe	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
-3498	1004380	Item_AbyssGear_Recipe_Box_II	Unidentified Abyss Gear Recipe	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
-3499	1004381	Item_AbyssGear_Recipe_Box_III	Unidentified Abyss Gear Recipe	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
-3500	1004382	Item_AbyssGear_Recipe_Box_IV	Unidentified Abyss Gear Recipe	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
-3501	1004383	Item_AbyssGear_Recipe_Box_V	Unidentified Abyss Gear Recipe	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
-3502	1004384	Item_AbyssGear_Recipe_Box_VI	Unidentified Abyss Gear Recipe	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
+3497	1004379	Item_AbyssGear_Recipe_Box_I	Unidentified Abyss Gear Blueprint	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
+3498	1004380	Item_AbyssGear_Recipe_Box_II	Unidentified Abyss Gear Blueprint	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
+3499	1004381	Item_AbyssGear_Recipe_Box_III	Unidentified Abyss Gear Blueprint	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
+3500	1004382	Item_AbyssGear_Recipe_Box_IV	Unidentified Abyss Gear Blueprint	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
+3501	1004383	Item_AbyssGear_Recipe_Box_V	Unidentified Abyss Gear Blueprint	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
+3502	1004384	Item_AbyssGear_Recipe_Box_VI	Unidentified Abyss Gear Blueprint	abyss-gear-box	abyss-gear-box no-sell stackable tier-0 use-immediately wild	0	1
 3503	1002266	Collection_Prop_Chest_0010	Cylindrical Wooden Box	decoration	chest collectible decoration furniture goods knowledge stackable tier-0	0	243
 3504	1004503	Item_AbyssArtifact_Chest_2_7	Unstable Artifact Chest	chest	abyss-item chest goods reward-box stackable tier-0	0	
 3505	1004504	Item_AbyssArtifact_Chest_3	Small Artifact Chest	chest	abyss-item chest goods reward-box stackable tier-0	0	
@@ -4238,9 +4238,9 @@ row	key	string_key	name	class	tags	tier	value_copper
 4236	1000800	Reeddevil_Fabric_Helm_II	Reed Devil Minion's Cloth Helm	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
 4237	1000801	Reeddevil_Fabric_Helm_III	Reed Devil Minion's Cloth Helm	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
 4238	1000788	Prisoner_Fabric_Helm	Captive's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
-4239	1000789	Prisoner_Fabric_Helm_I	Captive's Cloth Helm	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
+4239	1000789	Prisoner_Fabric_Helm_I	Captive's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
 4240	1000790	Prisoner_Fabric_Helm_II	Captive's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
-4241	1000791	Prisoner_Fabric_Helm_III	Captive's Cloth Headband	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
+4241	1000791	Prisoner_Fabric_Helm_III	Captive's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
 4242	1000792	Prisoner_Fabric_Helm_IV	Captive's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
 4243	1001280	Greyfur_Fabric_Helm	Colton's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
 4244	1001281	Greyfur_Fabric_Helm_I	Arnold's Cloth Cap	damaged-gear	armor cloth damaged-gear goods helm tier-1	1	79
@@ -4874,7 +4874,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 4872	2133124	Light_Arrowhead_Leather_Boots_I	Blinding Arrow's Leather Boots	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
 4873	2133125	Light_Arrowhead_Leather_Boots_II	Blinding Arrow's Leather Boots	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
 4874	2133162	Barbarian_Leather_Boots_II	Barbarian Leather Greaves	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
-4875	2133166	Bandit_Leather_Boots	Bandit's Leather Greaves	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
+4875	2133166	Bandit_Leather_Boots	Bandit's Leather Boots	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
 4876	2133201	Goblin_Merchant_Soldier_Leather_Boots	Goldleaves' Short Leather Boots	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
 4877	1171111484	Bandit_Leather_Boots_II	Bandit's Leather Boots	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
 4878	1000243	Regglin_Leather_Boots	Fundamentalist Goblin Leather Boots	damaged-gear	armor boots damaged-gear goods leather tier-1	1	60
@@ -5730,7 +5730,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 5728	1163002	Optionary_Hernand_Party_Cloth	Hernandian Attire	body-armor	armor body-armor equipment extractable important special stealth-gear tier-1	1	300
 5729	2113163	Tibbletanus_Leather_Armor	Ashclaw Leather Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-1	1	821
 5730	2133173	North_Mercenary_Leather_Armor_II	Jackals' Leather Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-1	1	174
-5731	2133101	Light_Arrowhead_Leather_Armor_V	Blinding Arrows' Leather Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-1	1	821
+5731	2133101	Light_Arrowhead_Leather_Armor_V	Blinding Arrow's Leather Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-1	1	821
 5732	111151	Bayur_Fabric_Armor	The Faceless's Cloth Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-3	3	1044
 5733	1001177	Hymns_of_Dusk_Fabric_Armor_I	Musket Border Guard Standard Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-3	3	1044
 5734	114300	Wintharden_Fabric_Armor	Ator's Will Cloth Armor	body-armor	armor body-armor equipment extractable special stealth-gear tier-3	3	1044
@@ -5817,7 +5817,7 @@ row	key	string_key	name	class	tags	tier	value_copper
 5815	1000326	Optionary_Hernand_Party_Cloak	Hernandian Cloak	cloak	armor cloak equipment extractable special stealth-gear tier-1	1	350
 5816	1000846	Tibbletanus_Fabric_Cloak	Black Bears' Cloth Cloak	cloak	armor cloak equipment extractable special stealth-gear tier-1	1	786
 5817	1000318	Desert_Harrier_PlateArmor_Cloak_I	Desert Marauder's Cloak	cloak	armor cloak equipment extractable special stealth-gear tier-1	1	786
-5818	1000576	North_Mercenary_Fabric_Cloak_I	Jackal Cloth Cloak	cloak	armor cloak equipment extractable important special stealth-gear tier-1	1	123
+5818	1000576	North_Mercenary_Fabric_Cloak_I	Jackal's Cloth Cloak	cloak	armor cloak equipment extractable important special stealth-gear tier-1	1	123
 5819	1001061	Light_Arrowhead_Fabric_Cloak_I	Blinding Arrow's Cloth Cloak	cloak	armor cloak equipment extractable special stealth-gear tier-1	1	786
 5820	1000198	Sprayer_BackPack	Field Sprayer	armor	accessory armor backpack docking equipment knowledge no-sell special sprayer tier-0	0	1
 5821	1001750	Aggro_Backpack	Sonic Resonator	armor	accessory armor backpack docking equipment important special tier-3	3	2700
@@ -6812,3 +6812,6 @@ row	key	string_key	name	class	tags	tier	value_copper
 6810	1003643	Dev_QA_demtovar_walk	[QA] Profiling (Demeniss-Varnia 2.5)	dev	dev no-sell stackable tier-0	0	1
 6811	1003649	Dev_QA_demtovar_run	[QA] Profiling (Demeniss-Varnia 20)	dev	dev no-sell stackable tier-0	0	1
 6812	1000854	Dev_QA_her_loop	[QA] Repeated movement within Hernand (Speed 15)	dev	dev no-sell stackable tier-0	0	1
+6813	1006028	Dev_QA_dlc_Ocean_walk	TEMP	dev	dev no-sell stackable tier-0	0	1
+6814	1006029	Dev_QA_dlc_Ocean_run	TEMP	dev	dev no-sell stackable tier-0	0	1
+6815	1006030	Dev_QA_dlc_Ocean_run_fast	TEMP	dev	dev no-sell stackable tier-0	0	1

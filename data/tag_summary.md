@@ -1,6 +1,6 @@
 # Master Looter item tags, build 2.02.00
 
-6813 items parsed from iteminfo.staticinfobody; 6741 have an English name.
+6816 items parsed from iteminfo.staticinfobody; 6744 have an English name.
 
 ## Class column (one per item, first match in priority order)
 
@@ -11,7 +11,7 @@
 - field-cooked: 192
 - abyss-gear: 190
 - container: 170
-- dev: 152
+- dev: 155
 - sealed-artifact: 150
 - book: 137
 - helm: 137
@@ -112,8 +112,8 @@
 
 ## All tags
 
-- tier-0: 3442
-- stackable: 2409
+- tier-0: 3445
+- stackable: 2412
 - armor: 2196
 - goods: 1704
 - damaged-gear: 1637
@@ -121,7 +121,7 @@
 - equipment: 1412
 - tier-1: 1197
 - knowledge: 1105
-- no-sell: 1052
+- no-sell: 1055
 - body-armor: 1015
 - extractable: 1008
 - document: 1006
@@ -161,8 +161,8 @@
 - container: 170
 - reagent: 157
 - poster: 156
+- dev: 155
 - one-hand: 155
-- dev: 152
 - sealed-artifact: 150
 - book: 137
 - ingredient: 128

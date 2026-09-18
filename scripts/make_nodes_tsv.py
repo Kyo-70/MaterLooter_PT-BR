@@ -372,6 +372,15 @@ def kind_for(tags, name, prefab, folder=""):
     # would be second-guessing it.
     if tags:
         return "", False
+    # Two folders hold nothing a player gathers, and the name guess reached into
+    # both on game 1.0.0.2944. /00_common/faction/ is 130 buildings, statues and
+    # business nodes, and management_node_her_timberhamsawmill came out as wood
+    # because Timberham is a place with "timber" in it. /00_common/spot/ is map
+    # locations, and cd_spot_altarstone came out as stone. A wood or stone row
+    # answers to a switch that is on by default, so each would have been armed.
+    # These were the only two rows either folder gave the table.
+    if "/00_common/faction/" in folder or "/00_common/spot/" in folder:
+        return "", False
     low = name.lower()
     for kind, words in NAME_KIND:
         if kind == "ore":

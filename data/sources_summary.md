@@ -1,9 +1,9 @@
 # Drop sources, build 2.02.00
 
 - characters: 7250; with reward drop sets: 6107; with equipment: 4934; with a catch/steal set: 1125
-- gimmicks: 13906; with a drop block: 314
+- gimmicks: 13941; with a drop block: 314
 - drop sets used by at least one character or gimmick: 640 of 14744
-- items with at least one known source (set via character or gimmick, worn equipment, or catch): 2937 of 6813
+- items with at least one known source (set via character or gimmick, worn equipment, or catch): 2937 of 6816
 
 ## How each source was found
 

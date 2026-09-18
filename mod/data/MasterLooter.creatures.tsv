@@ -133,9 +133,9 @@ character_key	string_key	name	item_row	item_class
 32246	Animal_Longhorn_Wild_32246	White-Striped Longhorn	-1	animal
 32396	Animal_Female_Longhorn_Wild_32396	Female White-Striped Longhorn	-1	animal
 32397	Animal_Baby_Longhorn_Wild_32397	Young White-Striped Longhorn	-1	animal
-1001783	Animal_Longhorn_Domestic_1	White-striped Longhorn	-1	animal
-1001784	Animal_Female_Longhorn_Domestic_1	Female White-striped Longhorn	-1	animal
-1001785	Animal_Baby_Longhorn_Domestic_1	Young White-striped Longhorn	-1	animal
+1001783	Animal_Longhorn_Domestic_1	White-Striped Longhorn	-1	animal
+1001784	Animal_Female_Longhorn_Domestic_1	Female White-Striped Longhorn	-1	animal
+1001785	Animal_Baby_Longhorn_Domestic_1	Young White-Striped Longhorn	-1	animal
 32214	Animal_Goat_Wild_32214	Wild Goat	-1	animal
 30027	Animal_Goat_Domestic_30027	Goat	-1	animal
 1003105	Animal_GoatFemale_Wild_1	Wild Female Goat	-1	animal
@@ -477,12 +477,12 @@ character_key	string_key	name	item_row	item_class
 1000969	Animal_Insect_firefly	Firefly	1130	insect
 1001051	Animal_Insect_Moth	Mountain Moth	1150	insect
 1000886	Animal_Insect_Butterfly	Meadow Butterfly	1143	insect
-1001151	Animal_Insect_Eastern_Tiger_Swallowtail	Swallowtail Butterfly	1110	insect
+1001151	Animal_Insect_Eastern_Tiger_Swallowtail	Swallowtail	1110	insect
 1001153	Animal_Insect_Ornythion_Swallowtail	Ornythion Swallowtail Butterfly	1111	insect
 1001163	Animal_Insect_Spicebush_Swallowtail	Spicebush Swallowtail Butterfly	1128	insect
 1001164	Animal_Insect_Pipevine_Swallowtail	Pipevine Swallowtail Butterfly	1129	insect
 1001166	Animal_Insect_Polydamas_Swallowtail	Polydamas Swallowtail Butterfly	1112	insect
-1001174	Animal_Insect_Zebra_Swallowtail	Zebra Swallowtail Butterfly	1113	insect
+1001174	Animal_Insect_Zebra_Swallowtail	Zebra Swallowtail	1113	insect
 1001177	Animal_Insect_Orange_Barred_Sulphur	Orange-Barred Sulphur Butterfly	1154	insect
 1001179	Animal_Insect_Sleepy_Orange	Sleepy Scarlet Butterfly	1164	insect
 1001220	Animal_Insect_White_M_Hairstreak	White Streaked butterfly	1140	insect

@@ -20,7 +20,7 @@ cd_ex_dpf_flowerhang_03	plant		Cd ex dpf flowerhang	name	0		0	0	0
 cd_ex_dpf_flowerhang_04	plant		Cd ex dpf flowerhang	name	0		0	0	0
 cd_ex_dpf_flowerpot_09	container	Collection_Prop_FlowerPot_0005	Red Rose Flower Pot	tag	0		0	0	0
 cd_ex_dpf_flowerpot_09a	container	Collection_Prop_FlowerPot_0006	Yellow Rose Flower Pot	tag	0		0	0	0
-cd_ex_dpf_flowerpot_10	container	Collection_Prop_FlowerPot_0007	Ornamental Plant Pot	tag	0		0	0	0
+cd_ex_dpf_flowerpot_10	container	Collection_Prop_FlowerPot_0007	Alocasia Pot	tag	0		0	0	0
 cd_ex_dpf_flowerpot_11	container	Collection_Prop_FlowerPot_0008	Colorful Gerbera Pot	tag	0		0	0	0
 cd_ex_dpf_flowerpot_12	container	Collection_Prop_FlowerPot_0009	Violet Flower Pot	tag	0		0	0	0
 cd_ex_dpf_flowerpot_13	container	Collection_Prop_FlowerPot_0010	Purple Gerbera Flower Pot	tag	0		0	0	0
@@ -172,7 +172,7 @@ gimmick_barrel_fire_02	container		Barrel fire	tag	1		0	0	0
 gimmick_barrel_ice_01	container		Barrel ice	tag	1		0	0	0
 gimmick_barrel_nofire_01	container		Barrel nofire	tag	1		0	0	0
 gimmick_barrel_poison_01	container		Barrel poison	tag	1		0	0	0
-gimmick_beacon_firewood_0001	wood		Beacon firewood	name	0	Recipe_Grilled_Meat_Fish Ciburn_Leather_Gloves Varantine_Fabric_Cloak	0	0	0
+gimmick_beacon_firewood_0001	wood		Beacon firewood	name	0	Recipe_Grilled_Meat_Fish Ciburn_Leather_Gloves	0	0	0
 gimmick_beacon_firewood_01	wood		Beacon firewood	name	0		0	0	0
 gimmick_beacon_firewood_03	wood		Beacon firewood	name	0		0	0	0
 gimmick_bigtree_01	wood		Bigtree	name	0		0	0	0
@@ -521,7 +521,7 @@ gimmick_collection_prop_bottle_0032	container	Collection_Prop_Bottle_0032	Distil
 gimmick_collection_prop_bottle_0033	pickup	Collection_Prop_Bottle_0033	Blue Jar-Shaped Water Bottle	tag	0		0	0	0
 gimmick_collection_prop_bottle_0034	pickup	Collection_Prop_Bottle_0034	White Jar-Shaped Water Bottle	tag	0		0	0	0
 gimmick_collection_prop_bottle_0035	pickup	Collection_Prop_Bottle_0035	Green Jar-Shaped Water Bottle	tag	0		0	0	0
-gimmick_collection_prop_bottle_0036	container	Collection_Prop_Bottle_0036	Long Crimson Water Bottle	tag	0		0	0	0
+gimmick_collection_prop_bottle_0036	container	Collection_Prop_Bottle_0036	Long Red Water Bottle	tag	0		0	0	0
 gimmick_collection_prop_bottle_0037	container	Collection_Prop_Bottle_0037	Long White Water Bottle	tag	0		0	0	0
 gimmick_collection_prop_bottle_0038	container	Collection_Prop_Bottle_0038	Long Yellow Water Bottle	tag	0		0	0	0
 gimmick_collection_prop_bottle_0039	container	Collection_Prop_Bottle_0039	Long Blue Water Bottle	tag	0		0	0	0
@@ -609,7 +609,7 @@ gimmick_collection_prop_ceramic_0046	container	Collection_Prop_Ceramic_0046	Long
 gimmick_collection_prop_ceramic_0047	container	Collection_Prop_Ceramic_0047	Ornate Silver Conical Jar	tag	0		0	0	0
 gimmick_collection_prop_ceramic_0048	pickup		Collection prop ceramic	tag	1		0	0	0
 gimmick_collection_prop_ceramic_0049	pickup		Collection prop ceramic	tag	1		0	0	0
-gimmick_collection_prop_ceramic_0050	container	Collection_Prop_Ceramic_0050	Cylindrical Ocher Jar	tag	0		0	0	0
+gimmick_collection_prop_ceramic_0050	container	Collection_Prop_Ceramic_0050	Cylindrical Red Clay Jar	tag	0		0	0	0
 gimmick_collection_prop_ceramic_0051	container	Collection_Prop_Ceramic_0051	Cylindrical Clay Jar	tag	0		0	0	0
 gimmick_collection_prop_ceramic_0052	container	Collection_Prop_Ceramic_0052	Old Round Jar	tag	0		0	0	0
 gimmick_collection_prop_ceramic_0053	container	Collection_Prop_Ceramic_0053	Brown Round Jar	tag	0		0	0	0
@@ -639,7 +639,7 @@ gimmick_collection_prop_cup_0008	pickup	Collection_Prop_Cup_0008	Old Wooden Beer
 gimmick_collection_prop_cup_0009	pickup	Collection_Prop_Cup_0009	Decorative Silver Mug	tag	0		0	0	0
 gimmick_collection_prop_cup_0010	pickup	Collection_Prop_Cup_0010	Decorative Brass Goblet	tag	0		0	0	0
 gimmick_collection_prop_cup_0011	pickup	Collection_Prop_Cup_0011	Large Decorative Goblet	tag	0		0	0	0
-gimmick_collection_prop_cup_0012	pickup	Collection_Prop_Cup_0012	Worn Decorative Silver Mug	tag	0		0	0	0
+gimmick_collection_prop_cup_0012	pickup	Collection_Prop_Cup_0012	Worn Decorative Silver Goblet	tag	0		0	0	0
 gimmick_collection_prop_cup_0013	pickup	Collection_Prop_Cup_0013	Large Multipurpose Vessel	tag	0		0	0	0
 gimmick_collection_prop_cup_0014	pickup	Collection_Prop_Cup_0014	Fine Gold Goblet	tag	0		0	0	0
 gimmick_collection_prop_cup_0015	pickup	Collection_Prop_Cup_0015	Artisan's Metal Goblet	tag	0		0	0	0

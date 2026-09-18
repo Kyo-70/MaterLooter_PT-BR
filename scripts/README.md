@@ -1,6 +1,6 @@
 # Data pipeline
 
-Item, item group, drop set and drop source tables for Crimson Desert 2.02.00 (exe 1.0.0.2850), parsed from the game's own static-info files. This is the data layer behind the Master Looter plugin: it produces the item database, the creature table and the gather node table the plugin ships with.
+Item, item group, drop set and drop source tables for Crimson Desert 2.03.00 (exe 1.0.0.2944), parsed from the game's own static-info files. This is the data layer behind the Master Looter plugin: it produces the item database, the creature table and the gather node table the plugin ships with.
 
 ## Scripts
 
@@ -17,13 +17,13 @@ Item, item group, drop set and drop source tables for Crimson Desert 2.02.00 (ex
 
 ## What is committed and what is not
 
-data/class_overrides.csv and the three summaries are committed. The full outputs (items_tagged.csv/.json, character_drops.csv, the drop set and source tables, item_groups_tree.txt, unmapped_groups.txt) are generated locally from your own extracted game files and are not: they carry the game's text and tables. The three TSVs in mod/data are committed and current for 2.01.00; a plain build of the plugin does not need any of this.
+data/class_overrides.csv and the three summaries are committed. The full outputs (items_tagged.csv/.json, character_drops.csv, the drop set and source tables, item_groups_tree.txt, unmapped_groups.txt) are generated locally from your own extracted game files and are not: they carry the game's text and tables. The three TSVs in mod/data are committed and current for 2.03.00; a plain build of the plugin does not need any of this.
 
 ## Regenerating after a game patch
 
 1. Extract group 0008 (`*.staticinfo*`) and group 0020 (all `.paloc`) from the game archives into extracted/0008 and extracted/0020 with `paz_unpack.py` from NattKh/CrimsonDesertModdingTools (needs `pip install lz4 cryptography`).
 2. Run `cdtables.py summary` and fix any layout drift until it reports `bad 0`.
-3. Run, in order: `build_item_db.py`, `make_itemdb_tsv.py`, `make_creatures_tsv.py`, `make_nodes_tsv.py`. The drop set scripts (`build_dropsets.py`, `build_sources.py`) are only needed for the review pages.
+3. Run, in order: `build_item_db.py`, `make_itemdb_tsv.py`, `build_sources.py`, `make_creatures_tsv.py`, `make_nodes_tsv.py`. The creature table reads its names and item rows from the `character_drops.csv` that `build_sources.py` writes, so skipping it rebuilds creatures from the previous patch's data and nothing says so. `build_dropsets.py` is only needed for the review pages.
 4. Rebuild the plugin; the TSVs are compiled into it.
 
-Record layouts for 2.02.00 and the reasoning behind each field are in the module docstrings and in data/*_summary.md.
+Record layouts for 2.03.00 and the reasoning behind each field are in the module docstrings and in data/*_summary.md.
