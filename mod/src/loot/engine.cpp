@@ -1477,7 +1477,13 @@ namespace ml::loot
                     if (!p.mine) handOpen = true;
                     else if (p.itemRow < 0) mineOpen = true;
                 }
-                if (mineOpen && !handOpen) ours = rise;
+                // Never a document or a quest item this way. Those are handed
+                // out, not picked up: on 18 September 2026 two supply contracts
+                // came in during a camp clear with the mod's gathers pending and
+                // were offered, and they live in an inventory of their own.
+                const Item* it = ItemDb::ByRow(type);
+                const bool handedOut = it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos);
+                if (mineOpen && !handOpen && !handedOut) ours = rise;
             }
             if (ours > 0 && psm::Deposit(type, ours) && g_debugLog)
             {
