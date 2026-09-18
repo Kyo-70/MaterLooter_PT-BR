@@ -39,6 +39,8 @@ A well bucket and the like are never looted, but arming one makes the game offer
 Abyss and Kuku	
 Abyss gear, Kuku pots and their parts.	
 Accessories	
+Add	
+add an item: type 3+ letters of its name	
 allowed	
 also %s	
 always	
@@ -99,6 +101,7 @@ DirectX 12 hooks
 does not respond	
 Draw water from wells	
 Each item goes to the first storage in this list that takes it.	
+Empty: auto-store may move anything a storage takes.	
 Engine	
 English	
 English. %d line(s) seen this session.	
@@ -151,9 +154,11 @@ Insects
 insects off	
 installed	
 Item	
+item %u	
 Item database	
 Item table	
 Items	
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	
 Items lying in the world, including drops from enemies.	
 Items no shop will buy, across every class.	
 Items on the ground	
@@ -193,12 +198,15 @@ Minimum value (copper)
 missing	
 missing MasterLooter.items.tsv	
 mission object	
+more match; type more of the name	
 Mounts and vehicles	
 name a new preset	
 Nearby	
 never	
+Never move	
 no	
 no interaction node	
+no item by that name that is not listed already	
 Nodes the prefab table does not name and that have not yielded anything yet this session. Off (the default) leaves them alone. On makes the mod gather them to find out, which means a plant can be taken while Plants is off.	
 none	
 none seen	
@@ -282,6 +290,7 @@ Recent loot
 Refresh	
 Reload from the ini	
 Reload now	
+Remove	
 Replaces every setting and every class, tag and item rule with what the preset holds, and writes it to MasterLooter.ini. Nothing of the current settings is kept, so back them up first if you want them.	
 Reset all tags	
 Reset to defaults	
@@ -348,6 +357,7 @@ The game removes taken objects with a delay. This stops the same object being se
 The game treats this as stealing and will put a bounty on you.	
 The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	
 the key-block toggle	
+The list is full at %d items.	
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	
 The total, purchased expansions and story slots included. The left end keeps the game's size.	
 This chest holds one of each collectible, so its slots cannot be changed.	

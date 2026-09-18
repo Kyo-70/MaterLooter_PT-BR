@@ -53,6 +53,10 @@ namespace ml::psm
             a.depositResults = reinterpret_cast<int (*)(PsmDepositResult*, int)>(GetProcAddress(h, "PsmDepositResults"));   // optional
             if (!a.getAutoStore || !a.applyAutoStore || !a.deposit || !a.depositResults)   // all four or none
                 a.getAutoStore = nullptr, a.applyAutoStore = nullptr, a.deposit = nullptr, a.depositResults = nullptr;
+            a.getNeverMove   = reinterpret_cast<int (*)(uint16_t*, int, int)>(GetProcAddress(h, "PsmGetNeverMove"));   // optional
+            a.applyNeverMove = reinterpret_cast<int (*)(const uint16_t*, int, char*, int)>(GetProcAddress(h, "PsmApplyNeverMove"));   // optional
+            if (!a.getNeverMove || !a.applyNeverMove || !a.getAutoStore)   // both or neither, and only beside auto-store
+                a.getNeverMove = nullptr, a.applyNeverMove = nullptr;
             if (!a.apiVersion)
             {
                 snprintf(g_why, sizeof g_why, "found, but it has no interface (an older build)");

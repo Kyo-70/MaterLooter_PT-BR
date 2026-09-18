@@ -1351,6 +1351,9 @@ namespace ml::gui
     // when the last read succeeded.
     static PsmAutoStore s_psmAuto{};
     static bool         s_psmAutoOk = false;
+    // Items auto-store never moves, -1 until read.
+    static uint16_t     s_psmNever[PSM_NEVER_MOVE_MAX] = {};
+    static int          s_psmNeverN = -1;
     // The order it offers an item to the storages, so the list reads as it works.
     static const int kPsmAutoOrder[] = { 4, 8, 1, 3, 6, 5, 2, 0 };
     constexpr int      kPsmPadTarget = 220;   // pad rows, 220..228
@@ -1377,6 +1380,90 @@ namespace ml::gui
         s_psmBlockOk = api->getKeyBlock && api->getKeyBlock(&s_psmBlock, 0);
         s_psmAuto.size = sizeof s_psmAuto;
         s_psmAutoOk = api->getAutoStore && api->getAutoStore(&s_psmAuto, 0);
+        s_psmNeverN = api->getNeverMove ? api->getNeverMove(s_psmNever, PSM_NEVER_MOVE_MAX, 0) : -1;
+    }
+
+    static bool PsmApplyNever(const psm::Api* api, const uint16_t* items, int n, const char* what)
+    {
+        char why[256] = {};
+        const bool ok = api->applyNeverMove(items, n, why, sizeof why) != 0;
+        if (Settings::Get().debugLog)
+            LOG("[storage] never-move list %s %s: %d items%s%s", what, ok ? "saved" : "refused", n, why[0] ? " | " : "", why);
+        if (ok) s_psmWhy[0] = 0;
+        else snprintf(s_psmWhy, sizeof s_psmWhy, "%s", why[0] ? why : TR("Private Storage Master refused the change"));
+        PsmFetch(api);
+        return ok;
+    }
+
+    static const char* PsmItemName(uint16_t row)
+    {
+        const Item* it = ItemDb::ByRow(row);
+        return it && !it->name.empty() ? it->Label() : nullptr;
+    }
+
+    // Items auto-store always leaves in the bag. PSM keeps the list and saves it;
+    // this edits a copy and hands the whole list back on every change.
+    static void PsmNeverMoveList(const psm::Api* api)
+    {
+        if (!api->getNeverMove || s_psmNeverN < 0) return;
+        ImGui::TextUnformatted(TR("Never move"));
+        Help("Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.");
+        int drop = -1;
+        if (ImGui::BeginChild("##nevermove", ImVec2(0, 150 * g_scale), ImGuiChildFlags_Borders))
+        {
+            if (!s_psmNeverN) ImGui::TextDisabled("%s", TR("Empty: auto-store may move anything a storage takes."));
+            for (int i = 0; i < s_psmNeverN; ++i)
+            {
+                ImGui::PushID(500 + i);
+                if (ImGui::SmallButton(TR("Remove"))) drop = i;
+                ImGui::SameLine();
+                if (const char* name = PsmItemName(s_psmNever[i])) ImGui::TextUnformatted(name);
+                else ImGui::TextDisabled(TR("item %u"), static_cast<unsigned>(s_psmNever[i]));
+                ImGui::PopID();
+            }
+        }
+        ImGui::EndChild();
+        if (drop >= 0)
+        {
+            uint16_t next[PSM_NEVER_MOVE_MAX];
+            int n = 0;
+            for (int i = 0; i < s_psmNeverN; ++i) if (i != drop) next[n++] = s_psmNever[i];
+            PsmApplyNever(api, next, n, "remove");
+        }
+
+        static char query[64] = "";
+        if (s_psmNeverN >= PSM_NEVER_MOVE_MAX)
+        {
+            ImGui::TextDisabled(TR("The list is full at %d items."), PSM_NEVER_MOVE_MAX);
+            return;
+        }
+        ImGui::SetNextItemWidth(320 * g_scale);
+        ImGui::InputTextWithHint("##neveradd", TR("add an item: type 3+ letters of its name"), query, sizeof query);
+        const std::string q = Lower(query);
+        if (q.size() < 3) return;
+        int shown = 0;
+        for (const Item& it : ItemDb::All())
+        {
+            if (it.row < 0 || it.row > 0xFFFF || it.name.empty() || !Contains(it.name, q)) continue;
+            bool listed = false;
+            for (int i = 0; i < s_psmNeverN; ++i) if (s_psmNever[i] == it.row) listed = true;
+            if (listed) continue;
+            if (++shown > 8) { ImGui::TextDisabled("%s", TR("more match; type more of the name")); break; }
+            ImGui::PushID(600 + shown);
+            if (ImGui::SmallButton(TR("Add")))
+            {
+                uint16_t next[PSM_NEVER_MOVE_MAX];
+                for (int i = 0; i < s_psmNeverN; ++i) next[i] = s_psmNever[i];
+                next[s_psmNeverN] = static_cast<uint16_t>(it.row);
+                if (PsmApplyNever(api, next, s_psmNeverN + 1, "add")) query[0] = 0;
+                ImGui::PopID();
+                break;
+            }
+            ImGui::SameLine();
+            ImGui::TextUnformatted(it.Label());
+            ImGui::PopID();
+        }
+        if (!shown) ImGui::TextDisabled("%s", TR("no item by that name that is not listed already"));
     }
 
     static bool PsmApplyAuto(const psm::Api* api, const char* what = "auto-store")
@@ -1662,6 +1749,7 @@ namespace ml::gui
             if (ImGui::Checkbox(TR("Only move what was picked up"), &only)) { s_psmAuto.onlyGained = only; PsmApplyAuto(api); }
             Help("On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.");
             ImGui::EndDisabled();
+            PsmNeverMoveList(api);
             ImGui::EndDisabled();
             if (ImGui::Checkbox(TR("Say on screen what was stored"), &c.notifyAutoStore)) Settings::MarkDirty();
             Help("At most one line a second, naming each storage and how many went into it. Off, it goes to the log only.");
@@ -1790,6 +1878,12 @@ namespace ml::gui
                     s_psmAuto = a;
                     if (!PsmApplyAuto(api, "reset to defaults, auto-store") && !refused[0]) snprintf(refused, sizeof refused, "%s", s_psmWhy);
                 }
+            }
+            if (api->getNeverMove)
+            {
+                uint16_t d[PSM_NEVER_MOVE_MAX];
+                const int n = api->getNeverMove(d, PSM_NEVER_MOVE_MAX, 1);
+                if (n >= 0 && !PsmApplyNever(api, d, n, "reset to defaults") && !refused[0]) snprintf(refused, sizeof refused, "%s", s_psmWhy);
             }
             if (refused[0]) snprintf(s_psmWhy, sizeof s_psmWhy, "%s", refused);
         }

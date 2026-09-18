@@ -32,6 +32,9 @@ namespace ml::psm
         int         (*applyAutoStore)(const PsmAutoStore*, char*, int);
         int         (*deposit)(uint16_t, int64_t);
         int         (*depositResults)(PsmDepositResult*, int);
+        // The never-move list, optional and both or neither.
+        int         (*getNeverMove)(uint16_t*, int, int);
+        int         (*applyNeverMove)(const uint16_t*, int, char*, int);
     };
 
     // Null until the plugin is found with a matching interface. Cheap to call

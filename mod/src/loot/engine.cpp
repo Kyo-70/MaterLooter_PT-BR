@@ -1129,15 +1129,17 @@ namespace ml::loot
     // only what this mod picked up is ever offered to storage.
     struct PendSend { DWORD at; Action act; uint16_t nodeType; int itemRow; bool counted = false; std::string node; bool mine = false; };
     static std::vector<PendSend> g_pend;
-    // This mod's own sends of a named item, kept longer than g_pend for
-    // auto-store alone. The game can hold a run of pick-ups and hand them over
-    // together: on 18 September 2026 a camp clear reached nothing for eight
-    // seconds and then landed all at once, and everything sent before the last
-    // four seconds had already left g_pend, so Fang, bones, bread and a feather
-    // came in unclaimed and stayed in the bag.
-    struct OwnSend { uint16_t row; DWORD at; };
+    // This mod's own sends of a named item, for auto-store alone, kept until a
+    // rise of that item uses each one up. The game can hold a run of pick-ups
+    // and hand them over together: on 18 September 2026 a camp clear reached
+    // nothing for eight seconds and then landed all at once, and everything
+    // sent before the last four seconds had already left g_pend, so Fang,
+    // bones, bread and a feather came in unclaimed and stayed in the bag. A
+    // twelve-second list fixed that run; Seth asked for no time limit at all.
+    // One entry per world object, so a pick-up the mod sends again after
+    // six seconds is not counted twice, and the oldest go first past 512.
+    struct OwnSend { uint16_t row; uint32_t eid; };
     static std::vector<OwnSend> g_ownSends;
-    static constexpr DWORD kOwnSendMs = 12000;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
 
@@ -1391,8 +1393,6 @@ namespace ml::loot
         }
         g_invPrev.swap(cur);
         g_invPrevValid = true;
-        g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
-                                        [now](const OwnSend& o) { return now - o.at > kOwnSendMs; }), g_ownSends.end());
         // Expire stale sends. A pick-up of a known item that expires with
         // nothing to show for it is what a full bag looks like from here. Only
         // those count: an empty carcass, a node that gives nothing and an item
@@ -1452,8 +1452,8 @@ namespace ml::loot
             else     snprintf(msg, sizeof msg, "Master Looter: bag full, nothing is being picked up");
             State::Get().Notify(msg, 5000, true);
         }
-        // Auto-store, for every rise. What this mod sent by name in the last
-        // twelve seconds explains up to that many units; a rise no send names,
+        // Auto-store, for every rise. What this mod sent by name and has not
+        // yet seen arrive explains up to that many units; a rise no send names,
         // a node's yield or what a body held, is this mod's too when its own
         // nameless sends are the only ones waiting, since nothing done by hand
         // in the last four seconds could have brought it. Anything else rising,
@@ -5250,7 +5250,12 @@ namespace ml::loot
                     else if (!events::Send(v.act, k.eid, g_meEid, route, 0)) { held("the game refused the event"); continue; }
                     ++taken;
                     g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false, std::string(), true });
-                    if (k.db && k.db->row >= 0 && g_ownSends.size() < 512) g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), now });
+                    if (k.db && k.db->row >= 0 &&
+                        std::none_of(g_ownSends.begin(), g_ownSends.end(), [&](const OwnSend& o) { return o.eid == k.eid; }))
+                    {
+                        if (g_ownSends.size() >= 512) g_ownSends.erase(g_ownSends.begin());
+                        g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid });
+                    }
                     InterlockedIncrement(&g_session[static_cast<int>(v.act)]);
                     // Wide enough for a name and a distance. At 80 a long prefab
                     // path consumed the buffer and the distance was truncated away,
