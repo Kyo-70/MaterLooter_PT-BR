@@ -632,7 +632,7 @@ namespace ml::gui
         }
 
         if (s_said[0] && static_cast<LONG>(s_saidUntil - GetTickCount()) > 0) ImGui::TextColored(kGold, "%s", s_said);
-        else ImGui::TextDisabled(TR("One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall."));
+        else ImGui::TextDisabled(TR("A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall."));
     }
 
     static void TabGeneral(Config& c)

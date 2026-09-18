@@ -29,6 +29,7 @@
 1 match%s	
 3 of 3	
 \"%s\" already exists. Saving over it asks first.	
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
 a Master Looter shortcut	
@@ -221,7 +222,6 @@ on the player
 on XInput slot %d	
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	
 Open and close this menu	
 Open folder	

@@ -140,8 +140,9 @@ namespace ml::Settings
     static bool ReadWhole(const std::wstring& path, std::string& out);
 
     // Backups live as one dated file each in MasterLooter.backups. One is
-    // written every time the game starts, before this process can change
-    // anything, and the oldest are dropped so the folder cannot grow forever.
+    // written when the game starts with an ini that differs from the newest
+    // backup, before this process can change anything, and the oldest are
+    // dropped so the folder cannot grow forever.
     static constexpr int kKeepBackups = 12;
     static std::wstring BackupDir() { return Paths::File(L"MasterLooter.backups"); }
 
@@ -198,6 +199,15 @@ namespace ml::Settings
         const int n = static_cast<int>(all.size()) < max ? static_cast<int>(all.size()) : max;
         for (int i = 0; i < n; ++i) out[i] = all[i];
         return n;
+    }
+
+    // The newest backup's name and text; false when there is none.
+    static bool NewestBackup(std::string& name, std::string& text)
+    {
+        std::string names[1];
+        if (ListBackups(names, 1) != 1) return false;
+        name = names[0];
+        return ReadWhole(BackupPath(name), text);
     }
 
     static void PruneBackups()
@@ -645,7 +655,20 @@ namespace ml::Settings
         // version that changes a default, or an afternoon of fiddling, is then
         // one button away from being undone.
         std::string text;
-        if (ReadFile(text) && BackupText(StampNow(""), text))
+        if (!ReadFile(text)) return;
+        // Only when something changed since the newest backup. Every launch
+        // used to write one and only twelve are kept, so once an ini had been
+        // reset, by a mod manager reinstalling or an old build being put back,
+        // twelve launches later every backup was a copy of the defaults and the
+        // settings from before were gone. On 18 September 2026 all twelve on
+        // this machine were the same file, written that morning.
+        std::string newest, last;
+        if (NewestBackup(newest, last) && last == text)
+        {
+            LOG("Settings unchanged since the backup of %s, so no new one was written.", BackupLabel(newest.c_str()).c_str());
+            return;
+        }
+        if (BackupText(StampNow(""), text))
         {
             PruneBackups();
             LOG("Settings backed up as %s before this session touched them.", BackupLabel(StampNow("").c_str()).c_str());
