@@ -25,6 +25,8 @@ namespace ml::psm
         int         (*keyText)(PsmKey, char*, int);
         int         (*padText)(PsmPad, char*, int);
         int         (*fixedSlots)(int);   // optional, null on a plugin built before it
+        int         (*getKeyBlock)(PsmKeyBlock*, int);                // optional, 1.0.1 and later
+        int         (*applyKeyBlock)(const PsmKeyBlock*, char*, int); // optional, 1.0.1 and later
     };
 
     // Null until the plugin is found with a matching interface. Cheap to call

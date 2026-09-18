@@ -100,6 +100,21 @@ PSM_API void        PsmPauseInput(uint32_t ms);
 /* A size that is not a setting (the Collectibles Chest), or 0. Added after
  * interface 1 shipped to Master Looter, so look it up as optional. */
 PSM_API int         PsmFixedSlots(int storage);
+/* Held modifiers keep other keys from the game (HideKeysWithModifier), and a
+ * key turns that on and off (HideKeysToggleKey). Not in PsmSettings, which
+ * cannot grow, and added after interface 1, so both are optional: look them up
+ * by name. Apply saves the ini, turns the toggle off when it clashes with a
+ * storage or dump key, and refuses a mouse or modifier key with a reason. */
+typedef struct PsmKeyBlock
+{
+    uint32_t size;      /* sizeof(PsmKeyBlock) */
+    int32_t  on;        /* HideKeysWithModifier */
+    PsmKey   toggleKey; /* HideKeysToggleKey, vk 0 for none */
+} PsmKeyBlock;
+PSM_API int         PsmGetKeyBlock(PsmKeyBlock* out, int defaults);   /* defaults when nonzero; 0 on a wrong size */
+PSM_API int         PsmApplyKeyBlock(const PsmKeyBlock* in, char* why, int whyLen);
+/* 1 while the key block is holding keys back, else 0. Optional, by name. */
+PSM_API int         PsmHidingKeys(void);
 /* "Ctrl+F1", "LB+LS", "None". */
 PSM_API int         PsmKeyText(PsmKey key, char* out, int outLen);
 PSM_API int         PsmPadText(PsmPad pad, char* out, int outLen);

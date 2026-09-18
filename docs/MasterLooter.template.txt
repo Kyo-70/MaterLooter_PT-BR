@@ -136,6 +136,7 @@ Groups
 Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class on the Classes tab: herb and seed are separate there. That sorts what is lying on the ground item by item, and it reaches the node as well wherever the game says what the node holds: refuse herb and a herb patch is left alone. Plant nodes are a mixed lot, paying grain and crafting materials too, and for the ones the game does not describe this switch is the only control.	
 hold a button, then press the one that opens it (Escape cancels)	
 Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	
+Hold other keys back while Ctrl is down	
 hold two buttons (Escape cancels)	
 Household clutter and collectibles, most of it worthless.	
 How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.	
@@ -251,6 +252,7 @@ press a key (Escape cancels)
 press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	
 Private Storage expansions	
 Private Storage Master %s for game build %s	
+Private Storage Master did not hand over its defaults	
 Private Storage Master on	
 Private Storage Master refused the change	
 Private Storage Master: %s	
@@ -334,6 +336,7 @@ The game fills a node's data only when it thinks you can reach it. Arming asks i
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	
 The game treats this as stealing and will put a bounty on you.	
 The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	
+the key-block toggle	
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	
 The total, purchased expansions and story slots included. The left end keeps the game's size.	
 This chest holds one of each collectible, so its slots cannot be changed.	
@@ -343,6 +346,7 @@ Timber and branches on the ground, and the nodes that yield them. What most of t
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	
 Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	
 Treasure and keepsakes	
+Turn that on and off	
 Two buttons at once, never one: every single button already does something in this game. The mod only reads the pad, so the game still sees both buttons. Pick a pair that does nothing together, like the two shoulder buttons, or Back and a face button.	
 Two things that hold things. The chests, crates and drop-set nodes you open, which rarely answer the loot event. And anything on the ground whose job is to hold something: bottles, jars, clay pots, waterskins, vases and the storage boxes you place. Off by default, and off means a shelf of pottery is left where it stands. Reward boxes are not covered, since those are loot in their own right and belong to Treasure and keepsakes on the Classes tab.\n\nWhat comes out of a chest is not checked against your filters. The game hands the contents over in one go and the mod never sees them as objects, so for those this switch is all or nothing.	
 Unbound until you set it. The game calls taking owned goods stealing and puts a bounty on you for it, so this is the switch you want on for a moment and off again, which is a poor fit for a menu.	
@@ -369,6 +373,7 @@ Watch mode: the game has your controls. %s to interact, %s to close.
 Weapons and armor	
 What enters the working list at all. The ranges below are clamped to it.	
 What to collect	
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	
 Winds the handle for you and takes what comes up, by driving the same state transitions the game drives when you hold the interact button. A well raises no loot event at all, so this is a replay of a captured sequence rather than the game being asked for anything. Off by default, because a well it gets wrong is a well left standing without its bucket.	
 Wood	
 wood off	
@@ -381,6 +386,7 @@ worth %lld copper
 Wrap the swapchain	
 Write the size dump to the log	
 Write translation template	
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	
 Writes MasterLooter.template.txt beside the plugin, holding every line the menu has shown this session. Open every tab first, since a line only appears once it has been drawn. Translate the right-hand side of each record, save it as MasterLooter.<language>.txt, and put that language here.	
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	

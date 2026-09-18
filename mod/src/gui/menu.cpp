@@ -297,8 +297,12 @@ namespace ml::gui
 
         static bool s_watchWas = false;
         const bool front = State::ForegroundIsOurs();
-        const bool key = front && (KeyDown(c.menuKey) || hooks::PadChordHeld(c.padMenu));
-        if (key && !s_keyWas && !st.rebindCapture)
+        // Same rule as the loot hotkeys: a bare key fires only with Ctrl and Alt
+        // up, the pad chord always does. See State::HotkeysFree.
+        const bool keysFree = State::HotkeysFree();
+        const bool menuPad = hooks::PadChordHeld(c.padMenu);
+        const bool key = front && (KeyDown(c.menuKey) || menuPad);
+        if (key && !s_keyWas && !st.rebindCapture && (menuPad || keysFree))
         {
             // Insert: closed -> interactive; watching -> interactive; interactive -> closed.
             if (!st.menuOpen) { st.menuOpen = true; st.menuWatch = false; }
@@ -310,8 +314,9 @@ namespace ml::gui
         }
         s_keyWas = key;
 
-        const bool watch = front && (KeyDown(c.keyWatch) || hooks::PadChordHeld(c.padWatch));
-        if (watch && !s_watchWas && !st.rebindCapture && !st.textCapture)
+        const bool watchPad = hooks::PadChordHeld(c.padWatch);
+        const bool watch = front && (KeyDown(c.keyWatch) || watchPad);
+        if (watch && !s_watchWas && !st.rebindCapture && !st.textCapture && (watchPad || keysFree))
         {
             // Home: closed -> watching; interactive -> watching; watching -> closed.
             if (!st.menuOpen) { st.menuOpen = true; st.menuWatch = true; }
@@ -1336,7 +1341,12 @@ namespace ml::gui
     static bool        s_psmFetched = false;
     static char        s_psmWhy[256] = "";
     static unsigned    s_psmPadWidest = 0, s_psmPadLast = 0, s_psmPadPrev = 0;
-    constexpr int      kPsmKeyTarget = 200;   // g_rebindTarget for key rows, 200..209
+    constexpr int      kPsmKeyTarget = 200;   // g_rebindTarget for key rows, 200..210
+    constexpr int      kPsmBlockRow  = PSM_STORAGES + 1;   // the key-block toggle, after the dump key
+    // PSM 1.0.1's key block, which PsmSettings has no room for. Valid only
+    // when the plugin exports both halves and the last read succeeded.
+    static PsmKeyBlock s_psmBlock{};
+    static bool        s_psmBlockOk = false;
     constexpr int      kPsmPadTarget = 220;   // pad rows, 220..228
 
     static const char* const kPsmHelp[PSM_STORAGES] = {
@@ -1351,20 +1361,57 @@ namespace ml::gui
         "Abyss gear storage, which the game calls the Kuku Pot bag.",
     };
 
+    static void PsmLogApply(const char* what, bool ok, const char* why);
+
     static void PsmFetch(const psm::Api* api)
     {
         s_psm.size = sizeof s_psm;
         if (api->getSettings(&s_psm)) s_psmFetched = true;
+        s_psmBlock.size = sizeof s_psmBlock;
+        s_psmBlockOk = api->getKeyBlock && api->getKeyBlock(&s_psmBlock, 0);
     }
 
-    static void PsmApply(const psm::Api* api)
+    static bool PsmApplyBlock(const psm::Api* api, const char* what = "key block")
+    {
+        s_psmBlock.size = sizeof s_psmBlock;
+        char why[256] = {};
+        const bool ok = api->applyKeyBlock(&s_psmBlock, why, sizeof why) != 0;
+        PsmLogApply(what, ok, why);
+        if (ok) s_psmWhy[0] = 0;
+        else snprintf(s_psmWhy, sizeof s_psmWhy, "%s", why[0] ? why : TR("Private Storage Master refused the change"));
+        // It turns a clashing toggle off, so show what it kept.
+        PsmFetch(api);
+        return ok;
+    }
+
+    // Every save the tab makes, what it sent and what came back. Private
+    // Storage Master logs its own saves only while its detailed log is on, and
+    // a reset to defaults turns that off, so a reset that worked left nothing
+    // in either log on 18 September 2026 and could not be told from one that
+    // never ran.
+    static void PsmLogApply(const char* what, bool ok, const char* why)
+    {
+        if (!Settings::Get().debugLog) return;
+        LOG("[storage] %s %s: on %d, detailed log %d, sizes %d %d %d %d %d %d %d %d %d, leave alone %d, expansions %d, "
+            "key block %s, toggle vk %02X mods %u%s%s",
+            what, ok ? "saved" : "refused", s_psm.enabled, s_psm.debugLog,
+            s_psm.slots[0], s_psm.slots[1], s_psm.slots[2], s_psm.slots[3], s_psm.slots[4], s_psm.slots[5], s_psm.slots[6],
+            s_psm.slots[7], s_psm.slots[8], s_psm.leaveCapacityAlone, s_psm.privateStorageExpansions,
+            s_psmBlockOk ? (s_psmBlock.on ? "on" : "off") : "not offered", s_psmBlock.toggleKey.vk, s_psmBlock.toggleKey.mods,
+            why && why[0] ? " | " : "", why && why[0] ? why : "");
+    }
+
+    static bool PsmApply(const psm::Api* api, const char* what = "settings")
     {
         s_psm.size = sizeof s_psm;
         char why[256] = {};
-        if (api->applySettings(&s_psm, why, sizeof why)) s_psmWhy[0] = 0;
+        const bool ok = api->applySettings(&s_psm, why, sizeof why) != 0;
+        PsmLogApply(what, ok, why);
+        if (ok) s_psmWhy[0] = 0;
         else snprintf(s_psmWhy, sizeof s_psmWhy, "%s", why[0] ? why : TR("Private Storage Master refused the change"));
         // It turns a duplicate binding off, so show what it kept.
         PsmFetch(api);
+        return ok;
     }
 
     static int PsmBits(unsigned v)
@@ -1374,17 +1421,24 @@ namespace ml::gui
         return n;
     }
 
-    // Who else uses this key: another storage, the dump key, or one of Master Looter's own.
+    // Who else uses this key: another storage, the dump key, the key-block
+    // toggle, or one of Master Looter's own.
     static const char* PsmKeyClash(const psm::Api* api, int row, PsmKey k, const Config& c)
     {
         if (!k.vk) return nullptr;
-        for (int i = 0; i <= PSM_STORAGES; ++i)
+        const int last = s_psmBlockOk ? kPsmBlockRow : PSM_STORAGES;
+        for (int i = 0; i <= last; ++i)
         {
             if (i == row) continue;
-            const PsmKey o = i < PSM_STORAGES ? s_psm.keys[i] : s_psm.dumpKey;
-            if (o.vk == k.vk && o.mods == k.mods) return i < PSM_STORAGES ? api->storageName(i) : TR("the capacity dump");
+            const PsmKey o = i < PSM_STORAGES ? s_psm.keys[i] : i == PSM_STORAGES ? s_psm.dumpKey : s_psmBlock.toggleKey;
+            if (o.vk == k.vk && o.mods == k.mods)
+                return i < PSM_STORAGES ? api->storageName(i) : i == PSM_STORAGES ? TR("the capacity dump") : TR("the key-block toggle");
         }
-        if (k.mods) return nullptr;
+        // Master Looter's keys are bare and stay quiet while Ctrl or Alt is
+        // held (State::HotkeysFree), so only a bare key or a Shift one can
+        // reach them, and a Shift one only while the key block is off.
+        if (k.mods & (PSM_MOD_CTRL | PSM_MOD_ALT)) return nullptr;
+        if (k.mods && s_psmBlockOk && s_psmBlock.on) return nullptr;
         if (k.vk == c.menuKey || k.vk == c.keyToggle || k.vk == c.keyBurst || k.vk == c.keyWatch || k.vk == c.keyOwned)
             return TR("a Master Looter key");
         return nullptr;
@@ -1547,7 +1601,12 @@ namespace ml::gui
             ImGui::TextDisabled("%s", TR("takes effect next launch"));
             bool debug = s_psm.debugLog != 0;
             if (ImGui::Checkbox(TR("Detailed log"), &debug)) { s_psm.debugLog = debug; PsmApply(api); }
-            Help("Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.");
+            // 1.0.1 started rotating its logs, and the key-block exports came
+            // with it, so their presence says which text is true.
+            if (api->getKeyBlock)
+                Help("Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.");
+            else
+                Help("Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.");
         }
 
         Section(TR("Keys"));
@@ -1556,6 +1615,16 @@ namespace ml::gui
         for (int i = 0; i < PSM_STORAGES; ++i)
             dirty |= PsmKeyRow(api, api->storageName(i), kPsmHelp[i], s_psm.keys[i], kPsmKeyTarget + i, i, c);
         dirty |= PsmKeyRow(api, TR("Write the size dump to the log"), nullptr, s_psm.dumpKey, kPsmKeyTarget + PSM_STORAGES, PSM_STORAGES, c);
+        if (s_psmBlockOk)
+        {
+            bool on = s_psmBlock.on != 0;
+            if (ImGui::Checkbox(TR("Hold other keys back while Ctrl is down"), &on)) { s_psmBlock.on = on; PsmApplyBlock(api); }
+            Help("While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. "
+                 "Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.");
+            if (PsmKeyRow(api, TR("Turn that on and off"), "Turns the key block on and off while you play, and saves it.",
+                          s_psmBlock.toggleKey, kPsmKeyTarget + kPsmBlockRow, kPsmBlockRow, c))
+                PsmApplyBlock(api);
+        }
 
         Section(TR("Controller"));
         ImGui::TextDisabled("%s", TR("Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held."));
@@ -1633,9 +1702,28 @@ namespace ml::gui
         ImGui::SameLine();
         if (ConfirmButton("psm-defaults", TR("Reset to defaults"), TR("Click again to reset"), true))
         {
+            // Two saves, and a refusal from the first stays on screen: the
+            // second one succeeding used to clear it.
+            char refused[256] = "";
             PsmSettings d{};
             d.size = sizeof d;
-            if (api->getDefaults(&d)) { s_psm = d; PsmApply(api); }
+            if (!api->getDefaults(&d)) snprintf(refused, sizeof refused, "%s", TR("Private Storage Master did not hand over its defaults"));
+            else
+            {
+                s_psm = d;
+                if (!PsmApply(api, "reset to defaults, settings")) snprintf(refused, sizeof refused, "%s", s_psmWhy);
+            }
+            if (api->getKeyBlock)
+            {
+                PsmKeyBlock b{};
+                b.size = sizeof b;
+                if (api->getKeyBlock(&b, 1))
+                {
+                    s_psmBlock = b;
+                    if (!PsmApplyBlock(api, "reset to defaults, key block") && !refused[0]) snprintf(refused, sizeof refused, "%s", s_psmWhy);
+                }
+            }
+            if (refused[0]) snprintf(s_psmWhy, sizeof s_psmWhy, "%s", refused);
         }
     }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <atomic>
 #include <Windows.h>
 #include <cstring>
 
@@ -61,6 +62,37 @@ namespace ml
             DWORD pid = 0;
             GetWindowThreadProcessId(GetForegroundWindow(), &pid);
             return pid == GetCurrentProcessId();
+        }
+
+        // Whether a keyboard hotkey of this mod may fire right now. Every key
+        // here is bound bare, with no modifier, so a bare key is the only match:
+        // with Ctrl or Alt held the press belongs to something else. Private
+        // Storage Master binds Ctrl+F1 to Ctrl+F12, Ctrl+F10 among them, and
+        // this mod's F10 read through it, so one press toggled both mods. Shift
+        // is left out because the game sprints on it and nothing here is bound
+        // with it; when Private Storage Master uses Shift itself, its own
+        // PsmHidingKeys export says so and covers it. That export is optional
+        // and looked up by name, so a build of that plugin without it changes
+        // nothing. The pad chords are not affected.
+        static bool HotkeysFree()
+        {
+            if ((GetAsyncKeyState(VK_CONTROL) & 0x8000) || (GetAsyncKeyState(VK_MENU) & 0x8000)) return false;
+            using HidingFn = int (*)(void);
+            static std::atomic<HidingFn> s_hiding{nullptr};
+            static std::atomic<DWORD> s_nextTry{0};
+            HidingFn fn = s_hiding.load(std::memory_order_acquire);
+            if (!fn)
+            {
+                const DWORD now = GetTickCount();
+                if (static_cast<LONG>(now - s_nextTry.load(std::memory_order_relaxed)) >= 0)
+                {
+                    s_nextTry.store(now + 2000, std::memory_order_relaxed);
+                    if (const HMODULE h = GetModuleHandleW(L"PrivateStorageMaster.asi"))
+                        fn = reinterpret_cast<HidingFn>(GetProcAddress(h, "PsmHidingKeys"));
+                    if (fn) s_hiding.store(fn, std::memory_order_release);
+                }
+            }
+            return !(fn && fn() != 0);
         }
 
         static State& Get()
