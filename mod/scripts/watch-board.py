@@ -54,7 +54,7 @@ REPOS = [("", "", "shin2344234/master-looter"),
          ("_psm", "psm ", "shin2344234/private-storage-master")]
 GH = REPOS[0][2]
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128 Safari/537.36"
-INTERVAL = 600
+INTERVAL = 900
 KEYFILE = os.path.join(HERE, "keys.local.env")
 DISCORD_GUILD = "1547304303646089296"
 DISCORD_FORUM = "1547305334945615922"      # help-n-bug-reports
@@ -80,17 +80,21 @@ SELF_NAMES = {"shin234"}
 
 
 # The site's edge starts answering 403 when the pages are asked for in quick
-# succession, and adding a second mod doubled the number of pages a pass wants.
-# Four back to back was enough to earn it. A few seconds between them is plenty
-# and costs nothing, since a pass runs every ten minutes.
+# succession, and every mod added doubles down on that: a pass wants two tabs
+# per mod plus a reply list for every bug row whose timestamp moved. Four mods
+# on 17 September 2026 had three tabs refused in one pass, across three
+# different mods, so the gap went from four seconds to ten and the pass from
+# ten minutes to fifteen. Nothing is lost by being slow here. A report sitting
+# five minutes longer costs nobody anything, and a refused pass reads as
+# silence, which is worse.
 _last_fetch = [0.0]
-FETCH_GAP = 4.0
+FETCH_GAP = 10.0
 # The edge sheds a request now and then and answers 403 rather than a page. On
 # 15 September 2026 the bugs tab did that about half the time for a few minutes
 # while the posts tab was untouched, so a single refusal says nothing about
 # whether the page is reachable. Ask again before believing it.
 RETRIES = 3
-RETRY_GAP = (3.0, 9.0)
+RETRY_GAP = (10.0, 30.0)
 
 
 def _run(args, what):
