@@ -1148,7 +1148,13 @@ namespace ml::loot
     // an entry keeps no clock while its object is there. Once the object is
     // gone the entry has five seconds to be matched. One entry per world
     // object, and the oldest go first past 512.
-    struct OwnSend { uint16_t row; uint32_t eid; DWORD sentAt; DWORD goneAt; };
+    //
+    // Whether it went because it was delivered or because the player walked
+    // off is judged where it vanished: the object's own position, kept here
+    // from the send because the scan forgets an entity that stops reading back,
+    // against the scan centre in the first scan that missed it. missAt and
+    // missDist hold that first miss until a second and a half says it is real.
+    struct OwnSend { uint16_t row; uint32_t eid; DWORD sentAt; DWORD goneAt; Vec3 pos; DWORD missAt; float missDist; };
     static std::vector<OwnSend> g_ownSends;
     static constexpr DWORD kOwnGoneMs = 5000;
     // A rise of one item, seen by LearnFromInventory and judged by
@@ -1168,8 +1174,11 @@ namespace ml::loot
     // A rise seen within a second of that is treated as seen outside it, since
     // the bag is read a scan behind the screen.
     static DWORD g_notFreeAt = 0;
-    // What the player touched by hand, by entity, for four seconds.
+    // What the player touched by hand, by entity. Kept for twelve seconds,
+    // because the game can hold a delivery for eight and a hand pick-up
+    // delivered late must still read as the player's.
     struct HandTouch { uint32_t eid; DWORD at; };
+    static constexpr DWORD kHandMs = 12000;
     static std::vector<HandTouch> g_handTouches;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
@@ -1500,7 +1509,7 @@ namespace ml::loot
             const int fp = psm::FreePlay();
             if (fp == 0) g_notFreeAt = now ? now : 1;
             const bool inPlay = fp != 0 && !(g_notFreeAt && now - g_notFreeAt < 1000);
-            bool handOpen = g_lastHandAt && now - g_lastHandAt < 4000;
+            bool handOpen = g_lastHandAt && now - g_lastHandAt < kHandMs;
             for (const PendSend& p : g_pend) if (!p.mine) handOpen = true;
             for (uint16_t type : rose)
             {
@@ -1512,12 +1521,16 @@ namespace ml::loot
                 // were offered, and they live in an inventory of their own.
                 const Item* it = ItemDb::ByRow(type);
                 const bool handedOut = it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos);
-                if (!handOpen && !handedOut)
+                // A send whose yield is known vouches for that item whatever
+                // else the player is doing; a hand pick-up of the same item is
+                // caught later by AutoStorePass. A send that could have paid
+                // anything vouches only when nothing was done by hand.
+                if (!handedOut)
                     for (const PendSend& p : g_pend)
                     {
                         if (!p.mine || p.itemRow >= 0) continue;
                         if (g_changeAt && static_cast<LONG>(p.at - g_changeAt) < 0) continue;
-                        if (p.yieldRow < 0 || p.yieldRow == type) h.fallback = true;
+                        if (p.yieldRow == type || (p.yieldRow < 0 && !handOpen)) h.fallback = true;
                     }
                 if (g_heldRises.size() < 256) g_heldRises.push_back(h);
             }
@@ -3985,10 +3998,10 @@ namespace ml::loot
     static void AutoStorePass(DWORD now, const Vec3& centre, float scanRange)
     {
         g_handTouches.erase(std::remove_if(g_handTouches.begin(), g_handTouches.end(),
-                                           [now](const HandTouch& t) { return now - t.at > 4000; }), g_handTouches.end());
+                                           [now](const HandTouch& t) { return now - t.at > kHandMs; }), g_handTouches.end());
         // The player took by hand the very object this mod was reaching for, so
         // whatever it brings is theirs; and any item of a kind they took by hand
-        // in the last four seconds is theirs too.
+        // in the last twelve seconds is theirs too.
         std::unordered_set<uint16_t> handRows;
         for (const HandTouch& t : g_handTouches)
         {
@@ -3997,28 +4010,28 @@ namespace ml::loot
             const auto r = g_tidByEid.find(t.eid);
             if (r != g_tidByEid.end()) handRows.insert(r->second);
         }
-        // Every object in scan range is seen by every scan, so one not seen for
-        // a second and a half has gone from the world, landed or otherwise. One
-        // last seen near the edge of the range may only have been left behind,
-        // which says nothing about whether it landed, so its entry is dropped
-        // rather than trusted. The mod picks up within a few metres, and a
-        // delivered object vanishes close to the player.
-        const float edge = scanRange > 8.0f ? scanRange - 5.0f : scanRange * 0.5f;
+        // The scan reads every object in range, so one it has not read for a
+        // second and a half has gone from the world. Where it went is judged at
+        // the first scan that missed it. If it lay well inside the range then,
+        // it vanished where it lay, which is a delivery. If it lay within two
+        // metres of the edge or beyond it, the player may simply have left it
+        // behind, which says nothing about whether it landed, so the entry is
+        // dropped rather than trusted.
+        const float edge = scanRange > 2.5f ? scanRange - 2.0f : scanRange * 0.8f;
         for (auto o = g_ownSends.begin(); o != g_ownSends.end();)
         {
             const auto sn = g_seen.find(o->eid);
-            if (sn != g_seen.end() && now - sn->second.when < 1500) { o->goneAt = 0; ++o; continue; }
-            if (!o->goneAt)
+            if (sn != g_seen.end() && sn->second.when == now) { o->goneAt = 0; o->missAt = 0; ++o; continue; }
+            if (o->goneAt) { ++o; continue; }
+            if (!o->missAt)
             {
-                bool nearby = false;
-                if (sn != g_seen.end())
-                {
-                    const float dx = sn->second.pos.x - centre.x, dy = sn->second.pos.y - centre.y, dz = sn->second.pos.z - centre.z;
-                    nearby = dx * dx + dy * dy + dz * dz < edge * edge;
-                }
-                if (!nearby) { o = g_ownSends.erase(o); continue; }
-                o->goneAt = now ? now : 1;
+                const float dx = o->pos.x - centre.x, dy = o->pos.y - centre.y, dz = o->pos.z - centre.z;
+                o->missAt = now ? now : 1;
+                o->missDist = std::sqrt(dx * dx + dy * dy + dz * dz);
             }
+            if (now - o->missAt < 1500) { ++o; continue; }
+            if (o->missDist >= edge) { o = g_ownSends.erase(o); continue; }
+            o->goneAt = o->missAt;
             ++o;
         }
         g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
@@ -5419,11 +5432,11 @@ namespace ml::loot
                     if (k.db && k.db->row >= 0)
                     {
                         auto o = std::find_if(g_ownSends.begin(), g_ownSends.end(), [&](const OwnSend& e) { return e.eid == k.eid; });
-                        if (o != g_ownSends.end()) { o->sentAt = now; o->goneAt = 0; }
+                        if (o != g_ownSends.end()) { o->sentAt = now; o->goneAt = 0; o->missAt = 0; o->pos = k.pos; }
                         else
                         {
                             if (g_ownSends.size() >= 512) g_ownSends.erase(g_ownSends.begin());
-                            g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid, now, 0 });
+                            g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid, now, 0, k.pos, 0, 0.0f });
                         }
                     }
                     InterlockedIncrement(&g_session[static_cast<int>(v.act)]);
