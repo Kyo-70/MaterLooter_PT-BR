@@ -2,6 +2,9 @@
 
 Auto-loot for Crimson Desert 2.03.00 with an in-game menu.
 
+> [!IMPORTANT]
+> **New in 1.6.28: loot can go straight into storage.** Install [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) 1.1.0 or later beside Master Looter, and what Master Looter picks up can be moved into your storage as it lands. Nothing you pick up by hand is touched. It starts off; see [Storing loot](#storing-loot) for how to turn it on.
+
 Walk past it and it is in your bag: dropped items, herbs and flowers, ore and stone chunks, timber, insects, fish, small animals, and the carcasses and bodies of anything you kill. Each kind has its own switch. Every item it picks up is checked against a database of 6,816 items with classes and tags, and the game's own Take-or-Steal check decides what is off limits. Skinning a carcass is the exception: the game hands the yield over without the mod seeing what it is, so that one switch is all or nothing. Everything is set from a menu inside the game.
 
 [Nexus Mods page](https://www.nexusmods.com/crimsondesert/mods/3402) · [Releases](https://github.com/shin2344234/master-looter/releases) · [Plugin manual](mod/README.md) · [Data pipeline](scripts/README.md)
@@ -11,16 +14,38 @@ Walk past it and it is in your bag: dropped items, herbs and flowers, ore and st
 - Fourteen switches for what to collect: ground items, carcasses, enemy bodies, plants, crops, ore and stone, wood, unidentified nodes, insects, fish, small animals, containers, furniture nodes and water from wells. To keep the ore and leave the stone, refuse the class stone on the Classes tab.
 - Class groups with one click (weapons and armor, damaged gear, food and drink, materials, books and papers, furniture, treasure and keepsakes, and more), a full class table, tag rules and per-item overrides with a live verdict.
 - Quest items, memory chips, puzzle and mechanism parts, artifacts, recipes and your own equipment are protected by default. The Classes and Items tabs can lift that on purpose.
+- With [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) 1.1.0 or later installed, what the mod picks up can be moved into your storage as it lands. See [below](#storing-loot).
 - Owned goods are skipped unless you opt in: the mod asks the same routine the game uses to decide between "Take" and "Steal".
 - Gather nodes are armed from a distance, so bushes fill their data without you standing on them.
 - Ore veins are broken rather than emptied, the way a pickaxe does it, so the contents drop on the ground and your tool's Mining Yield Up is applied by the game. Each vein is struck once.
 - Water is lifted out of a well bucket while you turn the handle yourself. The mod drives the one state change the game makes for that and nothing else, so the bucket stays on the well and the handle stays in your hands. Off by default.
-- Presets: every setting and every rule saved under a name, swapped in two clicks. Settings are also backed up each time the game starts and the last twelve are kept, so a version with different defaults is one button to undo. Anything that overwrites or discards asks first.
+- Presets: every setting and every rule saved under a name, swapped in two clicks. Settings are also backed up when the game starts, whenever they changed since the last backup, and the last twelve are kept, so a version with different defaults is one button to undo. Anything that overwrites or discards asks first.
 - A notice appears when the bag is full, read from the bag's own slot count, so it shows the moment it fills whether or not you are looting. Turn it off under General.
 - The menu comes in 28 languages besides English, every language Steam offers, all built into the plugin and picked from one list under General. Brazilian Portuguese is from Kyo-70 and both Chinese menus from dofo7777. The other 25 are machine translations that no native speaker has read yet, and the menu says so whenever one is on. A corrected file beside the plugin overrides the built-in copy, no rebuild needed. The [template of every line](docs/MasterLooter.template.txt) is in the repository, and a partial translation leaves the rest in English.
 - A Nearby tab lists the objects around you, nearest first, with the rule that decided each one and a note when there are more than it can show; a Status tab shows every hook and signature.
 - Watch mode keeps the menu on screen while you play. Every key is rebindable, and each one can also be a two-button controller shortcut. The overlay works with DLSS frame generation and HDR.
 - Nothing hardcoded: every game address comes from a byte pattern or a class name resolved at load, and `sigcheck.py` reports what a game patch broke without launching the game.
+
+## Storing loot
+
+New in 1.6.28. With [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) installed beside it, whatever Master Looter picks up can be moved into your storage a moment after it lands in the bag, the same move you would make standing at the storage.
+
+You need Master Looter 1.6.28 or later and Private Storage Master 1.1.0 or later, both in `bin64`. Master Looter only stores what it picks up itself, so it has to be looting: auto-loot on, or the loot-everything key.
+
+To turn it on:
+
+1. Press Insert to open the menu and go to the Storage tab. The tab is only there when Private Storage Master is installed.
+2. Under Store loot, tick **Put what Master Looter picks up into storage**. It starts off. Setting `AutoStore=1` in `PrivateStorageMaster.ini` does the same.
+3. Tick the storages that may receive loot. Each item goes to the first ticked storage in the list that takes it, in this order: Collectibles Chest, Abyss gear storage, Gatherables Chest, Kuku Cooler, Bird Feed, Camp Straw, Wardrobe and Private Storage. Wardrobe and Private Storage start unticked. Camp Provisions never receives loot.
+4. If you like, add items to the **Never move** list under the checkboxes. Type three or more letters of a name and pick from the matches. Every currency is on it from the start.
+
+**Only move what was picked up** is on by default. It moves just the amount that arrived, so the food and potions you were already carrying stay in the bag. Turned off, the whole stack goes.
+
+What gets moved is what Master Looter itself took: auto-loot pickups, body and carcass searches, catches and gathers. What you pick up or gather by hand stays in the bag, and so does anything that arrives in a shop, a crafting screen, a menu or while a storage is open, which covers purchases, crafts and withdrawals. Quest items and documents are never moved, and neither is anything on the never-move list. An item no ticked storage takes stays in the bag. Two short windows lean the same way: for twelve seconds after you take something by hand that the mod can't identify, and for about two seconds after you close a menu or a storage, nothing is stored.
+
+Each batch shows a notice such as `Master Looter: Stored 3 items: Kuku Cooler 3`, at most one a second. **Show a notice when loot is stored**, just under the main switch, turns it off. With the verbose log on, every item offered and where it went is written to `MasterLooter.log` as a `[store]` line, along with the reason when one stayed in the bag.
+
+With an older Private Storage Master the section reads "Storing loot needs a newer Private Storage Master." If Private Storage Master can't find the game's move on your game version, the section says so and the switches are greyed out.
 
 ## Installing
 
@@ -63,11 +88,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.27:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.28:
 
-    3f8a1cd3ea245a5e4b9ac4f4ad8ed93d0582ebd0acda3a306bf85fe4a18d7c77  MasterLooter-1.6.27-DMM.zip
-    dd1db78de006f14a07a823fb705c7f288cbcfca5b7c7813634e277f58ab54cbc  MasterLooter-1.6.27.zip
-    18d979b307c8eced5b2aad6b1c0d0db5754c3a8117deee2bfd5c11e2ace68c09  MasterLooter.asi
+    a214ba2f7e61d9c1c982ac0f5bec1e72b8f63b6d890d65217886dd5ba42b9996  MasterLooter-1.6.28-DMM.zip
+    fa3485daa791b80794d0a9cfd5f2633dcd809ff20210d9cb8053e4616fbe13b7  MasterLooter-1.6.28.zip
+    305b2749898e9ad445fc4b3ce0f10389b927d5ebf1030daf94f401c046753e9c  MasterLooter.asi
 
 ## Controls
 
