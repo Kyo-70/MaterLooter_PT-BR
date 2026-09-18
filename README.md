@@ -63,11 +63,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.25:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.26:
 
-    961cc7439bc98a7c22cbe8d968e66534f0afb3c444d125825f15c63530484c41  MasterLooter-1.6.25-DMM.zip
-    fb8b27a56ed36146109c45ea005b20c0936ac3f83e5ee5d4fb8d627e61dc9bef  MasterLooter-1.6.25.zip
-    cf98f6b1da2f215593a7e3010ff1745700314ffcc61f32d8862b9821cc6ecc78  MasterLooter.asi
+    97775ed3b743588a6b293ccd7270b84cf267669c5d38c348168328db8874c42a  MasterLooter-1.6.26-DMM.zip
+    0c2b1d081a36d8df2b839f1c19ef6f0f179461f3e714ff6b4e85270ab8cc6db5  MasterLooter-1.6.26.zip
+    5a69dfc29a712f4d05defec5a65bd333459f827c77f0e03b63755f65f6bae6dd  MasterLooter.asi
 
 ## Controls
 
