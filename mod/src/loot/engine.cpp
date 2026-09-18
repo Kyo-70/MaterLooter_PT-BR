@@ -1160,20 +1160,39 @@ namespace ml::loot
     // A rise of one item, seen by LearnFromInventory and judged by
     // AutoStorePass. fallback: one of this mod's nameless sends could have paid
     // it and nothing was done by hand, judged while those sends were pending.
+    // handUnnamed: something taken by hand in the last twelve seconds is an
+    // item nothing here can name, so it could have paid this rise, and no
+    // credit of any kind is given to it.
     // inPlay: the player was in free play when the rise was first seen. A rise
     // seen in a shop, a crafting screen, a menu or a storage is a purchase, a
     // craft or something taken out on purpose, and is never offered. credited:
     // units already judged to be this mod's, waiting for Private Storage
     // Master to take them, which it refuses outside free play; they are
     // offered again until it does, for twenty seconds.
-    struct HeldRise { uint16_t row; long long units; DWORD at; bool fallback; bool inPlay; long long credited = 0; };
+    struct HeldRise { uint16_t row; long long units; DWORD at; bool fallback; bool inPlay; bool handUnnamed = false; long long credited = 0; };
     static std::vector<HeldRise> g_heldRises;
     static constexpr DWORD kRiseHoldMs = 4000;
     static constexpr DWORD kRiseRetryMs = 20000;
     // The last time Private Storage Master said the player was out of free play.
-    // A rise seen within a second of that is treated as seen outside it, since
-    // the bag is read a scan behind the screen.
+    // It is asked every tenth of a second, between scans as well, so a storage
+    // opened and closed inside one scan interval is still seen. A rise read
+    // within FreeGraceMs of it is treated as seen outside free play: the rise
+    // can have happened just before the close, and the bag is read up to half
+    // a second late and then only at the next scan.
     static DWORD g_notFreeAt = 0;
+    static void SampleFreePlay(DWORD now)
+    {
+        if (psm::FreePlay() == 0) g_notFreeAt = now ? now : 1;
+    }
+    static DWORD FreeGraceMs()
+    {
+        return 1600 + static_cast<DWORD>(1000 / std::clamp(Settings::Get().scansPerSec, 1, 30));
+    }
+    // A gather of this mod's whose yield is known, kept for twelve seconds
+    // because the game can hold a delivery for eight. It vouches for a rise of
+    // that item alone. The pending sends expire at four, which is too soon.
+    struct MineYield { DWORD at; uint16_t row; };
+    static std::vector<MineYield> g_mineYields;
     // What the player touched by hand, by entity. Kept for twelve seconds,
     // because the game can hold a delivery for eight and a hand pick-up
     // delivered late must still read as the player's.
@@ -1529,20 +1548,19 @@ namespace ml::loot
         // Auto-store. Every rise is held for AutoStorePass, which runs later in
         // the scan, once this scan has seen which objects are still in the world
         // and whether the world changed under it. The one thing judged here is
-        // the fallback, while the sends it depends on are still pending: a rise
-        // no send names is this mod's when one of its own nameless sends made
-        // since the last world change could have paid it (a gather whose yield
-        // is known pays that item alone, a body search or an unnamed gather
-        // could pay anything). One that could pay anything vouches only when
-        // nothing was done by hand in the last twelve seconds, and none does
-        // while something taken by hand is an item nothing here can name.
-        // Purchases and crafts raise nothing this mod sees, and
-        // Private Storage Master refuses a deposit outside free play, which is
-        // what keeps a shop from landing inside that window.
+        // the fallback: a rise no send names is this mod's when one of its own
+        // sends made since the last world change could have paid it. A gather
+        // whose yield is known pays that item alone and vouches for twelve
+        // seconds. A body search or an unnamed gather could pay anything,
+        // vouches only while it is pending, and only when nothing was done by
+        // hand in the last twelve seconds. None vouches while something taken
+        // by hand is an item nothing here can name. A rise read in or just
+        // after a shop, a menu or a storage is never offered at all.
         {
-            const int fp = psm::FreePlay();
-            if (fp == 0) g_notFreeAt = now ? now : 1;
-            const bool inPlay = fp != 0 && !(g_notFreeAt && now - g_notFreeAt < 1000);
+            SampleFreePlay(now);
+            const bool inPlay = psm::FreePlay() != 0 && !(g_notFreeAt && now - g_notFreeAt < FreeGraceMs());
+            g_mineYields.erase(std::remove_if(g_mineYields.begin(), g_mineYields.end(),
+                                              [now](const MineYield& m) { return now - m.at > kHandMs; }), g_mineYields.end());
             bool handOpen = g_lastHandAt && now - g_lastHandAt < kHandMs;
             for (const PendSend& p : g_pend) if (!p.mine) handOpen = true;
             // Something taken by hand whose item nothing here can name could
@@ -1554,24 +1572,33 @@ namespace ml::loot
                 if (now - t.at < kHandMs && !g_tidByEid.count(t.eid) && !g_yieldByEid.count(t.eid)) handUnnamed = true;
             for (const auto& [type, units] : bagRose)
             {
-                HeldRise h{ type, units > 0 ? units : 1, now, false, inPlay };
-                // Never a document or a quest item this way. Those are handed
-                // out, not picked up: on 18 September 2026 two supply contracts
-                // came in during a camp clear with the mod's gathers pending and
-                // were offered, and they live in an inventory of their own.
+                // Never a document or a quest item, by any route. Those are
+                // handed out as often as picked up: on 18 September 2026 two
+                // supply contracts came in during a camp clear with the mod's
+                // gathers pending and were offered. And one the mod did pick up,
+                // with the Quest items switch on, still belongs in the bag.
                 const Item* it = ItemDb::ByRow(type);
-                const bool handedOut = it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos);
+                if (it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos)) continue;
+                HeldRise h{ type, units > 0 ? units : 1, now, false, inPlay };
+                h.handUnnamed = handUnnamed;
                 // A send whose yield is known vouches for that item whatever
                 // else the player is doing; a hand pick-up of the same item is
                 // caught later by AutoStorePass. A send that could have paid
                 // anything vouches only when nothing was done by hand.
-                if (!handedOut && !handUnnamed)
+                if (!handUnnamed)
+                {
                     for (const PendSend& p : g_pend)
                     {
-                        if (!p.mine || p.itemRow >= 0) continue;
+                        if (!p.mine || p.itemRow >= 0 || p.yieldRow >= 0) continue;
                         if (g_changeAt && static_cast<LONG>(p.at - g_changeAt) < 0) continue;
-                        if (p.yieldRow == type || (p.yieldRow < 0 && !handOpen)) h.fallback = true;
+                        if (!handOpen) h.fallback = true;
                     }
+                    for (const MineYield& m : g_mineYields)
+                    {
+                        if (g_changeAt && static_cast<LONG>(m.at - g_changeAt) < 0) continue;
+                        if (m.row == type) h.fallback = true;
+                    }
+                }
                 if (g_heldRises.size() < 256) g_heldRises.push_back(h);
             }
         }
@@ -4063,9 +4090,11 @@ namespace ml::loot
         const float edge = scanRange > 2.5f ? scanRange - 2.0f : scanRange * 0.8f;
         for (auto o = g_ownSends.begin(); o != g_ownSends.end();)
         {
-            if (g_present.count(o->eid)) { o->goneAt = 0; o->missAt = 0; ++o; continue; }
-            if (o->goneAt) { ++o; continue; }
+            // The list keeps the nearest 256, so the walk's own refresh this
+            // scan counts as present too.
             const auto sn = g_seen.find(o->eid);
+            if (g_present.count(o->eid) || (sn != g_seen.end() && sn->second.when == now)) { o->goneAt = 0; o->missAt = 0; ++o; continue; }
+            if (o->goneAt) { ++o; continue; }
             if (sn == g_seen.end()) { o->goneAt = o->missAt ? o->missAt : (now ? now : 1); ++o; continue; }
             {
                 const float dx = sn->second.pos.x - centre.x, dy = sn->second.pos.y - centre.y, dz = sn->second.pos.z - centre.z;
@@ -4094,8 +4123,22 @@ namespace ml::loot
             // includes the scan that noticed the change, whose bag was read
             // before the change was.
             const LONG sinceChange = g_changeAt ? static_cast<LONG>(h.at - g_changeAt) : 0x7FFFFFFF;
-            if ((sinceChange > -static_cast<LONG>(kRiseHoldMs) && sinceChange <= 3000) || handRows.count(h.row) || !h.inPlay)
+            if ((sinceChange > -static_cast<LONG>(kRiseHoldMs) && sinceChange <= 3000) || !h.inPlay)
             {
+                g_heldRises.erase(g_heldRises.begin() + static_cast<long>(i));
+                continue;
+            }
+            // Taken by hand, or possibly: the rise is not offered, and it uses
+            // up as many of this item's gone targets as it has units, so they
+            // are not left over for some later rise to claim.
+            if (handRows.count(h.row) || h.handUnnamed)
+            {
+                long long left = h.units;
+                for (auto o = g_ownSends.begin(); o != g_ownSends.end() && left > 0;)
+                {
+                    if (o->row == h.row && o->goneAt) { --left; o = g_ownSends.erase(o); }
+                    else ++o;
+                }
                 g_heldRises.erase(g_heldRises.begin() + static_cast<long>(i));
                 continue;
             }
@@ -4788,6 +4831,7 @@ namespace ml::loot
                 // not be delivered from it.
                 g_heldRises.clear();
                 g_ownSends.clear();
+                g_mineYields.clear();
                 // A well run is the fourth holder of a raw component pointer and
                 // the queues were only three of them. Winding a well is eleven
                 // seconds of timed transitions spread over many scans, and
@@ -5410,6 +5454,7 @@ namespace ml::loot
                         {
                             const Item* y = NodeYield(k);
                             g_pend.push_back({ now, Action::Gather, k.gtid, -1, false, std::string(), true, y ? y->row : -1 });
+                            if (y && g_mineYields.size() < 256) g_mineYields.push_back({ now, static_cast<uint16_t>(y->row) });
                         }
                         if (cfg.debugLog)
                             LOG("[pick] drove the game's own pick at eid %08X %.1f m: %s", k.eid, k.d, k.node);
@@ -5479,6 +5524,7 @@ namespace ml::loot
                         const Item* y = v.act == Action::Gather ? NodeYield(k) : nullptr;
                         g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false,
                                            std::string(), true, y ? y->row : -1 });
+                        if (y && !k.db && g_mineYields.size() < 256) g_mineYields.push_back({ now, static_cast<uint16_t>(y->row) });
                     }
                     if (k.db && k.db->row >= 0)
                     {
@@ -5618,7 +5664,14 @@ namespace ml::loot
                 if (g_status.playerFound) strncpy(g_status.note, cfg.enabled ? "looting" : "idle", sizeof g_status.note - 1);
             }
             const int sps = std::clamp(cfg.scansPerSec, 1, 30);
-            Sleep(want ? static_cast<DWORD>(1000 / sps) : 100);
+            const DWORD nap = want ? static_cast<DWORD>(1000 / sps) : 100;
+            for (DWORD slept = 0; slept < nap;)
+            {
+                const DWORD step = std::min<DWORD>(nap - slept, 100);
+                Sleep(step);
+                slept += step;
+                if (want) SampleFreePlay(GetTickCount());
+            }
         }
         return 0;
     }
