@@ -1182,6 +1182,15 @@ namespace ml::loot
     static std::vector<HandTouch> g_handTouches;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
+    // The carried bag alone, for auto-store. The sample above spans every
+    // storage, and Private Storage Master moving a stack out of the bag can be
+    // read half done, in both places at once, which is a rise nobody picked up.
+    static std::vector<std::pair<uint16_t, long long>> g_bagPrev;
+    static bool g_bagPrevValid = false;
+    // Gather nodes whose yield is known, by entity, so a node gathered by hand
+    // names what it paid the way an item's own row does.
+    static std::unordered_map<uint32_t, uint16_t> g_yieldByEid;
+    static std::unordered_map<uint32_t, uint16_t> g_tidByEid;   // items the scan has read, by entity
 
     // How full the bag is is read straight from it: the carried bag keeps its
     // used count and its limit side by side. When those do not read sanely the
@@ -1435,6 +1444,29 @@ namespace ml::loot
         }
         g_invPrev.swap(cur);
         g_invPrevValid = true;
+        std::vector<std::pair<uint16_t, long long>> bagRose;   // row, units
+        {
+            static uint16_t btypes[1024]; static long long bqty[1024];
+            const int bn = game::BagTypes(btypes, bqty, 1024);
+            if (bn < 0) g_bagPrevValid = false;
+            else
+            {
+                std::vector<std::pair<uint16_t, long long>> bcur(bn);
+                for (int i = 0; i < bn; ++i) bcur[i] = { btypes[i], bqty[i] };
+                if (g_bagPrevValid)
+                {
+                    size_t j = 0;
+                    for (const auto& e : bcur)
+                    {
+                        while (j < g_bagPrev.size() && g_bagPrev[j].first < e.first) ++j;
+                        const long long before = (j < g_bagPrev.size() && g_bagPrev[j].first == e.first) ? g_bagPrev[j].second : 0;
+                        if (e.second > before) bagRose.push_back({ e.first, e.second - before });
+                    }
+                }
+                g_bagPrev.swap(bcur);
+                g_bagPrevValid = true;
+            }
+        }
         // Expire stale sends. A pick-up of a known item that expires with
         // nothing to show for it is what a full bag looks like from here. Only
         // those count: an empty carcass, a node that gives nothing and an item
@@ -1501,8 +1533,10 @@ namespace ml::loot
         // no send names is this mod's when one of its own nameless sends made
         // since the last world change could have paid it (a gather whose yield
         // is known pays that item alone, a body search or an unnamed gather
-        // could pay anything) and nothing has been done by hand in the last
-        // four seconds. Purchases and crafts raise nothing this mod sees, and
+        // could pay anything). One that could pay anything vouches only when
+        // nothing was done by hand in the last twelve seconds, and none does
+        // while something taken by hand is an item nothing here can name.
+        // Purchases and crafts raise nothing this mod sees, and
         // Private Storage Master refuses a deposit outside free play, which is
         // what keeps a shop from landing inside that window.
         {
@@ -1511,10 +1545,16 @@ namespace ml::loot
             const bool inPlay = fp != 0 && !(g_notFreeAt && now - g_notFreeAt < 1000);
             bool handOpen = g_lastHandAt && now - g_lastHandAt < kHandMs;
             for (const PendSend& p : g_pend) if (!p.mine) handOpen = true;
-            for (uint16_t type : rose)
+            // Something taken by hand whose item nothing here can name could
+            // have paid any rise, so while one is recent no send vouches, not
+            // even one whose yield is known. A named one is caught by row in
+            // AutoStorePass.
+            bool handUnnamed = false;
+            for (const HandTouch& t : g_handTouches)
+                if (now - t.at < kHandMs && !g_tidByEid.count(t.eid) && !g_yieldByEid.count(t.eid)) handUnnamed = true;
+            for (const auto& [type, units] : bagRose)
             {
-                const auto g = gained.find(type);
-                HeldRise h{ type, g != gained.end() && g->second > 0 ? g->second : 1, now, false, inPlay };
+                HeldRise h{ type, units > 0 ? units : 1, now, false, inPlay };
                 // Never a document or a quest item this way. Those are handed
                 // out, not picked up: on 18 September 2026 two supply contracts
                 // came in during a camp clear with the mod's gathers pending and
@@ -1525,7 +1565,7 @@ namespace ml::loot
                 // else the player is doing; a hand pick-up of the same item is
                 // caught later by AutoStorePass. A send that could have paid
                 // anything vouches only when nothing was done by hand.
-                if (!handedOut)
+                if (!handedOut && !handUnnamed)
                     for (const PendSend& p : g_pend)
                     {
                         if (!p.mine || p.itemRow >= 0) continue;
@@ -3626,7 +3666,6 @@ namespace ml::loot
     // so it cannot take anything but what it was aimed at. Quest, protected
     // and dev items are never deleted: refusing to pick one up is caution,
     // destroying one is not.
-    static std::unordered_map<uint32_t, uint16_t> g_tidByEid;   // items the scan has read, by entity
     static uint16_t g_petKeyByType[64]; static uint8_t g_petKeyKnown[64];
 
     static uint16_t PetTypeKey(uint16_t type)
@@ -4009,20 +4048,29 @@ namespace ml::loot
                                             [&](const OwnSend& o) { return o.eid == t.eid; }), g_ownSends.end());
             const auto r = g_tidByEid.find(t.eid);
             if (r != g_tidByEid.end()) handRows.insert(r->second);
+            const auto y = g_yieldByEid.find(t.eid);
+            if (y != g_yieldByEid.end()) handRows.insert(y->second);
         }
-        // The scan reads every object in range, so one it has not read for a
-        // second and a half has gone from the world. Where it went is judged at
-        // the first scan that missed it. If it lay well inside the range then,
-        // it vanished where it lay, which is a delivery. If it lay within two
-        // metres of the edge or beyond it, the player may simply have left it
-        // behind, which says nothing about whether it landed, so the entry is
-        // dropped rather than trusted.
+        // A target in this scan's list, found by the walk or read back from the
+        // cache, is still in the world. One the cache dropped because it no
+        // longer reads back with its id and a position has gone from the world,
+        // wherever it lay, and that is a delivery. One that still reads back
+        // from beyond the scan range was left behind and says nothing about
+        // whether it landed, so its entry is dropped. Anything else, missed
+        // with no reading either way, is judged where it lay: well inside the
+        // range is a delivery after a second and a half, within two metres of
+        // the edge is dropped.
         const float edge = scanRange > 2.5f ? scanRange - 2.0f : scanRange * 0.8f;
         for (auto o = g_ownSends.begin(); o != g_ownSends.end();)
         {
-            const auto sn = g_seen.find(o->eid);
-            if (sn != g_seen.end() && sn->second.when == now) { o->goneAt = 0; o->missAt = 0; ++o; continue; }
+            if (g_present.count(o->eid)) { o->goneAt = 0; o->missAt = 0; ++o; continue; }
             if (o->goneAt) { ++o; continue; }
+            const auto sn = g_seen.find(o->eid);
+            if (sn == g_seen.end()) { o->goneAt = o->missAt ? o->missAt : (now ? now : 1); ++o; continue; }
+            {
+                const float dx = sn->second.pos.x - centre.x, dy = sn->second.pos.y - centre.y, dz = sn->second.pos.z - centre.z;
+                if (dx * dx + dy * dy + dz * dz > scanRange * scanRange) { o = g_ownSends.erase(o); continue; }
+            }
             if (!o->missAt)
             {
                 const float dx = o->pos.x - centre.x, dy = o->pos.y - centre.y, dz = o->pos.z - centre.z;
@@ -4931,6 +4979,9 @@ namespace ml::loot
             Fill(k);
             ++detailed;
             if (k.tid && k.db) { if (g_tidByEid.size() > 8192) g_tidByEid.clear(); g_tidByEid[k.eid] = k.tid; }
+            else if (!k.db && k.node[0])
+                if (const Item* y = NodeYield(k))
+                { if (g_yieldByEid.size() > 8192) g_yieldByEid.clear(); g_yieldByEid[k.eid] = static_cast<uint16_t>(y->row); }
         }
         // Any instance id on two objects in this scan is shared from now on, and
         // it has to be known before the check below, or one sibling's retirement

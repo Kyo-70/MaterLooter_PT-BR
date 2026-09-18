@@ -100,6 +100,9 @@ namespace ml::game
     // Quantity per item type id across every storage, sorted by type. Returns
     // the number of entries copied.
     int  InventoryTypes(uint16_t* types, long long* qty, int max);
+    // The same, counted in the carried bag alone. -1 when the last refresh could
+    // not read the bag.
+    int  BagTypes(uint16_t* types, long long* qty, int max);
 
     // --- tables -------------------------------------------------------------
     // Probes the live iteminfo table against our item database to learn the

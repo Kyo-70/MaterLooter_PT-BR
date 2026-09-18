@@ -343,6 +343,12 @@ namespace ml::game
     static int      g_bagUsed = 0, g_bagCap = 0;        // the carried bag, 0 when unreadable
     static unsigned g_slotStride = 0;   // 0xC0 (Trinity) or 0xC8 (CDLoot); probed on the live data
     static std::vector<std::pair<uint16_t, long long>> g_qty;
+    // What the carried bag alone holds. Kept apart because the total above
+    // spans every storage the player owns, and a storage mod moving a stack
+    // from the bag into one of them takes it out of one bucket and puts it in
+    // another in two steps; a read that falls between them counts it twice.
+    static std::vector<std::pair<uint16_t, long long>> g_bagQty;
+    static bool g_bagQtyOk = false;
 
     // The two references disagree on the slot stride. Count slots that look
     // valid (type id inside the item table or the empty marker) under each
@@ -373,6 +379,9 @@ namespace ml::game
         const DWORD now = GetTickCount();
         if (!me || (!force && g_invN && now - g_invAt < 500)) return;
         g_invAt = now;
+        g_bagQtyOk = false;
+        std::vector<std::pair<uint16_t, long long>> bagQty;
+        bool bagRead = false;
         int n = 0, cap = 0;
         std::vector<std::pair<int, int>> each;   // per bucket: slots, occupied
         std::vector<std::pair<uint16_t, long long>> qty;
@@ -405,6 +414,7 @@ namespace ml::game
             if (!g_slotStride && sn >= 8) g_slotStride = ProbeStride(slots, sn);
             const unsigned stride = g_slotStride ? g_slotStride : kInv_SlotStride;
             if (!mem::Readable(slots, static_cast<size_t>(sn) * stride)) continue;
+            if (b == kInv_BagBucket) bagRead = true;
             cap += sn;
             int hereN = 0;
             for (uint16_t i = 0; i < sn && n < 2048; ++i)
@@ -417,6 +427,7 @@ namespace ml::game
                 uint64_t q = 0;
                 long long count = (mem::Read64(s + 0x10, &q) && q > 0 && q < 100000000ull) ? static_cast<long long>(q) : 1;
                 qty.emplace_back(type, count);
+                if (b == kInv_BagBucket) bagQty.emplace_back(type, count);
             }
             each.emplace_back(static_cast<int>(sn), hereN);
         }
@@ -459,6 +470,22 @@ namespace ml::game
             else merged.push_back(e);
         }
         g_qty.swap(merged);
+        std::sort(bagQty.begin(), bagQty.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+        merged.clear();
+        for (const auto& e : bagQty)
+        {
+            if (!merged.empty() && merged.back().first == e.first) merged.back().second += e.second;
+            else merged.push_back(e);
+        }
+        g_bagQty.swap(merged);
+        g_bagQtyOk = bagRead;
+    }
+    int BagTypes(uint16_t* types, long long* qty, int max)
+    {
+        if (!g_bagQtyOk) return -1;
+        const int n = static_cast<int>(g_bagQty.size()) < max ? static_cast<int>(g_bagQty.size()) : max;
+        for (int i = 0; i < n; ++i) { types[i] = g_bagQty[i].first; qty[i] = g_bagQty[i].second; }
+        return n;
     }
     int InventoryTypes(uint16_t* types, long long* qty, int max)
     {
