@@ -1134,23 +1134,32 @@ namespace ml::loot
     // hand gather of a node whose yield is already learned never goes into
     // g_pend at all, and auto-store has to know about it all the same.
     static DWORD g_lastHandAt = 0;
-    // This mod's own sends of a named item, for auto-store alone, kept until a
-    // rise of that item uses each one up. The game can hold a run of pick-ups
-    // and hand them over together: on 18 September 2026 a camp clear reached
-    // nothing for eight seconds and then landed all at once, and everything
-    // sent before the last four seconds had already left g_pend, so Fang,
-    // bones, bread and a feather came in unclaimed and stayed in the bag.
+    // Auto-store's evidence. An item counts as this mod's pick-up when the
+    // object the mod sent to has gone from the world and a rise of that item
+    // follows. A matching entry on its own is not enough, and /vet showed it
+    // twice: an object the mod reached for and never got stays in the world,
+    // and its entry claimed the player's own hand pick-up, purchase or craft of
+    // the same item. So a rise waits in g_heldRises until the scan has seen
+    // whether the target is still lying there.
     //
-    // No clock runs while the object is still in the world, because the game
-    // can hold a batch for seconds. Once it is gone the entry has half a minute
-    // to be matched and is then dropped: a pick-up that never landed (a full bag,
-    // someone else took it) used to leave an entry that claimed the next
-    // purchase, craft or hand pick-up of the same item, and /vet proved it.
-    // One entry per world object, so a pick-up sent again is not counted
-    // twice, and the oldest go first past 512.
-    struct OwnSend { uint16_t row; uint32_t eid; DWORD sentAt; DWORD lastSeen; };
+    // The game can hold a run of pick-ups and hand them over together: on 18
+    // September 2026 a camp clear reached nothing for eight seconds and then
+    // landed all at once. The objects stay in the world for all of that, so
+    // an entry keeps no clock while its object is there. Once the object is
+    // gone the entry has five seconds to be matched. One entry per world
+    // object, and the oldest go first past 512.
+    struct OwnSend { uint16_t row; uint32_t eid; DWORD sentAt; DWORD goneAt; };
     static std::vector<OwnSend> g_ownSends;
-    static constexpr DWORD kOwnGoneMs = 30000;
+    static constexpr DWORD kOwnGoneMs = 5000;
+    // A rise of one item, seen by LearnFromInventory and judged by
+    // AutoStorePass. fallback: one of this mod's nameless sends could have paid
+    // it and nothing was done by hand, judged while those sends were pending.
+    struct HeldRise { uint16_t row; long long units; DWORD at; bool fallback; };
+    static std::vector<HeldRise> g_heldRises;
+    static constexpr DWORD kRiseHoldMs = 4000;
+    // What the player touched by hand, by entity, for four seconds.
+    struct HandTouch { uint32_t eid; DWORD at; };
+    static std::vector<HandTouch> g_handTouches;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
 
@@ -1326,6 +1335,7 @@ namespace ml::loot
         if (sn > 0) g_lastHandAt = now ? now : 1;
         for (int i = 0; i < sn; ++i)
         {
+            if (g_handTouches.size() < 128) g_handTouches.push_back({ seen[i].eid, now });
             // A carcass or body searched by hand is empty now, so it joins the
             // same never-again set the mod's own searches go into. Before this
             // only the mod's searches were remembered: on 16 September 2026 Seth
@@ -1464,50 +1474,38 @@ namespace ml::loot
             else     snprintf(msg, sizeof msg, "Master Looter: bag full, nothing is being picked up");
             State::Get().Notify(msg, 5000, true);
         }
-        // Auto-store, for every rise. What this mod sent by name and has not
-        // yet seen arrive explains up to that many units. A rise no send names
-        // is this mod's too when one of its own nameless sends could have paid
-        // it: a gather whose yield is known pays that item and nothing else,
-        // while a body search or a gather nothing names could pay anything.
-        // That holds only while nothing has been done by hand in the last four
-        // seconds and only for sends made since the last world change. Anything
-        // else rising, a craft, a purchase, a quest reward or an item taken out
-        // of storage on purpose, is left where it is.
-        g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
-                                        [now](const OwnSend& o) { return now - o.lastSeen > kOwnGoneMs; }), g_ownSends.end());
-        const bool handRecent = g_lastHandAt && now - g_lastHandAt < 4000;
-        for (uint16_t type : rose)
+        // Auto-store. Every rise is held for AutoStorePass, which runs later in
+        // the scan, once this scan has seen which objects are still in the world
+        // and whether the world changed under it. The one thing judged here is
+        // the fallback, while the sends it depends on are still pending: a rise
+        // no send names is this mod's when one of its own nameless sends made
+        // since the last world change could have paid it (a gather whose yield
+        // is known pays that item alone, a body search or an unnamed gather
+        // could pay anything) and nothing has been done by hand in the last
+        // four seconds. Purchases and crafts raise nothing this mod sees, and
+        // Private Storage Master refuses a deposit outside free play, which is
+        // what keeps a shop from landing inside that window.
         {
-            const auto g = gained.find(type);
-            const long long rise = g != gained.end() && g->second > 0 ? g->second : 1;
-            long long ours = 0;
-            for (auto o = g_ownSends.begin(); o != g_ownSends.end() && ours < rise;)
+            bool handOpen = g_lastHandAt && now - g_lastHandAt < 4000;
+            for (const PendSend& p : g_pend) if (!p.mine) handOpen = true;
+            for (uint16_t type : rose)
             {
-                if (o->row == type) { ++ours; o = g_ownSends.erase(o); }
-                else ++o;
-            }
-            if (ours < rise)
-            {
-                bool couldPay = false, handOpen = handRecent;
-                for (const PendSend& p : g_pend)
-                {
-                    if (!p.mine) { handOpen = true; continue; }
-                    if (p.itemRow >= 0) continue;
-                    if (g_changeAt && static_cast<LONG>(p.at - g_changeAt) < 0) continue;
-                    if (p.yieldRow < 0 || p.yieldRow == type) couldPay = true;
-                }
+                const auto g = gained.find(type);
+                HeldRise h{ type, g != gained.end() && g->second > 0 ? g->second : 1, now, false };
                 // Never a document or a quest item this way. Those are handed
                 // out, not picked up: on 18 September 2026 two supply contracts
                 // came in during a camp clear with the mod's gathers pending and
                 // were offered, and they live in an inventory of their own.
                 const Item* it = ItemDb::ByRow(type);
                 const bool handedOut = it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos);
-                if (couldPay && !handOpen && !handedOut) ours = rise;
-            }
-            if (ours > 0 && psm::Deposit(type, ours) && g_debugLog)
-            {
-                const Item* it = ItemDb::ByRow(type);
-                LOG("[store] offered %lld %s to Private Storage Master", ours, it && !it->name.empty() ? it->name.c_str() : "unnamed item");
+                if (!handOpen && !handedOut)
+                    for (const PendSend& p : g_pend)
+                    {
+                        if (!p.mine || p.itemRow >= 0) continue;
+                        if (g_changeAt && static_cast<LONG>(p.at - g_changeAt) < 0) continue;
+                        if (p.yieldRow < 0 || p.yieldRow == type) h.fallback = true;
+                    }
+                if (g_heldRises.size() < 256) g_heldRises.push_back(h);
             }
         }
         if (rose.empty() || g_pend.empty()) return;
@@ -3962,6 +3960,75 @@ namespace ml::loot
         if (now - snapAt >= 400) snapAt = snapshot(snap);
     }
 
+    static void OfferToStore(uint16_t row, long long units, const char* how)
+    {
+        if (units <= 0 || !psm::Deposit(row, units) || !g_debugLog) return;
+        const Item* it = ItemDb::ByRow(row);
+        LOG("[store] offered %lld %s to Private Storage Master (%s)", units,
+            it && !it->name.empty() ? it->name.c_str() : "unnamed item", how);
+    }
+
+    // Judges the rises LearnFromInventory held, after this scan has read the
+    // world and checked it for a change.
+    static void AutoStorePass(DWORD now)
+    {
+        g_handTouches.erase(std::remove_if(g_handTouches.begin(), g_handTouches.end(),
+                                           [now](const HandTouch& t) { return now - t.at > 4000; }), g_handTouches.end());
+        // The player took by hand the very object this mod was reaching for, so
+        // whatever it brings is theirs; and any item of a kind they took by hand
+        // in the last four seconds is theirs too.
+        std::unordered_set<uint16_t> handRows;
+        for (const HandTouch& t : g_handTouches)
+        {
+            g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
+                                            [&](const OwnSend& o) { return o.eid == t.eid; }), g_ownSends.end());
+            const auto r = g_tidByEid.find(t.eid);
+            if (r != g_tidByEid.end()) handRows.insert(r->second);
+        }
+        // Every object in scan range is seen by every scan, so one not seen for
+        // a second and a half has gone from the world, landed or otherwise.
+        for (OwnSend& o : g_ownSends)
+        {
+            const auto sn = g_seen.find(o.eid);
+            if (sn != g_seen.end() && now - sn->second.when < 1500) o.goneAt = 0;
+            else if (!o.goneAt) o.goneAt = now ? now : 1;
+        }
+        g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
+                                        [now](const OwnSend& o) { return o.goneAt && now - o.goneAt > kOwnGoneMs; }), g_ownSends.end());
+
+        for (size_t i = 0; i < g_heldRises.size();)
+        {
+            HeldRise& h = g_heldRises[i];
+            // Across a world change the bag is not the bag that was sampled, and
+            // a save load reads as everything rising at once. A rise seen from
+            // just before a change to three seconds after it is dropped; that
+            // includes the scan that noticed the change, whose bag was read
+            // before the change was.
+            const LONG sinceChange = g_changeAt ? static_cast<LONG>(h.at - g_changeAt) : 0x7FFFFFFF;
+            if ((sinceChange > -static_cast<LONG>(kRiseHoldMs) && sinceChange <= 3000) || handRows.count(h.row))
+            {
+                g_heldRises.erase(g_heldRises.begin() + static_cast<long>(i));
+                continue;
+            }
+            long long ours = 0;
+            bool lying = false;   // a target of this kind is still in the world
+            for (auto o = g_ownSends.begin(); o != g_ownSends.end() && ours < h.units;)
+            {
+                if (o->row != h.row) { ++o; continue; }
+                if (!o->goneAt) { lying = true; ++o; continue; }
+                ++ours;
+                o = g_ownSends.erase(o);
+            }
+            OfferToStore(h.row, ours, "its target is gone");
+            h.units -= ours;
+            // Still more than the gone targets explain, while one of this kind
+            // lies there: it may be on its way, so wait for it a while.
+            if (h.units > 0 && lying && now - h.at < kRiseHoldMs) { ++i; continue; }
+            if (h.units > 0 && h.fallback) OfferToStore(h.row, h.units, "a nameless send of the mod's could have paid it");
+            g_heldRises.erase(g_heldRises.begin() + static_cast<long>(i));
+        }
+    }
+
     static void Scan(const Config& cfg, bool act, bool burst)
     {
         const DWORD now = GetTickCount();
@@ -4537,7 +4604,6 @@ namespace ml::loot
         std::sort(list.begin(), list.end(), [](const Cand& a, const Cand& b) { return a.d < b.d; });
         g_present.clear();
         for (const Cand& c : list) g_present.insert(c.eid);
-        for (OwnSend& o : g_ownSends) if (g_present.count(o.eid)) o.lastSeen = now;
 
         // Scene transitions: the list is swapped before positions settle, and a
         // dozen objects can all read as "0.6 m away" for a moment. Hold fire.
@@ -4598,12 +4664,11 @@ namespace ml::loot
                 g_spillWatch.clear();
                 // The bag that comes back after this is not the bag we sampled.
                 InvalidateBagBaseline();
-                // Auto-store's own sends. A pick-up made just before mounting can
-                // land just after, so those stay; anything older is from the
-                // world that just went, and after a save load the whole bag can
-                // read as risen, which an old entry would otherwise claim.
-                g_ownSends.erase(std::remove_if(g_ownSends.begin(), g_ownSends.end(),
-                                                [now](const OwnSend& o) { return now - o.sentAt > 5000; }), g_ownSends.end());
+                // Auto-store. Rises held from before the change read a bag that
+                // is not this one, and targets in the world that just went will
+                // not be delivered from it.
+                g_heldRises.clear();
+                g_ownSends.clear();
                 // A well run is the fourth holder of a raw component pointer and
                 // the queues were only three of them. Winding a well is eleven
                 // seconds of timed transitions spread over many scans, and
@@ -4777,6 +4842,7 @@ namespace ml::loot
         }
         const bool settling = now < s_holdUntil;
         (void)total;
+        AutoStorePass(now);
 
         // Details for everything close enough to matter.
         float maxRange = std::max(std::max(cfg.lootRange, cfg.gatherRange), std::max(cfg.catchRange, cfg.corpseRange));
@@ -5295,11 +5361,11 @@ namespace ml::loot
                     if (k.db && k.db->row >= 0)
                     {
                         auto o = std::find_if(g_ownSends.begin(), g_ownSends.end(), [&](const OwnSend& e) { return e.eid == k.eid; });
-                        if (o != g_ownSends.end()) { o->sentAt = now; o->lastSeen = now; }
+                        if (o != g_ownSends.end()) { o->sentAt = now; o->goneAt = 0; }
                         else
                         {
                             if (g_ownSends.size() >= 512) g_ownSends.erase(g_ownSends.begin());
-                            g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid, now, now });
+                            g_ownSends.push_back({ static_cast<uint16_t>(k.db->row), k.eid, now, 0 });
                         }
                     }
                     InterlockedIncrement(&g_session[static_cast<int>(v.act)]);
