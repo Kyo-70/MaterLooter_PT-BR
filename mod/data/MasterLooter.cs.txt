@@ -30,13 +30,11 @@
 1 match%s	1 výsledek%s
 3 of 3	3 ze 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" už existuje. Přepsání se nejprve zeptá na potvrzení.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Mazlíček sbírá, co se mu zlíbí, a hra na to nemá žádný přepínač. Zapnuto: vše, co mazlíček, žoldnéř nebo společník sebere a co by tvá pravidla předmětů, štítky, třídy nebo hranice hodnoty odmítly, se smaže z inventáře hned, jak tam dorazí, a hlášení řekne, co zmizelo. Questovní a chráněné předměty se nemažou nikdy a ničeho, co už v tašce máš, se to nedotkne.\n\nStojí za to vědět, než to zapneš: hra hlásí sebrání volného předmětu ze země společníkem tak, jako bys ho sebral ty sám, a nijak se ty dva případy nedají rozlišit. Takže dokud je někdo venku a aktivní, i něco, co sebereš rukou a co tvá vlastní pravidla odmítají, se smaže spolu s jeho nálezem. Když venku nikdo není, ničeho, co sebereš, se to nikdy nedotkne. Jestli si raději necháš všechno a roztřídíš si to sám, nech to vypnuté.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Kbelík od studny a podobné věci se nikdy nelootují, ale jejich aktivace donutí hru nabídnout interakci, takže je můžeš použít ručně.
 Abyss and Kuku	Abyss a Kuku
 Abyss gear, Kuku pots and their parts.	Vybavení Abyss, hrnce Kuku a jejich součásti.
 Accessories	Doplňky
 allowed	povoleno
-already in your bag	už v batohu
 always	vždy
 always beats the class rule; never beats always	vždy má přednost před pravidlem třídy; nikdy má přednost i před vždy
 Ammunition	Munice
@@ -196,7 +194,6 @@ Objects per scan	Objektů na sken
 on the player	na hráči
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Zapnuto: žíla se vytěží tam, kde stojí, a ty nikdy nezvedneš krumpáč. Vypnuto: žíly zůstávají netknuté a sbírají se jen kusy, které sám vyrazíš. Vyžaduje aktivaci, protože přimět žílu, aby se otevřela, je celý trik.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Zapnuto: překryvná vrstva se vykresluje pod generováním snímků DLSS, což vyžaduje, aby mod hře předal zabalený swapchain.\n\nVypnuto: překryvná vrstva se místo toho vykresluje přes present hook. Pokud není zapnuté generování snímků, vypadá vše stejně, a mod tak zůstává mimo cestu, kterou si patchují i jiné překryvné mody. Zkus to, pokud se hra nespustí spolu s jiným překryvným modem; dá se to nastavit jako WrapSwapChain v MasterLooter.ini i bez spuštění hry.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Jedna záloha se zapíše pokaždé, když hra nastartuje, a posledních dvanáct se uchovává ve složce MasterLooter.backups vedle pluginu. Presety leží v MasterLooter.presets. Kteroukoli složku zkopíruj, pokud si to chceš uchovat i přes přeinstalaci.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Jedno kliknutí na celou rodinu. Tabulka níže pořád nastavuje jednotlivé třídy; skupina zobrazuje pomlčku, když je zapnutá jen její část.
 Open and close this menu	Otevřít a zavřít toto menu
 Open folder	Otevřít složku
@@ -270,7 +267,6 @@ someone is wearing this; taking it would copy it	někdo to má na sobě; vzít t
 stack at one point (storage contents)	hromada na jednom místě (obsah úložiště)
 Status	Stav
 Stop pets looting	Zabránit mazlíčkům ve sbírání
-Stop pets looting at all	Zabránit mazlíčkům ve sbírání úplně
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Stoly, židle, postele, koberce, lampy, svíčky, obrazy, hrnce a zbytek zařízené místnosti, ať už to seberes z podlahy nebo to vezmeš z vlastního interakčního uzlu. Většina toho má hodnotu měďák nebo dva, ale koberce a luxusní postele se šplhají do tisíců, takže tohle zapni, než si zařídíš dům. Truhly a další věci, které něco obsahují, spadají místo toho pod Kontejnery. Ve výchozím stavu vypnuto.
 Tag	Štítek
 Tags	Štítky
@@ -283,13 +279,10 @@ Take owned goods on / off	Brát vlastněné věci zapnuto / vypnuto
 take this one by hand, looting it can lock the quest	vezmi tenhle rukou, sebrání může zablokovat quest
 takes effect next launch	projeví se až při dalším spuštění
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Engine skenuje okolí a bere, co pravidla dovolí. Vypnuto znamená, že se nic nebere automaticky; klávesa pro jednorázové sebrání pořád funguje.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Hra položí dvě otázky, než mazlíček něco sebere, jednu na volný předmět na zemi a jednu na tělo, a tohle odpoví ne na obě. Mazlíček po ničem nesáhne, takže se ti potom nikdy nic nesmaže a tvé vlastní nálezy nejsou nikdy ve hře. Čistší z těch dvou odpovědí, pokud prostě nechceš, aby mazlíček sbíral. Jestli to dosáhne na žoldnéře, vyzkoušené nebylo. Hra nese jedno pravidlo sbírání tohoto druhu a na obě jeho otázky se odpovídá ne, takže možná ano; Mazlíčci a společníci se řídí filtry je ten přepínač, který to dělá jistě.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Hra naplní data uzlu jen tehdy, když si myslí, že na něj dosáhneš. Aktivace ji požádá, aby to udělala na dálku, a totéž umožňuje vytěžit rudnou žílu tam, kde stojí. Žílám trvá odpověď několik sekund, zatímco keři zlomek vteřiny.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Hra odstraňuje vzaté objekty se zpožděním. Tohle brání tomu, aby byl stejný objekt odeslán dvakrát, zatímco mizí.
 The game treats this as stealing and will put a bounty on you.	Hra tohle považuje za krádež a dá na tebe odměnu.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Mod nikdy nezvedne krumpáč. Spouští vlastní sekvenci rozbití žíly, a hra si u toho projde jeden řádek výsypu, zatímco u skutečného úderu projde dva, takže bonus tvého těžebního nástroje nevyplatí nic, když těží mod. Tohle chybějící rudu doplní zpátky přes tu samou cestu výsypu, kterou používá hra, takže jde o skutečnou rudu vysypanou na zem, ne o předmět zkopírovaný do batohu. Nastav to na to, co ti nástroj vyplácí ručně, minus jedna: vrtačka, která ručně dává tři, tu chce 2. Platí to jen pro žílu, kterou rozbil mod, takže ruční těžba zůstává nedotčená a obě se nemohou sčítat.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Stahování zvířat, která zabijete, jednou na mršinu. Lidé jsou pod Těla. Co stahování vynese, se neporovnává s vašimi filtry. Mod to nikdy nevidí dřív, než to dorazí, takže tento přepínač je všechno, nebo nic.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Prohledávání lidí, které zabijete, jednou na tělo. Zvířata jsou pod Mršiny. Co prohledání vynese, se neporovnává s vašimi filtry, takže i tento přepínač je všechno, nebo nic.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Tato relace: %ld sebráno, %ld nasbíráno, %ld uloveno, %ld zdechlin
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Dřevo a větve na zemi a uzly, které je dávají. To, co většina z nich obsahuje, se čte přímo z herních dat, takže odmítnutí třídy wood v záložce Třídy nechá stromy stát a stejně tak dřevo pod nimi. Tam, kde hra o uzlu neříká nic, je tento přepínač jediné ovládání, které má.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Aby jeden druh zůstal netknutý, nastav, čím se stává, na nikdy v záložce Předměty: Item_Tench, Item_Ricefish, Item_Iguana. Mod čte vlastní řádek tvora v herní tabulce postav, takže ví, na jaký druh se dívá, ještě než něco uloví. Několik neobvyklých tvorů se stále spoléhá na odhad podle názvu modelu a loví se jen podle kategorie.
@@ -339,3 +332,99 @@ your rules refuse all stone	tvá pravidla odmítají veškerý kámen
 your rules refuse everything this node holds	tvá pravidla odmítají vše, co tento uzel obsahuje
 part of a mechanism, not loose loot	součást mechanismu, ne volná kořist
 yours, just out of your hand	tvoje, právě ti to vypadlo z ruky
+%d last time	%d naposledy
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Záloha se zapíše, když hra nastartuje s nastaveními změněnými od té poslední, a posledních dvanáct se uchovává ve složce MasterLooter.backups vedle pluginu. Presety leží v MasterLooter.presets. Kteroukoli složku zkopíruj, pokud si to chceš uchovat i přes přeinstalaci.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Klávesa nebo kombinace na ovladači otevře dané úložiště odkudkoli a znovu ho zavře. Klávesa jiného úložiště na něj přepne rovnou.
+a Master Looter key	klávesa Master Looteru
+a Master Looter shortcut	klávesová zkratka Master Looteru
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Chvíli poté, co předmět dorazí do batohu, ho Private Storage Master přesune do prvního úložiště níže, které ho přijme, stejný přesun, jaký bys udělal ty sám u úložiště. Přesouvá se jen to, co sebral Master Looter, nikdy to, co jsi sebral rukou, a z těla nebo mršiny jen to, co tvá pravidla předmětů dovolují. Nic se nepřesouvá, dokud je úložiště otevřené nebo mimo volnou hru, klíče, dokumenty, questovní předměty a vše na seznamu Nikdy nepřesouvat zůstávají na místě, a to, co žádné úložiště nepřijme, zůstává v batohu.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Mazlíček sbírá, co se mu zlíbí, a hra na to nemá žádný přepínač. Zapnuto: mazlíčkovi se řekne ne, než sáhne po volném předmětu na zemi, který tvá pravidla předmětů, štítky, třídy nebo hranice hodnoty odmítají, a cokoli vezme z těla, co ony odmítají, se smaže z inventáře hned, jak tam dorazí, s hlášením, co zmizelo. Questovní a chráněné předměty se nemažou nikdy a ničeho, co už v tašce máš, se to nedotkne.\n\nCo sebereš sám, zůstává, protože mazlíček nemůže být ten, kdo vzal odmítnutý volný předmět. Najatý žoldnéř je výjimkou: nikdo neověřil, že klade stejnou otázku, takže dokud je venku, odmítnutý předmět, který dorazí do tašky, se smaže bez ohledu na to, kdo ho sebral.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Mazlíček nebo společník, který vyplení tělo, dá to, co našel, do tvého batohu. Zapnuto, tyto předměty jdou do úložiště stejně jako vlastní úlovky Master Looteru, pokud je tvá pravidla předmětů dovolují. Volné předměty, které mazlíček sebere, hra hlásí jako tvé vlastní úlovky, takže ty zůstávají v batohu.
+a seed planted in your camp farm	semeno zaseté na tvé táborové farmě
+Add	Přidat
+add an item: type 3+ letters of its name	přidej předmět: napiš 3+ písmena jeho názvu
+also %s	také %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	rudná žíla, ponechaná tvému krumpáči, dokud je Těžit rudné žíly za tebe vypnuto
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Nejvýše jeden řádek za sekundu, jmenující každé úložiště a kolik do něj šlo. Vypnuto, nic se nezobrazí a jde to jen do logu.
+Click again to reset	Klikni znovu pro reset
+Detailed log	Podrobný log
+Drop refused loot from bodies	Upustit odmítnutý loot z těl
+Each item goes to the first storage in this list that takes it.	Každý předmět jde do prvního úložiště v tomto seznamu, které ho přijme.
+Empty: auto-store may move anything a storage takes.	Prázdné: automatické ukládání může přesunout cokoli, co úložiště přijme.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Velikost každého úložiště a kolik slotů se používá, zapsáno do PrivateStorageMaster.log. Přilož ho k hlášení o velikosti.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Pro JSON mody kapacity: velikosti úložišť níže jsou ignorovány a rozhoduje hra, nebo ten mod.
+game size (%d)	velikost hry (%d)
+Game window	Okno hry
+hold a button, then press the one that opens it (Escape cancels)	podrž tlačítko, pak stiskni to, které ho otevře (Escape zruší)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Podrž jedno nebo více tlačítek, pak stiskni to, které otevře úložiště. Stisknuté tlačítko je před hrou skryté, dokud jsou ostatní držená.
+Hold other keys back while Ctrl is down	Zadržet ostatní klávesy, dokud je Ctrl stisknutý
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Kolik slotů Osobního úložiště pochází z koupených rozšíření a z příběhu. Celkový počet na posuvníku je počítá, takže základní velikost je celek mínus tyto.
+item %u	předmět %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Předměty, které automatické ukládání vždy nechává v batohu. Výchozí je každá měna: stříbro, měšce s mincemi, zlaté cihly, táborové fondy a zásoby, žetony a dluhopisy. Obnovit výchozí níže vrátí tento seznam.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Jeho nastavení žijí v PrivateStorageMaster.ini vedle pluginu. Změny zde se tam ukládají okamžitě.
+Last error	Poslední chyba
+Leave every size alone	Ponechat všechny velikosti beze změny
+left as the game has them	ponechané tak, jak je má hra
+load a save to see it	načti uloženou hru, abys to viděl
+more matches; type more of the name	další shody; napiš víc z názvu
+Never move	Nikdy nepřesouvat
+no item by that name that is not listed already	žádný předmět s tímto názvem, který by už nebyl v seznamu
+none seen	žádné nezaznamenáno
+not found, bound keys also reach the game	nenalezeno, přiřazené klávesy se dostanou i ke hře
+Not on this game version: Private Storage Master could not find the move it needs.	Ne na této verzi hry: Private Storage Master nenašel pohyb, který potřebuje.
+nothing	nic
+now %d of %d used	nyní %d z %d použito
+off, see the error below	vypnuto, viz chyba níže
+off, the mod is disabled	vypnuto, mod je deaktivován
+on XInput slot %d	na XInput slotu %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Zapnuto, přesune se jen množství, které právě dorazilo, takže jídlo a lektvary, které jsi už nosil, zůstanou v batohu. Vypnuto, jde celá hromádka.
+Only move what was picked up	Přesouvat jen to, co bylo sebráno
+Open now	Otevřít teď
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	stiskni klávesu, případně s Ctrl, Shift nebo Alt (Escape zruší)
+Private Storage expansions	Rozšíření Osobního úložiště
+Private Storage Master %s for game build %s	Private Storage Master %s pro herní build %s
+Private Storage Master did not hand over its defaults	Private Storage Master nepředal své výchozí hodnoty
+Private Storage Master did not hand over its store loot settings.	Private Storage Master nepředal svá nastavení pro ukládání lootu.
+Private Storage Master on	Private Storage Master zapnutý
+Private Storage Master refused the change	Private Storage Master odmítl změnu
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi je také nainstalován. Oba mění stejné části hry; odstraň ten druhý.
+Put what Master Looter picks up into storage	Ukládat to, co Master Looter sebere, do úložiště
+read from the save	přečteno z uložené hry
+Reload from the ini	Znovu načíst z ini
+Remove	Odebrat
+Reset to defaults	Obnovit výchozí
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Prohledání těla nebo mršiny předá vše, co obsahuje, a mod to uvidí, až to bude v batohu. Zapnuto: to z toho, co tvá pravidla předmětů, štítky, třídy nebo hranice hodnoty odmítají, se položí rovnou zpátky na zem vedle tebe, stejným upuštěním, jaké hra používá, když upustíš něco sám, jedna hromádka na hromadu. Pokrývá to vlastní prohledávání modu i těla, která vyplení mazlíček nebo společník, jejichž odmítnuté předměty přistanou vedle tebe také. Tělo, které prohledáš sám, si nechá, co vyplatilo. Peníze, dokumenty, questovní předměty a chráněné předměty zůstávají v batohu.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Prohledávání lidí, které zabiješ, jednou na tělo. Zvířata jsou pod Mršiny. Co prohledání vynese, dorazí dřív, než to tvé filtry uvidí, stejně jako u mršiny, a Upustit odmítnutý loot z těl v Obecné položí zpátky to, co odmítají.
+set	nastaveno
+set this launch	nastaveno při tomto spuštění
+Settings file	Soubor nastavení
+Show a notice when loot is stored	Zobrazit hlášení, když je loot uložen
+Size changes take effect the next time the game starts.	Změny velikosti se projeví při příštím spuštění hry.
+Sizes	Velikosti
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Stahování zvířat, která zabiješ, jednou na mršinu. Lidé jsou pod Těla. Mod nikdy nevidí, co stahování vynese, dřív, než to dorazí, takže tvé filtry to nemohou zastavit. Aby se to, co odmítají, položilo zpátky na zem, zapni Upustit odmítnutý loot z těl v Obecné.
+Some changes take effect the next time the game starts.	Některé změny se projeví při příštím spuštění hry.
+Stop pets looting bodies	Zabránit mazlíčkům plenit těla
+Stop pets picking up loose items	Zabránit mazlíčkům sbírat volné předměty
+Storage	Úložiště
+Storage keys	Klávesy úložiště
+Storage sizes	Velikosti úložišť
+Store loot	Ukládat loot
+Store what your pet loots from bodies	Ukládat to, co tvůj mazlíček vyplení z těl
+Storing loot needs a newer Private Storage Master.	Ukládání lootu vyžaduje novější Private Storage Master.
+the size dump	výpis velikostí
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Hra se zeptá, než mazlíček vezme předmět ležící na zemi, a tohle odpoví ne. Mazlíček ho mine a nic se pak nemusí mazat. Jestli žoldnéř klade stejnou otázku, nebylo testováno.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Hra se zeptá zvlášť, než mazlíček vyplení tělo, a tohle odpoví ne. Zapni jedno ze dvou a ne druhé, pokud chceš, aby mazlíček obíral mrtvoly, ale nesbíral volné předměty, nebo naopak.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Přiřazení kláves byla převzata z PrivateStorageAnywhere.ini při prvním spuštění.
+the key-block toggle	přepínač blokování kláves
+The list is full at %d items.	Seznam je plný při %d předmětech.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Celkový počet, včetně koupených rozšíření a slotů z příběhu. Levý konec ponechává velikost hry.
+This chest holds one of each collectible, so its slots cannot be changed.	Tato truhla obsahuje jeden kus od každého sběratelského předmětu, takže její sloty nelze změnit.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Tato záložka potřebuje verzi Private Storage Master, která odpovídá této verzi Master Looteru.
+Turn that on and off	Zapni a vypni to
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Dokud je držen Ctrl, nebo jakýkoli modifikátor, který tvé klávesy úložiště používají, ostatní klávesy jsou zadrženy před hrou, takže sklouznutí z klávesy úložiště nespustí dovednost. Pohyb, mezerník, Tab, Enter, Escape, Alt+F4 a klávesy, které hra používá s Ctrl (Z, Shift, +), stále projdou.
+working	funguje
+Write the size dump to the log	Zapsat výpis velikostí do logu
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Zapisuje každý stisk klávesy, otevření a zavření do PrivateStorageMaster.log a uchovává posledních 24 relací. Vypnuto, log uchovává souhrn při spuštění, chyby a výpis velikostí, a poslední dvě relace.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Zapisuje každý stisk klávesy, otevření a zavření do PrivateStorageMaster.log. Vypnuto, log uchovává souhrn při spuštění, chyby a výpis velikostí.
+your own camp farm (off)	tvá vlastní táborová farma (vypnuto)

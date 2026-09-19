@@ -1451,7 +1451,7 @@ namespace ml::gui
             bool listed = false;
             for (int i = 0; i < s_psmNeverN; ++i) if (s_psmNever[i] == it.row) listed = true;
             if (listed) continue;
-            if (++shown > 8) { ImGui::TextDisabled("%s", TR("more match; type more of the name")); break; }
+            if (++shown > 8) { ImGui::TextDisabled("%s", TR("more matches; type more of the name")); break; }
             ImGui::PushID(600 + shown);
             if (ImGui::SmallButton(TR("Add")))
             {
@@ -1547,7 +1547,7 @@ namespace ml::gui
             if (i == row) continue;
             const PsmKey o = i < PSM_STORAGES ? s_psm.keys[i] : i == PSM_STORAGES ? s_psm.dumpKey : s_psmBlock.toggleKey;
             if (o.vk == k.vk && o.mods == k.mods)
-                return i < PSM_STORAGES ? api->storageName(i) : i == PSM_STORAGES ? TR("the capacity dump") : TR("the key-block toggle");
+                return i < PSM_STORAGES ? api->storageName(i) : i == PSM_STORAGES ? TR("the size dump") : TR("the key-block toggle");
         }
         // Master Looter's keys are bare and stay quiet while Ctrl or Alt is
         // held (State::HotkeysFree), so only a bare key or a Shift one can

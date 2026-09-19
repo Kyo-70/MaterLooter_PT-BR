@@ -34,13 +34,11 @@
 1 match%s	1 совпадение%s
 3 of 3	3 из 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" уже существует. Перезапись потребует подтверждения.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Питомец подбирает всё, что ему вздумается, и в игре нет для этого никакого переключателя. Включено: всё, что питомец, наёмник или спутник подбирает и что твои правила предметов, метки, классы или порог стоимости отклонили бы, удаляется из инвентаря сразу по прибытии, а уведомление сообщает, что исчезло. Квестовые и защищённые предметы не удаляются никогда, и ничто, что уже лежит в твоей сумке, не трогается.\n\nСтоит знать, прежде чем включать: игра сообщает о подборе лежащего предмета спутником так, будто ты подобрал его сам, и различить эти два случая невозможно. Поэтому, пока кто-то выпущен и активен, то, что ты подбираешь рукой и что отклоняют твои собственные правила, удаляется вместе с его добычей. Когда никого нет рядом, ничто из подобранного тобой не трогается. Если предпочитаешь оставлять всё и разбирать самостоятельно, оставь это выключенным.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Ведро колодца и подобные объекты никогда не лутаются, но их активация заставляет игру предложить взаимодействие, чтобы вы могли воспользоваться им вручную.
 Abyss and Kuku	Abyss и Kuku
 Abyss gear, Kuku pots and their parts.	Снаряжение Abyss, горшки Kuku и их детали.
 Accessories	Аксессуары
 allowed	разрешено
-already in your bag	уже в сумке
 always	всегда
 always beats the class rule; never beats always	«всегда» важнее правила класса; «никогда» важнее «всегда»
 Ammunition	Боеприпасы
@@ -200,7 +198,6 @@ Objects per scan	Объектов за сканирование
 on the player	на игроке
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Включено — жила добывается прямо на месте, и вы ни разу не взмахиваете киркой. Выключено — жилы остаются нетронутыми, подбираются только куски, которые вы отбили сами. Требует активации, ведь весь фокус в том, чтобы попросить жилу открыться.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Включено — оверлей отрисовывается под генерацией кадров DLSS, для чего этому моду нужно передать игре обёрнутую цепочку обмена.\n\nВыключено — оверлей вместо этого отрисовывается через хук present. Разницы не видно, если генерация кадров выключена, а мод держится в стороне от пути, который патчат и другие моды-оверлеи. Попробуйте это, если игра не запускается вместе с другим модом-оверлеем; параметр можно задать как WrapSwapChain в MasterLooter.ini, не запуская игру.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Одна резервная копия записывается при каждом запуске игры, хранятся последние двенадцать, в папке MasterLooter.backups рядом с плагином. Предустановки лежат в MasterLooter.presets. Скопируйте любую из папок, чтобы сохранить её при переустановке.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Один клик на семейство. Таблица ниже по-прежнему задаёт отдельные классы; группа показывает прочерк, если включена лишь часть её состава.
 Open and close this menu	Открыть и закрыть это меню
 Open folder	Открыть папку
@@ -274,7 +271,6 @@ someone is wearing this; taking it would copy it	это на ком-то над�
 stack at one point (storage contents)	стопка в одной точке (содержимое хранилища)
 Status	Статус
 Stop pets looting	Запретить питомцам подбирать
-Stop pets looting at all	Запретить питомцам подбирать вовсе
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Столы, стулья, кровати, ковры, лампы, свечи, картины, горшки и всё остальное убранство обставленной комнаты, будь то подобрано с пола или взято из собственной точки взаимодействия. Большая часть стоит медяк-другой, но ковры и роскошные кровати доходят до тысяч, так что включайте это перед обстановкой дома. Сундуки и прочее, что что-то хранит, подчиняются вместо этого «Контейнерам». Выключено по умолчанию.
 Tag	Тег
 Tags	Теги
@@ -287,13 +283,10 @@ Take owned goods on / off	Забирать чужое имущество, вкл
 take this one by hand, looting it can lock the quest	возьми этот вручную, подбор может заблокировать квест
 takes effect next launch	вступит в силу при следующем запуске
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Движок сканирует пространство вокруг вас и забирает то, что разрешают правила. Выключено — значит, ничего не забирается автоматически; клавиша разового сбора при этом продолжает работать.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Игра задаёт два вопроса, прежде чем питомец что-то подберёт, один о лежащем на земле предмете и один о теле, и это отвечает нет на оба. Питомец ни к чему не тянется, поэтому после ничего твоего не удаляется, а твои собственные находки никогда не под вопросом. Более чистый из двух ответов, если ты просто не хочешь, чтобы питомец подбирал. Достаёт ли это до наёмника, не проверялось. В игре одно правило подбора такого рода, и на оба его вопроса отвечают нет, так что может достать; Питомцы и спутники соблюдают фильтры — тот переключатель, который делает это наверняка.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Игра заполняет данные точки только тогда, когда считает, что вы можете до неё дотянуться. Активация просит её сделать это на расстоянии, и именно это позволяет добывать рудную жилу прямо на месте. Жилы отвечают несколько секунд, тогда как куст — лишь долю секунды.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Игра убирает взятые объекты с задержкой. Это не даёт одному и тому же объекту быть отправленным дважды, пока он исчезает.
 The game treats this as stealing and will put a bounty on you.	Игра расценивает это как воровство и назначит награду за вашу голову.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Мод никогда не взмахивает киркой. Он запускает собственную последовательность раскола жилы, а игра при этом проходит по одной строке выпадения там, где настоящий удар проходит по двум, — поэтому бонус вашего горного инструмента ничего не даёт, когда добычу ведёт мод. Этот параметр возвращает недостающую руду через тот же путь выпадения, что использует игра, так что это настоящая руда, рассыпанная на земле, а не предмет, скопированный в вашу сумку. Задайте здесь то, что ваш инструмент даёт вручную, минус один: бурав, дающий вручную три, здесь должен получить 2. Это применяется только к жиле, раскрытой этим модом, поэтому ручная добыча не затрагивается, и оба бонуса не суммируются.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Свежевание убитых вами животных, один раз на тушу. Люди относятся к пункту Тела. То, что даёт свежевание, не проверяется по вашим фильтрам. Мод никогда не видит этого до того, как оно попадёт к вам, так что этот переключатель работает по принципу всё или ничего.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Обыск убитых вами людей, один раз на тело. Животные относятся к пункту Туши. То, что даёт обыск, не проверяется по вашим фильтрам, так что и этот переключатель работает по принципу всё или ничего.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	За эту сессию: подобрано %ld, собрано %ld, поймано %ld, туш %ld
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Древесина и ветки на земле, и точки, которые их дают. То, что содержит большинство из них, читается из самих игровых данных, поэтому отклонение класса wood на вкладке Классы оставляет деревья стоять, а вместе с ними и древесину под ними. Там, где игра ничего не говорит о точке, этот переключатель — единственное управление, которое у неё есть.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Чтобы оставить один вид в покое, выставите то, во что он превращается, на «никогда» на вкладке «Предметы»: Item_Tench, Item_Ricefish, Item_Iguana. Мод читает собственную строку существа в таблице персонажей игры, поэтому знает, на какой вид он смотрит, ещё до того, как что-то поймает. Несколько нетипичных существ всё же определяются по имени модели и ловятся только по категории.
@@ -343,3 +336,99 @@ your rules refuse all stone	твои правила отклоняют весь 
 your rules refuse everything this node holds	твои правила отклоняют всё, что содержит эта точка
 part of a mechanism, not loose loot	часть механизма, а не лежащая добыча
 yours, just out of your hand	ваше, только что выпавшее из рук
+%d last time	%d в прошлый раз
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Резервная копия записывается, когда игра запускается с настройками, изменёнными с прошлого раза, и хранятся последние двенадцать, в MasterLooter.backups рядом с плагином. Предустановки лежат в MasterLooter.presets. Скопируйте любую из папок, чтобы сохранить её при переустановке.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Комбинация клавиши или геймпада открывает это хранилище откуда угодно, и она же его закрывает. Клавиша другого хранилища переключает прямо на него.
+a Master Looter key	клавиша Master Looter
+a Master Looter shortcut	сочетание клавиш Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Через мгновение после того, как предмет попадает в сумку, Private Storage Master перемещает его в первое подходящее хранилище из списка ниже — то же самое перемещение, которое вы бы сделали сами у хранилища. Перемещается только то, что подобрал Master Looter, никогда то, что вы подобрали вручную, а с тела или туши — только то, что разрешают ваши правила предметов. Ничего не перемещается, пока хранилище открыто или вне свободной игры, ключи, документы, квестовые предметы и всё из списка «никогда не перемещать» остаются на месте, а то, что не принимает ни одно хранилище, остаётся в сумке.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Питомец подбирает всё, что ему вздумается, и в игре нет для этого никакого переключателя. Включено: питомцу говорят нет ещё до того, как он потянется за лежащим предметом, который отклоняют твои правила предметов, метки, классы или порог стоимости, а то, что он берёт с тела и что они отклоняют, удаляется из инвентаря сразу по прибытии, с уведомлением о том, что исчезло. Квестовые и защищённые предметы не удаляются никогда, и ничто, что уже лежит в твоей сумке, не трогается.\n\nТо, что ты подбираешь сам, сохраняется, потому что питомец не может быть тем, кто взял отклонённый лежащий предмет. Наёмник — исключение: никто не проверял, задаёт ли он тот же вопрос, поэтому пока один выпущен, отклонённый предмет, попавший в сумку, удаляется, кто бы его ни подобрал.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Питомец или спутник, обыскавший тело, кладёт найденное в твою сумку. Включено — эти предметы уходят в хранилище так же, как и собственные находки Master Looter, если это разрешают твои правила предметов. Лежащие предметы, которые подбирает питомец, игра сообщает как твои собственные находки, поэтому они остаются в сумке.
+a seed planted in your camp farm	семя, посаженное на твоём поле в лагере
+Add	Добавить
+add an item: type 3+ letters of its name	добавить предмет: введите от 3 букв его имени
+also %s	также %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	рудная жила, оставленная для твоей кирки, пока Добывать рудные жилы за вас выключено
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Не больше одной строки в секунду, с именем каждого хранилища и тем, сколько в него ушло. Выключено — ничего не отображается, и это идёт только в журнал.
+Click again to reset	Нажмите ещё раз, чтобы сбросить
+Detailed log	Подробный журнал
+Drop refused loot from bodies	Бросать на землю отклонённый лут с тел
+Each item goes to the first storage in this list that takes it.	Каждый предмет уходит в первое хранилище из этого списка, которое его примет.
+Empty: auto-store may move anything a storage takes.	Пусто: автоматическое перемещение может отправить в хранилище всё, что хранилище примет.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Размер каждого хранилища и сколько слотов занято, записывается в PrivateStorageMaster.log. Приложите его к отчёту о размере.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Для модов вместимости на JSON: размеры хранилищ ниже игнорируются, и решает игра или этот мод.
+game size (%d)	размер игры (%d)
+Game window	Окно игры
+hold a button, then press the one that opens it (Escape cancels)	удерживайте кнопку, затем нажмите ту, что её открывает (Escape отменяет)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Удерживайте одну или несколько кнопок, затем нажмите ту, что открывает хранилище. Нажатая кнопка скрыта от игры, пока держатся остальные.
+Hold other keys back while Ctrl is down	Удерживать остальные клавиши, пока зажат Ctrl
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Сколько слотов Личного хранилища получено из купленных дополнений и из сюжета. Итог ползунка учитывает их, так что базовый размер — это итог за вычетом них.
+item %u	предмет %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Предметы, которые автоматическое перемещение всегда оставляет в сумке. По умолчанию это вся валюта: серебро, кошельки с монетами, золотые слитки, средства и припасы лагеря, жетоны и облигации. Сбросить к умолчаниям ниже возвращает этот список.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Его настройки живут в PrivateStorageMaster.ini рядом с плагином. Изменения здесь сохраняются туда же сразу.
+Last error	Последняя ошибка
+Leave every size alone	Не трогать ни один размер
+left as the game has them	как их задаёт игра
+load a save to see it	загрузите сохранение, чтобы увидеть это
+more matches; type more of the name	ещё совпадения; введите больше букв имени
+Never move	Никогда не перемещать
+no item by that name that is not listed already	нет предмета с таким именем, который ещё не указан в списке
+none seen	не замечено ни одного
+not found, bound keys also reach the game	не найдено, привязанные клавиши тоже доходят до игры
+Not on this game version: Private Storage Master could not find the move it needs.	Не в этой версии игры: Private Storage Master не смог найти нужное перемещение.
+nothing	ничего
+now %d of %d used	сейчас использовано %d из %d
+off, see the error below	выключено, см. ошибку ниже
+off, the mod is disabled	выключено, мод отключён
+on XInput slot %d	в слоте XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Включено — перемещается только то количество, что только что прибыло, поэтому еда и зелья, которые вы уже несли, остаются в сумке. Выключено — уходит вся стопка.
+Only move what was picked up	Перемещать только подобранное
+Open now	Открыть сейчас
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	нажмите клавишу, с Ctrl, Shift или Alt при желании (Escape отменяет)
+Private Storage expansions	Дополнения Личного хранилища
+Private Storage Master %s for game build %s	Private Storage Master %s для сборки игры %s
+Private Storage Master did not hand over its defaults	Private Storage Master не передал свои значения по умолчанию
+Private Storage Master did not hand over its store loot settings.	Private Storage Master не передал свои настройки хранения лута.
+Private Storage Master on	Private Storage Master включён
+Private Storage Master refused the change	Private Storage Master отклонил изменение
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi тоже установлен. Оба мода меняют одни и те же части игры; удалите тот.
+Put what Master Looter picks up into storage	Отправлять в хранилище то, что подбирает Master Looter
+read from the save	считано из сохранения
+Reload from the ini	Перезагрузить из ini
+Remove	Удалить
+Reset to defaults	Сбросить к умолчаниям
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Обыск тела или туши передаёт всё, что при нём есть, а мод видит это только тогда, когда оно уже в сумке. Включено: то, что отклоняют твои правила предметов, метки, классы или порог стоимости, кладётся обратно на землю рядом с тобой, тем же способом выпадения, которым пользуется игра, когда ты сам что-то выбрасываешь, одна кучка на стопку. Это касается как обысков самого мода, так и тел, которые обыскивает питомец или спутник, — их отклонённые предметы тоже падают рядом с тобой. Тело, которое ты обыскиваешь сам, сохраняет то, что выдало. Деньги, документы, квестовые и защищённые предметы остаются в сумке.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Обыск убитых вами людей, один раз на тело. Животные относятся к пункту Туши. То, что даёт обыск, приходит раньше, чем его увидят твои фильтры, точно так же, как с тушей, а Бросать на землю отклонённый лут с тел, в разделе Общие, кладёт обратно то, что они отклоняют.
+set	задать
+set this launch	задать для этого запуска
+Settings file	Файл настроек
+Show a notice when loot is stored	Показывать уведомление, когда лут убран в хранилище
+Size changes take effect the next time the game starts.	Изменения размера вступят в силу при следующем запуске игры.
+Sizes	Размеры
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Свежевание убитых вами животных, один раз на тушу. Люди относятся к пункту Тела. Мод никогда не видит, что даёт свежевание, до того, как оно попадёт к вам, так что ваши фильтры не могут остановить его прибытие. Чтобы то, что они отклоняют, клалось обратно на землю, включите Бросать на землю отклонённый лут с тел, в разделе Общие.
+Some changes take effect the next time the game starts.	Некоторые изменения вступят в силу при следующем запуске игры.
+Stop pets looting bodies	Запретить питомцам подбирать с тел
+Stop pets picking up loose items	Запретить питомцам подбирать лежащие предметы
+Storage	Хранилище
+Storage keys	Клавиши хранилища
+Storage sizes	Размеры хранилищ
+Store loot	Хранение лута
+Store what your pet loots from bodies	Хранить то, что твой питомец подбирает с тел
+Storing loot needs a newer Private Storage Master.	Для хранения лута нужен более новый Private Storage Master.
+the size dump	дамп размеров
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Игра спрашивает, прежде чем питомец возьмёт лежащий на земле предмет, и это отвечает нет. Питомец проходит мимо него, и после этого ничего удалять не нужно. Задаёт ли наёмник тот же вопрос, не проверялось.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Игра отдельно спрашивает, прежде чем питомец обыщет тело, и это отвечает нет. Включите одно из двух, а не другое, если хотите, чтобы питомец обирал трупы, но не собирал лежащие предметы, или наоборот.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Привязки клавиш были перенесены из PrivateStorageAnywhere.ini при первом запуске.
+the key-block toggle	переключатель блокировки клавиш
+The list is full at %d items.	Список заполнен, в нём %d предметов.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Итог, включая купленные дополнения и слоты сюжета. Левый край сохраняет размер игры.
+This chest holds one of each collectible, so its slots cannot be changed.	В этом сундуке хранится по одному экземпляру каждого коллекционного предмета, поэтому его слоты нельзя изменить.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Этой вкладке нужна сборка Private Storage Master, совпадающая с этой версией Master Looter.
+Turn that on and off	Включать и выключать это
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Пока зажат Ctrl или любой другой модификатор, который используют ваши клавиши хранилища, остальные клавиши удерживаются от игры, поэтому соскальзывание с клавиши хранилища не активирует умение. Движение, Space, Tab, Enter, Escape, Alt+F4 и клавиши, которые игра использует вместе с Ctrl (Z, Shift, +), по-прежнему доходят до игры.
+working	работает
+Write the size dump to the log	Записать дамп размеров в журнал
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Записывает каждое нажатие клавиши, открытие и закрытие в PrivateStorageMaster.log и хранит последние 24 сессии. Выключено — журнал хранит сводку запуска, ошибки и дамп размеров, а также последние две сессии.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Записывает каждое нажатие клавиши, открытие и закрытие в PrivateStorageMaster.log. Выключено — журнал хранит сводку запуска, ошибки и дамп размеров.
+your own camp farm (off)	твоё собственное поле в лагере (выключено)

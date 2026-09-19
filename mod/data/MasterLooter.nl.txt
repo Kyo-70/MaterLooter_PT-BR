@@ -30,13 +30,11 @@
 1 match%s	1 resultaat%s
 3 of 3	3 van 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" bestaat al. Overschrijven vraagt eerst om bevestiging.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Een huisdier pakt op wat het wil en het spel heeft daar geen schakelaar voor. Aan: alles wat een huisdier, een huurling of een metgezel oppakt en wat je itemregels, labels, klassen of waardedrempel zouden hebben geweigerd, wordt uit de inventaris verwijderd zodra het binnenkomt, en een melding zegt wat er weg is. Missie-items en beschermde items worden nooit verwijderd, en niets wat al in je tas zit wordt aangeraakt.\n\nGoed om te weten voordat je dit aanzet: het spel meldt dat een metgezel een los voorwerp van de grond oppakt alsof je het zelf had opgepakt, en er is geen manier om die twee uit elkaar te houden. Zolang er dus een buiten en actief is, wordt iets wat je met de hand oppakt en wat je eigen regels weigeren samen met het zijne verwijderd. Is er niemand buiten, dan wordt niets wat je oppakt ooit aangeraakt. Wil je liever alles houden en het zelf uitzoeken, laat dit dan uit.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Een putemmer en dergelijke worden nooit geloot, maar door er een te activeren biedt het spel de interactie aan, zodat je hem zelf kunt gebruiken.
 Abyss and Kuku	Abyss en Kuku
 Abyss gear, Kuku pots and their parts.	Abyss-uitrusting, Kuku-potten en hun onderdelen.
 Accessories	Accessoires
 allowed	toegestaan
-already in your bag	al in je tas
 always	altijd
 always beats the class rule; never beats always	altijd wint van de klasseregel; nooit wint van altijd
 Ammunition	Munitie
@@ -196,7 +194,6 @@ Objects per scan	Objecten per scan
 on the player	op de speler
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Aan wordt een ader ter plekke ontgonnen en zwaai je nooit een pikhouweel. Uit worden aders met rust gelaten en worden alleen de brokken die je losslaat opgepakt. Vereist activering, want de ader vragen om open te gaan is de hele truc.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Aan tekent de overlay onder DLSS-framegeneratie, waarvoor deze mod het spel een gewrapte swapchain moet geven.\n\nUit tekent de overlay via de present-hook in plaats daarvan. Alles ziet er hetzelfde uit tenzij framegeneratie aan staat, en de mod blijft weg van een pad dat andere overlay-mods ook patchen. Probeer dit als het spel niet start naast een andere overlay-mod; het kan als WrapSwapChain in MasterLooter.ini worden ingesteld zonder het spel te starten.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Er wordt telkens een back-up geschreven wanneer het spel start en de laatste twaalf worden bewaard, in MasterLooter.backups naast de plugin. Voorinstellingen staan in MasterLooter.presets. Kopieer een van beide mappen om ze bij een herinstallatie te behouden.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Eén klik per familie. De tabel hieronder stelt nog steeds individuele klassen in; een groep toont een streepje wanneer slechts een deel ervan aan staat.
 Open and close this menu	Dit menu openen en sluiten
 Open folder	Map openen
@@ -270,7 +267,6 @@ someone is wearing this; taking it would copy it	iemand draagt dit; het meenemen
 stack at one point (storage contents)	stapel op één punt (opslaginhoud)
 Status	Status
 Stop pets looting	Huisdieren beletten te plunderen
-Stop pets looting at all	Huisdieren helemaal beletten te plunderen
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Tafels, stoelen, bedden, tapijten, lampen, kaarsen, schilderijen, potten en de rest van een ingerichte kamer, of je ze nu van de vloer oppakt of uit hun eigen interactiepunt haalt. Het meeste is een koperstuk of twee waard, maar de tapijten en luxe bedden lopen op tot duizenden, dus zet dit aan voordat je een huis inricht. Kisten en andere dingen die iets bevatten, vallen in plaats daarvan onder Containers. Standaard uit.
 Tag	Label
 Tags	Labels
@@ -283,13 +279,10 @@ Take owned goods on / off	Eigendom van anderen meenemen aan/uit
 take this one by hand, looting it can lock the quest	pak deze met de hand, hem plunderen kan de missie blokkeren
 takes effect next launch	wordt actief bij de volgende start
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	De engine scant je omgeving en neemt mee wat de regels toestaan. Uit betekent dat er niets automatisch wordt meegenomen; de sneltoets voor direct looten werkt nog steeds.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Het spel stelt twee vragen voordat een huisdier plundert, één voor een los voorwerp op de grond en één voor een lichaam, en dit beantwoordt beide met nee. Een huisdier reikt naar niets, dus daarna wordt er nooit iets van jou verwijderd en staan je eigen vondsten nooit ter discussie. Het schoonste van de twee antwoorden als je gewoon niet wilt dat een huisdier plundert. Of het een huurling bereikt is niet getest. Het spel draagt één plunderregel van deze soort en op beide vragen ervan wordt nee geantwoord, dus het zou kunnen; Huisdieren en metgezellen volgen de filters is de schakelaar die het zeker doet.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Het spel vult de gegevens van een punt pas wanneer het denkt dat je het kunt bereiken. Activeren vraagt het spel dit op afstand te doen, wat ook een ertsader in staat stelt om ter plekke ontgonnen te worden. Aders hebben meerdere seconden nodig om te reageren waar een struik een fractie daarvan nodig heeft.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Het spel verwijdert meegenomen objecten met vertraging. Dit voorkomt dat hetzelfde object twee keer wordt verzonden terwijl het vervaagt.
 The game treats this as stealing and will put a bounty on you.	Het spel ziet dit als diefstal en zet een premie op je hoofd.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	De mod zwaait nooit een pikhouweel. Hij stuurt de eigen breeksequentie van de ader aan, en het spel doorloopt daarvoor één droprij waar een echte zwaai er twee doorloopt, dus de bonus van je mijnbouwgereedschap levert niets op wanneer de mod het delven doet. Dit voegt het ontbrekende erts terug toe via hetzelfde droppad dat het spel gebruikt, dus het is echt erts dat op de grond valt, geen item dat naar je tas wordt gekopieerd. Stel het in op wat je gereedschap met de hand oplevert min één: een boor die met de hand drie geeft, wil hier 2. Dit geldt alleen voor een ader die deze mod heeft opengebroken, dus met de hand delven blijft onaangetast en de twee kunnen niet stapelen.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Het villen van de dieren die je doodt, eenmaal per kadaver. Mensen vallen onder Lichamen. Wat villen oplevert, wordt niet aan je filters getoetst. De mod ziet het nooit voordat het aankomt, dus deze schakelaar is alles of niets.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Het doorzoeken van de mensen die je doodt, eenmaal per lichaam. Dieren vallen onder Kadavers. Wat een doorzoeking oplevert, wordt niet aan je filters getoetst, dus ook deze schakelaar is alles of niets.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Deze sessie: %ld opgepakt, %ld verzameld, %ld gevangen, %ld kadavers
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Hout en takken op de grond, en de punten die ze opleveren. Wat de meeste ervan bevatten wordt uit de spelgegevens zelf gelezen, dus het weigeren van de klasse wood op het tabblad Klassen laat de bomen staan en ook het hout eronder. Waar het spel niets over een punt zegt, is deze schakelaar de enige controle die hij heeft.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Om één soort met rust te laten, zet wat hij wordt op nooit in het tabblad Items: Item_Tench, Item_Ricefish, Item_Iguana. De mod leest de eigen rij van het schepsel in de personagetabel van het spel, dus hij weet naar welke soort hij kijkt voordat hij iets vangt. Een paar ongewone schepsels vallen nog steeds terug op raden aan de hand van hun modelnaam en worden alleen op categorie gevangen.
@@ -339,3 +332,99 @@ your rules refuse all stone	je regels weigeren alle steen
 your rules refuse everything this node holds	je regels weigeren alles wat dit punt bevat
 part of a mechanism, not loose loot	onderdeel van een mechanisme, geen los buit
 yours, just out of your hand	van jou, net uit je hand
+%d last time	%d vorige keer
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Er wordt een back-up geschreven wanneer het spel start met instellingen die sinds de vorige keer zijn gewijzigd, en de laatste twaalf worden bewaard, in MasterLooter.backups naast de plugin. Voorinstellingen staan in MasterLooter.presets. Kopieer een van beide mappen om ze bij een herinstallatie te behouden.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Een toets of controllercombinatie opent die opslagplaats vanaf overal, en sluit hem weer. De toets van een andere opslagplaats schakelt er direct naartoe.
+a Master Looter key	een Master Looter-toets
+a Master Looter shortcut	een Master Looter-sneltoets
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Een moment nadat een voorwerp in de tas terechtkomt, verplaatst Private Storage Master het naar de eerste opslagplaats hieronder die het accepteert, dezelfde verplaatsing die je zelf bij de opslagplaats zou doen. Alleen wat Master Looter heeft opgepakt wordt verplaatst, nooit wat je met de hand hebt opgepakt, en van een lichaam of een kadaver alleen wat je itemregels toestaan. Er wordt niets verplaatst terwijl een opslagplaats open is of buiten vrij spelen, sleutels, documenten, missie-items en alles op de lijst Nooit verplaatsen blijven liggen, en wat geen enkele opslagplaats accepteert, blijft in de tas.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Een huisdier pakt op wat het wil en het spel heeft daar geen schakelaar voor. Aan: tegen een huisdier wordt nee gezegd voordat het naar een los voorwerp op de grond reikt dat je itemregels, labels, klassen of waardedrempel weigeren, en wat het ook van een lichaam meeneemt dat zij weigeren, wordt uit de inventaris verwijderd zodra het binnenkomt, met een melding die zegt wat er weg is. Missie-items en beschermde items worden nooit verwijderd, en niets wat al in je tas zit wordt aangeraakt.\n\nWat je zelf oppakt, blijft behouden, omdat het huisdier niet degene kan zijn die een geweigerd los voorwerp heeft meegenomen. Een ingehuurde huurling is de uitzondering: niemand heeft gecontroleerd of die dezelfde vraag stelt, dus zolang er een buiten is, wordt een geweigerd voorwerp dat in de tas terechtkomt verwijderd, wie het ook heeft opgepakt.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Een huisdier of metgezel dat een lichaam plundert, stopt wat het vond in je tas. Aan gaan die items naar de opslagplaats op dezelfde manier als Master Looters eigen oppakken, zolang je itemregels ze toestaan. Losse voorwerpen die een huisdier oppakt, worden door het spel gemeld als je eigen oppakken, dus die blijven in de tas.
+a seed planted in your camp farm	een zaadje geplant op je kampboerderij
+Add	Toevoegen
+add an item: type 3+ letters of its name	voeg een item toe: typ 3+ letters van de naam
+also %s	ook %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	een ertsader, overgelaten aan je pikhouweel zolang Ertsaders voor je delven uit staat
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Hooguit één regel per seconde, die elke opslagplaats noemt en hoeveel erin gingen. Uit wordt niets getoond en gaat het alleen naar het logboek.
+Click again to reset	Klik nogmaals om te resetten
+Detailed log	Gedetailleerd logboek
+Drop refused loot from bodies	Geweigerde loot van lichamen laten vallen
+Each item goes to the first storage in this list that takes it.	Elk item gaat naar de eerste opslagplaats in deze lijst die het accepteert.
+Empty: auto-store may move anything a storage takes.	Leeg: automatisch opslaan kan alles verplaatsen wat een opslagplaats accepteert.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	De grootte van elke opslagplaats en hoeveel vakjes in gebruik zijn, geschreven naar PrivateStorageMaster.log. Voeg dit bij een groottemelding.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Voor JSON-capaciteitsmods: de opslaggroottes hieronder worden genegeerd en het spel, of die mod, beslist.
+game size (%d)	spelgrootte (%d)
+Game window	Spelvenster
+hold a button, then press the one that opens it (Escape cancels)	houd een knop ingedrukt, druk dan op degene die het opent (Escape annuleert)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Houd één of meer knoppen ingedrukt, druk dan op degene die de opslagplaats opent. De ingedrukte knop wordt voor het spel verborgen zolang de andere worden vastgehouden.
+Hold other keys back while Ctrl is down	Houd andere toetsen tegen terwijl Ctrl wordt ingedrukt
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Hoeveel Persoonlijke opslag-vakjes afkomstig zijn van gekochte uitbreidingen en van het verhaal. Het totaal van de schuifregelaar telt ze mee, dus de basisgrootte is het totaal min deze.
+item %u	item %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Items die automatisch opslaan altijd in de tas laat. De standaard is elke valuta: zilver, muntbuidels, goudstaven, kampfondsen en voorraden, munten en obligaties. Terugzetten naar standaard hieronder zet die lijst terug.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	De instellingen ervan staan in PrivateStorageMaster.ini naast de plugin. Wijzigingen hier worden daar direct opgeslagen.
+Last error	Laatste fout
+Leave every size alone	Laat alle groottes ongewijzigd
+left as the game has them	gelaten zoals het spel ze heeft
+load a save to see it	laad een save om het te zien
+more matches; type more of the name	meer resultaten; typ meer van de naam
+Never move	Nooit verplaatsen
+no item by that name that is not listed already	geen item met die naam dat niet al vermeld is
+none seen	geen gezien
+not found, bound keys also reach the game	niet gevonden, gebonden toetsen bereiken ook het spel
+Not on this game version: Private Storage Master could not find the move it needs.	Niet op deze spelversie: Private Storage Master kon de beweging die hij nodig heeft niet vinden.
+nothing	niets
+now %d of %d used	nu %d van %d gebruikt
+off, see the error below	uit, zie de fout hieronder
+off, the mod is disabled	uit, de mod is uitgeschakeld
+on XInput slot %d	op XInput-slot %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Aan wordt alleen de hoeveelheid die net is aangekomen verplaatst, dus eten en drankjes die je al bij je had blijven in de tas. Uit gaat de hele stapel.
+Only move what was picked up	Verplaats alleen wat is opgepakt
+Open now	Nu openen
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	druk op een toets, eventueel met Ctrl, Shift of Alt (Escape annuleert)
+Private Storage expansions	Persoonlijke opslag-uitbreidingen
+Private Storage Master %s for game build %s	Private Storage Master %s voor spelversie %s
+Private Storage Master did not hand over its defaults	Private Storage Master heeft zijn standaardwaarden niet doorgegeven
+Private Storage Master did not hand over its store loot settings.	Private Storage Master heeft zijn instellingen voor het opslaan van loot niet doorgegeven.
+Private Storage Master on	Private Storage Master aan
+Private Storage Master refused the change	Private Storage Master heeft de wijziging geweigerd
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi is ook geïnstalleerd. Beide veranderen dezelfde delen van het spel; verwijder die.
+Put what Master Looter picks up into storage	Wat Master Looter oppakt in opslag zetten
+read from the save	gelezen uit de save
+Reload from the ini	Herladen vanuit de ini
+Remove	Verwijderen
+Reset to defaults	Terugzetten naar standaard
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Het doorzoeken van een lichaam of een kadaver draagt alles over wat het bevat, en de mod ziet het pas zodra het in de tas zit. Aan: wat daarvan je itemregels, labels, klassen of waardedrempel weigeren, wordt direct terug op de grond naast je gelegd, via dezelfde drop die het spel gebruikt wanneer je zelf iets laat vallen, één stapel per stack. Dit geldt voor de eigen doorzoekingen van de mod en de lichamen die een huisdier of metgezel plundert, waarvan de geweigerde items ook naast je terechtkomen. Een lichaam dat je zelf doorzoekt, houdt wat het uitbetaalde. Geld, documenten, missie-items en beschermde items blijven in de tas.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Het doorzoeken van de mensen die je doodt, eenmaal per lichaam. Dieren vallen onder Kadavers. Wat een doorzoeking oplevert, komt binnen voordat je filters het zien, net als bij een kadaver, en Geweigerde loot van lichamen laten vallen onder Algemeen legt terug wat zij weigeren.
+set	ingesteld
+set this launch	ingesteld bij deze start
+Settings file	Instellingenbestand
+Show a notice when loot is stored	Toon een melding wanneer loot wordt opgeslagen
+Size changes take effect the next time the game starts.	Groottewijzigingen worden actief de volgende keer dat het spel start.
+Sizes	Groottes
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Het villen van de dieren die je doodt, eenmaal per kadaver. Mensen vallen onder Lichamen. De mod ziet nooit wat villen oplevert voordat het aankomt, dus je filters kunnen niet voorkomen dat het binnenkomt. Om wat zij weigeren terug op de grond te laten leggen, zet je Geweigerde loot van lichamen laten vallen onder Algemeen aan.
+Some changes take effect the next time the game starts.	Sommige wijzigingen worden actief de volgende keer dat het spel start.
+Stop pets looting bodies	Huisdieren beletten lichamen te plunderen
+Stop pets picking up loose items	Huisdieren beletten losse voorwerpen op te pakken
+Storage	Opslag
+Storage keys	Opslagtoetsen
+Storage sizes	Opslaggroottes
+Store loot	Loot opslaan
+Store what your pet loots from bodies	Sla op wat je huisdier van lichamen plundert
+Storing loot needs a newer Private Storage Master.	Loot opslaan vereist een nieuwere Private Storage Master.
+the size dump	de groottedump
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Het spel vraagt het voordat een huisdier een voorwerp meeneemt dat op de grond ligt, en dit antwoordt nee. Het huisdier loopt eraan voorbij en er hoeft daarna niets te worden verwijderd. Of een huurling dezelfde vraag stelt, is niet getest.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Het spel vraagt apart voordat een huisdier een lichaam plundert, en dit antwoordt nee. Zet er één van de twee aan en de andere niet als je wilt dat een huisdier lijken plundert maar geen losse voorwerpen oppakt, of andersom.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	De toetsbindingen zijn overgenomen uit PrivateStorageAnywhere.ini bij de eerste keer opstarten.
+the key-block toggle	de toetsblokkeerschakelaar
+The list is full at %d items.	De lijst is vol bij %d items.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Het totaal, inclusief gekochte uitbreidingen en verhaalvakjes. Het linkeruiteinde behoudt de grootte van het spel.
+This chest holds one of each collectible, so its slots cannot be changed.	Deze kist bevat er één van elk verzamelobject, dus de vakjes ervan kunnen niet worden gewijzigd.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Dit tabblad heeft een build van Private Storage Master nodig die overeenkomt met deze versie van Master Looter.
+Turn that on and off	Zet dit aan en uit
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Terwijl Ctrl, of een andere modifier die je opslagtoetsen gebruiken, wordt vastgehouden, worden andere toetsen tegengehouden voor het spel, zodat uitglijden van een opslagtoets geen vaardigheid activeert. Beweging, spatie, Tab, Enter, Escape, Alt+F4 en de toetsen die het spel met Ctrl gebruikt (Z, Shift, +) komen nog steeds door.
+working	werkt
+Write the size dump to the log	Schrijf de groottedump naar het logboek
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Schrijft elke toetsaanslag, elk openen en sluiten naar PrivateStorageMaster.log, en bewaart de laatste 24 sessies. Uit bewaart het logboek de opstartsamenvatting, fouten en de groottedump, en de laatste twee sessies.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Schrijft elke toetsaanslag, elk openen en sluiten naar PrivateStorageMaster.log. Uit bewaart het logboek de opstartsamenvatting, fouten en de groottedump.
+your own camp farm (off)	je eigen kampboerderij (uit)

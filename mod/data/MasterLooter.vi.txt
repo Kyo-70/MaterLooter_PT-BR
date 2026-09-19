@@ -31,13 +31,11 @@
 1 match%s	1 kết quả khớp%s
 3 of 3	3 trong 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" đã tồn tại. Ghi đè lên sẽ được hỏi xác nhận trước.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Thú cưng nhặt bất cứ thứ gì nó thích và trò chơi không có công tắc nào cho việc đó. Bật: bất cứ thứ gì thú cưng, lính đánh thuê hoặc bạn đồng hành nhặt lên mà quy tắc vật phẩm, thẻ, loại hoặc ngưỡng giá trị của bạn đã từ chối đều bị xóa khỏi túi đồ ngay khi vào, và một thông báo cho biết thứ gì đã mất. Vật phẩm nhiệm vụ và vật phẩm được bảo vệ không bao giờ bị xóa, và không thứ gì đã nằm sẵn trong túi bị đụng đến.\n\nĐáng biết trước khi bật cái này: trò chơi báo việc một bạn đồng hành nhặt vật phẩm rơi dưới đất y như thể chính bạn đã nhặt nó, và không có cách nào phân biệt hai trường hợp. Vì vậy, khi có một người đang ở ngoài và hoạt động, thứ bạn tự tay nhặt mà quy tắc của chính bạn từ chối cũng bị xóa cùng với đồ của họ. Khi không có ai ở ngoài, không thứ gì bạn nhặt bị đụng đến. Nếu bạn muốn giữ lại tất cả và tự phân loại, hãy để tắt.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Xô giếng và những thứ tương tự không bao giờ bị loot, nhưng kích hoạt nó khiến trò chơi hiện ra tương tác để bạn tự tay dùng nó.
 Abyss and Kuku	Abyss và Kuku
 Abyss gear, Kuku pots and their parts.	Trang bị Abyss, bình Kuku và các bộ phận của chúng.
 Accessories	Phụ kiện
 allowed	được phép
-already in your bag	đã có trong túi đồ của bạn
 always	luôn
 always beats the class rule; never beats always	“luôn” thắng quy tắc theo loại; “không bao giờ” thắng “luôn”
 Ammunition	Đạn dược
@@ -197,7 +195,6 @@ Objects per scan	Số vật thể mỗi lần quét
 on the player	trên người chơi
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Bật, một vỉa quặng được khai thác ngay tại chỗ và bạn không bao giờ phải vung cuốc chim. Tắt, vỉa quặng được để yên và chỉ những mảnh vụn bạn đánh rơi ra mới được nhặt. Cần kích hoạt, vì yêu cầu vỉa quặng mở ra chính là toàn bộ mấu chốt.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Bật, lớp phủ được vẽ bên dưới tính năng tạo khung hình của DLSS, việc này đòi hỏi mod phải đưa cho trò chơi một swapchain đã được bọc.\n\nTắt, lớp phủ được vẽ qua hook Present thay vào đó. Mọi thứ trông như nhau trừ khi tính năng tạo khung hình đang bật, và mod tránh xa một đường mà các mod lớp phủ khác cũng vá vào. Hãy thử cách này nếu trò chơi không khởi động được cùng một mod lớp phủ khác; có thể đặt bằng WrapSwapChain trong MasterLooter.ini mà không cần mở trò chơi.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Một bản sao lưu được ghi mỗi khi trò chơi khởi động, và mười hai bản gần nhất được giữ lại, trong MasterLooter.backups cạnh plugin. Các cấu hình nằm trong MasterLooter.presets. Sao chép một trong hai thư mục để giữ lại qua một lần cài lại.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Một cú nhấp cho mỗi nhóm lớn. Bảng bên dưới vẫn đặt từng loại riêng lẻ; một nhóm hiện dấu gạch ngang khi chỉ một phần trong đó đang bật.
 Open and close this menu	Mở và đóng menu này
 Open folder	Mở thư mục
@@ -271,7 +268,6 @@ someone is wearing this; taking it would copy it	có người đang mặc thứ 
 stack at one point (storage contents)	chồng tại một điểm (nội dung kho chứa)
 Status	Trạng thái
 Stop pets looting	Ngăn thú cưng nhặt đồ
-Stop pets looting at all	Ngăn thú cưng nhặt đồ hoàn toàn
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Bàn, ghế, giường, thảm, đèn, nến, tranh, chậu cây và những thứ còn lại của một căn phòng có nội thất, dù bạn nhặt từ sàn hay lấy từ chính điểm tương tác của nó. Hầu hết chỉ đáng giá một hoặc hai đồng, nhưng thảm và giường sang trọng có thể lên tới hàng nghìn, nên hãy bật mục này trước khi trang trí một căn nhà. Rương và những thứ khác dùng để đựng đồ được xử lý bởi mục Vật chứa thay vào đó. Mặc định là tắt.
 Tag	Thẻ
 Tags	Thẻ
@@ -284,13 +280,10 @@ Take owned goods on / off	Bật/tắt lấy tài sản của người khác
 take this one by hand, looting it can lock the quest	hãy tự tay lấy cái này, nhặt nó có thể khóa nhiệm vụ
 takes effect next launch	có hiệu lực từ lần khởi động sau
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Công cụ quét xung quanh bạn và lấy những gì quy tắc cho phép. Tắt nghĩa là không có gì được lấy tự động; phím bấm nhanh vẫn hoạt động.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Trò chơi hỏi hai câu trước khi một thú cưng nhặt đồ, một câu cho vật phẩm rơi dưới đất và một câu cho thi thể, và cái này trả lời không cho cả hai. Thú cưng không với tới thứ gì, nên sau đó không có gì của bạn bị xóa và những thứ chính bạn nhặt không bao giờ bị đặt vấn đề. Đây là câu trả lời gọn gàng hơn trong hai cách, nếu bạn chỉ đơn giản không muốn thú cưng nhặt đồ. Việc nó có với tới lính đánh thuê hay không thì chưa được thử. Trò chơi mang một quy tắc nhặt đồ thuộc loại này và cả hai câu hỏi của nó đều bị trả lời không, nên có thể là có; Thú cưng và đồng hành tuân theo bộ lọc mới là công tắc chắc chắn làm được điều đó.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Trò chơi chỉ lấp đầy dữ liệu của một điểm khi nó nghĩ rằng bạn có thể chạm tới. Kích hoạt yêu cầu nó làm việc đó từ xa, và đó cũng là cách một vỉa quặng có thể được khai thác ngay tại chỗ. Vỉa quặng mất vài giây để phản hồi trong khi một bụi cây chỉ mất một phần nhỏ của giây đó.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Trò chơi xóa các vật thể đã lấy với một khoảng trễ. Điều này ngăn cùng một vật thể được gửi hai lần trong lúc nó biến mất.
 The game treats this as stealing and will put a bounty on you.	Trò chơi coi đây là hành vi trộm cắp và sẽ treo tiền thưởng truy nã bạn.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Mod không bao giờ vung cuốc chim. Nó kích hoạt chuỗi vỡ riêng của vỉa quặng, và trò chơi chỉ chạy qua một hàng rơi cho việc đó, trong khi một cú vung thật chạy qua hai hàng, nên phần thưởng của công cụ khai thác không trả gì khi mod tự khai thác. Tùy chọn này cộng lại số quặng còn thiếu qua đúng đường rơi mà trò chơi dùng, nên đó là quặng thật đổ ra mặt đất, không phải một vật phẩm được sao chép vào túi đồ bạn. Hãy đặt nó bằng số quặng công cụ của bạn trả khi khai thác tay trừ đi một: một cây khoan cho ba khi khai thác tay thì cần đặt 2 ở đây. Nó chỉ áp dụng cho một vỉa quặng do mod này đập vỡ, nên việc khai thác bằng tay không bị ảnh hưởng và hai khoản này không thể cộng dồn.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Lột da những con vật bạn giết, một lần cho mỗi xác. Con người thuộc mục Thi thể. Thứ lột da mang lại không được kiểm tra theo bộ lọc của bạn. Mod không bao giờ thấy nó trước khi nó đến, nên công tắc này là tất cả hoặc không có gì.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Lục soát những người bạn giết, một lần cho mỗi thi thể. Động vật thuộc mục Xác động vật. Thứ lục soát mang lại không được kiểm tra theo bộ lọc của bạn, nên công tắc này cũng là tất cả hoặc không có gì.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Phiên này: %ld đã nhặt, %ld đã thu thập, %ld đã bắt, %ld xác thú
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Gỗ và cành cây dưới đất, cùng các điểm cho ra chúng. Phần lớn trong số đó chứa gì được đọc ngay từ dữ liệu của trò chơi, nên từ chối loại wood ở thẻ Loại sẽ để cây đứng nguyên và cả gỗ nằm dưới gốc. Ở nơi trò chơi không nói gì về một điểm, công tắc này là cách kiểm soát duy nhất mà nó có.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Để một loài được yên, hãy đặt quy tắc cho vật phẩm mà nó biến thành về “không bao giờ” trong tab Vật phẩm: Item_Tench, Item_Ricefish, Item_Iguana. Mod đọc chính hàng dữ liệu của sinh vật đó trong bảng nhân vật của trò chơi, nên nó biết đang nhìn vào loài nào trước khi bắt bất cứ thứ gì. Một vài sinh vật khác thường vẫn phải đoán qua tên mô hình của chúng và chỉ bị bắt theo loại.
@@ -340,3 +333,99 @@ your rules refuse all stone	quy tắc của bạn từ chối mọi loại đá
 your rules refuse everything this node holds	quy tắc của bạn từ chối mọi thứ điểm này chứa
 part of a mechanism, not loose loot	một phần của cơ cấu, không phải chiến lợi phẩm rơi rớt
 yours, just out of your hand	của bạn, vừa rời khỏi tay bạn
+%d last time	%d lần trước
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Một bản sao lưu được ghi khi trò chơi khởi động với các thiết lập đã thay đổi so với lần sao lưu trước, và mười hai bản gần nhất được giữ lại, trong MasterLooter.backups cạnh plugin. Các cấu hình nằm trong MasterLooter.presets. Sao chép một trong hai thư mục để giữ lại qua một lần cài lại.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Một phím hoặc tổ hợp tay cầm sẽ mở kho chứa đó từ bất cứ đâu, và bấm lại sẽ đóng nó. Phím của một kho chứa khác sẽ chuyển thẳng sang kho đó.
+a Master Looter key	một phím của Master Looter
+a Master Looter shortcut	một phím tắt của Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Một lúc sau khi vật phẩm vào túi đồ, Private Storage Master sẽ chuyển nó vào kho chứa đầu tiên bên dưới nhận nó, giống hệt thao tác bạn sẽ làm tại kho chứa đó. Chỉ những gì Master Looter nhặt được mới bị chuyển đi, không bao giờ là thứ bạn tự tay nhặt, và từ một thi thể hay xác thú thì chỉ những gì quy tắc vật phẩm của bạn cho phép. Không gì bị chuyển trong khi một kho chứa đang mở hoặc ngoài chế độ chơi tự do, chìa khóa, tài liệu, vật phẩm nhiệm vụ và bất cứ thứ gì trong danh sách Không bao giờ chuyển sẽ được giữ nguyên, và thứ không kho chứa nào nhận sẽ ở lại trong túi đồ.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Thú cưng nhặt bất cứ thứ gì nó thích và trò chơi không có công tắc nào cho việc đó. Bật: thú cưng được báo không trước khi nó với tới một vật phẩm rơi rớt mà quy tắc vật phẩm, thẻ, loại hoặc ngưỡng giá trị của bạn từ chối, và bất cứ thứ gì nó lấy từ một thi thể mà những quy tắc đó từ chối đều bị xóa khỏi túi đồ ngay khi vào, kèm một thông báo cho biết thứ gì đã mất. Vật phẩm nhiệm vụ và vật phẩm được bảo vệ không bao giờ bị xóa, và không thứ gì đã nằm sẵn trong túi bị đụng đến.\n\nThứ bạn tự tay nhặt được giữ lại, vì thú cưng không thể là kẻ đã lấy một vật phẩm rơi rớt bị từ chối. Lính đánh thuê được thuê là ngoại lệ: chưa ai kiểm tra xem nó có bị hỏi cùng câu hỏi đó hay không, nên khi có một người đang ở ngoài, một vật phẩm bị từ chối mà vào túi đồ sẽ bị xóa bất kể ai đã nhặt nó.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Một thú cưng hoặc bạn đồng hành lục soát một thi thể sẽ đặt những gì tìm được vào túi đồ của bạn. Bật, những vật phẩm đó sẽ vào kho chứa giống như cách những vật phẩm Master Looter tự nhặt vẫn vào, miễn là quy tắc vật phẩm của bạn cho phép chúng. Vật phẩm rơi rớt mà thú cưng nhặt được trò chơi báo cáo như thể chính bạn đã nhặt, nên những thứ đó vẫn ở lại trong túi đồ.
+a seed planted in your camp farm	một hạt giống được trồng trong nông trại tại trại của bạn
+Add	Thêm
+add an item: type 3+ letters of its name	thêm một vật phẩm: gõ từ 3 ký tự trở lên của tên vật phẩm đó
+also %s	cũng %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	một vỉa quặng, được để lại cho cuốc chim của bạn trong khi Tự động khai thác vỉa quặng cho bạn đang tắt
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Nhiều nhất một dòng mỗi giây, nêu tên từng kho chứa và có bao nhiêu món đã vào đó. Tắt, không gì được hiển thị và chỉ được ghi vào nhật ký.
+Click again to reset	Nhấp lại để đặt lại
+Detailed log	Nhật ký chi tiết
+Drop refused loot from bodies	Thả loot bị từ chối từ thi thể
+Each item goes to the first storage in this list that takes it.	Mỗi vật phẩm sẽ vào kho chứa đầu tiên trong danh sách này nhận nó.
+Empty: auto-store may move anything a storage takes.	Trống: tính năng Cất loot có thể chuyển bất cứ thứ gì mà một kho chứa nhận vào kho đó.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Kích thước của từng kho chứa và có bao nhiêu ô đang được dùng, được ghi vào PrivateStorageMaster.log. Đính kèm tệp đó khi báo cáo về kích thước.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Đối với các mod chỉnh dung lượng bằng JSON: kích thước kho chứa bên dưới bị bỏ qua và trò chơi, hoặc mod đó, sẽ quyết định.
+game size (%d)	kích thước của trò chơi (%d)
+Game window	Cửa sổ trò chơi
+hold a button, then press the one that opens it (Escape cancels)	giữ một nút, rồi nhấn nút mở nó (Escape để hủy)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Giữ một hoặc nhiều nút, rồi nhấn nút mở kho chứa đó. Nút vừa nhấn sẽ bị ẩn khỏi trò chơi trong khi các nút còn lại đang được giữ.
+Hold other keys back while Ctrl is down	Giữ các phím khác lại trong khi Ctrl đang được nhấn
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Có bao nhiêu ô kho chứa riêng đến từ các gói mở rộng bạn đã mua và từ cốt truyện. Tổng trên thanh trượt tính luôn cả những ô này, nên kích thước gốc là tổng đó trừ đi số ô này.
+item %u	vật phẩm %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Những vật phẩm mà tính năng Cất loot luôn để lại trong túi đồ. Mặc định là mọi loại tiền tệ: bạc, túi tiền xu, thỏi vàng, quỹ và vật tư trại, token và trái phiếu. Đặt lại về mặc định bên dưới sẽ khôi phục danh sách đó.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Các thiết lập của nó nằm trong PrivateStorageMaster.ini cạnh plugin. Thay đổi ở đây được lưu vào đó ngay lập tức.
+Last error	Lỗi gần nhất
+Leave every size alone	Để nguyên mọi kích thước
+left as the game has them	để nguyên như trò chơi đặt
+load a save to see it	tải một bản lưu để xem nó
+more matches; type more of the name	còn các kết quả khớp khác; gõ thêm phần tên
+Never move	Không bao giờ chuyển
+no item by that name that is not listed already	không có vật phẩm nào mang tên đó mà chưa có trong danh sách
+none seen	chưa thấy cái nào
+not found, bound keys also reach the game	không tìm thấy, các phím đã gán cũng vẫn đến được trò chơi
+Not on this game version: Private Storage Master could not find the move it needs.	Không có trên phiên bản trò chơi này: Private Storage Master không tìm thấy thao tác di chuyển mà nó cần.
+nothing	không có gì
+now %d of %d used	hiện dùng %d trong %d
+off, see the error below	tắt, xem lỗi bên dưới
+off, the mod is disabled	tắt, mod đang bị vô hiệu hóa
+on XInput slot %d	trên khe XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Bật, chỉ số lượng vừa mới vào được chuyển đi, nên thức ăn và thuốc bạn đã mang theo từ trước vẫn ở lại trong túi đồ. Tắt, cả chồng đồ sẽ được chuyển đi.
+Only move what was picked up	Chỉ chuyển những gì đã nhặt được
+Open now	Mở ngay
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	nhấn một phím, kèm Ctrl, Shift hoặc Alt nếu bạn muốn (Escape để hủy)
+Private Storage expansions	Mở rộng kho chứa riêng
+Private Storage Master %s for game build %s	Private Storage Master %s cho bản dựng trò chơi %s
+Private Storage Master did not hand over its defaults	Private Storage Master không trả về các giá trị mặc định của nó
+Private Storage Master did not hand over its store loot settings.	Private Storage Master không trả về các thiết lập Cất loot của nó.
+Private Storage Master on	Private Storage Master đang bật
+Private Storage Master refused the change	Private Storage Master từ chối thay đổi đó
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi cũng đang được cài đặt. Cả hai đều thay đổi cùng những phần của trò chơi; hãy gỡ bỏ mod đó.
+Put what Master Looter picks up into storage	Cất những gì Master Looter nhặt được vào kho chứa
+read from the save	đọc từ bản lưu
+Reload from the ini	Tải lại từ tệp ini
+Remove	Loại bỏ
+Reset to defaults	Đặt lại về mặc định
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Lục soát một thi thể hoặc một xác thú sẽ trao ra mọi thứ nó mang, và mod chỉ thấy được sau khi đã vào túi đồ. Bật: bất cứ thứ gì trong số đó mà quy tắc vật phẩm, thẻ, loại hoặc ngưỡng giá trị của bạn từ chối sẽ được đặt thẳng xuống đất bên cạnh bạn, qua đúng thao tác thả mà trò chơi dùng khi chính bạn thả một thứ gì đó, một đống cho mỗi chồng đồ. Điều này bao gồm cả những lần mod tự lục soát lẫn những thi thể mà một thú cưng hoặc bạn đồng hành lục soát, mà vật phẩm bị từ chối của chúng cũng sẽ rơi xuống bên cạnh bạn. Một thi thể bạn tự tay lục soát thì giữ nguyên những gì nó trả. Tiền, tài liệu, vật phẩm nhiệm vụ và vật phẩm được bảo vệ vẫn ở lại trong túi đồ.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Lục soát những người bạn giết, một lần cho mỗi thi thể. Động vật thuộc mục Xác thú. Thứ lục soát mang lại đến trước khi bộ lọc của bạn kịp thấy nó, giống như với xác thú, và Thả loot bị từ chối từ thi thể dưới mục Chung sẽ đặt lại xuống đất những gì bị từ chối.
+set	đã đặt
+set this launch	đã đặt cho lần khởi động này
+Settings file	Tệp thiết lập
+Show a notice when loot is stored	Hiện thông báo khi loot được cất vào kho
+Size changes take effect the next time the game starts.	Thay đổi kích thước có hiệu lực từ lần khởi động trò chơi kế tiếp.
+Sizes	Kích thước
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Lột da những con vật bạn giết, một lần cho mỗi xác. Con người thuộc mục Thi thể. Mod không bao giờ thấy thứ lột da mang lại trước khi nó đến, nên bộ lọc của bạn không thể ngăn nó đến. Để những gì bị từ chối được đặt lại xuống đất, hãy bật Thả loot bị từ chối từ thi thể dưới mục Chung.
+Some changes take effect the next time the game starts.	Một số thay đổi có hiệu lực từ lần khởi động trò chơi kế tiếp.
+Stop pets looting bodies	Ngăn thú cưng lục soát thi thể
+Stop pets picking up loose items	Ngăn thú cưng nhặt vật phẩm rơi rớt
+Storage	Kho chứa
+Storage keys	Phím kho chứa
+Storage sizes	Kích thước kho chứa
+Store loot	Cất loot
+Store what your pet loots from bodies	Cất những gì thú cưng của bạn lục soát được từ thi thể
+Storing loot needs a newer Private Storage Master.	Việc cất loot cần một bản Private Storage Master mới hơn.
+the size dump	bản kê dung lượng
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Trò chơi hỏi trước khi một thú cưng lấy một vật phẩm rơi rớt dưới đất, và cái này trả lời không. Thú cưng đi ngang qua nó và sau đó không có gì cần phải xóa. Việc lính đánh thuê có bị hỏi cùng câu hỏi đó hay không thì chưa được thử.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Trò chơi hỏi riêng trước khi một thú cưng lục soát một thi thể, và cái này trả lời không. Hãy bật một trong hai cái mà không bật cái kia nếu bạn muốn thú cưng lục soát xác nhưng không nhặt vật phẩm rơi rớt, hoặc ngược lại.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Các gán phím đã được mang sang từ PrivateStorageAnywhere.ini trong lần chạy đầu tiên.
+the key-block toggle	công tắc chặn phím
+The list is full at %d items.	Danh sách đã đầy ở %d vật phẩm.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Tổng số, đã bao gồm các ô từ gói mở rộng đã mua và từ cốt truyện. Đầu bên trái giữ nguyên kích thước của trò chơi.
+This chest holds one of each collectible, so its slots cannot be changed.	Rương này chứa một món của mỗi loại vật phẩm sưu tầm, nên số ô của nó không thể thay đổi.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Thẻ này cần một bản dựng Private Storage Master khớp với phiên bản Master Looter này.
+Turn that on and off	Bật rồi tắt nó lại
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Trong khi Ctrl, hoặc bất kỳ phím bổ trợ nào mà phím kho chứa của bạn dùng, đang được giữ, các phím khác bị giữ lại không cho tới trò chơi, để việc trượt tay khỏi một phím kho chứa không kích hoạt một kỹ năng. Di chuyển, Space, Tab, Enter, Escape, Alt+F4 và các phím mà trò chơi dùng cùng Ctrl (Z, Shift, +) vẫn được cho qua.
+working	đang hoạt động
+Write the size dump to the log	Ghi bản kê dung lượng vào nhật ký
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Ghi lại mọi lần nhấn phím, mở và đóng vào PrivateStorageMaster.log, và giữ lại 24 phiên gần nhất. Tắt, nhật ký chỉ giữ tóm tắt khởi động, lỗi và bản kê dung lượng, cùng hai phiên gần nhất.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Ghi lại mọi lần nhấn phím, mở và đóng vào PrivateStorageMaster.log. Tắt, nhật ký chỉ giữ tóm tắt khởi động, lỗi và bản kê dung lượng.
+your own camp farm (off)	nông trại riêng của bạn (tắt)

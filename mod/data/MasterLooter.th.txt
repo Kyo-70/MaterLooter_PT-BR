@@ -30,13 +30,11 @@
 1 match%s	พบ 1 รายการ%s
 3 of 3	3 จาก 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" มีอยู่แล้ว การบันทึกทับจะถามยืนยันก่อนเสมอ
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	สัตว์เลี้ยงจะเก็บอะไรก็ได้ตามใจมัน และตัวเกมไม่มีสวิตช์สำหรับเรื่องนี้เลย เมื่อเปิด: สิ่งใดก็ตามที่สัตว์เลี้ยง ทหารรับจ้าง หรือเพื่อนร่วมทางเก็บขึ้นมา แล้วกฎไอเทม แท็ก ประเภท หรือขั้นต่ำของมูลค่าที่คุณตั้งไว้จะปฏิเสธ จะถูกลบออกจากกระเป๋าทันทีที่เข้ามา และจะมีข้อความบอกว่าอะไรหายไป ไอเทมเควสต์และไอเทมที่ถูกป้องกันจะไม่ถูกลบเด็ดขาด และของที่อยู่ในกระเป๋าอยู่แล้วจะไม่ถูกแตะต้อง\n\nสิ่งที่ควรรู้ก่อนเปิด: เมื่อเพื่อนร่วมทางเก็บไอเทมที่ตกอยู่บนพื้น เกมจะรายงานเหมือนกับว่าคุณเป็นคนเก็บเอง และไม่มีทางแยกสองกรณีนี้ออกจากกัน ดังนั้นตราบใดที่ยังมีเพื่อนร่วมทางออกมาอยู่ ของที่คุณเก็บเองกับมือแล้วกฎของคุณเองปฏิเสธ ก็จะถูกลบไปพร้อมกับของที่มันเก็บด้วย หากไม่มีใครออกมา ของที่คุณเก็บจะไม่ถูกแตะต้องเลย ถ้าคุณอยากเก็บทุกอย่างไว้แล้วคัดเอง ให้ปิดตัวเลือกนี้ไว้
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	ถังบ่อน้ำและสิ่งคล้ายกันจะไม่ถูกลูทเลย แต่การกระตุ้นมันจะทำให้เกมเสนอการโต้ตอบให้คุณใช้งานด้วยมือเอง
 Abyss and Kuku	Abyss และ Kuku
 Abyss gear, Kuku pots and their parts.	อุปกรณ์ Abyss, หม้อ Kuku และชิ้นส่วนของมัน
 Accessories	เครื่องประดับ
 allowed	อนุญาต
-already in your bag	อยู่ในกระเป๋าอยู่แล้ว
 always	เสมอ
 always beats the class rule; never beats always	"เสมอ" ชนะกฎของประเภทเสมอ ส่วน "ไม่เลย" ชนะ "เสมอ"
 Ammunition	กระสุน
@@ -196,7 +194,6 @@ Objects per scan	จำนวนวัตถุต่อการสแกน
 on the player	อยู่บนตัวผู้เล่น
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	เปิด สายแร่จะถูกเก็บเกี่ยวตรงที่มันอยู่ คุณจะไม่ต้องเหวี่ยงอีเต้าเลย ปิด สายแร่จะถูกปล่อยไว้ มีแค่เศษที่แตกออกมาเท่านั้นที่จะถูกเก็บ ต้องเปิดการกระตุ้นด้วย เพราะการขอให้สายแร่เปิดคือกลไกหลักทั้งหมด
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	เปิด โอเวอร์เลย์จะวาดภาพอยู่ใต้ DLSS frame generation ซึ่งต้องให้มอดนี้ส่งมอบ swapchain ที่ห่อไว้ให้เกม\n\nปิด โอเวอร์เลย์จะวาดภาพผ่าน present hook แทน ทุกอย่างจะดูเหมือนกันตราบใดที่ยังไม่ได้เปิด frame generation และมอดจะเลี่ยงเส้นทางที่มอดโอเวอร์เลย์ตัวอื่นก็แพตช์ด้วยเช่นกัน ลองปิดตัวนี้ดูหากเกมไม่ยอมเปิดพร้อมกับมอดโอเวอร์เลย์ตัวอื่น ตั้งค่าเป็น WrapSwapChain ใน MasterLooter.ini ได้โดยไม่ต้องเปิดเกม
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	ข้อมูลสำรองหนึ่งชุดจะถูกเขียนทุกครั้งที่เกมเริ่มทำงาน และเก็บไว้สิบสองชุดล่าสุด ในโฟลเดอร์ MasterLooter.backups ข้างปลั๊กอิน พรีเซ็ตอยู่ใน MasterLooter.presets คัดลอกโฟลเดอร์ใดโฟลเดอร์หนึ่งไว้เพื่อรักษาไว้ข้ามการติดตั้งใหม่
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	คลิกเดียวต่อหนึ่งตระกูล ตารางด้านล่างยังตั้งค่าแต่ละประเภทแยกได้อยู่ กลุ่มจะแสดงขีดกลางเมื่อมีเพียงบางส่วนเปิดอยู่
 Open and close this menu	เปิดและปิดเมนูนี้
 Open folder	เปิดโฟลเดอร์
@@ -270,7 +267,6 @@ someone is wearing this; taking it would copy it	มีคนสวมใส่�
 stack at one point (storage contents)	กองรวมที่จุดเดียว (เนื้อหาคลังเก็บ)
 Status	สถานะ
 Stop pets looting	ห้ามสัตว์เลี้ยงเก็บของ
-Stop pets looting at all	ห้ามสัตว์เลี้ยงเก็บของโดยสิ้นเชิง
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	โต๊ะ, เก้าอี้, เตียง, พรม, โคมไฟ, เทียน, ภาพวาด, หม้อ และของที่เหลือในห้องที่ตกแต่งไว้ ไม่ว่าจะเก็บจากพื้นหรือเก็บจากจุดโต้ตอบของมันเอง ส่วนใหญ่มีค่าแค่หนึ่งหรือสองทองแดง แต่พรมและเตียงหรูอาจมีมูลค่าถึงหลักพัน จึงควรเปิดสวิตช์นี้ก่อนตกแต่งบ้าน หีบและสิ่งอื่นที่เก็บของไว้ข้างในจะขึ้นกับสวิตช์กล่องแทน ปิดไว้เป็นค่าเริ่มต้น
 Tag	แท็ก
 Tags	แท็ก
@@ -283,13 +279,10 @@ Take owned goods on / off	เก็บของมีเจ้าของ เ�
 take this one by hand, looting it can lock the quest	หยิบชิ้นนี้ด้วยมือ การเก็บอัตโนมัติอาจทำให้เควสต์ค้าง
 takes effect next launch	มีผลตอนเปิดเกมครั้งถัดไป
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	เอนจินจะสแกนรอบตัวคุณและเก็บของตามที่กฎอนุญาต ปิด หมายความว่าจะไม่มีอะไรถูกเก็บอัตโนมัติเลย ปุ่มเก็บรวดยังใช้งานได้อยู่
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	เกมจะถามสองคำถามก่อนที่สัตว์เลี้ยงจะเก็บของ คำถามหนึ่งสำหรับไอเทมที่ตกอยู่บนพื้น และอีกคำถามสำหรับศพ และตัวเลือกนี้ตอบไม่ทั้งสองคำถาม สัตว์เลี้ยงจะไม่เอื้อมไปหยิบอะไรเลย ดังนั้นหลังจากนั้นจะไม่มีของของคุณถูกลบ และของที่คุณเก็บเองก็ไม่เคยตกอยู่ในข้อสงสัย นี่คือคำตอบที่สะอาดกว่าในสองแบบ หากคุณเพียงแค่ไม่อยากให้สัตว์เลี้ยงเก็บของ ส่วนที่ว่ามันครอบคลุมถึงทหารรับจ้างหรือไม่นั้นยังไม่ได้ทดสอบ เกมมีกฎการเก็บของชนิดนี้อยู่เพียงข้อเดียว และทั้งสองคำถามของมันถูกตอบว่าไม่ จึงเป็นไปได้ว่าครอบคลุม ส่วนสัตว์เลี้ยงและเพื่อนร่วมทางทำตามตัวกรองคือสวิตช์ที่ครอบคลุมแน่นอน
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	เกมจะเติมข้อมูลของจุดเก็บของก็ต่อเมื่อคิดว่าคุณเอื้อมถึงมันได้ การกระตุ้นคือการขอให้เกมทำแบบนั้นจากระยะไกล ซึ่งเป็นสิ่งเดียวกับที่ทำให้เก็บเกี่ยวสายแร่ได้ตรงที่มันอยู่ สายแร่ใช้เวลาหลายวินาทีในการตอบสนอง ขณะที่พุ่มไม้ใช้เวลาแค่เสี้ยวเดียว
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	เกมจะลบวัตถุที่ถูกเก็บไปหน่วงเวลาหนึ่ง สิ่งนี้ป้องกันไม่ให้วัตถุเดียวกันถูกส่งซ้ำสองครั้งระหว่างที่มันกำลังจางหาย
 The game treats this as stealing and will put a bounty on you.	เกมจะถือว่านี่คือการขโมยและจะตั้งค่าหัวรางวัลให้คุณ
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	มอดจะไม่มีวันเหวี่ยงอีเต้าเอง มันขับเคลื่อนลำดับการแตกของสายแร่เอง และเกมจะเดินแถวของหล่นเพียงแถวเดียวสำหรับกรณีนี้ ในขณะที่การเหวี่ยงจริงเดินสองแถว จึงทำให้โบนัสของเครื่องมือขุดของคุณไม่จ่ายอะไรเลยเมื่อมอดเป็นคนขุด สิ่งนี้เพิ่มแร่ที่ขาดหายไปกลับคืนผ่านเส้นทางการหล่นเดียวกับที่เกมใช้ จึงเป็นแร่จริงที่กระจายอยู่บนพื้น ไม่ใช่ไอเทมที่ถูกก็อปปี้เข้ากระเป๋า ตั้งค่าให้เท่ากับสิ่งที่เครื่องมือของคุณจ่ายเมื่อขุดด้วยมือลบหนึ่ง: สว่านที่ให้สามชิ้นเมื่อขุดด้วยมือ ต้องการค่า 2 ที่นี่ มันใช้ได้เฉพาะกับสายแร่ที่มอดนี้ทุบเท่านั้น การขุดด้วยมือจึงไม่ได้รับผลกระทบและทั้งสองอย่างไม่สามารถซ้อนกันได้
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	การถลกหนังสัตว์ที่คุณฆ่า หนึ่งครั้งต่อซาก คนอยู่ในหมวด ศพ สิ่งที่ได้จากการถลกหนังจะไม่ถูกตรวจสอบกับตัวกรองของคุณ ม็อดไม่เคยเห็นมันก่อนที่มันจะมาถึง ดังนั้นสวิตช์นี้จึงเป็นทั้งหมดหรือไม่มีเลย
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	การค้นตัวคนที่คุณฆ่า หนึ่งครั้งต่อศพ สัตว์อยู่ในหมวด ซากสัตว์ สิ่งที่ได้จากการค้นตัวจะไม่ถูกตรวจสอบกับตัวกรองของคุณ ดังนั้นสวิตช์นี้ก็เป็นทั้งหมดหรือไม่มีเลยเช่นกัน
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	เซสชันนี้: เก็บแล้ว %ld ชิ้น, เก็บเกี่ยวแล้ว %ld ชิ้น, จับได้แล้ว %ld ตัว, ซากสัตว์ %ld ตัว
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	ไม้ซุงและกิ่งไม้บนพื้น รวมถึงจุดเก็บของที่ให้ของเหล่านั้น สิ่งที่ส่วนใหญ่ของมันมีอยู่ข้างในนั้นอ่านมาจากข้อมูลของตัวเกมเอง ดังนั้นการปฏิเสธประเภท wood ในแท็บประเภทจะทำให้ต้นไม้ยังคงยืนอยู่ และไม้ที่อยู่ใต้ต้นก็เช่นกัน ในที่ที่เกมไม่ได้บอกอะไรเกี่ยวกับจุดเก็บของเลย สวิตช์นี้คือการควบคุมเพียงอย่างเดียวที่มันมี
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	หากต้องการเว้นสัตว์บางชนิดไว้ ให้ตั้งค่าสิ่งที่มันกลายเป็นเป็นไม่เลยในแท็บไอเทม: Item_Tench, Item_Ricefish, Item_Iguana มอดอ่านแถวของสิ่งมีชีวิตนั้นในตารางตัวละครของเกมเอง จึงรู้ว่ากำลังเจอสัตว์ชนิดใดก่อนจะจับมันด้วยซ้ำ สัตว์แปลก ๆ บางชนิดยังคงต้องเดาจากชื่อโมเดลของมัน และถูกจับตามหมวดหมู่เท่านั้น
@@ -339,3 +332,99 @@ your rules refuse all stone	กฎของคุณปฏิเสธหิน�
 your rules refuse everything this node holds	กฎของคุณปฏิเสธทุกอย่างที่จุดเก็บของนี้มีอยู่
 part of a mechanism, not loose loot	เป็นส่วนหนึ่งของกลไก ไม่ใช่ของที่ตกอยู่
 yours, just out of your hand	ของคุณเอง เพิ่งหลุดจากมือไป
+%d last time	%d ครั้งก่อนหน้า
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	ข้อมูลสำรองจะถูกเขียนเมื่อเกมเริ่มทำงานและการตั้งค่าเปลี่ยนไปจากครั้งก่อน โดยเก็บไว้สิบสองชุดล่าสุด ในโฟลเดอร์ MasterLooter.backups ข้างปลั๊กอิน พรีเซ็ตอยู่ใน MasterLooter.presets คัดลอกโฟลเดอร์ใดโฟลเดอร์หนึ่งไว้เพื่อรักษาไว้ข้ามการติดตั้งใหม่
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	ปุ่มหรือคอมโบคอนโทรลเลอร์จะเปิดคลังนั้นได้จากทุกที่ และกดซ้ำเพื่อปิด ปุ่มของคลังอื่นจะสลับไปที่คลังนั้นทันที
+a Master Looter key	ปุ่มของ Master Looter
+a Master Looter shortcut	ทางลัดของ Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	ไม่นานหลังจากไอเทมมาถึงกระเป๋า Private Storage Master จะย้ายมันไปยังคลังแรกด้านล่างที่รับมันได้ ซึ่งเป็นการย้ายแบบเดียวกับที่คุณจะทำเองที่คลัง มีเพียงของที่ Master Looter เก็บมาเท่านั้นที่จะถูกย้าย ไม่ใช่ของที่คุณเก็บด้วยมือ และจากศพหรือซากสัตว์จะย้ายเฉพาะสิ่งที่กฎไอเทมของคุณอนุญาตเท่านั้น จะไม่มีการย้ายใด ๆ ขณะเปิดคลังอยู่หรือขณะอยู่นอกโหมดเล่นอิสระ กุญแจ เอกสาร ไอเทมเควสต์ และสิ่งใดก็ตามในรายการห้ามย้ายจะอยู่กับที่เสมอ และสิ่งที่ไม่มีคลังใดรับจะยังคงอยู่ในกระเป๋า
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	สัตว์เลี้ยงจะเก็บอะไรก็ได้ตามใจมัน และตัวเกมไม่มีสวิตช์สำหรับเรื่องนี้เลย เมื่อเปิด: สัตว์เลี้ยงจะถูกบอกว่าไม่ก่อนที่มันจะเอื้อมไปหยิบไอเทมที่ตกอยู่บนพื้นซึ่งกฎไอเทม แท็ก ประเภท หรือขั้นต่ำของมูลค่าที่คุณตั้งไว้ปฏิเสธ และสิ่งที่มันเก็บจากศพซึ่งถูกปฏิเสธจะถูกลบออกจากกระเป๋าทันทีที่เข้ามา พร้อมข้อความบอกว่าอะไรหายไป ไอเทมเควสต์และไอเทมที่ถูกป้องกันจะไม่ถูกลบเด็ดขาด และของที่อยู่ในกระเป๋าอยู่แล้วจะไม่ถูกแตะต้อง\n\nของที่คุณเก็บเองจะยังคงอยู่ เพราะสัตว์เลี้ยงไม่ใช่ผู้ที่เก็บไอเทมที่ตกอยู่บนพื้นซึ่งถูกปฏิเสธ ทหารรับจ้างที่จ้างมาเป็นข้อยกเว้น: ยังไม่มีใครตรวจสอบว่ามันถามคำถามเดียวกันหรือไม่ ดังนั้นในขณะที่มันออกอยู่ ไอเทมที่ถูกปฏิเสธซึ่งเข้ามาในกระเป๋าจะถูกลบไม่ว่าใครเป็นคนเก็บมา
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	สัตว์เลี้ยงหรือเพื่อนร่วมทางที่เก็บของจากศพจะใส่สิ่งที่พบลงในกระเป๋าของคุณ เมื่อเปิด ไอเทมเหล่านั้นจะถูกย้ายไปยังคลังแบบเดียวกับของที่ Master Looter เก็บเอง ตราบใดที่กฎไอเทมของคุณอนุญาต ไอเทมที่ตกอยู่บนพื้นซึ่งสัตว์เลี้ยงเก็บนั้น เกมจะรายงานว่าเป็นของที่คุณเก็บเอง จึงยังคงอยู่ในกระเป๋า
+a seed planted in your camp farm	เมล็ดพันธุ์ที่ปลูกไว้ในฟาร์มแคมป์ของคุณ
+Add	เพิ่ม
+add an item: type 3+ letters of its name	เพิ่มไอเทม: พิมพ์ชื่ออย่างน้อย 3 ตัวอักษรของมัน
+also %s	และ %s ด้วย
+an ore vein, left to your pickaxe while Mine ore veins for you is off	สายแร่ ที่ปล่อยให้เป็นหน้าที่ของอีเต้าคุณขณะที่ปิดสวิตช์ทุบสายแร่ให้คุณ
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	แสดงได้มากสุดหนึ่งบรรทัดต่อวินาที ระบุชื่อคลังแต่ละแห่งและจำนวนที่ถูกใส่เข้าไป ปิด จะไม่แสดงอะไรเลยและบันทึกลงในล็อกเท่านั้น
+Click again to reset	คลิกอีกครั้งเพื่อรีเซ็ต
+Detailed log	บันทึกละเอียด
+Drop refused loot from bodies	ทำของที่ถูกปฏิเสธจากศพหล่นคืนพื้น
+Each item goes to the first storage in this list that takes it.	แต่ละไอเทมจะไปยังคลังแรกในรายการนี้ที่รับมันได้
+Empty: auto-store may move anything a storage takes.	ว่างเปล่า: การเก็บอัตโนมัติสามารถย้ายอะไรก็ได้ที่คลังรับได้
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	ขนาดของคลังทุกแห่งและจำนวนช่องที่ใช้ไป จะถูกเขียนลงใน PrivateStorageMaster.log แนบไฟล์นี้ไปกับรายงานเรื่องขนาด
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	สำหรับมอดที่ปรับความจุด้วย JSON: ขนาดคลังด้านล่างจะถูกเพิกเฉย และเกมหรือมอดนั้นจะเป็นผู้ตัดสินใจแทน
+game size (%d)	ขนาดของเกม (%d)
+Game window	หน้าต่างเกม
+hold a button, then press the one that opens it (Escape cancels)	กดปุ่มค้างไว้ แล้วกดปุ่มที่ใช้เปิดมัน (Escape เพื่อยกเลิก)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	กดปุ่มอย่างน้อยหนึ่งปุ่มค้างไว้ แล้วกดปุ่มที่ใช้เปิดคลัง ปุ่มที่กดจะถูกซ่อนจากเกมในขณะที่ปุ่มอื่นยังถูกกดค้างอยู่
+Hold other keys back while Ctrl is down	กันปุ่มอื่นไว้ขณะกด Ctrl ค้าง
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	จำนวนช่องคลังส่วนตัวที่ได้มาจากส่วนขยายที่คุณซื้อและจากเนื้อเรื่อง ยอดรวมของแถบเลื่อนนับรวมช่องเหล่านี้ด้วย ดังนั้นขนาดพื้นฐานคือยอดรวมลบด้วยจำนวนนี้
+item %u	ไอเทม %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	ไอเทมที่การเก็บอัตโนมัติจะปล่อยไว้ในกระเป๋าเสมอ ค่าเริ่มต้นคือสกุลเงินทุกชนิด: เงิน, ถุงเหรียญ, แท่งทอง, กองทุนและเสบียงแคมป์, โทเคน และพันธบัตร รีเซ็ตเป็นค่าเริ่มต้นด้านล่างเพื่อนำรายการนั้นกลับมา
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	การตั้งค่าของมันอยู่ใน PrivateStorageMaster.ini ข้างปลั๊กอิน การเปลี่ยนแปลงที่นี่จะถูกบันทึกไว้ที่นั่นทันที
+Last error	ข้อผิดพลาดล่าสุด
+Leave every size alone	ไม่แตะต้องขนาดใด ๆ เลย
+left as the game has them	ปล่อยไว้ตามที่เกมกำหนด
+load a save to see it	โหลดเซฟเพื่อดู
+more matches; type more of the name	ยังมีรายการที่ตรงกันอีก พิมพ์ชื่อให้มากขึ้น
+Never move	ไม่ย้ายเลย
+no item by that name that is not listed already	ไม่มีไอเทมชื่อนั้นที่ยังไม่อยู่ในรายการ
+none seen	ยังไม่พบเลย
+not found, bound keys also reach the game	ไม่พบ ปุ่มที่ผูกไว้จะส่งผลถึงเกมด้วย
+Not on this game version: Private Storage Master could not find the move it needs.	ไม่รองรับเกมเวอร์ชันนี้: Private Storage Master หาฟังก์ชันการย้ายที่ต้องใช้ไม่พบ
+nothing	ไม่มีอะไร
+now %d of %d used	ตอนนี้ใช้ไป %d จาก %d
+off, see the error below	ปิด ดูข้อผิดพลาดด้านล่าง
+off, the mod is disabled	ปิด มอดถูกปิดใช้งาน
+on XInput slot %d	บนช่อง XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	เปิด จะย้ายเฉพาะจำนวนที่เพิ่งได้มาเท่านั้น ดังนั้นอาหารและยาที่คุณพกอยู่แล้วจะยังอยู่ในกระเป๋า ปิด จะย้ายทั้งกองไป
+Only move what was picked up	ย้ายเฉพาะของที่เพิ่งเก็บมา
+Open now	เปิดตอนนี้
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	กดปุ่ม พร้อม Ctrl, Shift หรือ Alt ได้ถ้าต้องการ (Escape เพื่อยกเลิก)
+Private Storage expansions	ส่วนขยายคลังส่วนตัว
+Private Storage Master %s for game build %s	Private Storage Master %s สำหรับเกมบิลด์ %s
+Private Storage Master did not hand over its defaults	Private Storage Master ไม่ได้ส่งมอบค่าเริ่มต้นของมัน
+Private Storage Master did not hand over its store loot settings.	Private Storage Master ไม่ได้ส่งมอบการตั้งค่าการเก็บของลงคลัง
+Private Storage Master on	Private Storage Master เปิดอยู่
+Private Storage Master refused the change	Private Storage Master ปฏิเสธการเปลี่ยนแปลงนี้
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi ก็ติดตั้งอยู่ด้วย ทั้งสองแก้ไขส่วนเดียวกันของเกม ให้ลบตัวนั้นออก
+Put what Master Looter picks up into storage	นำของที่ Master Looter เก็บมาใส่ลงคลัง
+read from the save	อ่านจากเซฟ
+Reload from the ini	โหลดใหม่จากไฟล์ ini
+Remove	ลบ
+Reset to defaults	รีเซ็ตเป็นค่าเริ่มต้น
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	การค้นศพหรือซากสัตว์จะส่งมอบทุกอย่างที่มันมีมาทั้งหมด และมอดจะเห็นมันก็ต่อเมื่อมันเข้ามาอยู่ในกระเป๋าแล้วเท่านั้น เมื่อเปิด: สิ่งใดในนั้นที่กฎไอเทม แท็ก ประเภท หรือขั้นต่ำของมูลค่าของคุณปฏิเสธ จะถูกวางกลับลงพื้นข้างตัวคุณทันที ผ่านการทำของหล่นแบบเดียวกับที่เกมใช้เมื่อคุณทิ้งของด้วยตัวเอง หนึ่งกองต่อหนึ่งสแตก ซึ่งครอบคลุมทั้งการค้นของมอดเองและศพที่สัตว์เลี้ยงหรือเพื่อนร่วมทางเก็บของ ซึ่งไอเทมที่ถูกปฏิเสธจะตกลงข้างตัวคุณเช่นกัน ศพที่คุณค้นด้วยตัวเองจะยังคงสิ่งที่มันจ่ายไว้ เงิน เอกสาร ไอเทมเควสต์ และไอเทมที่ถูกป้องกันจะยังอยู่ในกระเป๋า
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	การค้นตัวคนที่คุณฆ่า หนึ่งครั้งต่อศพ สัตว์อยู่ในหมวด ซากสัตว์ สิ่งที่ได้จากการค้นตัวจะมาถึงก่อนที่ตัวกรองของคุณจะเห็นมัน เช่นเดียวกับซากสัตว์ และสวิตช์ทำของที่ถูกปฏิเสธจากศพหล่นคืนพื้น ในหมวดทั่วไปจะวางสิ่งที่ถูกปฏิเสธกลับลงพื้น
+set	ตั้งค่าแล้ว
+set this launch	ตั้งค่าไว้สำหรับการเปิดเกมครั้งนี้
+Settings file	ไฟล์การตั้งค่า
+Show a notice when loot is stored	แสดงข้อความเมื่อของถูกเก็บลงคลัง
+Size changes take effect the next time the game starts.	การเปลี่ยนขนาดจะมีผลในการเริ่มเกมครั้งถัดไป
+Sizes	ขนาด
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	การถลกหนังสัตว์ที่คุณฆ่า หนึ่งครั้งต่อซาก คนอยู่ในหมวด ศพ มอดไม่เคยเห็นสิ่งที่ได้จากการถลกหนังก่อนที่มันจะมาถึง ตัวกรองของคุณจึงหยุดมันไม่ให้เข้ามาไม่ได้ หากต้องการให้สิ่งที่ถูกปฏิเสธถูกวางกลับลงพื้น ให้เปิดสวิตช์ทำของที่ถูกปฏิเสธจากศพหล่นคืนพื้น ในหมวดทั่วไป
+Some changes take effect the next time the game starts.	การเปลี่ยนแปลงบางอย่างจะมีผลในการเริ่มเกมครั้งถัดไป
+Stop pets looting bodies	ห้ามสัตว์เลี้ยงเก็บของจากศพ
+Stop pets picking up loose items	ห้ามสัตว์เลี้ยงเก็บไอเทมที่ตกอยู่บนพื้น
+Storage	คลัง
+Storage keys	ปุ่มคลัง
+Storage sizes	ขนาดคลัง
+Store loot	เก็บของลงคลัง
+Store what your pet loots from bodies	เก็บสิ่งที่สัตว์เลี้ยงของคุณเก็บจากศพลงคลัง
+Storing loot needs a newer Private Storage Master.	การเก็บของลงคลังต้องใช้ Private Storage Master เวอร์ชันใหม่กว่านี้
+the size dump	ข้อมูลดัมป์ขนาด
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	เกมจะถามก่อนที่สัตว์เลี้ยงจะหยิบไอเทมที่วางอยู่บนพื้น และตัวเลือกนี้ตอบว่าไม่ สัตว์เลี้ยงจะเดินผ่านไปโดยไม่หยิบ และหลังจากนั้นก็ไม่จำเป็นต้องลบอะไรเลย ส่วนทหารรับจ้างจะถามคำถามเดียวกันหรือไม่นั้นยังไม่ได้ทดสอบ
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	เกมจะถามแยกต่างหากก่อนที่สัตว์เลี้ยงจะเก็บของจากศพ และตัวเลือกนี้ตอบว่าไม่ เปิดใช้เพียงตัวเดียวจากสองตัวนี้หากต้องการให้สัตว์เลี้ยงปล้นศพได้แต่ไม่เก็บไอเทมที่ตกอยู่บนพื้น หรือกลับกัน
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	การผูกปุ่มถูกนำมาจาก PrivateStorageAnywhere.ini ในการรันครั้งแรก
+the key-block toggle	สวิตช์การกันปุ่ม
+The list is full at %d items.	รายการเต็มแล้วที่ %d ไอเทม
+The total, purchased expansions and story slots included. The left end keeps the game's size.	ยอดรวม รวมถึงส่วนขยายที่ซื้อและช่องจากเนื้อเรื่องด้วย ปลายด้านซ้ายจะคงขนาดของเกมไว้
+This chest holds one of each collectible, so its slots cannot be changed.	หีบนี้เก็บของสะสมอย่างละหนึ่งชิ้น ดังนั้นช่องของมันจึงเปลี่ยนแปลงไม่ได้
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	แท็บนี้ต้องใช้ Private Storage Master รุ่นที่ตรงกับเวอร์ชันนี้ของ Master Looter
+Turn that on and off	เปิดและปิดตัวเลือกนั้น
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	ขณะกด Ctrl หรือปุ่มร่วมใด ๆ ที่ปุ่มคลังของคุณใช้ค้างไว้ ปุ่มอื่นจะถูกกันไม่ให้ส่งถึงเกม เพื่อไม่ให้การพลาดกดปุ่มคลังไปกระตุ้นสกิล การเคลื่อนที่, Space, Tab, Enter, Escape, Alt+F4 และปุ่มที่เกมใช้ร่วมกับ Ctrl (Z, Shift, +) ยังคงส่งผ่านไปได้ตามปกติ
+working	กำลังทำงาน
+Write the size dump to the log	เขียนข้อมูลดัมป์ขนาดลงในบันทึก
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	บันทึกการกดปุ่ม การเปิด และการปิดทุกครั้งลงใน PrivateStorageMaster.log และเก็บไว้ 24 เซสชันล่าสุด ปิด บันทึกจะเก็บสรุปการเริ่มทำงาน ข้อผิดพลาด และข้อมูลดัมป์ขนาด และเก็บไว้เพียงสองเซสชันล่าสุด
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	บันทึกการกดปุ่ม การเปิด และการปิดทุกครั้งลงใน PrivateStorageMaster.log ปิด บันทึกจะเก็บสรุปการเริ่มทำงาน ข้อผิดพลาด และข้อมูลดัมป์ขนาด
+your own camp farm (off)	ฟาร์มแคมป์ของคุณเอง (ปิด)

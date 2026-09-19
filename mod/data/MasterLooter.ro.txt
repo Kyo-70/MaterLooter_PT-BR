@@ -31,13 +31,11 @@
 1 match%s	1 rezultat%s
 3 of 3	3 din 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" există deja. Suprascrierea cere confirmare mai întâi.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Un animal jefuiește ce îi place și jocul nu are niciun comutator pentru asta. Pornit: tot ce ridică un animal, un mercenar sau un însoțitor și ce regulile tale de obiecte, etichetele, clasele sau pragul de valoare ar fi refuzat este șters din inventar imediat ce ajunge acolo, iar un mesaj spune ce a dispărut. Obiectele de misiune și cele protejate nu sunt niciodată șterse, iar nimic din ce se află deja în rucsacul tău nu este atins.\n\nBine de știut înainte să pornești asta: jocul raportează ridicarea unui obiect de pe jos de către un însoțitor ca și cum l-ai fi ridicat tu, și nu există niciun fel de a le deosebi. Așa că atât timp cât unul este afară și activ, ceva ce ridici cu mâna ta și pe care propriile tale reguli îl refuză este șters odată cu al lui. Dacă nu este nimeni afară, nimic din ce ridici nu este atins vreodată. Dacă preferi să păstrezi tot și să sortezi singur, lasă asta oprit.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Găleata unei fântâni și altele asemenea nu sunt niciodată luate, dar activarea uneia face ca jocul să ofere interacțiunea, ca s-o poți folosi manual.
 Abyss and Kuku	Abyss și Kuku
 Abyss gear, Kuku pots and their parts.	Echipament Abyss, oale Kuku și piesele lor.
 Accessories	Accesorii
 allowed	permis
-already in your bag	deja în inventar
 always	întotdeauna
 always beats the class rule; never beats always	întotdeauna bate regula clasei; niciodată bate întotdeauna
 Ammunition	Muniție
@@ -197,7 +195,6 @@ Objects per scan	Obiecte per scanare
 on the player	pe jucător
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Activat, un zăcământ este recoltat exact acolo unde se află și nu ridici niciodată târnăcopul. Dezactivat, zăcămintele sunt lăsate în pace și doar bucățile desprinse de tine sunt ridicate. Necesită activare, pentru că a cere zăcământului să se deschidă este toată șmecheria.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Activat, suprapunerea se desenează sub generarea de cadre DLSS, ceea ce cere ca acest mod să predea jocului un swapchain încapsulat.\n\nDezactivat, suprapunerea se desenează prin hook-ul de present în loc de asta. Totul arată la fel, cu excepția cazului în care generarea de cadre este activă, iar modul evită o cale pe care o modifică și alte mod-uri de suprapunere. Încearcă asta dacă jocul nu pornește alături de un alt mod de suprapunere; poate fi setat ca WrapSwapChain în MasterLooter.ini fără să pornești jocul.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	O copie de rezervă este scrisă de fiecare dată când pornește jocul, iar ultimele douăsprezece sunt păstrate în MasterLooter.backups, lângă plugin. Presetările se află în MasterLooter.presets. Copiază oricare dintre foldere ca s-o păstrezi la o reinstalare.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Un singur clic per familie. Tabelul de mai jos tot mai setează clase individuale; un grup arată o linie când doar o parte din el e activată.
 Open and close this menu	Deschide și închide acest meniu
 Open folder	Deschide folderul
@@ -271,7 +268,6 @@ someone is wearing this; taking it would copy it	cineva poartă asta; luarea ei 
 stack at one point (storage contents)	grămadă într-un singur punct (conținut de depozitare)
 Status	Stare
 Stop pets looting	Împiedică animalele să jefuiască
-Stop pets looting at all	Împiedică animalele să jefuiască cu totul
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Mese, scaune, paturi, covoare, lămpi, lumânări, tablouri, oale și restul unei camere mobilate, fie că ridici un obiect de pe jos, fie că-l iei din propriul lui punct de interacțiune. Majoritatea valorează una-două monede de aramă, dar covoarele și paturile de lux ajung la mii, așa că activează asta înainte să mobilezi o casă. Cuferele și celelalte lucruri care conțin ceva răspund la Recipiente în loc de asta. Dezactivat implicit.
 Tag	Etichetă
 Tags	Etichete
@@ -284,13 +280,10 @@ Take owned goods on / off	Activare/dezactivare luare bunuri deținute
 take this one by hand, looting it can lock the quest	ia-l pe acesta manual, jefuirea lui poate bloca misiunea
 takes effect next launch	are efect la următoarea pornire
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Motorul scanează în jurul tău și ia ce permit regulile. Dezactivat înseamnă că nimic nu este luat automat; tasta de recoltare rapidă tot funcționează.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Jocul pune două întrebări înainte ca un animal să jefuiască, una pentru un obiect liber de pe jos și una pentru un cadavru, iar asta răspunde nu la amândouă. Un animal nu întinde laba spre nimic, așa că nimic de-al tău nu mai este șters după aceea, iar propriile tale ridicări nu sunt niciodată puse sub semnul întrebării. Cel mai curat dintre cele două răspunsuri, dacă pur și simplu nu vrei ca un animal să jefuiască. Dacă ajunge la un mercenar nu a fost testat. Jocul poartă o singură regulă de jefuire de acest fel și la ambele ei întrebări se răspunde nu, deci s-ar putea; Animalele și însoțitorii respectă filtrele este comutatorul care sigur o face.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Jocul completează datele unui punct doar când consideră că poți ajunge la el. Activarea îi cere să facă asta de la distanță, ceea ce e și ce permite unui zăcământ de minereu să fie recoltat exact acolo unde se află. Zăcămintele au nevoie de câteva secunde ca să răspundă, față de fracțiunea de secundă a unui tufiș.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Jocul elimină obiectele luate cu o întârziere. Asta oprește trimiterea aceluiași obiect de două ori cât timp acesta dispare treptat.
 The game treats this as stealing and will put a bounty on you.	Jocul tratează asta ca furt și îți va pune recompensă pe cap.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Modul nu ridică niciodată un târnăcop. El acționează secvența proprie de spargere a zăcământului, iar jocul parcurge un singur rând de cădere pentru asta, unde o lovitură reală parcurge două, deci bonusul uneltei tale de minerit nu dă nimic când modul face mineritul. Asta adaugă minereul lipsă înapoi prin aceeași cale de cădere pe care o folosește jocul, deci este minereu real vărsat pe jos, nu un obiect copiat în inventarul tău. Setează-o la ce oferă unealta ta manual minus unu: un burghiu care dă trei manual vrea 2 aici. Se aplică doar unui zăcământ spart de acest mod, deci mineritul manual rămâne neatins și cele două nu se pot acumula.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Jupuirea animalelor pe care le ucizi, o dată per carcasă. Oamenii intră la Cadavre umane. Ce aduce jupuirea nu este verificat cu filtrele tale. Modul nu îl vede niciodată înainte să ajungă, așa că acest comutator este totul sau nimic.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Percheziționarea oamenilor pe care îi ucizi, o dată per cadavru. Animalele intră la Carcase. Ce aduce o percheziție nu este verificat cu filtrele tale, așa că și acest comutator este totul sau nimic.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Această sesiune: %ld ridicate, %ld recoltate, %ld capturate, %ld carcase
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Lemn și crengi de pe jos, și punctele care le dau. Ce conțin cele mai multe dintre ele este citit chiar din datele jocului, așa că refuzarea clasei wood în fila Clase lasă copacii în picioare și, la fel, lemnul de sub ei. Acolo unde jocul nu spune nimic despre un punct, acest comutator este singurul control pe care îl are.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Ca să lași o specie în pace, setează la niciodată obiectul în care se transformă, în fila Obiecte: Item_Tench, Item_Ricefish, Item_Iguana. Modul citește rândul propriu al creaturii din tabelul de personaje al jocului, deci știe ce specie observă înainte să prindă ceva. Câteva creaturi neobișnuite tot recurg la ghicire după numele modelului și sunt prinse doar după categorie.
@@ -340,3 +333,99 @@ your rules refuse all stone	regulile tale refuză toată piatra
 your rules refuse everything this node holds	regulile tale refuză tot ce conține acest punct
 part of a mechanism, not loose loot	parte dintr-un mecanism, nu pradă răzleață
 yours, just out of your hand	al tău, tocmai scăpat din mână
+%d last time	%d ultima dată
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	O copie de rezervă este scrisă când jocul pornește cu setări schimbate față de ultima, iar ultimele douăsprezece sunt păstrate, în MasterLooter.backups, lângă plugin. Presetările se află în MasterLooter.presets. Copiază oricare dintre foldere ca s-o păstrezi la o reinstalare.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	O combinație de tastă sau de controler deschide acel depozit de oriunde, și tot ea îl închide la loc. Tasta altui depozit trece direct la el.
+a Master Looter key	o tastă din Master Looter
+a Master Looter shortcut	o comandă rapidă din Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	La puțin timp după ce un obiect ajunge în inventar, Private Storage Master îl mută în primul depozit de mai jos care îl acceptă, aceeași mutare pe care ai face-o tu la depozit. Se mută doar ce a ridicat Master Looter, niciodată ce ai ridicat tu cu mâna, iar de la un cadavru sau o carcasă doar ce permit regulile tale de obiecte. Nimic nu se mută cât timp un depozit este deschis sau în afara jocului liber, cheile, documentele, obiectele de misiune și orice se află pe lista de nemutat rămân pe loc, iar ce niciun depozit nu acceptă rămâne în inventar.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Un animal jefuiește ce îi place și jocul nu are niciun comutator pentru asta. Pornit: animalului i se spune nu înainte să întindă laba spre un obiect liber pe care regulile tale de obiecte, etichetele, clasele sau pragul de valoare îl refuză, iar ce ia de la un cadavru și acestea refuză este șters din inventar imediat ce ajunge, cu un mesaj care spune ce a dispărut. Obiectele de misiune și cele protejate nu sunt niciodată șterse, iar nimic din ce se află deja în inventarul tău nu este atins.\n\nCe ridici tu însuți rămâne, pentru că animalul nu poate fi cel care a luat un obiect liber refuzat. Un mercenar angajat este excepția: nimeni nu a verificat dacă el pune aceeași întrebare, așa că atât timp cât unul este afară, un obiect refuzat care ajunge în inventar este șters indiferent cine l-a ridicat.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Un animal sau un însoțitor care jefuiește un cadavru pune ce a găsit în inventarul tău. Pornit, acele obiecte merg în depozit la fel ca ridicările proprii ale lui Master Looter, atât timp cât regulile tale de obiecte le permit. Obiectele libere pe care le ridică un animal sunt raportate de joc ca fiind propriile tale ridicări, așa că acelea rămân în inventar.
+a seed planted in your camp farm	o sămânță plantată în ferma ta de tabără
+Add	Adaugă
+add an item: type 3+ letters of its name	adaugă un obiect: scrie 3+ litere din numele lui
+also %s	de asemenea %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	un zăcământ de minereu, lăsat pentru târnăcopul tău cât timp Minează zăcămintele pentru tine este dezactivat
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Cel mult o linie pe secundă, numind fiecare depozit și câte au intrat în el. Dezactivat, nu se afișează nimic și merge doar în jurnal.
+Click again to reset	Apasă din nou pentru resetare
+Detailed log	Jurnal detaliat
+Drop refused loot from bodies	Aruncă înapoi pe jos prada refuzată de la cadavre
+Each item goes to the first storage in this list that takes it.	Fiecare obiect merge la primul depozit din această listă care îl acceptă.
+Empty: auto-store may move anything a storage takes.	Gol: depozitarea automată poate muta orice acceptă un depozit.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Dimensiunea fiecărui depozit și câte sloturi sunt folosite, scrise în PrivateStorageMaster.log. Atașează-l la un raport de dimensiune.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Pentru mod-uri de capacitate JSON: dimensiunile de depozit de mai jos sunt ignorate și jocul, sau acel mod, decide.
+game size (%d)	dimensiunea jocului (%d)
+Game window	Fereastra jocului
+hold a button, then press the one that opens it (Escape cancels)	ține apăsat un buton, apoi apasă pe cel care îl deschide (Escape anulează)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Ține apăsate unul sau mai multe butoane, apoi apasă pe cel care deschide depozitul. Butonul apăsat este ascuns de joc cât timp celelalte sunt ținute.
+Hold other keys back while Ctrl is down	Blochează celelalte taste cât timp Ctrl este apăsat
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Câte sloturi de Depozit Privat provin din expansiuni cumpărate și din poveste. Totalul cursorului le numără, așa că dimensiunea de bază este totalul minus acestea.
+item %u	obiect %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Obiecte pe care depozitarea automată le lasă mereu în inventar. Implicit este orice monedă: argint, pungi cu monede, lingouri de aur, fonduri și provizii de tabără, jetoane și obligațiuni. Resetează la implicit de mai jos aduce înapoi acea listă.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Setările sale trăiesc în PrivateStorageMaster.ini, lângă plugin. Schimbările de aici sunt salvate acolo imediat.
+Last error	Ultima eroare
+Leave every size alone	Nu atinge nicio dimensiune
+left as the game has them	așa cum le are jocul
+load a save to see it	încarcă o salvare ca s-o vezi
+more matches; type more of the name	mai multe rezultate; scrie mai mult din nume
+Never move	Nu muta niciodată
+no item by that name that is not listed already	niciun obiect cu acel nume care să nu fie deja listat
+none seen	niciunul văzut
+not found, bound keys also reach the game	negăsit, tastele atribuite ajung și ele la joc
+Not on this game version: Private Storage Master could not find the move it needs.	Nu în această versiune a jocului: Private Storage Master nu a putut găsi mutarea de care are nevoie.
+nothing	nimic
+now %d of %d used	acum %d din %d folosite
+off, see the error below	dezactivat, vezi eroarea de mai jos
+off, the mod is disabled	oprit, modul este dezactivat
+on XInput slot %d	pe slotul XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Pornit, se mută doar cantitatea care tocmai a sosit, așa că mâncarea și poțiunile pe care le purtai deja rămân în inventar. Dezactivat, pleacă tot teancul.
+Only move what was picked up	Mută doar ce a fost ridicat
+Open now	Deschide acum
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	apasă o tastă, cu Ctrl, Shift sau Alt dacă vrei (Escape anulează)
+Private Storage expansions	Expansiuni de Depozit Privat
+Private Storage Master %s for game build %s	Private Storage Master %s pentru versiunea de joc %s
+Private Storage Master did not hand over its defaults	Private Storage Master nu a predat valorile implicite
+Private Storage Master did not hand over its store loot settings.	Private Storage Master nu a predat setările sale de depozitare a prăzii.
+Private Storage Master on	Private Storage Master pornit
+Private Storage Master refused the change	Private Storage Master a refuzat schimbarea
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi este de asemenea instalat. Cele două schimbă aceleași părți ale jocului; elimină-l pe acela.
+Put what Master Looter picks up into storage	Pune în depozit ce ridică Master Looter
+read from the save	citit din salvare
+Reload from the ini	Reîncarcă din ini
+Remove	Elimină
+Reset to defaults	Resetează la implicit
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Percheziționarea unui cadavru sau a unei carcase predă tot ce conține, iar modul îl vede abia după ce ajunge în inventar. Pornit: ce refuză regulile tale de obiecte, etichetele, clasele sau pragul de valoare este pus înapoi pe jos lângă tine, prin aceeași cădere pe care o folosește jocul când arunci ceva tu însuți, o grămadă per teanc. Acoperă atât percheziționările proprii ale modului, cât și cadavrele pe care le jefuiește un animal sau un însoțitor, ale căror obiecte refuzate cad tot lângă tine. Un cadavru pe care îl percheziționezi tu însuți păstrează ce a plătit. Banii, documentele, obiectele de misiune și cele protejate rămân în inventar.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Percheziționarea oamenilor pe care îi ucizi, o dată per cadavru. Animalele intră la Carcase. Ce aduce o percheziție ajunge înainte ca filtrele tale s-o vadă, la fel ca la o carcasă, iar Aruncă înapoi pe jos prada refuzată de la cadavre, din General, pune înapoi pe jos ce refuză.
+set	setează
+set this launch	setează pentru această pornire
+Settings file	Fișier de setări
+Show a notice when loot is stored	Afișează un mesaj când prada este depozitată
+Size changes take effect the next time the game starts.	Schimbările de dimensiune au efect abia la următoarea pornire a jocului.
+Sizes	Dimensiuni
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Jupuirea animalelor pe care le ucizi, o dată per carcasă. Oamenii intră la Cadavre umane. Modul nu vede niciodată ce aduce jupuirea înainte să ajungă, așa că filtrele tale nu o pot opri să sosească. Ca să pui înapoi pe jos ce refuză, activează Aruncă înapoi pe jos prada refuzată de la cadavre, din General.
+Some changes take effect the next time the game starts.	Unele schimbări au efect abia la următoarea pornire a jocului.
+Stop pets looting bodies	Împiedică animalele să jefuiască cadavre
+Stop pets picking up loose items	Împiedică animalele să ridice obiecte libere
+Storage	Depozit
+Storage keys	Taste de depozit
+Storage sizes	Dimensiuni de depozit
+Store loot	Depozitează prada
+Store what your pet loots from bodies	Depozitează ce jefuiește animalul tău de la cadavre
+Storing loot needs a newer Private Storage Master.	Depozitarea prăzii are nevoie de un Private Storage Master mai nou.
+the size dump	raportul de dimensiuni
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Jocul întreabă înainte ca un animal să ia un obiect aflat pe jos, și asta răspunde nu. Animalul trece pe lângă el și nu mai trebuie șters nimic după aceea. Dacă un mercenar pune aceeași întrebare nu a fost testat.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Jocul întreabă separat înainte ca un animal să jefuiască un cadavru, și asta răspunde nu. Activează una din cele două și nu pe cealaltă dacă vrei ca un animal să dezbrace cadavre dar să nu adune obiecte libere, sau invers.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Atribuirile de taste au fost preluate din PrivateStorageAnywhere.ini la prima rulare.
+the key-block toggle	comutatorul de blocare a tastelor
+The list is full at %d items.	Lista este plină la %d obiecte.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Totalul, incluzând expansiunile cumpărate și sloturile din poveste. Capătul din stânga păstrează dimensiunea jocului.
+This chest holds one of each collectible, so its slots cannot be changed.	Acest cufăr ține câte unul din fiecare obiect de colecție, așa că sloturile lui nu pot fi schimbate.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Această filă are nevoie de o versiune de Private Storage Master care se potrivește cu această versiune de Master Looter.
+Turn that on and off	Pornește și oprește asta
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Cât timp Ctrl, sau orice modificator pe care îl folosesc tastele tale de depozit, este ținut apăsat, celelalte taste sunt blocate de la joc, așa că o alunecare de pe o tastă de depozit nu declanșează o abilitate. Mișcarea, Space, Tab, Enter, Escape, Alt+F4 și tastele pe care jocul le folosește cu Ctrl (Z, Shift, +) tot ajung la joc.
+working	funcționează
+Write the size dump to the log	Scrie raportul de dimensiuni în jurnal
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Scrie fiecare apăsare de tastă, deschidere și închidere în PrivateStorageMaster.log, și păstrează ultimele 24 de sesiuni. Dezactivat, jurnalul păstrează rezumatul de pornire, erorile și raportul de dimensiuni, și ultimele două sesiuni.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Scrie fiecare apăsare de tastă, deschidere și închidere în PrivateStorageMaster.log. Dezactivat, jurnalul păstrează rezumatul de pornire, erorile și raportul de dimensiuni.
+your own camp farm (off)	ferma ta proprie de tabără (dezactivat)

@@ -35,13 +35,11 @@
 1 match%s	1 treff%s
 3 of 3	3 av 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" finnes allerede. Du blir spurt før den overskrives.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Et kjæledyr plukker opp det det vil, og spillet har ingen bryter for det. På: alt et kjæledyr, en leiesoldat eller en følgesvenn plukker opp, og som gjenstandsreglene, merkelappene, klassene eller verdigrensen din ville ha avvist, slettes fra inventaret straks det kommer inn, og en melding sier hva som forsvant. Questgjenstander og beskyttede gjenstander slettes aldri, og ingenting som allerede ligger i sekken din røres.\n\nVerdt å vite før du slår dette på: spillet melder at en følgesvenn plukker opp en løs gjenstand fra bakken som om du hadde plukket den opp selv, og de to lar seg ikke skille. Så lenge en er ute og aktiv, blir altså noe du plukker opp for hånd og som dine egne regler avviser, slettet sammen med hans funn. Er ingen ute, røres aldri noe du plukker opp. Vil du heller beholde alt og sortere selv, la dette stå av.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	En brønnbøtte og lignende blir aldri lootet, men å klargjøre en får spillet til å tilby sin interaksjon slik at du kan bruke den for hånd.
 Abyss and Kuku	Abyss and Kuku
 Abyss gear, Kuku pots and their parts.	Abyss-utstyr, Kuku-krukker og delene deres.
 Accessories	Tilbehør
 allowed	tillatt
-already in your bag	allerede i sekken din
 always	alltid
 always beats the class rule; never beats always	alltid overstyrer klasseregelen; aldri overstyrer alltid
 Ammunition	Ammunisjon
@@ -201,7 +199,6 @@ Objects per scan	Objekter per skanning
 on the player	på spilleren
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	På blir en åre høstet der den står, og du svinger aldri en hakke. Av blir årer latt i fred, og bare bitene du slår løs plukkes opp. Krever klargjøring, siden det er selve trikset å be åren åpne seg.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	På tegnes overlayet under DLSS frame generation, noe som krever at modden gir spillet en innpakket swapchain.\n\nAv tegnes overlayet gjennom present-hooken i stedet. Alt ser likt ut med mindre frame generation er på, og modden holder seg unna en sti andre overlay-mods også patcher. Prøv dette hvis spillet ikke vil starte sammen med en annen overlay-mod; det kan settes som WrapSwapChain i MasterLooter.ini uten å starte spillet.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Én sikkerhetskopi skrives hver gang spillet starter, og de siste tolv beholdes, i MasterLooter.backups ved siden av pluginen. Forhåndsinnstillinger ligger i MasterLooter.presets. Kopier en av mappene for å beholde den ved en ominstallering.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Ett klikk per familie. Tabellen under setter fortsatt enkeltklasser; en gruppe viser en strek når bare deler av den er på.
 Open and close this menu	Åpne og lukk denne menyen
 Open folder	Åpne mappe
@@ -275,7 +272,6 @@ someone is wearing this; taking it would copy it	noen har dette på seg; å ta d
 stack at one point (storage contents)	stables på ett sted (lagerinnhold)
 Status	Status
 Stop pets looting	Hindre kjæledyr i å plyndre
-Stop pets looting at all	Hindre kjæledyr i å plyndre i det hele tatt
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Bord, stoler, senger, tepper, lamper, lys, malerier, krukker og resten av et møblert rom, enten du plukker det opp fra gulvet eller tar det fra sitt eget interaksjonspunkt. Det meste er verdt en kobber eller to, men teppene og luksussengene går opp i tusener, så slå dette på før du møblerer et hus. Kister og andre ting som inneholder noe hører til Beholdere i stedet. Av som standard.
 Tag	Tagg
 Tags	Tagger
@@ -288,13 +284,10 @@ Take owned goods on / off	Ta eide varer på/av
 take this one by hand, looting it can lock the quest	ta denne for hånd, å plyndre den kan låse questen
 takes effect next launch	trer i kraft ved neste oppstart
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Motoren skanner rundt deg og tar det reglene tillater. Av betyr at ingenting tas automatisk; trykk-tasten fungerer fortsatt.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Spillet stiller to spørsmål før et kjæledyr plyndrer, ett for en løs gjenstand på bakken og ett for et lik, og dette svarer nei på begge. Et kjæledyr strekker seg ikke etter noe, så ingenting av ditt slettes etterpå, og dine egne funn er aldri i tvil. Det reneste av de to svarene hvis du rett og slett ikke vil at et kjæledyr plyndrer. Om det når en leiesoldat er ikke prøvd. Spillet bærer én plyndringsregel av dette slaget, og begge spørsmålene dens besvares med nei, så det kan hende; Kjæledyr og følgesvenner følger filtrene er bryteren som helt sikkert gjør det.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Spillet fyller et punkts data bare når det tror du kan nå det. Klargjøring ber det gjøre det på avstand, noe som også er det som lar en malmåre bli høstet der den står. Årer bruker flere sekunder på å svare der en busk bruker en brøkdel av ett.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Spillet fjerner tatte objekter med en forsinkelse. Dette hindrer at det samme objektet sendes to ganger mens det forsvinner.
 The game treats this as stealing and will put a bounty on you.	Spillet regner dette som tyveri og setter en dusør på deg.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Modden svinger aldri en hakke. Den kjører årens egen bruddsekvens, og spillet går gjennom én droprad for det der et ekte slag går gjennom to, så bonusen fra gruveverktøyet ditt gir ingenting når modden gjør gravingen. Dette legger den manglende malmen tilbake gjennom samme droppsti spillet bruker, så det er ekte malm som spruter ut på bakken, ikke en gjenstand kopiert inn i sekken din. Sett den til det verktøyet ditt gir for hånd minus én: en drill som gir tre for hånd vil ha 2 her. Det gjelder bare en åre denne modden brøt, så graving for hånd er upåvirket, og de to kan ikke stables.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Flåing av dyrene du dreper, én gang per kadaver. Mennesker hører under Lik. Det flåingen gir, sjekkes ikke mot filtrene dine. Modden ser det aldri før det lander, så denne bryteren er alt eller ingenting.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Gjennomsøking av menneskene du dreper, én gang per lik. Dyr hører under Kadavre. Det en gjennomsøking gir, sjekkes ikke mot filtrene dine, så denne bryteren er også alt eller ingenting.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Denne økten: %ld plukket opp, %ld sanket, %ld fanget, %ld kadavre
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Tømmer og greiner på bakken, og punktene som gir dem. Hva de fleste av dem inneholder leses ut av spillets egne data, så å avvise klassen wood under fanen Klasser lar trærne stå og likeså tømmeret under dem. Der spillet ikke sier noe om et punkt, er denne bryteren den eneste kontrollen det har.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	For å la én art være i fred, sett det den blir til til aldri i Gjenstander-fanen: Item_Tench, Item_Ricefish, Item_Iguana. Modden leser skapningens egen rad i spillets karaktertabell, så den vet hvilken art den ser på før den fanger noe. Noen få uvanlige skapninger faller fortsatt tilbake på å gjette ut fra modellnavnet og fanges bare etter kategori.
@@ -344,3 +337,99 @@ your rules refuse all stone	reglene dine avviser all stein
 your rules refuse everything this node holds	reglene dine avviser alt dette punktet inneholder
 part of a mechanism, not loose loot	del av en mekanisme, ikke løst bytte
 yours, just out of your hand	ditt, rett utenfor hånden din
+%d last time	%d sist
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Én sikkerhetskopi skrives når spillet starter med innstillinger endret siden forrige gang, og de siste tolv beholdes, i MasterLooter.backups ved siden av pluginen. Forhåndsinnstillinger ligger i MasterLooter.presets. Kopier en av mappene for å beholde den ved en ominstallering.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	En tast- eller kontrollerkombinasjon åpner det lageret fra hvor som helst, og lukker det igjen. Et annet lagers tast bytter rett til det.
+a Master Looter key	en Master Looter-tast
+a Master Looter shortcut	en Master Looter-snarvei
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Et øyeblikk etter at en gjenstand havner i sekken, flytter Private Storage Master den til det første lageret under som tar imot den, samme flytting du selv ville gjort ved lageret. Bare det Master Looter har plukket opp, flyttes, aldri det du har plukket opp for hånd, og fra et lik eller et kadaver bare det gjenstandsreglene dine tillater. Ingenting flyttes mens et lager er åpent eller utenfor fritt spill; nøkler, dokumenter, questgjenstander og alt på listen Aldri flytt blir liggende, og det intet lager tar imot, blir i sekken.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Et kjæledyr plukker opp det det vil, og spillet har ingen bryter for det. På: et kjæledyr nektes før det strekker seg etter en løs gjenstand som gjenstandsreglene, merkelappene, klassene eller verdigrensen din avviser, og det den tar fra et lik som disse avviser, slettes fra inventaret straks det kommer inn, med en melding som sier hva som forsvant. Questgjenstander og beskyttede gjenstander slettes aldri, og ingenting som allerede ligger i sekken din, røres.\n\nDet du plukker opp selv, beholdes, for kjæledyret kan ikke være den som tok en avvist løs gjenstand. En leid leiesoldat er unntaket: ingen har sjekket at han stiller det samme spørsmålet, så mens en er ute, slettes en avvist gjenstand som havner i sekken, uansett hvem som plukket den opp.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Et kjæledyr eller en følgesvenn som plyndrer et lik, legger det de fant, i sekken din. På går de gjenstandene til lager på samme måte som Master Looters egne funn, så lenge gjenstandsreglene dine tillater dem. Løse gjenstander et kjæledyr plukker opp, meldes av spillet som dine egne funn, så de blir i sekken.
+a seed planted in your camp farm	et frø plantet på gårdsbruket ditt i leiren
+Add	Legg til
+add an item: type 3+ letters of its name	legg til en gjenstand: skriv 3+ bokstaver av navnet
+also %s	også %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	en malmåre, overlatt til hakken din mens Bryt malmårer for deg er av
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Høyst én linje i sekundet, som navngir hvert lager og hvor mange som gikk inn i det. Av, vises ingenting, og det går bare til loggen.
+Click again to reset	Klikk igjen for å tilbakestille
+Detailed log	Detaljert logg
+Drop refused loot from bodies	Slipp avvist bytte fra lik
+Each item goes to the first storage in this list that takes it.	Hver gjenstand går til det første lageret i denne listen som tar imot den.
+Empty: auto-store may move anything a storage takes.	Tom: automatisk lagring kan flytte alt et lager tar imot.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Størrelsen på hvert lager og hvor mange plasser som er i bruk, skrevet til PrivateStorageMaster.log. Legg den ved en størrelsesrapport.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	For JSON-kapasitetsmodder: lagerstørrelsene under ignoreres, og spillet, eller den modden, bestemmer.
+game size (%d)	spillstørrelse (%d)
+Game window	Spillvindu
+hold a button, then press the one that opens it (Escape cancels)	hold inne en knapp, trykk så den som åpner det (Escape avbryter)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Hold inne én eller flere knapper, trykk så den som åpner lageret. Den trykte knappen skjules for spillet mens de andre holdes inne.
+Hold other keys back while Ctrl is down	Hold andre taster tilbake mens Ctrl er nede
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Hvor mange plasser i Privat lager som kommer fra utvidelser du har kjøpt og fra historien. Glidebryterens total teller dem med, så grunnstørrelsen er totalen minus disse.
+item %u	gjenstand %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Gjenstander automatisk lagring alltid lar bli i sekken. Standarden er all valuta: sølv, myntposer, gullbarrer, leirmidler og forsyninger, tegn og obligasjoner. Tilbakestill til standard under legger den listen tilbake.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Innstillingene ligger i PrivateStorageMaster.ini ved siden av pluginen. Endringer her lagres dit med det samme.
+Last error	Siste feil
+Leave every size alone	La alle størrelser være
+left as the game has them	latt som spillet har dem
+load a save to see it	last inn et lagret spill for å se det
+more matches; type more of the name	flere treff; skriv mer av navnet
+Never move	Aldri flytt
+no item by that name that is not listed already	ingen gjenstand med det navnet som ikke allerede er listet
+none seen	ingen sett ennå
+not found, bound keys also reach the game	ikke funnet, bundne taster når også spillet
+Not on this game version: Private Storage Master could not find the move it needs.	Ikke på denne spillversjonen: Private Storage Master fant ikke flyttingen den trenger.
+nothing	ingenting
+now %d of %d used	nå %d av %d brukt
+off, see the error below	av, se feilen under
+off, the mod is disabled	av, modden er deaktivert
+on XInput slot %d	på XInput-plass %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	På flyttes bare mengden som nettopp kom inn, så mat og drikker du allerede bar, blir i sekken. Av går hele stabelen.
+Only move what was picked up	Flytt bare det som ble plukket opp
+Open now	Åpne nå
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	trykk en tast, med Ctrl, Shift eller Alt om du vil (Escape avbryter)
+Private Storage expansions	Utvidelser til Privat lager
+Private Storage Master %s for game build %s	Private Storage Master %s for spillbygg %s
+Private Storage Master did not hand over its defaults	Private Storage Master ga ikke fra seg standardene sine
+Private Storage Master did not hand over its store loot settings.	Private Storage Master ga ikke fra seg innstillingene sine for lagring av bytte.
+Private Storage Master on	Private Storage Master på
+Private Storage Master refused the change	Private Storage Master avviste endringen
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi er også installert. De to endrer de samme delene av spillet; fjern den ene.
+Put what Master Looter picks up into storage	Legg det Master Looter plukker opp, i lager
+read from the save	lest fra det lagrede spillet
+Reload from the ini	Last inn på nytt fra ini-filen
+Remove	Fjern
+Reset to defaults	Tilbakestill til standard
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Å søke et lik eller et kadaver gir fra seg alt det inneholder, og modden ser det først når det er i sekken. På: det av dette som gjenstandsreglene, merkelappene, klassene eller verdigrensen din avviser, legges rett tilbake på bakken ved siden av deg, gjennom det samme slippet spillet bruker når du selv slipper noe, én haug per stabel. Det dekker modens egne søk og likene et kjæledyr eller en følgesvenn plyndrer, der avviste gjenstander også havner ved siden av deg. Et lik du søker selv, beholder det det ga. Penger, dokumenter, questgjenstander og beskyttede gjenstander blir i sekken.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Gjennomsøking av menneskene du dreper, én gang per lik. Dyr hører under Kadavre. Det en gjennomsøking gir, kommer frem før filtrene dine ser det, akkurat som for et kadaver, og Slipp avvist bytte fra lik under Generelt legger tilbake det de avviser.
+set	satt
+set this launch	satt for denne oppstarten
+Settings file	Innstillingsfil
+Show a notice when loot is stored	Vis en melding når bytte lagres
+Size changes take effect the next time the game starts.	Størrelsesendringer trer i kraft neste gang spillet starter.
+Sizes	Størrelser
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Å flå dyrene du dreper, én gang per kadaver. Mennesker hører under Lik. Modden ser aldri det flåingen gir, før det kommer inn, så filtrene dine kan ikke stanse det fra å ankomme. For å få det de avviser, lagt tilbake på bakken, slå på Slipp avvist bytte fra lik under Generelt.
+Some changes take effect the next time the game starts.	Noen endringer trer i kraft neste gang spillet starter.
+Stop pets looting bodies	Hindre kjæledyr i å plyndre lik
+Stop pets picking up loose items	Hindre kjæledyr i å plukke opp løse gjenstander
+Storage	Lager
+Storage keys	Lagertaster
+Storage sizes	Lagerstørrelser
+Store loot	Lagre bytte
+Store what your pet loots from bodies	Lagre det kjæledyret ditt plyndrer fra lik
+Storing loot needs a newer Private Storage Master.	Å lagre bytte krever en nyere Private Storage Master.
+the size dump	størrelsesdumpen
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Spillet spør før et kjæledyr tar en gjenstand som ligger på bakken, og dette svarer nei. Kjæledyret går forbi den, og ingenting trenger å slettes etterpå. Om en leiesoldat stilles det samme spørsmålet, er ikke prøvd.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Spillet spør separat før et kjæledyr plyndrer et lik, og dette svarer nei. Slå på den ene av de to og ikke den andre hvis du vil at et kjæledyr skal plyndre lik, men ikke samle løse gjenstander, eller omvendt.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Tastebindingene ble tatt med fra PrivateStorageAnywhere.ini ved første kjøring.
+the key-block toggle	bryteren for tasteblokkering
+The list is full at %d items.	Listen er full med %d gjenstander.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Totalen, kjøpte utvidelser og historieplasser inkludert. Venstre ende beholder spillets størrelse.
+This chest holds one of each collectible, so its slots cannot be changed.	Denne kisten inneholder ett av hvert samleobjekt, så plassene i den kan ikke endres.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Denne fanen krever en versjon av Private Storage Master som passer til denne versjonen av Master Looter.
+Turn that on and off	Slå det av og på
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Mens Ctrl, eller en annen modifikator lagertastene dine bruker, holdes inne, holdes andre taster unna spillet, så en glipp fra en lagertast ikke utløser en ferdighet. Bevegelse, mellomrom, Tab, Enter, Escape, Alt+F4 og tastene spillet bruker sammen med Ctrl (Z, Shift, +) slipper likevel gjennom.
+working	fungerer
+Write the size dump to the log	Skriv størrelsesdumpen til loggen
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Skriver hvert tastetrykk, hver åpning og lukking til PrivateStorageMaster.log, og beholder de siste 24 øktene. Av beholder loggen oppstartssammendraget, feil og størrelsesdumpen, og de to siste øktene.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Skriver hvert tastetrykk, hver åpning og lukking til PrivateStorageMaster.log. Av beholder loggen oppstartssammendraget, feil og størrelsesdumpen.
+your own camp farm (off)	ditt eget gårdsbruk i leiren (av)

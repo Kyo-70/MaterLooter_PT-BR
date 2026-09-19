@@ -33,13 +33,11 @@
 1 match%s	1 wynik%s
 3 of 3	3 z 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" już istnieje. Nadpisanie wymaga potwierdzenia.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Zwierzę zbiera, co mu się podoba, a gra nie ma na to żadnego przełącznika. Włączone: wszystko, co zwierzę, najemnik lub towarzysz podniesie, a co twoje reguły przedmiotów, znaczniki, klasy albo próg wartości by odrzuciły, zostaje usunięte z ekwipunku zaraz po trafieniu do niego, a komunikat mówi, co zniknęło. Przedmioty zadaniowe i chronione nie są usuwane nigdy, a nic, co już leży w twojej torbie, nie zostaje ruszone.\n\nWarto wiedzieć, zanim to włączysz: gra zgłasza podniesienie luźnego przedmiotu przez towarzysza tak, jakbyś podniósł go ty sam, i nie ma sposobu, by je rozróżnić. Dopóki więc ktoś jest na zewnątrz i aktywny, coś, co podniesiesz ręcznie, a co odrzucają twoje własne reguły, zostaje usunięte razem z jego łupem. Gdy nikogo nie ma na zewnątrz, nic z tego, co podnosisz, nie zostaje ruszone. Jeśli wolisz zatrzymać wszystko i posortować samodzielnie, zostaw to wyłączone.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Wiadro studni i tym podobne nigdy nie są zbierane, ale aktywowanie takiego obiektu sprawia, że gra oferuje interakcję, dzięki czemu możesz go użyć ręcznie.
 Abyss and Kuku	Abyss i Kuku
 Abyss gear, Kuku pots and their parts.	Ekwipunek Abyss, dzbany Kuku i ich części.
 Accessories	Akcesoria
 allowed	dozwolone
-already in your bag	już jest w twojej torbie
 always	zawsze
 always beats the class rule; never beats always	„zawsze” bije regułę klasy; „nigdy” bije „zawsze”
 Ammunition	Amunicja
@@ -199,7 +197,6 @@ Objects per scan	Obiektów na skanowanie
 on the player	na graczu
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Włączone: żyła jest wydobywana tam, gdzie stoi, i nigdy nie zamachujesz się kilofem. Wyłączone: żyły są zostawiane w spokoju, a zbierane są tylko odłamki, które sam wykruszysz. Wymaga aktywacji, bo cała sztuczka polega na poproszeniu żyły, by się otworzyła.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Włączone: nakładka jest rysowana pod generowaniem klatek DLSS, co wymaga, by ten mod przekazał grze opakowany swapchain.\n\nWyłączone: nakładka jest zamiast tego rysowana przez hak prezentacji. Wszystko wygląda tak samo, chyba że generowanie klatek jest włączone, a mod omija ścieżkę, którą łatają też inne mody nakładek. Wypróbuj to, jeśli gra nie chce uruchomić się razem z innym modem nakładki; można to też ustawić jako WrapSwapChain w MasterLooter.ini bez uruchamiania gry.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Jedna kopia zapasowa jest zapisywana przy każdym uruchomieniu gry, a ostatnie dwanaście jest zachowywanych, w folderze MasterLooter.backups obok wtyczki. Profile znajdują się w MasterLooter.presets. Skopiuj dowolny z tych folderów, aby zachować go po ponownej instalacji.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Jedno kliknięcie na całą rodzinę. Poniższa tabela nadal ustawia pojedyncze klasy; grupa pokazuje myślnik, gdy włączona jest tylko jej część.
 Open and close this menu	Otwórz i zamknij to menu
 Open folder	Otwórz folder
@@ -273,7 +270,6 @@ someone is wearing this; taking it would copy it	ktoś to nosi; zabranie tego st
 stack at one point (storage contents)	stos w jednym miejscu (zawartość magazynu)
 Status	Stan
 Stop pets looting	Powstrzymaj zwierzęta przed zbieraniem
-Stop pets looting at all	Powstrzymaj zwierzęta przed zbieraniem całkowicie
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Stoły, krzesła, łóżka, dywany, lampy, świece, obrazy, wazony i reszta umeblowanego pomieszczenia, niezależnie od tego, czy podnosisz coś z podłogi, czy bierzesz je z jego własnego punktu interakcji. Większość jest warta miedziak lub dwa, ale dywany i luksusowe łóżka sięgają tysięcy, więc włącz to przed umeblowaniem domu. Skrzynie i inne rzeczy, które coś przechowują, podlegają zamiast tego kategorii Pojemniki. Domyślnie wyłączone.
 Tag	Etykieta
 Tags	Etykiety
@@ -286,13 +282,10 @@ Take owned goods on / off	Zbieranie cudzego mienia wł. / wył.
 take this one by hand, looting it can lock the quest	weź to ręcznie, zebranie tego może zablokować zadanie
 takes effect next launch	zacznie działać po następnym uruchomieniu
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Silnik skanuje otoczenie i zbiera to, na co pozwalają reguły. Wyłączone oznacza, że nic nie jest zbierane automatycznie; klawisz szybkiego zbierania nadal działa.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Gra zadaje dwa pytania, zanim zwierzę coś zbierze, jedno o luźny przedmiot na ziemi i jedno o ciało, a to odpowiada nie na oba. Zwierzę po nic nie sięga, więc potem nic twojego nie jest usuwane, a twoje własne znaleziska nigdy nie są w grze. Czystsza z dwóch odpowiedzi, jeśli po prostu nie chcesz, żeby zwierzę zbierało. Czy sięga to najemnika, nie zostało sprawdzone. Gra niesie jedną regułę zbierania tego rodzaju i na oba jej pytania pada nie, więc może sięgać; Zwierzęta i towarzysze przestrzegają filtrów to przełącznik, który robi to na pewno.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Gra wypełnia dane punktu tylko wtedy, gdy uzna, że możesz go dosięgnąć. Aktywacja prosi ją, by zrobiła to z oddali, co pozwala też wydobyć żyłę rudy tam, gdzie stoi. Żyły odpowiadają po kilku sekundach, podczas gdy krzew potrzebuje na to ułamka sekundy.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Gra usuwa zebrane obiekty z opóźnieniem. To zapobiega dwukrotnemu wysłaniu tego samego obiektu, zanim zniknie.
 The game treats this as stealing and will put a bounty on you.	Gra traktuje to jako kradzież i nałoży na ciebie nagrodę.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Mod nigdy nie zamachuje się kilofem. Uruchamia własną sekwencję pęknięcia żyły, a gra przechodzi wtedy przez jeden wiersz upuszczenia, podczas gdy prawdziwy zamach przechodzi przez dwa, więc bonus twojego narzędzia górniczego nic nie daje, gdy to mod wydobywa rudę. Ta opcja dokłada brakującą rudę tą samą ścieżką upuszczania, której używa gra, więc jest to prawdziwa ruda wysypana na ziemię, a nie przedmiot skopiowany do twojej torby. Ustaw ją na to, co twoje narzędzie daje ręcznie, minus jeden: wiertło, które ręcznie daje trzy, chce tutaj 2. Dotyczy to tylko żyły rozbitej przez ten mod, więc wydobycie ręczne pozostaje nietknięte i oba bonusy nie mogą się sumować.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Oprawianie zabitych przez ciebie zwierząt, raz na truchło. Ludzie podlegają pod Ciała. To, co daje oprawianie, nie jest sprawdzane z twoimi filtrami. Mod nigdy tego nie widzi, zanim dotrze, więc ten przełącznik to wszystko albo nic.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Przeszukiwanie zabitych przez ciebie ludzi, raz na ciało. Zwierzęta podlegają pod Truchła. To, co daje przeszukanie, nie jest sprawdzane z twoimi filtrami, więc ten przełącznik to również wszystko albo nic.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	W tej sesji: podniesiono %ld, zebrano %ld, złapano %ld, padlina: %ld
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Drewno i gałęzie na ziemi oraz punkty, które je dają. To, co zawiera większość z nich, jest odczytywane z samych danych gry, więc odrzucenie klasy wood w zakładce Klasy zostawia drzewa na miejscu, a także drewno pod nimi. Tam, gdzie gra nic nie mówi o punkcie, ten przełącznik jest jedyną kontrolą, jaką ma.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Aby zostawić jeden gatunek w spokoju, ustaw na „nigdy” to, w co się zamienia, w zakładce Przedmioty: Item_Tench, Item_Ricefish, Item_Iguana. Mod odczytuje własny wiersz stworzenia w tabeli postaci gry, więc wie, na jaki gatunek patrzy, zanim cokolwiek złapie. Kilka nietypowych stworzeń nadal opiera się na domysłach z nazwy modelu i jest łapanych tylko według kategorii.
@@ -342,3 +335,99 @@ your rules refuse all stone	twoje reguły odrzucają cały kamień
 your rules refuse everything this node holds	twoje reguły odrzucają wszystko, co zawiera ten punkt
 part of a mechanism, not loose loot	część mechanizmu, nie luźny łup
 yours, just out of your hand	twoje, właśnie wypuszczone z ręki
+%d last time	%d ostatnim razem
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Kopia zapasowa jest zapisywana, gdy gra uruchamia się z ustawieniami zmienionymi od ostatniej, a ostatnie dwanaście jest zachowywanych, w folderze MasterLooter.backups obok wtyczki. Profile znajdują się w MasterLooter.presets. Skopiuj dowolny z tych folderów, aby zachować go po ponownej instalacji.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Kombinacja klawiszy lub kontrolera otwiera ten magazyn z dowolnego miejsca i zamyka go ponownie. Klawisz innego magazynu przełącza od razu na niego.
+a Master Looter key	klawisz Master Looter
+a Master Looter shortcut	skrót Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Chwilę po tym, jak przedmiot trafi do torby, Private Storage Master przenosi go do pierwszego magazynu poniżej, który go przyjmuje, dokładnie tak, jak zrobiłbyś to sam przy tym magazynie. Przenoszone jest tylko to, co podniósł Master Looter, nigdy to, co podniosłeś ręcznie, a z ciała lub padliny tylko to, na co pozwalają twoje reguły przedmiotów. Nic się nie przenosi, gdy magazyn jest otwarty lub poza swobodną rozgrywką; klucze, dokumenty, przedmioty zadaniowe i wszystko z listy Nigdy nie przenoś zostają na miejscu, a to, czego nie przyjmie żaden magazyn, zostaje w torbie.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Zwierzę zbiera, co mu się podoba, a gra nie ma na to żadnego przełącznika. Włączone: zwierzę słyszy odmowę, zanim sięgnie po luźny przedmiot, który twoje reguły przedmiotów, znaczniki, klasy albo próg wartości odrzucają, a to, co weźmie z ciała, a co one odrzucają, zostaje usunięte z ekwipunku zaraz po trafieniu do niego, z komunikatem mówiącym, co zniknęło. Przedmioty zadaniowe i chronione nie są usuwane nigdy, a nic, co już leży w twojej torbie, nie zostaje ruszone.\n\nTo, co podniesiesz sam, zostaje zachowane, bo zwierzę nie może być tym, kto wziął odrzucony luźny przedmiot. Wynajęty najemnik jest wyjątkiem: nikt nie sprawdził, czy zadaje to samo pytanie, więc dopóki jeden jest na zewnątrz, odrzucony przedmiot, który trafi do torby, zostaje usunięty bez względu na to, kto go podniósł.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Zwierzę lub towarzysz, który złupi ciało, kładzie to, co znalazł, do twojej torby. Włączone, te przedmioty trafiają do magazynu tak samo jak własne znaleziska Master Looter, o ile pozwalają na to twoje reguły przedmiotów. Luźne przedmioty, które podniesie zwierzę, gra zgłasza jako twoje własne znaleziska, więc te zostają w torbie.
+a seed planted in your camp farm	nasiono zasadzone na twoim polu w obozie
+Add	Dodaj
+add an item: type 3+ letters of its name	dodaj przedmiot: wpisz 3 lub więcej liter jego nazwy
+also %s	także %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	żyła rudy, zostawiona twojemu kilofowi, dopóki Wydobywaj żyły rudy za ciebie jest wyłączone
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Najwyżej jedna linia na sekundę, nazywająca każdy magazyn i ile do niego trafiło. Wyłączone, nic nie jest pokazywane i trafia to tylko do dziennika.
+Click again to reset	Kliknij ponownie, aby zresetować
+Detailed log	Szczegółowy dziennik
+Drop refused loot from bodies	Upuszczaj odrzucony łup z ciał
+Each item goes to the first storage in this list that takes it.	Każdy przedmiot trafia do pierwszego magazynu na tej liście, który go przyjmuje.
+Empty: auto-store may move anything a storage takes.	Puste: automatyczne magazynowanie może przenieść wszystko, co przyjmuje magazyn.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Rozmiar każdego magazynu i liczba zajętych miejsc, zapisywane do PrivateStorageMaster.log. Dołącz go do zgłoszenia dotyczącego rozmiaru.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Dla modów pojemności JSON: poniższe rozmiary magazynów są ignorowane, a decyduje gra albo ten mod.
+game size (%d)	rozmiar gry (%d)
+Game window	Okno gry
+hold a button, then press the one that opens it (Escape cancels)	przytrzymaj przycisk, potem naciśnij ten, który go otwiera (Escape anuluje)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Przytrzymaj jeden lub więcej przycisków, potem naciśnij ten, który otwiera magazyn. Naciśnięty przycisk jest ukrywany przed grą, dopóki pozostałe są przytrzymane.
+Hold other keys back while Ctrl is down	Powstrzymuj inne klawisze, dopóki Ctrl jest wciśnięty
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Ile miejsc w Prywatnym magazynie pochodzi z kupionych rozszerzeń i z fabuły. Suma na suwaku je uwzględnia, więc rozmiar bazowy to suma pomniejszona o nie.
+item %u	przedmiot %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Przedmioty, które automatyczne magazynowanie zawsze zostawia w torbie. Domyślnie to każda waluta: srebro, sakiewki monet, sztabki złota, fundusze i zapasy obozu, żetony i obligacje. Przywróć wartości domyślne poniżej przywraca tę listę.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Jego ustawienia znajdują się w PrivateStorageMaster.ini obok wtyczki. Zmiany tutaj są tam zapisywane od razu.
+Last error	Ostatni błąd
+Leave every size alone	Zostaw każdy rozmiar bez zmian
+left as the game has them	pozostawione takie, jak ma je gra
+load a save to see it	wczytaj zapis, aby to zobaczyć
+more matches; type more of the name	więcej dopasowań; wpisz więcej liter nazwy
+Never move	Nigdy nie przenoś
+no item by that name that is not listed already	brak przedmiotu o tej nazwie, który nie jest już na liście
+none seen	jeszcze nie widziano
+not found, bound keys also reach the game	nie znaleziono, przypisane klawisze docierają też do gry
+Not on this game version: Private Storage Master could not find the move it needs.	Nie na tej wersji gry: Private Storage Master nie znalazł potrzebnego przeniesienia.
+nothing	nic
+now %d of %d used	teraz użyte %d z %d
+off, see the error below	wyłączone, zobacz błąd poniżej
+off, the mod is disabled	wyłączone, mod jest wyłączony
+on XInput slot %d	na slocie XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Włączone, przenoszona jest tylko ilość, która właśnie przybyła, więc jedzenie i mikstury, które już miałeś, zostają w torbie. Wyłączone, przenosi się cały stos.
+Only move what was picked up	Przenoś tylko to, co zostało podniesione
+Open now	Otwórz teraz
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	naciśnij klawisz, z Ctrl, Shift lub Alt, jeśli chcesz (Escape anuluje)
+Private Storage expansions	Rozszerzenia Prywatnego magazynu
+Private Storage Master %s for game build %s	Private Storage Master %s dla wersji gry %s
+Private Storage Master did not hand over its defaults	Private Storage Master nie przekazał swoich wartości domyślnych
+Private Storage Master did not hand over its store loot settings.	Private Storage Master nie przekazał swoich ustawień magazynowania łupu.
+Private Storage Master on	Private Storage Master włączony
+Private Storage Master refused the change	Private Storage Master odrzucił zmianę
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	Zainstalowano też PrivateStorageAnywhere.asi. Oba zmieniają te same części gry; usuń tamten.
+Put what Master Looter picks up into storage	Umieszczaj w magazynie to, co podnosi Master Looter
+read from the save	odczytane z zapisu
+Reload from the ini	Wczytaj ponownie z pliku ini
+Remove	Usuń
+Reset to defaults	Przywróć wartości domyślne
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Przeszukanie ciała lub padliny oddaje wszystko, co posiada, a mod widzi to dopiero, gdy trafi do torby. Włączone: to, co z tego odrzucają twoje reguły przedmiotów, znaczniki, klasy albo próg wartości, jest od razu odkładane z powrotem na ziemię obok ciebie, tym samym upuszczeniem, którego gra używa, gdy sam coś upuszczasz, jedna kupka na każdy stos. Obejmuje to zarówno przeszukania samego moda, jak i ciała, które łupi zwierzę lub towarzysz, których odrzucone przedmioty również lądują obok ciebie. Ciało, które przeszukasz sam, zachowuje to, co dało. Pieniądze, dokumenty, przedmioty zadaniowe i chronione przedmioty zostają w torbie.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Przeszukiwanie zabitych przez ciebie ludzi, raz na ciało. Zwierzęta podlegają pod Truchła. To, co daje przeszukanie, dociera, zanim zobaczą to twoje filtry, tak samo jak przy truchle, a Upuszczaj odrzucony łup z ciał w Ogólnych odkłada z powrotem to, co odrzucają.
+set	ustawione
+set this launch	ustawione na to uruchomienie
+Settings file	Plik ustawień
+Show a notice when loot is stored	Pokaż powiadomienie, gdy łup zostanie zmagazynowany
+Size changes take effect the next time the game starts.	Zmiany rozmiaru zaczynają obowiązywać przy następnym uruchomieniu gry.
+Sizes	Rozmiary
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Oprawianie zabitych przez ciebie zwierząt, raz na truchło. Ludzie podlegają pod Ciała. Mod nigdy nie widzi tego, co daje oprawianie, zanim to dotrze, więc twoje filtry nie mogą powstrzymać tego przed przybyciem. Aby to, co odrzucają, trafiało z powrotem na ziemię, włącz Upuszczaj odrzucony łup z ciał w Ogólnych.
+Some changes take effect the next time the game starts.	Niektóre zmiany zaczynają obowiązywać przy następnym uruchomieniu gry.
+Stop pets looting bodies	Powstrzymaj zwierzęta przed łupieniem ciał
+Stop pets picking up loose items	Powstrzymaj zwierzęta przed podnoszeniem luźnych przedmiotów
+Storage	Magazyn
+Storage keys	Klawisze magazynu
+Storage sizes	Rozmiary magazynów
+Store loot	Magazynuj łup
+Store what your pet loots from bodies	Magazynuj to, co twoje zwierzę złupi z ciał
+Storing loot needs a newer Private Storage Master.	Magazynowanie łupu wymaga nowszego Private Storage Master.
+the size dump	zrzut rozmiarów
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Gra pyta, zanim zwierzę weźmie przedmiot leżący na ziemi, a to odpowiada nie. Zwierzę mija go, więc później nie trzeba niczego usuwać. Czy najemnikowi zadawane jest to samo pytanie, nie zostało sprawdzone.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Gra pyta osobno, zanim zwierzę złupi ciało, a to odpowiada nie. Włącz jedno z dwóch, a nie drugie, jeśli chcesz, żeby zwierzę obdzierało zwłoki, ale nie zbierało luźnych przedmiotów, albo odwrotnie.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Przypisania klawiszy zostały przeniesione z PrivateStorageAnywhere.ini przy pierwszym uruchomieniu.
+the key-block toggle	przełącznik blokady klawiszy
+The list is full at %d items.	Lista jest pełna przy %d przedmiotach.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Suma, wliczając kupione rozszerzenia i miejsca fabularne. Lewy koniec zachowuje rozmiar gry.
+This chest holds one of each collectible, so its slots cannot be changed.	Ta skrzynia zawiera po jednym egzemplarzu każdego kolekcjonerskiego przedmiotu, więc liczby jej miejsc nie można zmienić.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Ta zakładka wymaga wersji Private Storage Master, która pasuje do tej wersji Master Looter.
+Turn that on and off	Włącz to i wyłącz
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Dopóki Ctrl, lub jakikolwiek modyfikator, którego używają twoje klawisze magazynu, jest wciśnięty, inne klawisze są powstrzymywane przed dotarciem do gry, więc zsunięcie się z klawisza magazynu nie uruchamia umiejętności. Ruch, spacja, Tab, Enter, Escape, Alt+F4 oraz klawisze, których gra używa z Ctrl (Z, Shift, +), nadal docierają.
+working	działa
+Write the size dump to the log	Zapisz zrzut rozmiarów do dziennika
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Zapisuje każde naciśnięcie klawisza, otwarcie i zamknięcie do PrivateStorageMaster.log i zachowuje ostatnie 24 sesje. Wyłączone, dziennik zachowuje podsumowanie uruchomienia, błędy i zrzut rozmiarów oraz ostatnie dwie sesje.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Zapisuje każde naciśnięcie klawisza, otwarcie i zamknięcie do PrivateStorageMaster.log. Wyłączone, dziennik zachowuje podsumowanie uruchomienia, błędy i zrzut rozmiarów.
+your own camp farm (off)	twoje własne pole w obozie (wyłączone)

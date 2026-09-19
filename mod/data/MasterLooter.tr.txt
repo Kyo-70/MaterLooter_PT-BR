@@ -31,13 +31,11 @@
 1 match%s	1 eşleşme%s
 3 of 3	3/3
 \"%s\" already exists. Saving over it asks first.	\"%s\" zaten var. Üzerine kaydetmeden önce onay istenir.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Evcil hayvan canı ne isterse onu toplar ve oyunda bunun için hiçbir anahtar yoktur. Açık: bir evcil hayvanın, bir paralı askerin ya da bir yoldaşın aldığı ve senin eşya kurallarının, etiketlerinin, sınıflarının veya değer eşiğinin reddedeceği her şey envantere düşer düşmez silinir ve bir bildirim neyin gittiğini söyler. Görev eşyaları ve korunan eşyalar asla silinmez, çantanda zaten duran hiçbir şeye de dokunulmaz.\n\nBunu açmadan önce bilmekte fayda var: oyun, bir yoldaşın yerdeki bir eşyayı almasını sanki sen almışsın gibi bildirir ve ikisini ayırt etmenin yolu yoktur. Yani biri dışarıda ve etkinken, elinle aldığın ve kendi kurallarının reddettiği bir şey de onunkiyle birlikte silinir. Dışarıda kimse yoksa aldığın hiçbir şeye dokunulmaz. Her şeyi tutup kendin ayıklamayı tercih ediyorsan bunu kapalı bırak.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Kuyu kovası ve benzerleri asla yağmalanmaz, ama birini etkinleştirmek oyunun etkileşimini sunmasını sağlar, böylece onu elinle kullanabilirsin.
 Abyss and Kuku	Abyss ve Kuku
 Abyss gear, Kuku pots and their parts.	Abyss ekipmanları, Kuku kapları ve parçaları.
 Accessories	Aksesuarlar
 allowed	izinli
-already in your bag	zaten çantanda
 always	her zaman
 always beats the class rule; never beats always	“her zaman” sınıf kuralına üstün gelir; “asla” da “her zaman”a üstün gelir.
 Ammunition	Cephane
@@ -197,7 +195,6 @@ Objects per scan	Tarama başına nesne
 on the player	oyuncunun üzerinde
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Açıkken, bir damar olduğu yerde işlenir ve sen asla kazma sallamazsın. Kapalıyken, damarlar dokunulmadan bırakılır ve yalnızca senin gevşettiğin parçalar alınır. Etkinleştirme gerektirir, çünkü işin sırrı damardan açılmasını istemektir.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Açıkken, overlay DLSS kare oluşturmanın altında çizilir; bu da bu modun oyuna sarmalanmış bir swapchain vermesini gerektirir.\n\nKapalıyken, overlay bunun yerine present kancası üzerinden çizilir. Kare oluşturma açık olmadıkça her şey aynı görünür, ve mod başka overlay modlarının da yamadığı bir yoldan uzak durur. Oyun başka bir overlay moduyla birlikte açılmıyorsa bunu dene; oyunu başlatmadan MasterLooter.ini içinde WrapSwapChain olarak ayarlanabilir.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Oyun her başladığında bir yedek yazılır ve son on iki tanesi, eklentinin yanındaki MasterLooter.backups içinde tutulur. Ön ayarlar MasterLooter.presets içindedir. Bir yeniden kurulumda korumak için iki klasörden birini kopyala.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Aile başına tek tıklama. Aşağıdaki tablo yine de tek tek sınıfları ayarlar; bir grubun yalnızca bir kısmı açıkken tire gösterilir.
 Open and close this menu	Bu menüyü aç ve kapat
 Open folder	Klasörü aç
@@ -271,7 +268,6 @@ someone is wearing this; taking it would copy it	bunu biri giyiyor; almak onu ko
 stack at one point (storage contents)	tek noktada yığın (depo içeriği)
 Status	Durum
 Stop pets looting	Evcil hayvanların toplamasını engelle
-Stop pets looting at all	Evcil hayvanların toplamasını tamamen engelle
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Masalar, sandalyeler, yataklar, halılar, lambalar, mumlar, tablolar, çömlekler ve döşeli bir odanın geri kalanı; ister yerden alınsın ister kendi etkileşim noktasından. Çoğu bir iki bakıra değer, ama halılar ve lüks yataklar binlere çıkar, bu yüzden bir ev döşemeden önce bunu aç. Sandıklar ve bir şey barındıran diğer nesneler bunun yerine Konteynerlere yanıt verir. Varsayılan olarak kapalı.
 Tag	Etiket
 Tags	Etiketler
@@ -284,13 +280,10 @@ Take owned goods on / off	Sahipli eşya alımı açık / kapalı
 take this one by hand, looting it can lock the quest	bunu elle al, toplamak görevi kilitleyebilir
 takes effect next launch	sonraki başlatmada etkili olur
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Motor etrafını tarar ve kuralların izin verdiğini alır. Kapalıyken hiçbir şey otomatik alınmaz; ani alım tuşu yine de çalışır.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Oyun, bir evcil hayvan toplamadan önce iki soru sorar; biri yerdeki serbest bir eşya için, biri bir ceset için ve bu, ikisine de hayır der. Evcil hayvan hiçbir şeye uzanmaz, dolayısıyla sonrasında senden hiçbir şey silinmez ve kendi aldıkların hiç sorgulanmaz. İkisinin daha temiz olanı, eğer sadece bir evcil hayvanın toplamasını istemiyorsan. Bir paralı askere ulaşıp ulaşmadığı denenmedi. Oyun bu türden tek bir toplama kuralı taşır ve her iki sorusuna da hayır yanıtı verilir, yani ulaşabilir; Evcil hayvanlar ve yoldaşlar filtrelere uyar, kesin olarak bunu yapan anahtardır.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Oyun, bir noktanın verisini yalnızca ona ulaşabileceğini düşündüğünde doldurur. Etkinleştirme, bunu uzaktan yapmasını ister; bu da bir maden damarının olduğu yerde işlenmesini sağlayan şeydir. Damarların yanıt vermesi birkaç saniye sürerken bir çalı bunun küçük bir kısmında yanıt verir.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Oyun alınan nesneleri bir gecikmeyle kaldırır. Bu, aynı nesnenin kaybolurken iki kez gönderilmesini önler.
 The game treats this as stealing and will put a bounty on you.	Oyun bunu hırsızlık sayar ve üzerine ödül koyar.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Mod asla kazma sallamaz. Damarın kendi kırılma sırasını çalıştırır, ve oyun bunun için tek bir düşme satırı işlerken gerçek bir vuruş iki satır işler, bu yüzden mod madenciliği yaptığında maden aletinin bonusu hiçbir şey ödemez. Bu ayar, oyunun kullandığı aynı düşme yolundan eksik madeni geri ekler, yani yere dökülen gerçek madendir, çantana kopyalanan bir eşya değildir. Aletinin elle verdiği miktardan bir eksiğini gir: elle üç veren bir matkap burada 2 ister. Bu yalnızca bu modun kırdığı bir damara uygulanır, bu yüzden elle madencilik etkilenmez ve ikisi üst üste binmez.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Öldürdüğün hayvanların derisini yüzme, leş başına bir kez. İnsanlar Cesetler altındadır. Deri yüzmenin verdiği şey filtrelerinle karşılaştırılmaz. Mod bunu gelmeden önce hiç görmez, bu yüzden bu anahtar ya hep ya hiçtir.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Öldürdüğün insanları arama, ceset başına bir kez. Hayvanlar Leşler altındadır. Bir aramanın verdiği şey filtrelerinle karşılaştırılmaz, bu yüzden bu anahtar da ya hep ya hiçtir.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Bu oturum: %ld alındı, %ld toplandı, %ld yakalandı, %ld leş
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Yerdeki kereste ve dallar ile bunları veren noktalar. Bunların çoğunun ne içerdiği doğrudan oyun verilerinden okunur, bu yüzden Sınıflar sekmesinde wood sınıfını reddetmek ağaçları ayakta bırakır, altlarındaki keresteyi de. Oyunun bir nokta hakkında hiçbir şey söylemediği yerde bu anahtar onun tek denetimidir.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Bir türü dokunulmadan bırakmak için, dönüştüğü eşyayı Eşyalar sekmesinde asla'ya ayarla: Item_Tench, Item_Ricefish, Item_Iguana. Mod, oyunun karakter tablosundaki yaratığın kendi satırını okur, bu yüzden bir şey yakalamadan önce hangi türe baktığını bilir. Birkaç sıra dışı yaratık hâlâ model adından tahmine dayanır ve yalnızca kategoriye göre yakalanır.
@@ -340,3 +333,99 @@ your rules refuse all stone	kuralların bütün taşı reddediyor
 your rules refuse everything this node holds	kuralların bu noktanın içerdiği her şeyi reddediyor
 part of a mechanism, not loose loot	bir düzeneğin parçası, yerdeki ganimet değil
 yours, just out of your hand	senin, elinden yeni çıktı
+%d last time	son seferde %d
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Ayarlar bir öncekinden değiştiyse, oyun her başladığında bir yedek yazılır ve son on iki tanesi, eklentinin yanındaki MasterLooter.backups içinde tutulur. Ön ayarlar MasterLooter.presets içindedir. Bir yeniden kurulumda korumak için iki klasörden birini kopyala.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Bir tuş veya kumanda kombinasyonu o depoyu her yerden açar, ve tekrar basıldığında kapatır. Başka bir deponun tuşu doğrudan ona geçer.
+a Master Looter key	bir Master Looter tuşu
+a Master Looter shortcut	bir Master Looter kısayolu
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Bir eşya çantaya düştükten kısa bir süre sonra, Private Storage Master onu aşağıdaki listede onu kabul eden ilk depoya taşır, tıpkı deponun başında kendin yapacağın taşıma gibi. Yalnızca Master Looter'ın aldığı şeyler taşınır, elinle aldıkların asla taşınmaz, ve bir cesetten ya da leşten gelenlerde yalnızca eşya kurallarının izin verdiği taşınır. Bir depo açıkken veya serbest oynanış dışındayken hiçbir şey taşınmaz, anahtarlar, belgeler, görev eşyaları ve asla taşınmayacaklar listesindeki her şey yerinde kalır, ve hiçbir deponun kabul etmediği şey çantada kalır.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Evcil hayvan canı ne isterse onu toplar ve oyunda bunun için hiçbir anahtar yoktur. Açık: eşya kurallarının, etiketlerinin, sınıflarının veya değer eşiğinin reddedeceği yerdeki bir eşyaya evcil hayvan uzanmadan önce ona hayır denir, ve bir cesetten aldığı ve bunların reddettiği her şey envantere düşer düşmez silinir, bir bildirim neyin gittiğini söyler. Görev eşyaları ve korunan eşyalar asla silinmez, çantanda zaten duran hiçbir şeye de dokunulmaz.\n\nKendi elinle aldıkların korunur, çünkü reddedilen bir serbest eşyayı alan evcil hayvan olamaz. Kiralık bir paralı asker istisnadır: aynı soruyu sorup sormadığı kontrol edilmedi, bu yüzden biri dışarıdayken, çantaya düşen reddedilmiş bir eşya kim aldıysa silinir.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Bir cesedi toplayan bir evcil hayvan veya yoldaş, bulduğunu çantana koyar. Açıkken, eşya kuralların izin verdiği sürece bu eşyalar da Master Looter'ın kendi aldıkları gibi depoya gider. Bir evcil hayvanın aldığı serbest eşyalar oyun tarafından senin kendi aldıkların olarak bildirilir, bu yüzden onlar çantada kalır.
+a seed planted in your camp farm	kamp çiftliğine ekilmiş bir tohum
+Add	Ekle
+add an item: type 3+ letters of its name	bir eşya ekle: adının 3+ harfini yaz
+also %s	ayrıca %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	bir maden damarı, Maden damarlarını senin yerine kaz kapalıyken kazmana bırakılır
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Saniyede en fazla bir satır, her depoyu ve içine kaç tanesinin gittiğini adlandırarak. Kapalıyken hiçbir şey gösterilmez ve yalnızca günlüğe gider.
+Click again to reset	Sıfırlamak için tekrar tıkla
+Detailed log	Ayrıntılı günlük
+Drop refused loot from bodies	Cesetlerden reddedilen yağmayı yere bırak
+Each item goes to the first storage in this list that takes it.	Her eşya, bu listedeki onu kabul eden ilk depoya gider.
+Empty: auto-store may move anything a storage takes.	Boş: otomatik depolama, bir deponun kabul ettiği her şeyi taşıyabilir.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Her deponun boyutu ve kaç yuvasının kullanımda olduğu, PrivateStorageMaster.log dosyasına yazılır. Bunu bir boyut bildirimine ekle.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	JSON kapasite modları için: aşağıdaki depo boyutları yok sayılır ve oyun, ya da o mod, karar verir.
+game size (%d)	oyun boyutu (%d)
+Game window	Oyun penceresi
+hold a button, then press the one that opens it (Escape cancels)	bir tuşu basılı tut, sonra onu açan tuşa bas (Escape iptal eder)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Bir veya daha fazla tuşu basılı tut, sonra depoyu açan tuşa bas. Diğerleri basılıyken basılan tuş oyundan gizlenir.
+Hold other keys back while Ctrl is down	Ctrl basılıyken diğer tuşları engelle
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Kaç Özel Depo yuvasının satın aldığın genişletmelerden ve hikayeden geldiği. Kaydırıcının toplamı bunları da sayar, bu yüzden temel boyut toplamdan bunlar çıkarılarak bulunur.
+item %u	eşya %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Otomatik depolamanın her zaman çantada bıraktığı eşyalar. Varsayılan, her tür para birimidir: gümüş, para keseleri, altın külçeler, kamp fonları ve malzemeleri, jetonlar ve tahviller. Aşağıdaki Varsayılanlara sıfırla bu listeyi geri getirir.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Ayarları, eklentinin yanındaki PrivateStorageMaster.ini içinde tutulur. Buradaki değişiklikler hemen oraya kaydedilir.
+Last error	Son hata
+Leave every size alone	Hiçbir boyuta dokunma
+left as the game has them	oyunun ayarladığı gibi
+load a save to see it	görmek için bir kayıt yükle
+more matches; type more of the name	daha fazla eşleşme; adın daha fazlasını yaz
+Never move	Asla taşıma
+no item by that name that is not listed already	o adda, zaten listelenmemiş bir eşya yok
+none seen	hiç görülmedi
+not found, bound keys also reach the game	bulunamadı, atanmış tuşlar oyuna da ulaşır
+Not on this game version: Private Storage Master could not find the move it needs.	Bu oyun sürümünde değil: Private Storage Master ihtiyaç duyduğu taşımayı bulamadı.
+nothing	hiçbir şey
+now %d of %d used	şimdi %d/%d kullanımda
+off, see the error below	kapalı, aşağıdaki hataya bak
+off, the mod is disabled	kapalı, mod devre dışı
+on XInput slot %d	XInput yuvası %d üzerinde
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Açıkken, yalnızca az önce gelen miktar taşınır, bu yüzden zaten taşıdığın yiyecek ve iksirler çantada kalır. Kapalıyken, yığının tamamı gider.
+Only move what was picked up	Yalnızca alınanı taşı
+Open now	Şimdi aç
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	bir tuşa bas, istersen Ctrl, Shift veya Alt ile birlikte (Escape iptal eder)
+Private Storage expansions	Özel Depo genişletmeleri
+Private Storage Master %s for game build %s	Private Storage Master %s, oyun sürümü %s içindir
+Private Storage Master did not hand over its defaults	Private Storage Master varsayılanlarını vermedi
+Private Storage Master did not hand over its store loot settings.	Private Storage Master, yağma depolama ayarlarını vermedi.
+Private Storage Master on	Private Storage Master açık
+Private Storage Master refused the change	Private Storage Master değişikliği reddetti
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi da kurulu. İkisi de oyunun aynı kısımlarını değiştiriyor; onu kaldır.
+Put what Master Looter picks up into storage	Master Looter'ın aldıklarını depoya koy
+read from the save	kayıttan okunur
+Reload from the ini	ini dosyasından yeniden yükle
+Remove	Kaldır
+Reset to defaults	Varsayılanlara sıfırla
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Bir cesedi veya leşi aramak, tuttuğu her şeyi teslim eder, ve mod bunu ancak çantaya girdiğinde görür. Açık: eşya kurallarının, etiketlerinin, sınıflarının veya değer eşiğinin reddettiği her şey, senin bir şeyi kendi elinle yere bıraktığında oyunun kullandığı aynı bırakma ile hemen yanına yere konur, her yığın için bir küme. Bu, modun kendi aramalarını ve bir evcil hayvanın veya yoldaşın yağmaladığı cesetleri de kapsar; onların reddedilen eşyaları da yanına düşer. Kendi aradığın bir ceset, ödediğini korur. Para, belgeler, görev eşyaları ve korunan eşyalar çantada kalır.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Öldürdüğün insanları arama, ceset başına bir kez. Hayvanlar Leşler altındadır. Bir aramanın verdiği şey, tıpkı bir leş gibi, filtrelerin görmesinden önce gelir, ve Genel altındaki Cesetlerden reddedilen yağmayı yere bırak, reddettiklerini geri yere koyar.
+set	ayarlı
+set this launch	bu başlatmada ayarlandı
+Settings file	Ayarlar dosyası
+Show a notice when loot is stored	Yağma depolandığında bir bildirim göster
+Size changes take effect the next time the game starts.	Boyut değişiklikleri oyun bir sonraki başladığında etkili olur.
+Sizes	Boyutlar
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Öldürdüğün hayvanların derisini yüzme, leş başına bir kez. İnsanlar Cesetler altındadır. Mod, deri yüzmenin verdiğini yere düşmeden önce hiç görmez, bu yüzden filtrelerin gelmesini engelleyemez. Reddettiklerini yere geri koydurmak için, Genel altındaki Cesetlerden reddedilen yağmayı yere bırak'ı aç.
+Some changes take effect the next time the game starts.	Bazı değişiklikler oyun bir sonraki başladığında etkili olur.
+Stop pets looting bodies	Evcil hayvanların ceset toplamasını engelle
+Stop pets picking up loose items	Evcil hayvanların serbest eşya almasını engelle
+Storage	Depo
+Storage keys	Depo tuşları
+Storage sizes	Depo boyutları
+Store loot	Yağmayı depola
+Store what your pet loots from bodies	Evcil hayvanının cesetlerden topladığını depola
+Storing loot needs a newer Private Storage Master.	Yağma depolamak daha yeni bir Private Storage Master gerektirir.
+the size dump	boyut dökümü
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Oyun, bir evcil hayvan yerde duran bir eşyayı almadan önce sorar, ve bu hayır der. Evcil hayvan onun yanından geçer ve sonrasında hiçbir şeyin silinmesi gerekmez. Bir paralı askerin aynı soruyu sorup sormadığı denenmedi.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Oyun, bir evcil hayvan bir cesedi toplamadan önce ayrıca sorar, ve bu da hayır der. Bir evcil hayvanın cesetleri soymasını ama serbest eşya toplamamasını istiyorsan, ya da bunun tersini istiyorsan, bu ikisinden yalnızca birini aç.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Tuş atamaları ilk çalıştırmada PrivateStorageAnywhere.ini dosyasından aktarıldı.
+the key-block toggle	tuş engelleme anahtarı
+The list is full at %d items.	Liste %d eşya ile dolu.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Toplam, satın alınan genişletmeler ve hikaye yuvaları dahil. Sol uç, oyunun boyutunu korur.
+This chest holds one of each collectible, so its slots cannot be changed.	Bu sandık her koleksiyon parçasından birini tutar, bu yüzden yuvaları değiştirilemez.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Bu sekme, Master Looter'ın bu sürümüyle eşleşen bir Private Storage Master sürümü gerektirir.
+Turn that on and off	Onu aç ve kapat
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Ctrl, ya da depo tuşlarının kullandığı herhangi bir değiştirici tuş basılıyken, diğer tuşlar oyundan uzak tutulur, bu yüzden bir depo tuşundan kayma bir yetenek tetiklemez. Hareket, Space, Tab, Enter, Escape, Alt+F4 ve oyunun Ctrl ile kullandığı tuşlar (Z, Shift, +) yine de geçer.
+working	çalışıyor
+Write the size dump to the log	Boyut dökümünü günlüğe yaz
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Her tuş basışını, açma ve kapamayı PrivateStorageMaster.log dosyasına yazar ve son 24 oturumu tutar. Kapalıyken, günlük başlangıç özetini, hataları ve boyut dökümünü, ve son iki oturumu tutar.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Her tuş basışını, açma ve kapamayı PrivateStorageMaster.log dosyasına yazar. Kapalıyken, günlük başlangıç özetini, hataları ve boyut dökümünü tutar.
+your own camp farm (off)	kendi kamp çiftliğin (kapalı)

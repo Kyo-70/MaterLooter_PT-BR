@@ -33,13 +33,11 @@
 1 match%s	1 osuma%s
 3 of 3	3/3
 \"%s\" already exists. Saving over it asks first.	\"%s\" on jo olemassa. Sen päälle tallentaminen kysyy ensin vahvistusta.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Lemmikki nostaa mitä huvittaa, eikä pelissä ole siihen mitään kytkintä. Päällä: kaikki, minkä lemmikki, palkkasoturi tai kumppani poimii ja minkä esinesääntösi, tunnisteesi, luokkasi tai arvoraja olisivat hylänneet, poistetaan tavaraluettelosta heti sen saapuessa, ja ilmoitus kertoo, mikä katosi. Tehtäväesineitä ja suojattuja esineitä ei poisteta koskaan, eikä mihinkään laukussasi jo olevaan kosketa.\n\nHyvä tietää ennen kuin kytket tämän päälle: peli ilmoittaa kumppanin poimiman irtoesineen aivan kuin olisit poiminut sen itse, eikä näitä kahta voi erottaa toisistaan. Niinpä niin kauan kuin joku on ulkona ja aktiivisena, myös käsin poimimasi esine, jonka omat sääntösi hylkäävät, poistetaan yhdessä hänen saaliinsa kanssa. Kun kukaan ei ole ulkona, mihinkään poimimaasi ei kosketa. Jos pidät mieluummin kaiken ja lajittelet itse, jätä tämä pois päältä.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Kaivon sankoa ja vastaavia ei koskaan lootata, mutta niiden aktivointi saa pelin tarjoamaan oman toimintonsa, jotta voit käyttää sitä itse.
 Abyss and Kuku	Abyss ja Kuku
 Abyss gear, Kuku pots and their parts.	Abyssin varusteet, Kuku-padat ja niiden osat.
 Accessories	Asusteet
 allowed	sallittu
-already in your bag	jo laukussasi
 always	aina
 always beats the class rule; never beats always	aina-asetus voittaa luokkasäännön, ei koskaan -asetus voittaa aina-asetuksen
 Ammunition	Ammukset
@@ -199,7 +197,6 @@ Objects per scan	Kohteita per haku
 on the player	pelaajan päällä
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Päällä ollessaan suoni louhitaan siinä missä se on, etkä koskaan heiluta hakkua. Pois päältä ollessaan suonet jätetään rauhaan, ja vain irti lyömäsi palaset poimitaan. Vaatii aktivoinnin, sillä koko temppu on pyytää suonta aukeamaan.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Päällä ollessaan overlay piirtyy DLSS-kehystenluonnin alle, mikä vaatii tämän modin antavan pelille käärityn swapchainin.\n\nPois päältä ollessaan overlay piirtyy sen sijaan present-hookin kautta. Kaikki näyttää samalta, ellei kehystenluonti ole päällä, ja modi pysyy pois poluilta, joita muutkin overlay-modit muokkaavat. Kokeile tätä, jos peli ei käynnisty toisen overlay-modin kanssa; sen voi asettaa WrapSwapChain-arvona MasterLooter.ini-tiedostossa käynnistämättä peliä.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Yksi varmuuskopio kirjoitetaan joka kerta, kun peli käynnistyy, ja viimeiset kaksitoista säilytetään kansiossa MasterLooter.backups liitännäisen vieressä. Esiasetukset ovat kansiossa MasterLooter.presets. Kopioi kumpi tahansa kansio säilyttääksesi sen uudelleenasennuksen yli.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Yksi klikkaus per perhe. Alla oleva taulukko asettaa silti yksittäisiä luokkia; ryhmä näyttää viivan, kun vain osa siitä on päällä.
 Open and close this menu	Avaa ja sulje tämä valikko
 Open folder	Avaa kansio
@@ -273,7 +270,6 @@ someone is wearing this; taking it would copy it	joku pitää tätä yllään; s
 stack at one point (storage contents)	pino yhdessä pisteessä (varaston sisältö)
 Status	Tila
 Stop pets looting	Estä lemmikkejä ryöstämästä
-Stop pets looting at all	Estä lemmikkejä ryöstämästä lainkaan
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Pöydät, tuolit, sängyt, matot, lamput, kynttilät, taulut, ruukut ja loput sisustetun huoneen tavarasta, poiminetpa sen lattialta tai otat sen omasta vuorovaikutuspisteestään. Suurin osa on arvoltaan kupari tai pari, mutta matot ja luksussängyt nousevat tuhansiin, joten kytke tämä päälle ennen talon sisustamista. Arkut ja muut jotain säilyttävät esineet kuuluvat sen sijaan kohtaan Säiliöt. Oletuksena pois päältä.
 Tag	Tunniste
 Tags	Tunnisteet
@@ -286,13 +282,10 @@ Take owned goods on / off	Ota omistettua tavaraa, päälle / pois
 take this one by hand, looting it can lock the quest	ota tämä käsin, sen ryöstäminen voi lukita tehtävän
 takes effect next launch	astuu voimaan seuraavalla käynnistyksellä
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Moottori hakee ympäriltäsi ja ottaa sen, minkä säännöt sallivat. Pois päältä tarkoittaa, ettei mitään oteta automaattisesti; pikalootin näppäin toimii silti.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Peli kysyy kaksi kysymystä ennen kuin lemmikki ryöstää, yhden maassa olevasta irtoesineestä ja yhden ruumiista, ja tämä vastaa molempiin ei. Lemmikki ei kurota mihinkään, joten mitään sinun omaasi ei poisteta jälkeenpäin eivätkä omat poimintasi ole koskaan kyseenalaisia. Näistä kahdesta puhtaampi vastaus, jos et yksinkertaisesti halua lemmikin ryöstävän. Yltääkö se palkkasoturiin, ei ole testattu. Pelissä on yksi tämänlajinen ryöstösääntö ja sen molempiin kysymyksiin vastataan ei, joten saattaa yltää; Lemmikit ja kumppanit noudattavat suodattimia on se kytkin, joka varmasti yltää.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Peli täyttää pisteen tiedot vain, kun se arvioi sinun ulottuvan siihen. Aktivointi pyytää sitä tekemään niin etäältä, mikä myös mahdollistaa malmisuonen louhimisen siinä missä se on. Suonet vastaavat vasta useiden sekuntien kuluttua, kun pensas vastaa murto-osassa siitä.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Peli poistaa otetut kohteet viiveellä. Tämä estää saman kohteen lähettämisen kahdesti, kun se on häviämässä.
 The game treats this as stealing and will put a bounty on you.	Peli käsittelee tätä varkautena ja asettaa sinulle etsintäkuulutuksen.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Modi ei koskaan heiluta hakkua. Se ajaa suonen omaa murtumissekvenssiä, ja peli käy siinä läpi yhden pudotusrivin, kun oikea isku käy läpi kaksi, joten louhintatyökalusi bonus ei maksa mitään, kun modi tekee louhinnan. Tämä lisää puuttuvan malmin takaisin samaa pudotuspolkua pitkin, jota peli käyttää, joten kyseessä on oikeaa maahan valunutta malmia, ei laukkuun kopioitu esine. Aseta se siihen, mitä työkalusi maksaa käsin louhittaessa miinus yksi: pora, joka antaa käsin kolme, haluaa tähän 2. Tämä koskee vain suonta, jonka tämä modi murtaa, joten käsin louhiminen pysyy koskemattomana eivätkä kaksi voi kasautua.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Tappamiesi eläinten nylkeminen, kerran raatoa kohden. Ihmiset kuuluvat kohtaan Ruumiit. Nylkemisen tuottoa ei tarkisteta suodattimiasi vasten. Modi ei koskaan näe sitä ennen kuin se saapuu, joten tämä kytkin on kaikki tai ei mitään.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Tappamiesi ihmisten tutkiminen, kerran ruumista kohden. Eläimet kuuluvat kohtaan Raadot. Tutkimisen tuottoa ei tarkisteta suodattimiasi vasten, joten tämäkin kytkin on kaikki tai ei mitään.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Tällä pelikerralla: %ld poimittu, %ld kerätty, %ld pyydystetty, %ld raatoa
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Maassa olevat puutavara ja oksat sekä pisteet, jotka niitä tuottavat. Se mitä useimmat niistä sisältävät luetaan pelin omista tiedoista, joten luokan wood hylkääminen Luokat-välilehdellä jättää puut pystyyn ja samoin niiden alla olevan puutavaran. Siellä missä peli ei kerro pisteestä mitään, tämä kytkin on sen ainoa hallintakeino.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Jättääksesi yhden lajin rauhaan, aseta se, mihin se muuttuu, arvoon ei koskaan Esineet-välilehdellä: Item_Tench, Item_Ricefish, Item_Iguana. Modi lukee olennon oman rivin pelin hahmotaulukosta, joten se tietää, mitä lajia se katsoo, ennen kuin se saa mitään kiinni. Muutama epätavallinen olento joutuu silti arvaamaan mallinsa nimestä ja saadaan kiinni vain luokan perusteella.
@@ -342,3 +335,99 @@ your rules refuse all stone	sääntösi hylkäävät kaiken kiven
 your rules refuse everything this node holds	sääntösi hylkäävät kaiken mitä tämä piste sisältää
 part of a mechanism, not loose loot	osa mekanismia, ei irrallista saalista
 yours, just out of your hand	sinun, juuri kädestäsi pudonnut
+%d last time	%d viimeksi
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Varmuuskopio kirjoitetaan, kun peli käynnistyy asetuksilla, jotka ovat muuttuneet edellisestä kerrasta, ja viimeiset kaksitoista säilytetään kansiossa MasterLooter.backups liitännäisen vieressä. Esiasetukset ovat kansiossa MasterLooter.presets. Kopioi kumpi tahansa kansio säilyttääksesi sen uudelleenasennuksen yli.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Näppäin tai ohjainyhdistelmä avaa kyseisen varaston mistä tahansa ja sulkee sen taas. Toisen varaston näppäin vaihtaa suoraan siihen.
+a Master Looter key	Master Looterin näppäin
+a Master Looter shortcut	Master Looterin pikanäppäin
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Hetki sen jälkeen, kun esine saapuu laukkuun, Private Storage Master siirtää sen ensimmäiseen alla olevaan varastoon, joka ottaa sen vastaan, saman siirron, jonka tekisit itse varastolla. Vain se, minkä Master Looter on poiminut, siirretään, ei koskaan se, minkä olet poiminut käsin, ja ruumiista tai raadosta vain se, minkä esinesääntösi sallivat. Mikään ei siirry, kun varasto on auki tai vapaan pelin ulkopuolella, avaimet, asiakirjat, tehtäväesineet ja kaikki listalla Älä koskaan siirrä pysyvät paikallaan, ja se, mitä mikään varasto ei ota vastaan, jää laukkuun.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Lemmikki nostaa mitä huvittaa, eikä pelissä ole siihen mitään kytkintä. Päällä: lemmikille sanotaan ei ennen kuin se kurottaa maassa olevaan irtoesineeseen, jonka esinesääntösi, tunnisteesi, luokkasi tai arvoraja hylkäävät, ja mitä tahansa se ottaa ruumiista, jonka ne hylkäävät, poistetaan tavaraluettelosta heti sen saapuessa, ja ilmoitus kertoo, mikä katosi. Tehtäväesineitä ja suojattuja esineitä ei poisteta koskaan, eikä mihinkään laukussasi jo olevaan kosketa.\n\nSen, minkä poimit itse, säilyy, koska lemmikki ei voi olla se, joka otti hylätyn irtoesineen. Palkattu palkkasoturi on poikkeus: kukaan ei ole tarkistanut, kysyykö se samaa kysymystä, joten kun yksi on ulkona, laukkuun saapuva hylätty esine poistetaan riippumatta siitä, kuka sen poimi.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Lemmikki tai kumppani, joka ryöstää ruumiin, laittaa löytämänsä laukkuusi. Päällä nuo esineet menevät varastoon samalla tavalla kuin Master Looterin omat poiminnat, kunhan esinesääntösi sallivat ne. Irtoesineet, jotka lemmikki poimii, peli ilmoittaa omina poimintoinasi, joten ne pysyvät laukussa.
+a seed planted in your camp farm	leirisi maatilalle istutettu siemen
+Add	Lisää
+add an item: type 3+ letters of its name	lisää esine: kirjoita 3+ kirjainta sen nimestä
+also %s	myös %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	malmisuoni, joka jätetään hakullesi, kun Louhi malmisuonet puolestasi on pois päältä
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Enintään yksi rivi sekunnissa, joka nimeää kunkin varaston ja kuinka monta meni siihen. Pois päältä mitään ei näytetä, ja se menee vain lokiin.
+Click again to reset	Napsauta uudelleen nollataksesi
+Detailed log	Yksityiskohtainen loki
+Drop refused loot from bodies	Pudota hylätty lootti ruumiista
+Each item goes to the first storage in this list that takes it.	Jokainen esine menee ensimmäiseen tämän listan varastoon, joka ottaa sen vastaan.
+Empty: auto-store may move anything a storage takes.	Tyhjä: automaattinen varastointi voi siirtää mitä tahansa, minkä varasto ottaa vastaan.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Jokaisen varaston koko ja kuinka monta paikkaa on käytössä, kirjoitettu tiedostoon PrivateStorageMaster.log. Liitä se kokoraporttiin.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	JSON-kapasiteettimodeille: alla olevat varastokoot ohitetaan, ja peli tai kyseinen modi päättää.
+game size (%d)	pelin koko (%d)
+Game window	Peli-ikkuna
+hold a button, then press the one that opens it (Escape cancels)	pidä näppäintä pohjassa ja paina sitten sitä, joka avaa sen (Escape peruuttaa)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Pidä yhtä tai useampaa näppäintä pohjassa ja paina sitten sitä, joka avaa varaston. Painettu näppäin piilotetaan peliltä, kun muita pidetään pohjassa.
+Hold other keys back while Ctrl is down	Pidätä muut näppäimet, kun Ctrl on pohjassa
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Kuinka monta Yksityisen varaston paikkaa tulee ostamistasi laajennuksista ja tarinasta. Liukusäätimen kokonaismäärä laskee ne mukaan, joten peruskoko on kokonaismäärä miinus nämä.
+item %u	esine %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Esineet, jotka automaattinen varastointi jättää aina laukkuun. Oletuksena tämä on jokainen valuutta: hopea, kolikkopussit, kultaharkot, leirin varat ja tarvikkeet, merkit ja joukkovelkakirjat. Palauta oletusarvot alla palauttaa tämän listan.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Sen asetukset ovat tiedostossa PrivateStorageMaster.ini liitännäisen vieressä. Tässä tehdyt muutokset tallennetaan sinne heti.
+Last error	Viimeisin virhe
+Leave every size alone	Jätä kaikki koot ennalleen
+left as the game has them	jätetty sellaisiksi kuin peli ne pitää
+load a save to see it	lataa tallennus nähdäksesi sen
+more matches; type more of the name	lisää osumia; kirjoita enemmän nimestä
+Never move	Älä koskaan siirrä
+no item by that name that is not listed already	ei esinettä tällä nimellä, jota ei jo ole listattu
+none seen	ei nähty yhtään
+not found, bound keys also reach the game	ei löytynyt, sidotut näppäimet tavoittavat myös pelin
+Not on this game version: Private Storage Master could not find the move it needs.	Ei tässä pelin versiossa: Private Storage Master ei löytänyt tarvitsemaansa siirtoa.
+nothing	ei mitään
+now %d of %d used	nyt %d/%d käytössä
+off, see the error below	pois päältä, katso virhe alla
+off, the mod is disabled	pois päältä, modi on poistettu käytöstä
+on XInput slot %d	XInput-paikassa %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Päällä siirretään vain juuri saapunut määrä, joten ruoka ja juomat, joita jo kannoit, pysyvät laukussa. Pois päältä koko pino menee.
+Only move what was picked up	Siirrä vain se, mikä poimittiin
+Open now	Avaa nyt
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	paina näppäintä, halutessasi yhdessä Ctrl-, Shift- tai Alt-näppäimen kanssa (Escape peruuttaa)
+Private Storage expansions	Yksityisen varaston laajennukset
+Private Storage Master %s for game build %s	Private Storage Master %s, pelin versio %s
+Private Storage Master did not hand over its defaults	Private Storage Master ei luovuttanut oletusarvojaan
+Private Storage Master did not hand over its store loot settings.	Private Storage Master ei luovuttanut lootin varastointiasetuksiaan.
+Private Storage Master on	Private Storage Master päällä
+Private Storage Master refused the change	Private Storage Master hylkäsi muutoksen
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi on myös asennettuna. Molemmat muuttavat samoja pelin osia; poista se.
+Put what Master Looter picks up into storage	Laita se, minkä Master Looter poimii, varastoon
+read from the save	luettu tallennuksesta
+Reload from the ini	Lataa uudelleen ini-tiedostosta
+Remove	Poista
+Reset to defaults	Palauta oletusarvot
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Ruumiin tai raadon tutkiminen luovuttaa kaiken, mitä se sisältää, ja modi näkee sen vasta, kun se on laukussa. Päällä: se niistä, mitkä esinesääntösi, tunnisteesi, luokkasi tai arvoraja hylkäävät, laitetaan suoraan takaisin maahan viereesi, samalla pudotuksella, jota peli käyttää, kun pudotat jotain itse, yksi kasa per pino. Tämä kattaa modin omat tutkimiset ja ruumiit, jotka lemmikki tai kumppani ryöstää, joiden hylätyt esineet putoavat myös viereesi. Ruumis, jonka tutkit itse, säilyttää sen, minkä se maksoi. Rahat, asiakirjat, tehtäväesineet ja suojatut esineet pysyvät laukussa.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Tappamiesi ihmisten tutkiminen, kerran ruumista kohden. Eläimet kuuluvat kohtaan Raadot. Tutkimisen tuotto saapuu ennen kuin suodattimesi näkevät sen, aivan kuten raadon kohdalla, ja Pudota hylätty lootti ruumiista kohdassa Yleiset laittaa takaisin sen, minkä ne hylkäävät.
+set	asetettu
+set this launch	asetettu tällä käynnistyskerralla
+Settings file	Asetustiedosto
+Show a notice when loot is stored	Näytä ilmoitus, kun lootti varastoidaan
+Size changes take effect the next time the game starts.	Kokomuutokset astuvat voimaan seuraavalla kerralla, kun peli käynnistyy.
+Sizes	Koot
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Tappamiesi eläinten nylkeminen, kerran raatoa kohden. Ihmiset kuuluvat kohtaan Ruumiit. Modi ei koskaan näe, mitä nylkeminen tuottaa, ennen kuin se saapuu, joten suodattimesi eivät voi estää sen saapumista. Jos haluat, että se, minkä ne hylkäävät, laitetaan takaisin maahan, kytke päälle Pudota hylätty lootti ruumiista kohdassa Yleiset.
+Some changes take effect the next time the game starts.	Jotkin muutokset astuvat voimaan seuraavalla kerralla, kun peli käynnistyy.
+Stop pets looting bodies	Estä lemmikkejä ryöstämästä ruumiita
+Stop pets picking up loose items	Estä lemmikkejä poimimasta irtoesineitä
+Storage	Varasto
+Storage keys	Varastonäppäimet
+Storage sizes	Varastokoot
+Store loot	Varastoi lootti
+Store what your pet loots from bodies	Varastoi se, minkä lemmikkisi ryöstää ruumiista
+Storing loot needs a newer Private Storage Master.	Lootin varastointi vaatii uudemman Private Storage Masterin.
+the size dump	kokotuloste
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Peli kysyy ennen kuin lemmikki ottaa maassa makaavan esineen, ja tämä vastaa ei. Lemmikki kävelee sen ohi eikä mitään tarvitse poistaa jälkikäteen. Kysyykö palkkasoturi samaa kysymystä, ei ole testattu.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Peli kysyy erikseen ennen kuin lemmikki ryöstää ruumiin, ja tämä vastaa ei. Kytke toinen näistä kahdesta päälle ja toinen ei, jos haluat lemmikin riisuvan ruumiita mutta ei poimivan irtoesineitä, tai päinvastoin.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Näppäinsidonnat tuotiin tiedostosta PrivateStorageAnywhere.ini ensimmäisellä käynnistyskerralla.
+the key-block toggle	näppäinesto-kytkin
+The list is full at %d items.	Lista on täynnä %d esineen kohdalla.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Kokonaismäärä, mukaan lukien ostetut laajennukset ja tarinan paikat. Vasen pää säilyttää pelin koon.
+This chest holds one of each collectible, so its slots cannot be changed.	Tämä arkku sisältää yhden jokaista keräilyesinettä, joten sen paikkoja ei voi muuttaa.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Tämä välilehti tarvitsee Private Storage Masterin version, joka vastaa tätä Master Looterin versiota.
+Turn that on and off	Kytke se päälle ja pois
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Kun Ctrl tai mikä tahansa muunnosnäppäin, jota varastonäppäimesi käyttävät, on pohjassa, muut näppäimet pidätetään peliltä, joten varastonäppäimeltä lipsahtaminen ei laukaise kykyä. Liikkuminen, välilyönti, Tab, Enter, Escape, Alt+F4 ja näppäimet, joita peli käyttää Ctrl:n kanssa (Z, Shift, +), pääsevät silti läpi.
+working	toimii
+Write the size dump to the log	Kirjoita kokotuloste lokiin
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Kirjoittaa jokaisen näppäimen painalluksen, avaamisen ja sulkemisen tiedostoon PrivateStorageMaster.log, ja säilyttää viimeiset 24 pelikertaa. Pois päältä loki säilyttää käynnistysyhteenvedon, virheet ja kokotulosteen, sekä viimeiset kaksi pelikertaa.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Kirjoittaa jokaisen näppäimen painalluksen, avaamisen ja sulkemisen tiedostoon PrivateStorageMaster.log. Pois päältä loki säilyttää käynnistysyhteenvedon, virheet ja kokotulosteen.
+your own camp farm (off)	oma leirisi maatila (pois päältä)

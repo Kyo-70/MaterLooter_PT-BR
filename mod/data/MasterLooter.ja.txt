@@ -30,13 +30,11 @@
 1 match%s	1件一致%s
 3 of 3	3/3
 \"%s\" already exists. Saving over it asks first.	\"%s\"は既に存在します。上書き保存時には確認が入ります。
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	ペットは好きなものを拾ってしまい、ゲーム側にそれを止める設定はありません。オンにすると、ペット、傭兵、仲間が拾ったもののうち、あなたのアイテムルール、タグ、クラス、価値の下限が拒否したはずのものは、持ち物に入った時点で削除され、何が消えたかを通知が知らせます。クエストアイテムと保護されたアイテムは決して削除されず、すでに袋に入っているものには一切手を付けません。\n\nオンにする前に知っておくべきこと。仲間が地面のアイテムを拾ったとき、ゲームはそれをあなた自身が拾ったものとして報告し、この二つを見分ける手段はありません。そのため仲間を連れて行動している間は、あなたが自分の手で拾ったもののうち、自分のルールが拒否するものも仲間の分と一緒に削除されます。誰も連れていなければ、あなたが拾ったものには一切手を付けません。すべて持ち帰って自分で仕分けたい場合は、これをオフのままにしてください。
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	井戸のバケツなどは自動ルートの対象になりませんが、起動しておくと近づいたときに手動で使える状態になります。
 Abyss and Kuku	アビスとクク
 Abyss gear, Kuku pots and their parts.	アビス製の装備、ククの壺とその部品。
 Accessories	アクセサリー
 allowed	許可
-already in your bag	バッグに既にあります
 always	常に
 always beats the class rule; never beats always	「常に」はクラスのルールより優先され、「決して」は「常に」より優先されます
 Ammunition	弾薬
@@ -196,7 +194,6 @@ Objects per scan	1回のスキャンあたりのオブジェクト数
 on the player	本人に近すぎる
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	オンにすると鉱脈はその場で採掘され、つるはしを振ることは一切ありません。オフでは鉱脈には手を付けず、自分で崩した鉱石片だけが拾われます。鉱脈を開かせること自体が仕組みの核心のため、起動が必要です。
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	オンにするとオーバーレイはDLSSフレーム生成の下で描画されます。これにはMODがゲームへラップ済みのスワップチェーンを渡す必要があります。\n\nオフではオーバーレイはPresentフックを介して描画されます。フレーム生成がオンでない限り見た目は変わらず、他のオーバーレイMODも介入する経路をMODが避けるようになります。他のオーバーレイMODと同時に起動できない場合はこれを試してください。ゲームを起動せずにMasterLooter.iniのWrapSwapChainとして設定することもできます。
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	ゲームを起動するたびにバックアップが1つ書き込まれ、直近12個がプラグイン横のMasterLooter.backupsに保存されます。プリセットはMasterLooter.presetsにあります。再インストールをまたいで残したい場合はどちらかのフォルダをコピーしてください。
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	グループ単位で1クリックです。下の表では個別のクラスも設定でき、グループは一部だけオンの場合にダッシュ記号で表示されます。
 Open and close this menu	このメニューを開閉
 Open folder	フォルダを開く
@@ -270,7 +267,6 @@ someone is wearing this; taking it would copy it	これは誰かが装備して�
 stack at one point (storage contents)	1か所に集積（格納物）
 Status	状態
 Stop pets looting	ペットの収集を止める
-Stop pets looting at all	ペットの収集を完全に止める
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	テーブル、椅子、ベッド、カーペット、ランプ、キャンドル、絵画、壺など、床から拾う場合も専用の採集ポイントから取得する場合も含む、家具一式。ほとんどは銅貨数枚程度の価値ですが、カーペットや高級ベッドは数千に達するため、家を家具で整える前にオンにしてください。何かを収納する宝箱などは代わりに「入れ物」が対象です。初期値はオフです。
 Tag	タグ
 Tags	タグ
@@ -283,13 +279,10 @@ Take owned goods on / off	所有物の取得 オン/オフ
 take this one by hand, looting it can lock the quest	これは手で取ってください。自動で取るとクエストが進まなくなることがあります
 takes effect next launch	次回起動時に反映されます
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	エンジンは周囲をスキャンし、ルールが許可するものを取得します。オフにすると自動取得は行われませんが、一斉取得キーは引き続き使えます。
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	ペットが何かを拾う前に、ゲームは二つの問いを立てます。一つは地面に落ちているアイテムについて、もう一つは遺体についてで、これはその両方にいいえと答えます。ペットは何にも手を伸ばさないので、その後にあなたのものが削除されることはなく、あなた自身が拾ったものが問題になることもありません。ペットに拾わせたくないだけであれば、二つのうちこちらのほうが後腐れのない答えです。傭兵にまで及ぶかどうかは未検証です。ゲームが持つこの種の収集ルールは一つだけで、その両方の問いにいいえと答えているので、及ぶ可能性はあります。確実に及ぶのは「ペットと仲間はフィルターに従う」のほうです。
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	ゲームは、プレイヤーが到達できると判断したときにのみ採集ポイントのデータを埋めます。起動はこれを離れた場所から要求するもので、鉱脈をその場で採掘できるのもこの仕組みによります。鉱脈が反応するまで数秒かかる一方、茂みは一瞬で反応します。
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	ゲームは取得済みオブジェクトを遅延させて消去します。これにより、消える途中の同じオブジェクトが二重に送信されるのを防ぎます。
 The game treats this as stealing and will put a bounty on you.	ゲームはこれを窃盗とみなし、賞金をかけます。
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	MODはつるはしを振ることはありません。鉱脈自身の破壊シーケンスを実行しますが、そのとき使われるドロップ行は実際の一撃の半分しかなく、MODが採掘するとき採掘道具のボーナスは反映されません。この設定はゲームと同じドロップ経路で不足分の鉱石を追加するため、バッグに複製されたアイテムではなく、地面に実際に散らばる鉱石になります。手動採掘での道具のボーナスから1引いた値に設定してください。手動で3個産出するドリルなら、ここは2です。これはMODが打ち割った鉱脈にのみ適用されるため、手動採掘には影響せず、二つが重複することもありません。
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	倒した動物の皮剥ぎ、死骸ごとに一回。人は「遺体」の扱いです。皮剥ぎで得られるものはフィルターで確認されません。Modは届く前にそれを見ることがないため、このスイッチは全か無かです。
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	倒した人を調べる操作、遺体ごとに一回。動物は「死骸」の扱いです。調べて得られるものはフィルターで確認されないため、このスイッチも全か無かです。
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	このセッション：拾得%ld、採集%ld、捕獲%ld、死骸%ld
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	地面にある木材や枝と、それらを産出する採集ポイント。その多くが何を含むかはゲームのデータそのものから読み取られるため、クラスタブで wood クラスを拒否すれば木は立ったまま残り、その下の木材も残ります。ゲームが採集ポイントについて何も述べていない場合は、このスイッチが唯一の制御です。
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	特定の種だけ手を付けないようにするには、「アイテム」タブでその変換先を「決して」に設定してください：Item_Tench、Item_Ricefish、Item_Iguana。MODはゲームのキャラクターテーブルにあるクリーチャー自身の行を読み取るため、何かを捕獲する前にその種を把握しています。ただし一部の特殊なクリーチャーはモデル名からの推測に頼るしかなく、カテゴリのみで捕獲されます。
@@ -339,3 +332,99 @@ your rules refuse all stone	あなたのルールは石をすべて拒否して�
 your rules refuse everything this node holds	あなたのルールはこの採集ポイントの中身をすべて拒否しています
 part of a mechanism, not loose loot	仕掛けの一部で、落ちている戦利品ではありません
 yours, just out of your hand	自分のもの、手から離れただけ
+%d last time	前回は%d
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	前回から設定が変わった状態でゲームを起動すると1つバックアップが書き込まれ、直近12個がプラグイン横のMasterLooter.backupsに保存されます。プリセットはMasterLooter.presetsにあります。再インストールをまたいで残したい場合はどちらかのフォルダをコピーしてください。
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	キーまたはコントローラーの組み合わせでその保管庫をどこからでも開け、もう一度押すと閉じます。別の保管庫のキーはそちらへ直接切り替えます。
+a Master Looter key	Master Looterのキー
+a Master Looter shortcut	Master Looterのショートカット
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	アイテムがバッグに入った直後、Private Storage Masterはそれを受け入れる最初の保管庫、つまり自分でその保管庫で行うのと同じ移動先に移します。移されるのはMaster Looterが拾ったものだけで、あなたが自分の手で拾ったものは対象外です。遺体や死骸からのものは、あなたのアイテムルールが許すものだけが対象です。保管庫が開いている間や自由行動中でない間は何も移動せず、鍵、書類、クエストアイテム、「絶対に移動しない」リストにあるものはそのままで、どの保管庫も受け入れないものはバッグに残ります。
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	ペットは好きなものを拾ってしまい、ゲーム側にそれを止める設定はありません。オンにすると、あなたのアイテムルール、タグ、クラス、価値の下限が拒否する地面のアイテムにペットが手を伸ばす前に、それは断られます。遺体から拒否されるものを持ち帰った場合は、届いた時点で持ち物から削除され、何が消えたかを通知が知らせます。クエストアイテムと保護されたアイテムは決して削除されず、すでにバッグに入っているものには一切手を付けません。\n\n自分自身で拾ったものは残ります。拒否された地面のアイテムを取ったのがペットであるはずがないからです。雇われた傭兵は例外です。同じ問いが行われるかどうかは誰も確認していないため、傭兵を連れている間は、バッグに届いた拒否対象のアイテムは誰が拾ったかにかかわらず削除されます。
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	ペットや仲間が遺体を漁って見つけたものはあなたのバッグに入ります。オンにすると、あなたのアイテムルールが許す限り、それらのアイテムもMaster Looter自身の回収品と同じように保管庫へ送られます。ペットが拾った地面のアイテムはゲームによってあなた自身の回収として報告されるため、そちらはバッグに残ります。
+a seed planted in your camp farm	野営地の畑に植えた種
+Add	追加
+add an item: type 3+ letters of its name	アイテムを追加: 名前を3文字以上入力
+also %s	%sも
+an ore vein, left to your pickaxe while Mine ore veins for you is off	鉱脈。「鉱脈を代わりに採掘する」がオフの間はつるはしに任される
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	多くて1秒に1行、それぞれの保管庫の名前と入った個数を表示します。オフでは何も表示されず、ログにのみ記録されます。
+Click again to reset	もう一度クリックしてリセット
+Detailed log	詳細ログ
+Drop refused loot from bodies	遺体から拒否された戦利品を地面に戻す
+Each item goes to the first storage in this list that takes it.	各アイテムはこのリストの中で最初に受け入れる保管庫へ送られます。
+Empty: auto-store may move anything a storage takes.	空欄: 自動格納は保管庫が受け入れるものなら何でも移動できます。
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	各保管庫のサイズと使用中のスロット数をPrivateStorageMaster.logに書き込みます。サイズに関する報告に添付してください。
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	JSON容量modの場合: 下のサイズ設定は無視され、ゲームかそのmodが決めます。
+game size (%d)	ゲームのサイズ (%d)
+Game window	ゲームウィンドウ
+hold a button, then press the one that opens it (Escape cancels)	ボタンを押したままにして、それを開くボタンを押す (Escapeでキャンセル)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	1つ以上のボタンを押したままにして、保管庫を開くボタンを押します。押されたボタンは、他のボタンが押されている間ゲームからは隠されます。
+Hold other keys back while Ctrl is down	Ctrlが押されている間は他のキーを止める
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	購入した拡張とストーリーから得られる個人保管庫のスロット数。スライダーの合計にはこれらも含まれるため、基本サイズは合計からこれらを引いた値です。
+item %u	アイテム %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	自動格納が常にバッグに残すアイテム。既定はあらゆる通貨です。銀貨、コインポーチ、金塊、野営地の資金と物資、トークンと証書。下の「既定値にリセット」でこのリストを戻します。
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	その設定はプラグイン横のPrivateStorageMaster.iniにあります。ここでの変更は即座にそこへ保存されます。
+Last error	直近のエラー
+Leave every size alone	すべてのサイズをそのままにする
+left as the game has them	ゲームの値のまま
+load a save to see it	セーブを読み込むと確認できます
+more matches; type more of the name	一致が他にもあります。名前をさらに入力してください
+Never move	絶対に移動しない
+no item by that name that is not listed already	すでに一覧にないその名前のアイテムはありません
+none seen	まだ見ていません
+not found, bound keys also reach the game	見つかりません。割り当て済みのキーもゲームに届きます
+Not on this game version: Private Storage Master could not find the move it needs.	このゲームバージョンでは非対応: Private Storage Masterは必要な移動先を見つけられませんでした。
+nothing	なし
+now %d of %d used	現在%d/%d使用中
+off, see the error below	オフ、下のエラーを参照
+off, the mod is disabled	オフ、modが無効です
+on XInput slot %d	XInputスロット%d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	オンでは、届いたばかりの量だけが移動し、すでに持っていた食料や薬はバッグに残ります。オフでは、スタック全体が移動します。
+Only move what was picked up	拾ったものだけを移動する
+Open now	今すぐ開く
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	キーを押してください。必要ならCtrl、Shift、Altも併用できます (Escapeでキャンセル)
+Private Storage expansions	個人保管庫の拡張
+Private Storage Master %s for game build %s	Private Storage Master %s (対応ゲームビルド %s)
+Private Storage Master did not hand over its defaults	Private Storage Masterが既定値を渡しませんでした
+Private Storage Master did not hand over its store loot settings.	Private Storage Masterが戦利品の格納設定を渡しませんでした。
+Private Storage Master on	Private Storage Master有効
+Private Storage Master refused the change	Private Storage Masterが変更を拒否しました
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asiも導入されています。両者はゲームの同じ部分を変更するため、そちらを削除してください。
+Put what Master Looter picks up into storage	Master Looterが拾ったものを保管庫に入れる
+read from the save	セーブから読み込み済み
+Reload from the ini	iniから再読み込み
+Remove	削除
+Reset to defaults	既定値にリセット
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	遺体や死骸を調べると、その中身がすべて渡され、modはバッグに入って初めてそれを見ます。オンにすると、あなたのアイテムルール、タグ、クラス、価値の下限が拒否するものは、自分で何かを落としたときにゲームが使うのと同じドロップ処理を通じて、すぐにあなたの脇の地面に戻されます。スタックごとに1つの山になります。これはmod自身の調査と、ペットや仲間が漁る遺体の両方に適用され、それらで拒否されたアイテムもあなたの脇に落ちます。自分で調べた遺体は、支払われたものをそのまま保持します。お金、書類、クエストアイテム、保護されたアイテムはバッグに残ります。
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	倒した人を調べる操作、遺体ごとに一回。動物は「死骸」の扱いです。調べて得られるものは、死骸のときと同じくフィルターに見られる前に届き、「一般」にある「遺体から拒否された戦利品を地面に戻す」が拒否されたものを地面に戻します。
+set	設定済み
+set this launch	今回の起動のみ設定
+Settings file	設定ファイル
+Show a notice when loot is stored	戦利品が格納されたら通知する
+Size changes take effect the next time the game starts.	サイズの変更は次回のゲーム起動時に反映されます。
+Sizes	サイズ
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	倒した動物の皮剥ぎ、死骸ごとに一回。人は「遺体」の扱いです。modは皮剥ぎで得られるものを届く前には一切見ないため、フィルターで到着を止めることはできません。拒否されるものを地面に戻すには、「一般」の「遺体から拒否された戦利品を地面に戻す」をオンにしてください。
+Some changes take effect the next time the game starts.	一部の変更は次回のゲーム起動時に反映されます。
+Stop pets looting bodies	ペットが遺体を漁るのを止める
+Stop pets picking up loose items	ペットが地面のアイテムを拾うのを止める
+Storage	保管庫
+Storage keys	保管庫のキー
+Storage sizes	保管庫のサイズ
+Store loot	戦利品を格納する
+Store what your pet loots from bodies	ペットが遺体から漁るものを格納する
+Storing loot needs a newer Private Storage Master.	戦利品の格納には新しいバージョンのPrivate Storage Masterが必要です。
+the size dump	サイズダンプ
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	ゲームは、ペットが地面にあるアイテムを取る前に許可を求め、これはそれにいいえと答えます。ペットはそれを素通りするため、後で削除する必要も生じません。傭兵にも同じ問いが行われるかどうかは未検証です。
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	ゲームは、ペットが遺体を漁る前にも別途許可を求め、これはそれにいいえと答えます。ペットに死体を漁らせたいが地面のアイテムは集めさせたくない場合、あるいはその逆の場合は、二つのうち一方だけをオンにしてください。
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	キー割り当ては初回起動時にPrivateStorageAnywhere.iniから引き継がれました。
+the key-block toggle	キーブロックの切り替え
+The list is full at %d items.	リストは%d個のアイテムで満杯です。
+The total, purchased expansions and story slots included. The left end keeps the game's size.	購入した拡張とストーリーのスロットを含めた合計です。左端はゲームのサイズを保ちます。
+This chest holds one of each collectible, so its slots cannot be changed.	この宝箱にはコレクションアイテムが1種類ずつ入っているため、スロット数は変更できません。
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	このタブには、このバージョンのMaster Looterに対応したPrivate Storage Masterのビルドが必要です。
+Turn that on and off	オンとオフを切り替える
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Ctrl、または保管庫のキーが使う修飾キーが押されている間、他のキーはゲームから遠ざけられるため、保管庫のキーから指が滑ってもスキルは発動しません。移動、Space、Tab、Enter、Escape、Alt+F4、そしてゲームがCtrlと併用するキー(Z、Shift、+)はそのまま届きます。
+working	動作中
+Write the size dump to the log	サイズダンプをログに書き込む
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	すべてのキー入力、開閉をPrivateStorageMaster.logに書き込み、直近24セッションを保持します。オフでは、ログは起動時の概要、エラー、サイズダンプ、そして直近2セッションのみを保持します。
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	すべてのキー入力、開閉をPrivateStorageMaster.logに書き込みます。オフでは、ログは起動時の概要、エラー、サイズダンプのみを保持します。
+your own camp farm (off)	あなた自身の野営地の畑 (オフ)

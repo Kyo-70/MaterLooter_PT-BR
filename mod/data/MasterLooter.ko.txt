@@ -31,13 +31,11 @@
 1 match%s	1개 일치%s
 3 of 3	3 중 3
 \"%s\" already exists. Saving over it asks first.	\"%s\"이(가) 이미 있습니다. 덮어쓰기 전에 먼저 확인합니다.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	펫은 마음에 드는 것을 아무거나 주워 가며 게임에는 이를 막을 설정이 없습니다. 켜면, 펫과 용병, 동료가 주운 것 가운데 당신의 아이템 규칙, 태그, 분류, 가치 하한이 거부했을 것은 소지품에 들어오는 즉시 삭제되고, 무엇이 사라졌는지 알림이 알려 줍니다. 퀘스트 아이템과 보호된 아이템은 절대 삭제되지 않으며, 이미 가방에 있던 것에는 전혀 손대지 않습니다.\n\n켜기 전에 알아 둘 점이 있습니다. 동료가 땅에 있는 아이템을 주우면 게임은 그것을 당신이 직접 주운 것처럼 알리며, 둘을 구별할 방법이 없습니다. 그래서 동료를 데리고 다니는 동안에는 당신이 손으로 주운 것 가운데 당신 자신의 규칙이 거부하는 것도 동료 몫과 함께 삭제됩니다. 아무도 데리고 있지 않으면 당신이 주운 것에는 전혀 손대지 않습니다. 전부 가지고 가서 직접 정리하고 싶다면 이 설정은 꺼 두십시오.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	두레박 같은 것은 절대 자동으로 루팅되지 않지만, 활성화하면 게임이 상호작용을 제공하여 직접 손으로 사용할 수 있습니다.
 Abyss and Kuku	Abyss와 Kuku
 Abyss gear, Kuku pots and their parts.	Abyss 장비, Kuku 단지 및 그 부품.
 Accessories	장신구
 allowed	허용
-already in your bag	이미 가방에 있음
 always	항상
 always beats the class rule; never beats always	"항상"은 분류 규칙보다 우선하고, "절대 안 함"은 "항상"보다 우선합니다
 Ammunition	탄약
@@ -197,7 +195,6 @@ Objects per scan	스캔당 오브젝트 수
 on the player	플레이어에게 있음
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	켜면 광맥이 그 자리에서 채굴되어 곡괭이를 휘두를 일이 없습니다. 끄면 광맥은 그대로 두고 직접 떼어낸 조각만 줍습니다. 활성화가 필요합니다. 광맥을 열도록 요청하는 것이 핵심이기 때문입니다.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	켜면 오버레이가 DLSS 프레임 생성 아래에서 그려지며, 이를 위해 이 모드가 게임에 래핑된 스왑체인을 전달해야 합니다.\n\n끄면 오버레이는 대신 Present 훅을 통해 그려집니다. 프레임 생성을 켜지 않는 한 겉보기는 동일하며, 이 모드는 다른 오버레이 모드도 패치하는 경로를 건드리지 않습니다. 다른 오버레이 모드와 함께 게임이 시작되지 않을 때 시도해 보세요. 게임을 실행하지 않고도 MasterLooter.ini에서 WrapSwapChain으로 설정할 수 있습니다.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	게임이 시작될 때마다 백업이 하나씩 기록되며, 플러그인 옆의 MasterLooter.backups 폴더에 최근 12개가 보관됩니다. 프리셋은 MasterLooter.presets에 있습니다. 재설치 후에도 보존하려면 두 폴더 중 필요한 것을 복사해 두세요.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	클릭 한 번으로 그룹 전체를 설정합니다. 아래 표에서는 여전히 개별 분류를 설정할 수 있으며, 그룹 중 일부만 켜져 있으면 대시(-)로 표시됩니다.
 Open and close this menu	이 메뉴 열기/닫기
 Open folder	폴더 열기
@@ -271,7 +268,6 @@ someone is wearing this; taking it would copy it	누군가 착용 중입니다. 
 stack at one point (storage contents)	한 지점에 쌓임 (보관함 내용물)
 Status	상태
 Stop pets looting	펫이 줍지 못하게 하기
-Stop pets looting at all	펫이 아예 줍지 못하게 하기
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	탁자, 의자, 침대, 카펫, 램프, 초, 그림, 단지 등 가구가 갖춰진 방을 이루는 나머지 것들로, 바닥에서 줍든 고유의 상호작용 노드에서 획득하든 마찬가지입니다. 대부분 구리 한두 닢 가치이지만 카펫과 고급 침대는 수천에 이르므로, 집을 꾸미기 전에 이 항목을 켜 두세요. 무언가를 담고 있는 상자 등은 대신 "용기"에 해당합니다. 기본값은 끔.
 Tag	태그
 Tags	태그
@@ -284,13 +280,10 @@ Take owned goods on / off	소유물 가져가기 켜기/끄기
 take this one by hand, looting it can lock the quest	이것은 직접 손으로 집으십시오. 자동으로 주우면 퀘스트가 막힐 수 있습니다
 takes effect next launch	다음 실행 시 적용됨
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	엔진이 주변을 스캔하여 규칙이 허용하는 것을 가져갑니다. 끄면 아무것도 자동으로 가져가지 않으며, 속성 루팅 키는 여전히 작동합니다.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	게임은 펫이 무언가를 줍기 전에 두 가지를 묻습니다. 하나는 땅에 떨어진 아이템에 대해서, 다른 하나는 시신에 대해서이며, 이 설정은 둘 다에 아니요라고 답합니다. 펫이 아무것에도 손을 뻗지 않으므로 그 뒤에 당신의 물건이 삭제되는 일이 없고, 당신이 직접 주운 것이 문제가 되는 일도 없습니다. 그저 펫이 줍는 것을 원하지 않는다면 두 가지 중 이쪽이 더 깔끔한 답입니다. 용병에게까지 미치는지는 확인되지 않았습니다. 게임에는 이런 종류의 수거 규칙이 하나뿐이고 그 두 물음 모두에 아니요로 답하므로 미칠 수도 있습니다. 확실히 미치는 것은 펫과 동료가 필터를 따름 쪽입니다.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	게임은 손이 닿는다고 판단할 때만 노드의 데이터를 채웁니다. 활성화는 멀리서도 그렇게 하도록 요청하는 것으로, 이 덕분에 광맥도 그 자리에서 채굴할 수 있습니다. 덤불은 순식간에 반응하지만 광맥은 반응하는 데 몇 초가 걸립니다.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	게임은 딜레이를 두고 획득한 오브젝트를 제거합니다. 이는 오브젝트가 사라지는 동안 같은 것이 두 번 전송되는 것을 막습니다.
 The game treats this as stealing and will put a bounty on you.	게임은 이를 절도로 취급하며 현상금을 부과합니다.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	이 모드는 곡괭이를 휘두르지 않습니다. 광맥 자체의 파괴 시퀀스를 그대로 구동하며, 이때 게임은 드롭 목록을 한 줄만 처리합니다. 실제 타격은 두 줄을 처리하므로, 모드가 채굴할 때는 채광 도구의 보너스가 전혀 적용되지 않습니다. 이 설정은 게임이 사용하는 동일한 드롭 경로를 통해 빠진 광석을 다시 채워 넣으므로, 가방에 복사되어 들어오는 아이템이 아니라 실제로 바닥에 쏟아지는 광석입니다. 손으로 캤을 때 도구가 주는 양에서 1을 뺀 값으로 설정하세요: 손으로 캤을 때 3을 주는 드릴이라면 여기서는 2가 필요합니다. 이 모드가 깨뜨린 광맥에만 적용되므로 손으로 캐는 것은 영향받지 않으며 둘은 중첩되지 않습니다.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	처치한 동물의 가죽 벗기기, 사체당 한 번. 사람은 시신 항목에 속합니다. 가죽 벗기기로 얻는 것은 필터로 확인되지 않습니다. 모드는 그것이 도착하기 전에 볼 수 없으므로 이 스위치는 전부 아니면 전무입니다.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	처치한 사람 수색, 시신당 한 번. 동물은 사체 항목에 속합니다. 수색으로 얻는 것은 필터로 확인되지 않으므로 이 스위치도 전부 아니면 전무입니다.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	이번 세션: 습득 %ld개, 채집 %ld개, 포획 %ld개, 박피 %ld구
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	땅에 있는 목재와 나뭇가지, 그리고 그것을 내놓는 노드. 그 대부분이 무엇을 담고 있는지는 게임 데이터에서 직접 읽어 오므로, 분류 탭에서 wood 분류를 거부하면 나무도 서 있는 그대로 남고 그 아래의 목재도 남습니다. 게임이 노드에 대해 아무 말도 하지 않는 곳에서는 이 설정이 가진 유일한 통제 수단입니다.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	특정 종을 건드리지 않으려면 "아이템" 탭에서 해당 종이 변하는 아이템을 "절대 안 함"으로 설정하세요: Item_Tench, Item_Ricefish, Item_Iguana. 이 모드는 게임의 캐릭터 표에서 생물 고유의 행을 읽으므로 무언가를 포획하기 전에 어떤 종인지 이미 알고 있습니다. 일부 특이한 생물은 여전히 모델 이름으로 추측하며 분류로만 포획됩니다.
@@ -340,3 +333,99 @@ your rules refuse all stone	당신의 규칙이 모든 돌을 거부합니다
 your rules refuse everything this node holds	당신의 규칙이 이 노드에 든 것을 전부 거부합니다
 part of a mechanism, not loose loot	장치의 일부이며 떨어진 전리품이 아닙니다
 yours, just out of your hand	본인 소유, 손에서 벗어났을 뿐
+%d last time	지난번 %d개
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	마지막 저장 이후로 설정이 바뀐 채로 게임이 시작되면 백업이 하나 기록되며, 플러그인 옆의 MasterLooter.backups 폴더에 최근 12개가 보관됩니다. 프리셋은 MasterLooter.presets에 있습니다. 재설치 후에도 보존하려면 두 폴더 중 필요한 것을 복사해 두세요.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	키나 컨트롤러 조합으로 어디서든 그 보관함을 열고, 다시 누르면 닫습니다. 다른 보관함의 키를 누르면 바로 그쪽으로 전환됩니다.
+a Master Looter key	Master Looter 키
+a Master Looter shortcut	Master Looter 단축키
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	아이템이 가방에 들어온 직후, Private Storage Master는 그것을 아래 목록에서 받아 주는 첫 보관함으로 옮깁니다. 당신이 직접 그 보관함에서 할 법한 것과 같은 이동입니다. 옮겨지는 것은 Master Looter가 주운 것뿐이며, 당신이 손으로 주운 것은 결코 옮기지 않습니다. 시신이나 사체에서 나온 것은 당신의 아이템 규칙이 허용하는 것만 옮깁니다. 보관함이 열려 있거나 자유 행동 중이 아닐 때는 아무것도 옮기지 않으며, 열쇠, 서류, 퀘스트 아이템, 절대 옮기지 않음 목록에 있는 것은 그대로 두고, 어떤 보관함도 받지 않는 것은 가방에 남습니다.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	펫은 마음에 드는 것을 아무거나 주워 가며 게임에는 이를 막을 설정이 없습니다. 켜면, 당신의 아이템 규칙, 태그, 분류, 가치 하한이 거부할 땅 위의 아이템에 펫이 손을 뻗기 전에 안 된다고 알립니다. 시신에서 가져온 것 가운데 그것들이 거부하는 것은 도착하는 즉시 소지품에서 삭제되며, 무엇이 사라졌는지 알림이 알려 줍니다. 퀘스트 아이템과 보호된 아이템은 절대 삭제되지 않으며, 이미 가방에 있던 것에는 전혀 손대지 않습니다.\n\n당신이 직접 주운 것은 그대로 남습니다. 거부된 땅 위의 아이템을 주운 것이 펫일 수는 없기 때문입니다. 고용된 용병은 예외입니다. 같은 질문을 받는지는 아무도 확인하지 않았으므로, 용병을 데리고 있는 동안에는 가방에 들어온 거부 대상 아이템이 누가 주웠든 삭제됩니다.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	펫이나 동료가 시신을 뒤져 찾은 것은 당신의 가방에 들어갑니다. 켜면, 당신의 아이템 규칙이 허용하는 한 그 아이템들도 Master Looter 자신의 수거물과 같은 방식으로 보관함에 들어갑니다. 펫이 주운 땅 위의 아이템은 게임에 의해 당신 자신의 수거물로 보고되므로, 그것들은 가방에 남습니다.
+a seed planted in your camp farm	야영지 농장에 심은 씨앗
+Add	추가
+add an item: type 3+ letters of its name	아이템 추가: 이름을 3자 이상 입력
+also %s	%s도
+an ore vein, left to your pickaxe while Mine ore veins for you is off	광맥, 광맥을 대신 채굴이 꺼져 있는 동안에는 곡괭이에 맡겨짐
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	초당 최대 한 줄로, 각 보관함의 이름과 그곳에 들어간 개수를 표시합니다. 꺼짐에서는 아무것도 표시되지 않고 로그에만 기록됩니다.
+Click again to reset	다시 클릭하면 초기화
+Detailed log	상세 로그
+Drop refused loot from bodies	시신에서 거부된 전리품을 도로 내려놓기
+Each item goes to the first storage in this list that takes it.	각 아이템은 이 목록에서 그것을 받아 주는 첫 보관함으로 갑니다.
+Empty: auto-store may move anything a storage takes.	비어 있음: 자동 보관은 어떤 보관함이든 받아 주는 것이라면 무엇이든 옮길 수 있습니다.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	각 보관함의 크기와 사용 중인 슬롯 수를 PrivateStorageMaster.log에 기록합니다. 용량 보고서에 첨부하세요.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	JSON 용량 모드용: 아래의 보관함 크기는 무시되며 게임이나 그 모드가 결정합니다.
+game size (%d)	게임 크기 (%d)
+Game window	게임 창
+hold a button, then press the one that opens it (Escape cancels)	버튼을 누른 채로, 그것을 여는 버튼을 누르세요 (Escape로 취소)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	버튼을 하나 이상 누른 채로, 보관함을 여는 버튼을 누르세요. 누른 버튼은 다른 버튼이 눌려 있는 동안 게임에는 감춰집니다.
+Hold other keys back while Ctrl is down	Ctrl이 눌려 있는 동안 다른 키 막기
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	구매한 확장과 스토리에서 나오는 개인 보관함 슬롯 수입니다. 슬라이더의 합계에는 이것들도 포함되므로, 기본 크기는 합계에서 이것들을 뺀 값입니다.
+item %u	아이템 %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	자동 보관이 항상 가방에 남기는 아이템입니다. 기본값은 모든 화폐입니다. 은화, 동전 주머니, 금괴, 야영지 자금과 물자, 토큰과 채권입니다. 아래의 기본값으로 재설정을 누르면 이 목록이 원래대로 돌아갑니다.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	이 설정은 플러그인 옆의 PrivateStorageMaster.ini에 있습니다. 여기서의 변경 사항은 즉시 그곳에 저장됩니다.
+Last error	최근 오류
+Leave every size alone	모든 크기를 그대로 두기
+left as the game has them	게임이 정한 그대로
+load a save to see it	확인하려면 세이브를 불러오세요
+more matches; type more of the name	일치하는 것이 더 있습니다. 이름을 더 입력하세요
+Never move	절대 옮기지 않음
+no item by that name that is not listed already	그 이름의 아이템은 모두 이미 목록에 있습니다
+none seen	아직 본 적 없음
+not found, bound keys also reach the game	찾을 수 없음, 배정된 키도 게임에 전달됩니다
+Not on this game version: Private Storage Master could not find the move it needs.	이 게임 버전에서는 지원하지 않음: Private Storage Master가 필요한 이동 방법을 찾지 못했습니다.
+nothing	없음
+now %d of %d used	현재 %d/%d 사용 중
+off, see the error below	꺼짐, 아래의 오류를 확인하세요
+off, the mod is disabled	꺼짐, 모드가 비활성화됨
+on XInput slot %d	XInput 슬롯 %d에서
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	켜면, 방금 도착한 양만 옮겨지므로 이미 가지고 있던 음식과 물약은 가방에 남습니다. 끄면, 더미 전체가 옮겨집니다.
+Only move what was picked up	주운 것만 옮기기
+Open now	지금 열기
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	키를 누르세요. 원한다면 Ctrl, Shift, Alt도 함께 누를 수 있습니다 (Escape로 취소)
+Private Storage expansions	개인 보관함 확장
+Private Storage Master %s for game build %s	게임 빌드 %s용 Private Storage Master %s
+Private Storage Master did not hand over its defaults	Private Storage Master가 기본값을 건네주지 않았습니다
+Private Storage Master did not hand over its store loot settings.	Private Storage Master가 전리품 보관 설정을 건네주지 않았습니다.
+Private Storage Master on	Private Storage Master 켜짐
+Private Storage Master refused the change	Private Storage Master가 변경을 거부했습니다
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi도 설치되어 있습니다. 둘은 게임의 같은 부분을 바꾸므로, 그것을 제거하세요.
+Put what Master Looter picks up into storage	Master Looter가 줍는 것을 보관함에 넣기
+read from the save	세이브에서 읽음
+Reload from the ini	ini에서 다시 불러오기
+Remove	제거
+Reset to defaults	기본값으로 재설정
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	시신이나 사체를 수색하면 그것이 지닌 모든 것이 한꺼번에 건네지며, 모드는 그것이 가방에 들어온 뒤에야 봅니다. 켜면, 당신의 아이템 규칙, 태그, 분류, 가치 하한이 거부하는 것은 당신이 직접 무언가를 떨어뜨릴 때 게임이 쓰는 것과 같은 드롭을 통해 곧바로 당신 옆의 땅에 도로 놓입니다. 스택마다 더미 하나씩입니다. 이는 모드 자체의 수색과, 펫이나 동료가 뒤지는 시신 모두에 적용되며, 그곳에서 거부된 아이템도 마찬가지로 당신 옆에 떨어집니다. 당신이 직접 수색한 시신은 그것이 낸 것을 그대로 유지합니다. 돈, 서류, 퀘스트 아이템, 보호된 아이템은 가방에 남습니다.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	처치한 사람 수색, 시신당 한 번. 동물은 사체 항목에 속합니다. 수색으로 얻는 것은 사체와 마찬가지로 필터가 보기 전에 도착하며, 일반의 시신에서 거부된 전리품을 도로 내려놓기가 거부된 것을 도로 내려놓습니다.
+set	설정됨
+set this launch	이번 실행에서만 설정됨
+Settings file	설정 파일
+Show a notice when loot is stored	전리품이 보관되면 알림 표시
+Size changes take effect the next time the game starts.	크기 변경은 다음번 게임 시작 시 적용됩니다.
+Sizes	크기
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	처치한 동물의 가죽 벗기기, 사체당 한 번. 사람은 시신 항목에 속합니다. 모드는 가죽 벗기기로 얻는 것을 도착하기 전에는 전혀 보지 못하므로, 필터로는 도착을 막을 수 없습니다. 거부되는 것을 도로 땅에 내려놓으려면 일반의 시신에서 거부된 전리품을 도로 내려놓기를 켜세요.
+Some changes take effect the next time the game starts.	일부 변경은 다음번 게임 시작 시 적용됩니다.
+Stop pets looting bodies	펫이 시신을 뒤지지 못하게 하기
+Stop pets picking up loose items	펫이 땅 위의 아이템을 줍지 못하게 하기
+Storage	보관함
+Storage keys	보관함 키
+Storage sizes	보관함 크기
+Store loot	전리품 보관
+Store what your pet loots from bodies	펫이 시신에서 뒤진 것 보관하기
+Storing loot needs a newer Private Storage Master.	전리품 보관에는 더 새로운 버전의 Private Storage Master가 필요합니다.
+the size dump	크기 덤프
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	게임은 펫이 땅에 놓인 아이템을 가져가기 전에 허락을 구하며, 이 설정은 그것에 아니요라고 답합니다. 펫은 그것을 지나치며, 이후 삭제할 것도 생기지 않습니다. 용병에게도 같은 질문이 이루어지는지는 확인되지 않았습니다.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	게임은 펫이 시신을 뒤지기 전에도 별도로 허락을 구하며, 이 설정은 그것에 아니요라고 답합니다. 펫이 시체는 뒤지되 땅 위의 아이템은 줍지 않기를 원한다면, 또는 그 반대를 원한다면 둘 중 하나만 켜세요.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	첫 실행 시 키 배정이 PrivateStorageAnywhere.ini에서 그대로 옮겨졌습니다.
+the key-block toggle	키 차단 전환
+The list is full at %d items.	목록이 %d개의 아이템으로 가득 찼습니다.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	구매한 확장과 스토리 슬롯을 포함한 총합입니다. 왼쪽 끝은 게임의 크기를 유지합니다.
+This chest holds one of each collectible, so its slots cannot be changed.	이 보관함에는 수집품이 하나씩 들어 있어, 슬롯 수를 바꿀 수 없습니다.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	이 탭은 이 버전의 Master Looter에 맞는 Private Storage Master 빌드가 필요합니다.
+Turn that on and off	켜고 끄기
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Ctrl이나 보관함 키가 쓰는 다른 보조키가 눌려 있는 동안에는 다른 키가 게임으로부터 차단되므로, 보관함 키에서 손이 미끄러져도 스킬이 발동하지 않습니다. 이동, Space, Tab, Enter, Escape, Alt+F4, 그리고 게임이 Ctrl과 함께 쓰는 키(Z, Shift, +)는 그대로 전달됩니다.
+working	작동 중
+Write the size dump to the log	크기 덤프를 로그에 기록
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	모든 키 입력, 열기와 닫기를 PrivateStorageMaster.log에 기록하고 최근 24개 세션을 보관합니다. 꺼짐에서는 로그가 시작 요약, 오류, 크기 덤프와 최근 두 개 세션만 보관합니다.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	모든 키 입력, 열기와 닫기를 PrivateStorageMaster.log에 기록합니다. 꺼짐에서는 로그가 시작 요약, 오류, 크기 덤프만 보관합니다.
+your own camp farm (off)	당신 자신의 야영지 농장 (꺼짐)

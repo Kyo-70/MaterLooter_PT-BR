@@ -30,13 +30,11 @@
 1 match%s	1 hasil%s
 3 of 3	3 dari 3
 \"%s\" already exists. Saving over it asks first.	\"%s\" sudah ada. Menyimpan di atasnya akan meminta konfirmasi dulu.
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	Hewan peliharaan memungut apa pun yang disukainya dan gim ini tidak punya sakelar untuk itu. Aktif: apa pun yang dipungut hewan peliharaan, tentara bayaran, atau pendamping dan yang akan ditolak oleh aturan item, tag, kelas, atau ambang nilai milikmu akan dihapus dari inventaris begitu tiba, dan sebuah pemberitahuan menyebutkan apa yang hilang. Item quest dan item terlindungi tidak pernah dihapus, dan tidak ada yang sudah ada di tasmu yang disentuh.\n\nPerlu diketahui sebelum kamu mengaktifkannya: gim melaporkan pendamping yang memungut item di tanah seolah-olah kamu sendiri yang memungutnya, dan tidak ada cara membedakan keduanya. Jadi selama ada satu yang keluar dan aktif, sesuatu yang kamu pungut dengan tangan dan yang ditolak aturanmu sendiri ikut terhapus bersama miliknya. Jika tidak ada yang keluar, tidak ada yang kamu pungut yang pernah disentuh. Kalau kamu lebih suka menyimpan semuanya dan memilahnya sendiri, biarkan ini nonaktif.
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	Ember sumur dan sejenisnya tidak pernah dijarah, tapi mengaktifkannya membuat game menawarkan interaksinya sehingga kamu bisa memakainya sendiri.
 Abyss and Kuku	Abyss dan Kuku
 Abyss gear, Kuku pots and their parts.	Perlengkapan Abyss, pot Kuku, dan bagian-bagiannya.
 Accessories	Aksesori
 allowed	diizinkan
-already in your bag	sudah ada di tasmu
 always	selalu
 always beats the class rule; never beats always	selalu mengalahkan aturan kelas; tidak pernah mengalahkan selalu
 Ammunition	Amunisi
@@ -196,7 +194,6 @@ Objects per scan	Objek per pemindaian
 on the player	pada pemain
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	Aktif, urat bijih dipanen di tempatnya dan kamu tidak pernah mengayunkan beliung. Nonaktif, urat bijih dibiarkan dan hanya pecahan yang kamu lepaskan yang diambil. Butuh pengaktifan, karena meminta urat bijih terbuka adalah inti triknya.
 On, the overlay draws under DLSS frame generation, which needs this mod to hand the game a wrapped swapchain.\n\nOff, the overlay draws through the present hook instead. Everything looks the same unless frame generation is on, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod; it can be set as WrapSwapChain in MasterLooter.ini without launching the game.	Aktif, overlay digambar di bawah frame generation DLSS, yang mengharuskan mod ini menyerahkan swapchain yang dibungkus ke game.\n\nNonaktif, overlay digambar lewat present hook. Semuanya terlihat sama kecuali frame generation aktif, dan mod ini tetap menghindari jalur yang juga ditambal oleh mod overlay lain. Coba ini kalau game tidak mau berjalan bersama mod overlay lain; bisa diatur sebagai WrapSwapChain di MasterLooter.ini tanpa perlu membuka game.
-One backup is written each time the game starts and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Satu cadangan ditulis setiap kali game dimulai dan dua belas terakhir disimpan, di MasterLooter.backups di sebelah plugin. Preset berada di MasterLooter.presets. Salin salah satu folder untuk menyimpannya lewat instal ulang.
 One click per family. The table below still sets single classes; a group shows a dash when only some of it is on.	Satu klik per keluarga. Tabel di bawah tetap mengatur kelas satu per satu; grup menampilkan tanda hubung kalau hanya sebagian aktif.
 Open and close this menu	Buka dan tutup menu ini
 Open folder	Buka folder
@@ -270,7 +267,6 @@ someone is wearing this; taking it would copy it	ada yang memakainya; mengambiln
 stack at one point (storage contents)	tumpukan di satu titik (isi penyimpanan)
 Status	Status
 Stop pets looting	Cegah hewan peliharaan menjarah
-Stop pets looting at all	Cegah hewan peliharaan menjarah sama sekali
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	Meja, kursi, ranjang, karpet, lampu, lilin, lukisan, pot, dan sisa perabot ruangan lainnya, entah kamu mengambilnya dari lantai atau dari node interaksinya sendiri. Kebanyakan hanya bernilai satu-dua tembaga, tapi karpet dan ranjang mewah bisa mencapai ribuan, jadi aktifkan ini sebelum memperabot rumah. Peti dan benda lain yang menyimpan sesuatu diatur lewat Wadah, bukan ini. Nonaktif secara default.
 Tag	Tag
 Tags	Tag
@@ -283,13 +279,10 @@ Take owned goods on / off	Ambil barang bertuan, aktif / nonaktif
 take this one by hand, looting it can lock the quest	ambil yang ini dengan tangan, menjarahnya bisa mengunci quest
 takes effect next launch	berlaku mulai peluncuran berikutnya
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	Mesin memindai sekitarmu dan mengambil apa yang diizinkan aturan. Nonaktif berarti tidak ada yang diambil otomatis; tombol burst tetap berfungsi.
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	Gim mengajukan dua pertanyaan sebelum hewan peliharaan menjarah, satu untuk item lepas di tanah dan satu untuk mayat, dan ini menjawab tidak untuk keduanya. Hewan peliharaan tidak meraih apa pun, jadi setelahnya tidak ada milikmu yang terhapus dan hasil pungutanmu sendiri tidak pernah dipertanyakan. Jawaban yang lebih bersih dari keduanya jika kamu memang tidak ingin hewan peliharaan menjarah. Apakah ini menjangkau tentara bayaran belum diuji. Gim membawa satu aturan penjarahan semacam ini dan kedua pertanyaannya dijawab tidak, jadi mungkin saja; Hewan peliharaan dan pendamping mengikuti filter adalah sakelar yang pasti melakukannya.
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	Game mengisi data node hanya saat menganggap kamu bisa menjangkaunya. Pengaktifan meminta game melakukannya dari jarak jauh, yang juga memungkinkan urat bijih dipanen di tempatnya. Urat bijih butuh beberapa detik untuk merespons, sementara semak hanya butuh sepersekiannya.
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	Game menghapus objek yang diambil dengan jeda. Ini mencegah objek yang sama terkirim dua kali selagi memudar.
 The game treats this as stealing and will put a bounty on you.	Game menganggap ini pencurian dan akan menjadikanmu buronan.
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	Mod ini tidak pernah mengayunkan beliung. Ia menjalankan urutan pecah milik urat bijih itu sendiri, dan dalam hal itu game hanya melewati satu baris jatuhan padahal ayunan asli melewati dua, jadi bonus alat pertambanganmu tidak menghasilkan apa-apa saat mod yang menambang. Ini menambahkan kembali bijih yang hilang lewat jalur jatuhan yang sama dipakai game, jadi ini benar-benar bijih yang tumpah di tanah, bukan item yang disalin ke tasmu. Atur ke nilai yang dibayar alatmu secara manual dikurangi satu: bor yang memberi tiga secara manual butuh 2 di sini. Ini hanya berlaku pada urat bijih yang dipecahkan mod ini, jadi menambang manual tidak terpengaruh dan keduanya tidak bisa ditumpuk.
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	Menguliti hewan yang kamu bunuh, sekali per bangkai. Manusia masuk ke Mayat. Hasil menguliti tidak diperiksa terhadap filtermu. Mod tidak pernah melihatnya sebelum tiba, jadi sakelar ini semua atau tidak sama sekali.
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	Menggeledah orang yang kamu bunuh, sekali per mayat. Hewan masuk ke Bangkai. Hasil penggeledahan tidak diperiksa terhadap filtermu, jadi sakelar ini juga semua atau tidak sama sekali.
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	Sesi ini: %ld diambil, %ld dikumpulkan, %ld ditangkap, %ld bangkai
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	Kayu dan ranting di tanah, serta node yang menghasilkannya. Isi sebagian besar di antaranya dibaca dari data gim itu sendiri, jadi menolak kelas wood di tab Kelas membiarkan pohon tetap berdiri dan juga kayu di bawahnya. Di tempat gim tidak mengatakan apa pun tentang sebuah node, sakelar ini adalah satu-satunya kendali yang dimilikinya.
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	Untuk membiarkan satu spesies saja, atur item yang dihasilkannya ke tidak pernah di tab Item: Item_Tench, Item_Ricefish, Item_Iguana. Mod membaca baris makhluk itu sendiri di tabel karakter game, jadi ia tahu spesies apa yang sedang dilihatnya sebelum menangkap apa pun. Beberapa makhluk tidak umum masih mengandalkan tebakan dari nama modelnya dan hanya ditangkap berdasarkan kategori.
@@ -339,3 +332,99 @@ your rules refuse all stone	aturanmu menolak semua batu
 your rules refuse everything this node holds	aturanmu menolak semua yang ada di node ini
 part of a mechanism, not loose loot	bagian dari mekanisme, bukan jarahan lepas
 yours, just out of your hand	milikmu, baru saja lepas dari tanganmu
+%d last time	%d terakhir kali
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Cadangan ditulis saat gim dimulai dengan pengaturan yang berubah sejak yang terakhir, dan dua belas terakhir disimpan, di MasterLooter.backups di sebelah plugin. Preset berada di MasterLooter.presets. Salin salah satu folder untuk menyimpannya lewat instal ulang.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Kombinasi tombol keyboard atau kontroler membuka penyimpanan itu dari mana saja, dan menekannya lagi menutupnya. Tombol penyimpanan lain langsung beralih ke sana.
+a Master Looter key	tombol Master Looter
+a Master Looter shortcut	pintasan Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Sesaat setelah item tiba di tas, Private Storage Master memindahkannya ke penyimpanan pertama di bawah ini yang menerimanya, gerakan yang sama seperti yang akan kamu lakukan sendiri di penyimpanan itu. Hanya yang dipungut Master Looter yang dipindahkan, tidak pernah yang kamu pungut dengan tangan, dan dari mayat atau bangkai hanya yang diizinkan aturan itemmu. Tidak ada yang berpindah selama penyimpanan terbuka atau di luar permainan bebas, kunci, dokumen, item quest, dan apa pun di daftar Jangan pernah pindahkan tetap di tempatnya, dan yang tidak diterima penyimpanan mana pun tetap di tas.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	Hewan peliharaan memungut apa pun yang disukainya dan gim ini tidak punya sakelar untuk itu. Aktif: hewan peliharaan diberi tahu tidak sebelum meraih item lepas yang ditolak aturan item, tag, kelas, atau ambang nilaimu, dan apa pun yang diambilnya dari mayat yang ditolak aturan itu dihapus dari inventaris begitu tiba, dengan pemberitahuan yang menyebutkan apa yang hilang. Item quest dan item terlindungi tidak pernah dihapus, dan tidak ada yang sudah ada di tasmu yang disentuh.\n\nApa yang kamu pungut sendiri tetap ada, karena hewan peliharaan tidak mungkin menjadi yang mengambil item lepas yang ditolak. Tentara bayaran yang disewa adalah pengecualian: belum ada yang memeriksa apakah ia mengajukan pertanyaan yang sama, jadi selama satu sedang keluar, item yang ditolak dan tiba di tas dihapus, siapa pun yang memungutnya.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Hewan peliharaan atau pendamping yang menjarah mayat memasukkan temuannya ke tasmu. Aktif, item itu masuk ke penyimpanan dengan cara yang sama seperti pungutan Master Looter sendiri, selama aturan itemmu mengizinkannya. Item lepas yang dipungut hewan peliharaan dilaporkan gim sebagai pungutanmu sendiri, jadi itu tetap di tas.
+a seed planted in your camp farm	benih yang ditanam di kebun perkemahanmu
+Add	Tambah
+add an item: type 3+ letters of its name	tambah item: ketik 3+ huruf dari namanya
+also %s	juga %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	urat bijih, diserahkan ke beliungmu selama Tambang urat bijih untukmu nonaktif
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	Paling banyak satu baris per detik, menyebutkan setiap penyimpanan dan berapa banyak yang masuk ke dalamnya. Nonaktif, tidak ada yang ditampilkan dan hanya masuk ke log.
+Click again to reset	Klik lagi untuk mengatur ulang
+Detailed log	Log rinci
+Drop refused loot from bodies	Jatuhkan rampasan yang ditolak dari mayat
+Each item goes to the first storage in this list that takes it.	Setiap item masuk ke penyimpanan pertama di daftar ini yang menerimanya.
+Empty: auto-store may move anything a storage takes.	Kosong: penyimpanan otomatis boleh memindahkan apa pun yang diterima penyimpanan.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	Ukuran setiap penyimpanan dan berapa banyak slot yang terpakai, ditulis ke PrivateStorageMaster.log. Lampirkan ke laporan ukuran.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Untuk mod kapasitas JSON: ukuran penyimpanan di bawah ini diabaikan, dan gim, atau mod itu, yang memutuskan.
+game size (%d)	ukuran gim (%d)
+Game window	Jendela gim
+hold a button, then press the one that opens it (Escape cancels)	tahan satu tombol, lalu tekan tombol yang membukanya (Escape membatalkan)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Tahan satu atau lebih tombol, lalu tekan tombol yang membuka penyimpanan. Tombol yang ditekan disembunyikan dari gim selama tombol lain ditahan.
+Hold other keys back while Ctrl is down	Tahan tombol lain selama Ctrl ditekan
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Berapa banyak slot Penyimpanan Pribadi yang berasal dari ekspansi yang kamu beli dan dari cerita. Total pada penggeser menghitungnya juga, jadi ukuran dasar adalah total dikurangi ini.
+item %u	item %u
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Item yang selalu ditinggalkan penyimpanan otomatis di tas. Bawaannya adalah semua mata uang: perak, kantong koin, batangan emas, dana dan perbekalan kemah, token, dan obligasi. Atur ulang ke bawaan di bawah ini mengembalikan daftar itu.
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Pengaturannya berada di PrivateStorageMaster.ini di sebelah plugin. Perubahan di sini langsung disimpan di sana.
+Last error	Kesalahan terakhir
+Leave every size alone	Biarkan semua ukuran apa adanya
+left as the game has them	dibiarkan seperti yang dimiliki gim
+load a save to see it	muat save untuk melihatnya
+more matches; type more of the name	lebih banyak kecocokan; ketik lebih banyak dari namanya
+Never move	Jangan pernah pindahkan
+no item by that name that is not listed already	tidak ada item dengan nama itu yang belum terdaftar
+none seen	belum ada yang terlihat
+not found, bound keys also reach the game	tidak ditemukan, tombol yang terikat juga mencapai gim
+Not on this game version: Private Storage Master could not find the move it needs.	Tidak pada versi gim ini: Private Storage Master tidak dapat menemukan fungsi pemindahan yang dibutuhkannya.
+nothing	tidak ada
+now %d of %d used	sekarang %d dari %d terpakai
+off, see the error below	nonaktif, lihat kesalahan di bawah
+off, the mod is disabled	nonaktif, mod dinonaktifkan
+on XInput slot %d	di slot XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Aktif, hanya jumlah yang baru tiba yang dipindahkan, jadi makanan dan ramuan yang sudah kamu bawa tetap di tas. Nonaktif, seluruh tumpukan pergi.
+Only move what was picked up	Hanya pindahkan yang baru dipungut
+Open now	Buka sekarang
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	tekan tombol, dengan Ctrl, Shift, atau Alt jika kamu mau (Escape membatalkan)
+Private Storage expansions	Ekspansi Penyimpanan Pribadi
+Private Storage Master %s for game build %s	Private Storage Master %s untuk build gim %s
+Private Storage Master did not hand over its defaults	Private Storage Master tidak menyerahkan pengaturan bawaannya
+Private Storage Master did not hand over its store loot settings.	Private Storage Master tidak menyerahkan pengaturan penyimpanan rampasannya.
+Private Storage Master on	Private Storage Master aktif
+Private Storage Master refused the change	Private Storage Master menolak perubahan itu
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi juga terpasang. Keduanya mengubah bagian gim yang sama; hapus yang itu.
+Put what Master Looter picks up into storage	Masukkan yang dipungut Master Looter ke penyimpanan
+read from the save	dibaca dari save
+Reload from the ini	Muat ulang dari ini
+Remove	Hapus
+Reset to defaults	Atur ulang ke bawaan
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Menggeledah mayat atau bangkai menyerahkan semua yang dibawanya, dan mod baru melihatnya setelah masuk ke tas. Aktif: apa pun dari itu yang ditolak aturan item, tag, kelas, atau ambang nilaimu langsung diletakkan kembali ke tanah di sampingmu, lewat penjatuhan yang sama yang digunakan gim saat kamu menjatuhkan sesuatu sendiri, satu tumpukan per tumpukan. Ini mencakup penggeledahan mod sendiri dan mayat yang dijarah hewan peliharaan atau pendamping, yang item ditolaknya juga mendarat di sampingmu. Mayat yang kamu geledah sendiri menyimpan apa yang dibayarkannya. Uang, dokumen, item quest, dan item terlindungi tetap di tas.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Menggeledah orang yang kamu bunuh, sekali per mayat. Hewan masuk ke Bangkai. Hasil penggeledahan tiba sebelum filtermu melihatnya, sama seperti bangkai, dan Jatuhkan rampasan yang ditolak dari mayat di bawah Umum meletakkan kembali apa yang ditolak.
+set	diatur
+set this launch	diatur untuk peluncuran ini
+Settings file	File pengaturan
+Show a notice when loot is stored	Tampilkan pemberitahuan saat rampasan disimpan
+Size changes take effect the next time the game starts.	Perubahan ukuran berlaku saat gim dimulai lagi.
+Sizes	Ukuran
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Menguliti hewan yang kamu bunuh, sekali per bangkai. Manusia masuk ke Mayat. Mod tidak pernah melihat hasil menguliti sebelum tiba, jadi filtermu tidak bisa mencegahnya masuk. Agar yang ditolak diletakkan kembali ke tanah, aktifkan Jatuhkan rampasan yang ditolak dari mayat di bawah Umum.
+Some changes take effect the next time the game starts.	Beberapa perubahan berlaku saat gim dimulai lagi.
+Stop pets looting bodies	Cegah hewan peliharaan menjarah mayat
+Stop pets picking up loose items	Cegah hewan peliharaan memungut barang di tanah
+Storage	Penyimpanan
+Storage keys	Tombol penyimpanan
+Storage sizes	Ukuran penyimpanan
+Store loot	Simpan rampasan
+Store what your pet loots from bodies	Simpan yang dijarah hewan peliharaanmu dari mayat
+Storing loot needs a newer Private Storage Master.	Menyimpan rampasan membutuhkan Private Storage Master yang lebih baru.
+the size dump	data ukuran
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	Gim bertanya sebelum hewan peliharaan mengambil item yang tergeletak di tanah, dan ini menjawab tidak. Hewan peliharaan melewatinya begitu saja dan tidak ada yang perlu dihapus sesudahnya. Apakah tentara bayaran diberi pertanyaan yang sama belum diuji.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	Gim bertanya secara terpisah sebelum hewan peliharaan menjarah mayat, dan ini menjawab tidak. Aktifkan salah satu dari keduanya dan bukan yang lain jika kamu ingin hewan peliharaan menjarah mayat tapi tidak memungut barang lepas, atau sebaliknya.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	Ikatan tombol dibawa dari PrivateStorageAnywhere.ini pada peluncuran pertama.
+the key-block toggle	sakelar pemblokiran tombol
+The list is full at %d items.	Daftar penuh pada %d item.
+The total, purchased expansions and story slots included. The left end keeps the game's size.	Totalnya, termasuk ekspansi yang dibeli dan slot cerita. Ujung kiri mempertahankan ukuran gim.
+This chest holds one of each collectible, so its slots cannot be changed.	Peti ini menyimpan satu dari setiap barang koleksi, jadi slotnya tidak bisa diubah.
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Tab ini membutuhkan versi Private Storage Master yang cocok dengan versi Master Looter ini.
+Turn that on and off	Aktifkan dan nonaktifkan itu
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Selama Ctrl, atau pengubah apa pun yang digunakan tombol penyimpananmu, ditahan, tombol lain ditahan dari gim, jadi selip dari tombol penyimpanan tidak memicu skill. Gerakan, Space, Tab, Enter, Escape, Alt+F4, dan tombol yang digunakan gim dengan Ctrl (Z, Shift, +) tetap tersalur.
+working	berfungsi
+Write the size dump to the log	Tulis data ukuran ke log
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Menulis setiap penekanan tombol, pembukaan, dan penutupan ke PrivateStorageMaster.log, dan menyimpan 24 sesi terakhir. Nonaktif, log menyimpan ringkasan awal, kesalahan, dan data ukuran, serta dua sesi terakhir.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Menulis setiap penekanan tombol, pembukaan, dan penutupan ke PrivateStorageMaster.log. Nonaktif, log menyimpan ringkasan awal, kesalahan, dan data ukuran.
+your own camp farm (off)	kebun perkemahanmu sendiri (nonaktif)

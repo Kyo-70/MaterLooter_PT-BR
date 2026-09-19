@@ -33,7 +33,7 @@ A backup is written when the game starts with settings changed since the last on
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
 a Master Looter shortcut	
-A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, nothing on the never-move list moves, and what no storage takes stays in the bag.	
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	
 A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	
 A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	
 a seed planted in your camp farm	
@@ -202,7 +202,7 @@ Minimum value (copper)
 missing	
 missing MasterLooter.items.tsv	
 mission object	
-more match; type more of the name	
+more matches; type more of the name	
 Mounts and vehicles	
 name a new preset	
 Nearby	
@@ -356,7 +356,6 @@ Take items the database cannot name
 Take owned goods on / off	
 take this one by hand, looting it can lock the quest	
 takes effect next launch	
-the capacity dump	
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	
 The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	
 The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	
@@ -367,6 +366,7 @@ The key bindings were brought over from PrivateStorageAnywhere.ini on the first 
 the key-block toggle	
 The list is full at %d items.	
 The mod never swings a pickaxe. It drives the vein's own break sequence, and the game walks one drop row for that where a real swing walks two, so your mining tool's bonus pays nothing when the mod does the mining. This adds the missing ore back through the same drop path the game uses, so it is real ore spilled on the ground, not an item copied into your bag. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. It only applies to a vein this mod broke, so mining by hand is untouched and the two cannot stack.	
+the size dump	
 The total, purchased expansions and story slots included. The left end keeps the game's size.	
 This chest holds one of each collectible, so its slots cannot be changed.	
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	
