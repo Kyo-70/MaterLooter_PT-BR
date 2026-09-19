@@ -432,3 +432,32 @@ Write the size dump to the log	Írd ki a méretlistát a naplóba
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Minden billentyűlenyomást, megnyitást és bezárást kiír a PrivateStorageMaster.log fájlba, és megőrzi az utolsó 24 munkamenetet. Kikapcsolva a napló megőrzi az indítási összefoglalót, a hibákat és a méretlistát, valamint az utolsó két munkamenetet.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Minden billentyűlenyomást, megnyitást és bezárást kiír a PrivateStorageMaster.log fájlba. Kikapcsolva a napló megőrzi az indítási összefoglalót, a hibákat és a méretlistát.
 your own camp farm (off)	a saját tábori farmod (kikapcsolva)
+%d of %d, the rest do not stack	%d/%d, a többi nem halmozódik.
+%s %s for game build %s	%s %s a(z) %s játékverzióhoz
+%s refused the change: %s	A(z) %s elutasította a változtatást: %s
+Empty your big stacks before turning this down or off.	Ürítsd ki a nagy rakásaidat, mielőtt lejjebb veszed vagy kikapcsolod ezt.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	Minden rakásolható tárgy korlátja megszorzódik, amikor a játék elindul. A beállítás elmentődik annak a modnak a saját ini fájljába, amint kiválasztod.
+Item stacks: %s	Tárgyrakások: %s
+Items raised	Megemelt tárgyak
+Largest limit	Legnagyobb korlát
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	A szorzó csökkentése nem zsugorítja össze a már felépített rakást. Egy hely, amely többet tartalmaz, mint amennyit a játék most megenged, megtartja a tartalmát, amíg ki nem veszel belőle valamit, és minden, ami az új korlát felett van, elveszhet.
+Off	Kikapcsolva
+off	kikapcsolva
+Raising stack limits	Rakáskorlátok emelése
+Restart the game for the multiplier you picked to take effect.	Indítsd újra a játékot, hogy a kiválasztott szorzó érvénybe lépjen.
+Saved	Elmentve
+Stack multiplier	Rakásszorzó
+Stacks	Rakások
+stacks are the size the game ships	a rakások a játék alapértelmezett méretűek
+That mod did not hand over its stack settings.	Az a mod nem adta át a rakásbeállításait.
+This launch	Ez az indítás
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Ehhez a laphoz a Master Stack, vagy egy olyan Private Storage Master verzió szükséges, amely emeli a rakáskorlátokat.
+Why	Miért
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	A legtöbb dolgot a játék 100-as rakásban engedi tartani, így x10-nél 1000 fér belé. Mindenre vonatkozik, ami rakásba gyűjthető, és soha arra, ami nem, mint a fegyverek és páncélok, és a játék legmélyebb rakásai annál a korlátnál állnak meg, amit az a mod fentebb jelez. A szorzó a játék induláskor kerül beolvasásra, ezért a játékot újra kell indítani, mielőtt megjelenik.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Néhány tárgy elérte a legnagyobb rakást, amit az a mod megenged, %d, és ott megállt.
+x%d, by %s	x%d, %s jóvoltából
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	A(z) %s átadta a helyét egy másik modnak, így az itteni módosítás nem tenne semmit. Az a mod nem olyan, amit ez a menü elér, ezért a szorzót közvetlenül ott állítsd be.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	A(z) %s nem az a mod, amelyik a rakásméreteket beállítja, így az itteni módosítás nem tenne semmit. Ehelyett itt állítsd be a szorzót: %s.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	A nagyobb szorzó a kiválasztásakor azonnal érvénybe lép. A kisebb a következő indításig vár.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	A legtöbb dolgot a játék 100-as rakásban engedi tartani, így x10-nél 1000 fér belé. Mindenre vonatkozik, ami rakásba gyűjthető, és soha arra, ami nem, mint a fegyverek és páncélok, és a játék legmélyebb rakásai annál a korlátnál állnak meg, amit az a mod fentebb jelez. A nagyobb szorzó kiválasztása azonnal érvénybe lép; a kisebb a következő indításig vár, mert egy már felépült rakást nem lehet a benne lévő mennyiség alá csökkenteni.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	Újraindításra vár, vagy válaszd ki újra kint a világban, és azonnal érvénybe lép.

@@ -20,16 +20,22 @@
 %d matches%s	
 %d node kinds learned this session. Nodes are named by the prefab they were placed from; anything that table misses is identified the first time it yields something. A node's type number changes between sessions, so nothing is remembered after you quit.	
 %d objects within scan range, %d lootable now.	
+%d of %d, the rest do not stack	
 %d overrides	
+%s %s for game build %s	
 %s (key %u, row %d, tier %d)	
 %s (never looted)	
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	
 %s is a machine translation that nobody has checked yet. Corrections are welcome on GitHub or the Nexus page.	
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	
+%s refused the change: %s	
 %s translated by %s.	
 %s, let go to keep it	
 1 match%s	
 3 of 3	
 \"%s\" already exists. Saving over it asks first.	
 A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
 a Master Looter shortcut	
@@ -105,6 +111,7 @@ does not respond
 Draw water from wells	
 Drop refused loot from bodies	
 Each item goes to the first storage in this list that takes it.	
+Empty your big stacks before turning this down or off.	
 Empty: auto-store may move anything a storage takes.	
 Engine	
 English	
@@ -115,6 +122,7 @@ entity %08X, %d items across every store
 entity %08X, bag %d of %d slots, %d items across every store	
 Event descriptors	
 Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. A vein is broken where it stands and its contents picked up off the floor, which is what your pickaxe does and what makes a better pickaxe worth carrying: the tool's Mining Yield Up applies to the drop, not to the node. Each vein is struck once and left alone until the game brings it back. Reaching for veins starts as far out as the scan can see, because they take seconds to answer where a bush takes a fraction of one.\n\nStone used to have a switch of its own and the split never held: the game files most quarry stone under mining, so turning Stone off left it arriving anyway. To keep the ore and leave the stone, refuse the class stone on the Classes tab. That covers Stone, Fine Stone, Flawless Stone and Stalactite, and every rock the game says holds nothing else is then left standing, the mine rocks and the stalactites included. A vein that also holds ore or a jewel is still broken, since refusing the stone is not refusing what sits beside it. Where the game describes a node not at all, it takes ore, jewels and stone all being refused before that one is passed over.	
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	
 Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	
 Extra ore per vein	
 failed	
@@ -160,12 +168,14 @@ installed
 Item	
 item %u	
 Item database	
+Item stacks: %s	
 Item table	
 Items	
 Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	
 Items lying in the world, including drops from enemies.	
 Items no shop will buy, across every class.	
 Items on the ground	
+Items raised	
 Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.	
 Items with an unknown value are never filtered by it.	
 Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	
@@ -174,6 +184,7 @@ Keys
 Keys and tools	
 Language	
 Language \"%s\": %d line(s) translated, %d seen this session.	
+Largest limit	
 Last error	
 learned from the game	
 Leave every size alone	
@@ -192,6 +203,7 @@ Loot everything in range now
 Loot everything in range once	
 loot: %s	
 Looting	
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	
 MASTER LOOTER	
 Master Looter v%s for game build %s	
 Materials	
@@ -203,6 +215,8 @@ missing
 missing MasterLooter.items.tsv	
 mission object	
 more matches; type more of the name	
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	
 Mounts and vehicles	
 name a new preset	
 Nearby	
@@ -232,6 +246,8 @@ Objects are listed nearest first, with the rule that decided each one. Empty nod
 Objects closer than this are treated as your own equipment. A safety net; your gear is also recognised by other means.	
 Objects per burst press	
 Objects per scan	
+Off	
+off	
 off, see the error below	
 off, the mod is disabled	
 on the player	
@@ -284,6 +300,7 @@ puzzle or protected mechanism
 Quest equipment	
 Quest items	
 quest or memory trigger	
+Raising stack limits	
 Ranges (metres)	
 Rats, squirrels, birds, lizards, frogs and salamanders: anything else the game puts in the bag whole.	
 Reaching nodes	
@@ -299,10 +316,12 @@ Replaces every setting and every class, tag and item rule with what the preset h
 Reset all tags	
 Reset to defaults	
 resolved	
+Restart the game for the multiplier you picked to take effect.	
 Retry the same object after (ms)	
 Route id	
 Rule	
 Save now	
+Saved	
 Saved as \"%s\": a preset name keeps letters, digits, spaces, dashes and underscores.	
 Say so on screen when the bag stops taking things	
 scan %.1f ms	
@@ -333,9 +352,13 @@ skip: %s
 Small animals	
 small animals off	
 Some changes take effect the next time the game starts.	
+Some items reached the largest stack that mod allows, %d, and stopped there.	
 Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.	
 someone is wearing this; taking it would copy it	
 stack at one point (storage contents)	
+Stack multiplier	
+Stacks	
+stacks are the size the game ships	
 Status	
 Stop pets looting	
 Stop pets looting bodies	
@@ -356,6 +379,7 @@ Take items the database cannot name
 Take owned goods on / off	
 take this one by hand, looting it can lock the quest	
 takes effect next launch	
+That mod did not hand over its stack settings.	
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	
 The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	
 The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	
@@ -369,8 +393,10 @@ The mod never swings a pickaxe. It drives the vein's own break sequence, and the
 the size dump	
 The total, purchased expansions and story slots included. The left end keeps the game's size.	
 This chest holds one of each collectible, so its slots cannot be changed.	
+This launch	
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	
 This tab needs a build of Private Storage Master that matches this version of Master Looter.	
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	
 Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	
@@ -392,6 +418,7 @@ Vegetables, fruit and grain: sweet potato, barley, cabbage, apples, grapes and t
 Verbose log	
 Verdict	
 waiting	
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	
 waiting for the game to check an item	
 waiting for the game to check ownership once	
 Waiting for the world to load.	
@@ -403,6 +430,7 @@ Weapons and armor
 What enters the working list at all. The ranges below are clamped to it.	
 What to collect	
 While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	
+Why	
 Winds the handle for you and takes what comes up, by driving the same state transitions the game drives when you hold the interact button. A well raises no loot event at all, so this is a replay of a captured sequence rather than the game being asked for anything. Off by default, because a well it gets wrong is a well left standing without its bucket.	
 Wood	
 wood off	
@@ -420,6 +448,7 @@ Writes every key press, open and close to PrivateStorageMaster.log. Off, the log
 Writes MasterLooter.template.txt beside the plugin, holding every line the menu has shown this session. Open every tab first, since a line only appears once it has been drawn. Translate the right-hand side of each record, save it as MasterLooter.<language>.txt, and put that language here.	
 Writes the settings as they are now into \"%s\". Load it, change what you like, then save it back.	
 Writes the settings as they are now, named %s.	
+x%d, by %s	
 yes	
 your own camp farm (off)	
 your rules refuse all ore, jewels and stone	

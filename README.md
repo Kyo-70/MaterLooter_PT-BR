@@ -15,6 +15,7 @@ Walk past it and it is in your bag: dropped items, herbs and flowers, ore and st
 - Class groups with one click (weapons and armor, damaged gear, food and drink, materials, books and papers, furniture, treasure and keepsakes, and more), a full class table, tag rules and per-item overrides with a live verdict.
 - Quest items, memory chips, puzzle and mechanism parts, artifacts, recipes and your own equipment are protected by default. The Classes and Items tabs can lift that on purpose.
 - With [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) 1.1.0 or later installed, what the mod picks up can be moved into your storage as it lands. See [below](#storing-loot).
+- With Master Stack or Private Storage Master 1.1.2 or later installed, the Stacks tab sets how much more every stackable item holds. See [Bigger item stacks](#bigger-item-stacks).
 - Owned goods are skipped unless you opt in: the mod asks the same routine the game uses to decide between "Take" and "Steal".
 - Gather nodes are armed from a distance, so bushes fill their data without you standing on them.
 - Ore veins are broken rather than emptied, the way a pickaxe does it, so the contents drop on the ground and your tool's Mining Yield Up is applied by the game. Each vein is struck once.
@@ -48,6 +49,16 @@ What gets moved is what Master Looter itself took: auto-loot pickups, body and c
 Each batch shows a notice such as `Master Looter: Stored 3 items: Kuku Cooler 3`, at most one a second. **Show a notice when loot is stored**, just under the main switch, turns it off. With the verbose log on, every item offered and where it went is written to `MasterLooter.log` as a `[store]` line, along with the reason when one stayed in the bag.
 
 With an older Private Storage Master the section reads "Storing loot needs a newer Private Storage Master." If Private Storage Master can't find the game's move on your game version, the section says so and the switches are greyed out.
+
+## Bigger item stacks
+
+New in 1.6.33. The Stacks tab sets how much more every stackable item holds, and it appears only when a mod that can do that is installed beside Master Looter: Master Stack, or Private Storage Master 1.1.2 or later. Master Looter changes nothing itself; the tab is a front end for whichever of those is installed, and with both there Master Stack does the work.
+
+Pick Off, x2, x3, x5, x10, x20, x50 or x100. Most things the game stacks 100 of, so x10 holds 1000, and the deepest stacks in the game stop at the ceiling that mod reports, 999999 today. What you pick goes into that mod's own ini at once. A bigger multiplier than the one running takes hold immediately where that mod can manage it, which needs Private Storage Master loaded and you out in the world rather than in a storage screen. A smaller one always waits for the next launch, because a stack you already built cannot be shrunk under what is in it. The tab says which of the two you are looking at, and shows a restart line only when one is really needed.
+
+The tab also shows which mod is applying the multiplier, how many item records were raised, the largest limit written, and, when nothing is being changed, that mod's own sentence saying why.
+
+**Empty your big stacks before turning the multiplier down or off.** Lowering it does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.
 
 ## Installing
 

@@ -428,3 +428,32 @@ Write the size dump to the log	เขียนข้อมูลดัมป์�
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	บันทึกการกดปุ่ม การเปิด และการปิดทุกครั้งลงใน PrivateStorageMaster.log และเก็บไว้ 24 เซสชันล่าสุด ปิด บันทึกจะเก็บสรุปการเริ่มทำงาน ข้อผิดพลาด และข้อมูลดัมป์ขนาด และเก็บไว้เพียงสองเซสชันล่าสุด
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	บันทึกการกดปุ่ม การเปิด และการปิดทุกครั้งลงใน PrivateStorageMaster.log ปิด บันทึกจะเก็บสรุปการเริ่มทำงาน ข้อผิดพลาด และข้อมูลดัมป์ขนาด
 your own camp farm (off)	ฟาร์มแคมป์ของคุณเอง (ปิด)
+%d of %d, the rest do not stack	%d จาก %d ส่วนที่เหลือไม่สแตกกัน
+%s %s for game build %s	%s %s สำหรับเกมบิลด์ %s
+%s refused the change: %s	%s ปฏิเสธการเปลี่ยนแปลง: %s
+Empty your big stacks before turning this down or off.	เทสแตกก้อนใหญ่ของคุณให้ว่างก่อนที่จะลดค่านี้ลงหรือปิดมัน
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	ขีดจำกัดของไอเทมที่สแตกได้ทุกชิ้นจะถูกคูณตอนเกมเริ่มทำงาน การตั้งค่านี้จะถูกบันทึกลงใน ini ของมอดนั้นเองทันทีที่คุณเลือก
+Item stacks: %s	สแตกไอเทม: %s
+Items raised	ไอเทมที่ถูกเพิ่ม
+Largest limit	ขีดจำกัดสูงสุด
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	การลดตัวคูณจะไม่ทำให้สแตกที่คุณสร้างไว้แล้วเล็กลง ช่องที่มีของมากกว่าที่เกมอนุญาตในตอนนี้จะยังคงเก็บของไว้จนกว่าคุณจะเอาออกไปบ้าง และของที่เกินขีดจำกัดใหม่อาจสูญหายได้
+Off	ปิด
+off	ปิด
+Raising stack limits	การเพิ่มขีดจำกัดสแตก
+Restart the game for the multiplier you picked to take effect.	รีสตาร์ทเกมเพื่อให้ตัวคูณที่คุณเลือกมีผล
+Saved	บันทึกแล้ว
+Stack multiplier	ตัวคูณสแตก
+Stacks	สแตก
+stacks are the size the game ships	สแตกมีขนาดเท่าตอนเกมวางจำหน่าย
+That mod did not hand over its stack settings.	มอดนั้นไม่ได้ส่งมอบการตั้งค่าสแตกของมันมา
+This launch	การเปิดเกมครั้งนี้
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	แท็บนี้ต้องการ Master Stack หรือ Private Storage Master รุ่นที่เพิ่มขีดจำกัดสแตก
+Why	ทำไม
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	ของส่วนใหญ่ในเกมให้คุณสแตกได้ถึง 100 ชิ้น ดังนั้นที่ x10 จะเก็บได้ 1000 ชิ้น มีผลกับทุกอย่างที่สแตกได้ และไม่มีผลกับสิ่งที่สแตกไม่ได้ เช่น อาวุธและชุดเกราะ และสแตกที่ลึกที่สุดในเกมจะหยุดอยู่ที่ขีดจำกัดที่มอดนั้นรายงานไว้ด้านบน ตัวคูณนี้จะถูกอ่านตอนเกมเริ่มทำงาน จึงต้องรีสตาร์ทเกมก่อนจึงจะเห็นผล
+Some items reached the largest stack that mod allows, %d, and stopped there.	ไอเทมบางชิ้นถึงสแตกใหญ่ที่สุดที่มอดนั้นอนุญาต %d แล้วหยุดอยู่ตรงนั้น
+x%d, by %s	x%d โดย %s
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s ได้หลีกทางให้มอดอื่นแล้ว การเปลี่ยนค่านี้ที่นี่จึงไม่มีผลใดๆ มอดนั้นไม่ใช่มอดที่เมนูนี้เข้าถึงได้ จึงต้องตั้งค่าตัวคูณที่มอดนั้นโดยตรง
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s ไม่ใช่มอดที่กำหนดขนาดสแตก การเปลี่ยนค่านี้ที่นี่จึงไม่มีผลใดๆ ให้ตั้งค่าตัวคูณที่ %s แทน
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	ตัวคูณที่มากขึ้นจะมีผลทันทีที่คุณเลือก ส่วนตัวที่น้อยกว่าจะรอจนกว่าจะเริ่มเกมครั้งถัดไป
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	ของส่วนใหญ่ในเกมให้คุณสแตกได้ถึง 100 ชิ้น ดังนั้นที่ x10 จะเก็บได้ 1000 ชิ้น มีผลกับทุกอย่างที่สแตกได้ และไม่มีผลกับสิ่งที่สแตกไม่ได้ เช่น อาวุธและชุดเกราะ และสแตกที่ลึกที่สุดในเกมจะหยุดอยู่ที่ขีดจำกัดที่มอดนั้นรายงานไว้ด้านบน การเลือกตัวคูณที่มากขึ้นจะมีผลทันที ส่วนตัวที่น้อยกว่าจะรอจนกว่าจะเริ่มเกมครั้งถัดไป เพราะสแตกที่สร้างไว้แล้วไม่สามารถลดขนาดให้เล็กกว่าจำนวนที่มีอยู่ในนั้นได้
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	กำลังรอการรีสตาร์ท หรือเลือกมันอีกครั้งขณะอยู่ในโลกเกม แล้วจะมีผลทันที

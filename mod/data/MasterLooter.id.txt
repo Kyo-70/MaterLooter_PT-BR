@@ -428,3 +428,32 @@ Write the size dump to the log	Tulis data ukuran ke log
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Menulis setiap penekanan tombol, pembukaan, dan penutupan ke PrivateStorageMaster.log, dan menyimpan 24 sesi terakhir. Nonaktif, log menyimpan ringkasan awal, kesalahan, dan data ukuran, serta dua sesi terakhir.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Menulis setiap penekanan tombol, pembukaan, dan penutupan ke PrivateStorageMaster.log. Nonaktif, log menyimpan ringkasan awal, kesalahan, dan data ukuran.
 your own camp farm (off)	kebun perkemahanmu sendiri (nonaktif)
+%d of %d, the rest do not stack	%d dari %d, sisanya tidak menumpuk.
+%s %s for game build %s	%s %s untuk build gim %s
+%s refused the change: %s	%s menolak perubahan itu: %s
+Empty your big stacks before turning this down or off.	Kosongkan tumpukan besarmu sebelum menurunkan atau mematikan ini.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	Batas setiap item yang bisa menumpuk dikalikan saat gim dimulai. Pengaturan ini disimpan di file ini milik mod itu sendiri begitu kamu memilihnya.
+Item stacks: %s	Tumpukan item: %s
+Items raised	Item yang dinaikkan
+Largest limit	Batas terbesar
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	Menurunkan pengali tidak mengecilkan tumpukan yang sudah kamu bangun. Slot yang memuat lebih banyak dari yang sekarang diizinkan gim akan tetap menyimpan isinya sampai kamu mengeluarkan sebagian, dan apa pun di atas batas baru bisa hilang.
+Off	Nonaktif
+off	nonaktif
+Raising stack limits	Menaikkan batas tumpukan
+Restart the game for the multiplier you picked to take effect.	Mulai ulang gim agar pengali yang kamu pilih berlaku.
+Saved	Tersimpan
+Stack multiplier	Pengali tumpukan
+Stacks	Tumpukan
+stacks are the size the game ships	tumpukan berukuran seperti bawaan gim
+That mod did not hand over its stack settings.	Mod itu tidak menyerahkan pengaturan tumpukannya.
+This launch	Sesi ini
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Tab ini membutuhkan Master Stack, atau build Private Storage Master yang menaikkan batas tumpukan.
+Why	Mengapa
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	Kebanyakan barang bisa kamu tumpuk sampai 100 di gim ini, jadi pada x10 tumpukannya menampung 1000. Ini berlaku untuk semua yang bisa menumpuk, dan tidak pernah untuk yang tidak bisa, seperti senjata dan baju zirah, dan tumpukan terdalam dalam gim berhenti pada batas yang dilaporkan mod itu di atas. Pengali dibaca saat gim dimulai, jadi gim harus dimulai ulang sebelum perubahan itu terlihat.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Sebagian item mencapai tumpukan terbesar yang diizinkan mod itu, %d, dan berhenti di situ.
+x%d, by %s	x%d, oleh %s
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s telah mengalah untuk mod lain, jadi mengubahnya di sini tidak akan berpengaruh. Mod itu bukan yang bisa dijangkau menu ini, jadi atur pengalinya langsung di sana.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s bukan mod yang mengatur ukuran tumpukan, jadi mengubahnya di sini tidak akan berpengaruh. Sebagai gantinya, atur pengali di %s.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	Pengali yang lebih besar berlaku segera setelah dipilih. Yang lebih kecil menunggu peluncuran berikutnya.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	Kebanyakan barang bisa kamu tumpuk sampai 100 di gim ini, jadi pada x10 tumpukannya menampung 1000. Ini berlaku untuk semua yang bisa menumpuk, dan tidak pernah untuk yang tidak bisa, seperti senjata dan baju zirah, dan tumpukan terdalam dalam gim berhenti pada batas yang dilaporkan mod itu di atas. Memilih pengali yang lebih besar langsung berlaku; yang lebih kecil menunggu peluncuran berikutnya, karena tumpukan yang sudah terbentuk tidak bisa dikecilkan di bawah isinya.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	Menunggu mulai ulang, atau pilih lagi di dunia permainan dan langsung berlaku.

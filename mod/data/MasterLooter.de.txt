@@ -431,3 +431,32 @@ Write the size dump to the log	Den Größen-Dump ins Log schreiben
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Schreibt jeden Tastendruck, jedes Öffnen und Schließen in PrivateStorageMaster.log und behält die letzten 24 Sitzungen. Aus behält das Log die Startzusammenfassung, Fehler und den Größen-Dump sowie die letzten zwei Sitzungen.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Schreibt jeden Tastendruck, jedes Öffnen und Schließen in PrivateStorageMaster.log. Aus behält das Log die Startzusammenfassung, Fehler und den Größen-Dump.
 your own camp farm (off)	deine eigene Lagerfarm (aus)
+%d of %d, the rest do not stack	%d von %d, der Rest stapelt sich nicht.
+%s %s for game build %s	%s %s für Spiel-Build %s
+%s refused the change: %s	%s hat die Änderung abgelehnt: %s
+Empty your big stacks before turning this down or off.	Leere deine großen Stapel, bevor du das hier verringerst oder ausschaltest.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	Das Limit jedes stapelbaren Gegenstands wird beim Spielstart vervielfacht. Die Einstellung wird in der eigenen ini-Datei dieses Mods gespeichert, sobald du sie wählst.
+Item stacks: %s	Gegenstandsstapel: %s
+Items raised	Erhöhte Gegenstände
+Largest limit	Größtes Limit
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	Ein niedrigerer Multiplikator lässt einen bereits aufgebauten Stapel nicht schrumpfen. Ein Platz, der mehr enthält, als das Spiel jetzt erlaubt, behält seinen Inhalt, bis du etwas davon herausnimmst, und alles über dem neuen Limit kann verloren gehen.
+Off	Aus
+off	aus
+Raising stack limits	Stapellimits erhöhen
+Restart the game for the multiplier you picked to take effect.	Starte das Spiel neu, damit der gewählte Multiplikator wirkt.
+Saved	Gespeichert
+Stack multiplier	Stapelmultiplikator
+Stacks	Stapel
+stacks are the size the game ships	die Stapel haben die Größe, mit der das Spiel ausgeliefert wird
+That mod did not hand over its stack settings.	Der Mod hat seine Stapel-Einstellungen nicht übergeben.
+This launch	Dieser Start
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Dieser Reiter braucht Master Stack oder eine Version von Private Storage Master, die Stapellimits erhöht.
+Why	Warum
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	Die meisten Dinge lässt dich das Spiel bis 100 stapeln, also fassen sie bei x10 dann 1000. Der Multiplikator gilt für alles, was sich stapelt, und nie für das, was sich nicht stapelt, wie Waffen und Rüstungen, und die tiefsten Stapel im Spiel enden am Limit, das der Mod oben meldet. Er wird beim Start des Spiels gelesen, daher muss das Spiel neu gestartet werden, bevor er sich zeigt.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Manche Gegenstände erreichten den größten Stapel, den der Mod erlaubt, %d, und blieben dort stehen.
+x%d, by %s	x%d, von %s
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s ist einem anderen Mod gewichen, also würde eine Änderung hier nichts bewirken. Dieser Mod ist keiner, den dieses Menü erreichen kann, also stelle den Multiplikator direkt dort ein.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s ist nicht der Mod, der die Stapelgrößen festlegt, also würde eine Änderung hier nichts bewirken. Stelle den Multiplikator stattdessen in %s ein.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	Ein größerer Multiplikator wirkt sich sofort aus, sobald du ihn wählst. Ein kleinerer wartet bis zum nächsten Start.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	Die meisten Dinge lässt dich das Spiel bis 100 stapeln, also fassen sie bei x10 dann 1000. Der Multiplikator gilt für alles, was sich stapelt, und nie für das, was sich nicht stapelt, wie Waffen und Rüstungen, und die tiefsten Stapel im Spiel enden am Limit, das der Mod oben meldet. Ein größerer Multiplikator wirkt sich sofort aus, sobald er gewählt wird; ein kleinerer wartet bis zum nächsten Start, weil ein bereits aufgebauter Stapel nicht unter das schrumpfen kann, was er enthält.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	Wartet auf einen Neustart, oder wähle ihn draußen in der Welt erneut und er wirkt sofort.

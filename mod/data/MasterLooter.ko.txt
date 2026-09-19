@@ -429,3 +429,32 @@ Write the size dump to the log	크기 덤프를 로그에 기록
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	모든 키 입력, 열기와 닫기를 PrivateStorageMaster.log에 기록하고 최근 24개 세션을 보관합니다. 꺼짐에서는 로그가 시작 요약, 오류, 크기 덤프와 최근 두 개 세션만 보관합니다.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	모든 키 입력, 열기와 닫기를 PrivateStorageMaster.log에 기록합니다. 꺼짐에서는 로그가 시작 요약, 오류, 크기 덤프만 보관합니다.
 your own camp farm (off)	당신 자신의 야영지 농장 (꺼짐)
+%d of %d, the rest do not stack	%d / %d, 나머지는 스택이 되지 않습니다
+%s %s for game build %s	%s %s, 게임 빌드 %s용
+%s refused the change: %s	%s이(가) 변경을 거부했습니다: %s
+Empty your big stacks before turning this down or off.	이 값을 낮추거나 끄기 전에 큰 스택을 비우세요.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	스택이 되는 모든 아이템의 한도는 게임이 시작될 때 배율이 적용됩니다. 설정은 선택하는 즉시 그 모드 자체의 ini에 저장됩니다.
+Item stacks: %s	아이템 스택: %s
+Items raised	상향된 아이템
+Largest limit	가장 큰 한도
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	배율을 낮춰도 이미 만들어 둔 스택은 줄어들지 않습니다. 게임이 지금 허용하는 것보다 많이 담긴 칸은 일부를 꺼내기 전까지 그대로 유지되며, 새 한도를 넘는 만큼은 사라질 수 있습니다.
+Off	꺼짐
+off	꺼짐
+Raising stack limits	스택 한도 상향
+Restart the game for the multiplier you picked to take effect.	선택한 배율을 적용하려면 게임을 재시작하세요.
+Saved	저장됨
+Stack multiplier	스택 배율
+Stacks	스택
+stacks are the size the game ships	스택이 게임 출시 크기 그대로임
+That mod did not hand over its stack settings.	그 모드가 스택 설정을 넘겨주지 않았습니다.
+This launch	이번 실행
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	이 탭에는 Master Stack이나 스택 한도를 올리는 빌드의 Private Storage Master가 필요합니다.
+Why	이유
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	게임에서는 대부분의 아이템을 100개까지 쌓을 수 있어서, x10이면 1000개까지 들어갑니다. 스택이 되는 모든 것에 적용되며, 무기와 방어구처럼 스택이 되지 않는 것에는 결코 적용되지 않습니다. 게임에서 가장 깊은 스택은 위에 표시된 그 모드의 한도에서 멈춥니다. 이 배율은 게임이 시작될 때 읽히므로, 적용되려면 게임을 재시작해야 합니다.
+Some items reached the largest stack that mod allows, %d, and stopped there.	일부 아이템은 그 모드가 허용하는 가장 큰 스택인 %d에 도달해 거기서 멈췄습니다.
+x%d, by %s	x%d, %s 적용
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s이(가) 다른 모드에 자리를 내주었으므로, 여기서 바꿔도 아무 효과가 없습니다. 그 모드는 이 메뉴가 접근할 수 없는 모드이니, 배율은 그 모드에서 직접 설정하세요.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s이(가) 스택 크기를 설정하는 모드가 아니므로, 여기서 바꿔도 아무 효과가 없습니다. 대신 배율을 %s에서 설정하세요.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	더 큰 배율은 선택하는 즉시 적용됩니다. 더 작은 배율은 다음 실행까지 기다립니다.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	게임에서는 대부분의 아이템을 100개까지 쌓을 수 있어서, x10이면 1000개까지 들어갑니다. 스택이 되는 모든 것에 적용되며, 무기와 방어구처럼 스택이 되지 않는 것에는 결코 적용되지 않습니다. 게임에서 가장 깊은 스택은 위에 표시된 그 모드의 한도에서 멈춥니다. 더 큰 배율을 선택하면 즉시 적용되며, 더 작은 배율은 다음 실행까지 기다립니다. 이미 쌓인 스택은 그 안에 들어있는 양보다 줄어들 수 없기 때문입니다.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	재시작을 기다리는 중이거나, 필드에서 다시 선택하면 즉시 적용됩니다.

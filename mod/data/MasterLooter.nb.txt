@@ -433,3 +433,32 @@ Write the size dump to the log	Skriv størrelsesdumpen til loggen
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Skriver hvert tastetrykk, hver åpning og lukking til PrivateStorageMaster.log, og beholder de siste 24 øktene. Av beholder loggen oppstartssammendraget, feil og størrelsesdumpen, og de to siste øktene.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Skriver hvert tastetrykk, hver åpning og lukking til PrivateStorageMaster.log. Av beholder loggen oppstartssammendraget, feil og størrelsesdumpen.
 your own camp farm (off)	ditt eget gårdsbruk i leiren (av)
+%d of %d, the rest do not stack	%d av %d, resten stables ikke
+%s %s for game build %s	%s %s for spillbygg %s
+%s refused the change: %s	%s avviste endringen: %s
+Empty your big stacks before turning this down or off.	Tøm de store stablene dine før du skrur dette ned eller av.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	Grensen for alt som kan stables, multipliseres når spillet starter. Innstillingen lagres i den moddens egen ini så snart du velger den.
+Item stacks: %s	Gjenstandsstabler: %s
+Items raised	Gjenstander hevet
+Largest limit	Høyeste grense
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	Å senke multiplikatoren krymper ikke en stabel du allerede har bygd opp. En plass som holder mer enn spillet nå tillater, beholder det den har til du tar ut noe, og alt over den nye grensen kan gå tapt.
+Off	Av
+off	av
+Raising stack limits	Heving av stabelgrenser
+Restart the game for the multiplier you picked to take effect.	Start spillet på nytt for at multiplikatoren du valgte skal tre i kraft.
+Saved	Lagret
+Stack multiplier	Stabelmultiplikator
+Stacks	Stabler
+stacks are the size the game ships	stablene har størrelsen spillet ble utgitt med
+That mod did not hand over its stack settings.	Den modden ga ikke fra seg sine stabelinnstillinger.
+This launch	Denne oppstarten
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Denne fanen trenger Master Stack, eller en versjon av Private Storage Master som hever stabelgrensene.
+Why	Hvorfor
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	De fleste ting kan du stable opptil 100 av i spillet, så ved x10 rommer de 1000. Den gjelder alt som stables, og aldri det som ikke gjør det, som våpen og rustning, og de dypeste stablene i spillet stopper ved grensen som den modden rapporterer ovenfor. Multiplikatoren leses når spillet starter, så spillet må startes på nytt før den vises.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Noen gjenstander nådde den største stabelen den modden tillater, %d, og stanset der.
+x%d, by %s	x%d, av %s
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s har trådt til side for en annen mod, så å endre det her ville ikke gjort noe. Den modden er ikke en denne menyen kan nå, så still inn multiplikatoren direkte i den.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s er ikke modden som setter stabelstørrelser, så å endre det her ville ikke gjort noe. Still heller inn multiplikatoren i %s.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	En større multiplikator trer i kraft med én gang du velger den. En mindre venter til neste oppstart.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	De fleste ting kan du stable opptil 100 av i spillet, så ved x10 rommer de 1000. Den gjelder alt som stables, og aldri det som ikke gjør det, som våpen og rustning, og de dypeste stablene i spillet stopper ved grensen som den modden rapporterer ovenfor. Å velge en større multiplikator trer i kraft med én gang; en mindre venter til neste oppstart, fordi en stabel som allerede er bygget opp, ikke kan krympes under det den inneholder.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	Venter på en omstart, eller velg den igjen ute i verden, så trer den i kraft med én gang.

@@ -27,6 +27,7 @@
 #include "../loot/hooks.h"
 #include "../loot/mem.h"
 #include "../version.h"
+#include "stack_link.h"
 #include "storage_link.h"
 
 namespace ml::gui
@@ -1667,6 +1668,135 @@ namespace ml::gui
         return changed;
     }
 
+    // The item stack multiplier, from Master Stack or from Private Storage
+    // Master, whichever is applying it. Nothing here knows which: the link
+    // picks the provider and this edits it. The multiplier is read at startup
+    // by that mod, so a change here only shows in the game after a restart,
+    // which the tab says in three places because it is the one thing that
+    // confuses people about the feature.
+    static char s_stackWhy[192] = {};
+
+    static void TabStacks(Config&)
+    {
+        const stack::Api* api = stack::Get();
+        if (!api)
+        {
+            ImGui::TextColored(kWarn, TR("Item stacks: %s"), stack::Why());
+            ImGui::TextWrapped("%s", TR("This tab needs Master Stack, or a build of Private Storage Master that raises stack limits."));
+            return;
+        }
+        StackStatus s{};
+        s.size = sizeof s;
+        if (!api->getStatus(&s))
+        {
+            ImGui::TextColored(kWarn, "%s", TR("That mod did not hand over its stack settings."));
+            return;
+        }
+
+        ImGui::Text(TR("%s %s for game build %s"), s.provider, s.version, s.gameVersion);
+        ImGui::TextDisabled("%s", TR("Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it."));
+        if (s_stackWhy[0]) ImGui::TextColored(kWarn, "%s", s_stackWhy);
+        if (stack::RefusedOther()[0]) ImGui::TextColored(kWarn, "%s", stack::RefusedOther());
+        // liveRaise arrived after the first layout, so it counts only when the
+        // provider says it wrote that far. A provider built before it fills
+        // less and the tab keeps the old wording, which is still true there.
+        const bool liveOk = s.size >= static_cast<uint32_t>(STACK_STATUS_V1) + sizeof s.liveRaise;
+        const bool live = liveOk && s.liveRaise != 0;
+        // A raise still waiting where the provider can apply one means the
+        // game was busy with a storage screen, a shop, a cutscene or a load
+        // when it was picked. The value is saved either way, so picking it
+        // again out in the world costs nothing and saves the restart.
+        if (s.restartNeeded && live && s.multiplierSetting > s.multiplier)
+            ImGui::TextColored(kGold, "%s", TR("Waiting for a restart, or pick it again out in the world and it takes hold at once."));
+        else if (s.restartNeeded)
+            ImGui::TextColored(kGold, "%s", TR("Restart the game for the multiplier you picked to take effect."));
+        else if (live)
+            ImGui::TextColored(kGoldDim, "%s", TR("A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch."));
+
+        Section(TR("Status"));
+        OnOff("Raising stack limits", s.applying != 0, "yes", "no");
+        ImGui::TextUnformatted(TR("Why")); s_statusLabel.Next();
+        ImGui::TextColored(s.applying ? kGood : kMuted, "%s", stack::StandDownText(s.standDownReason));
+        ImGui::TextUnformatted(TR("This launch")); s_statusLabel.Next();
+        // Named here as well as in the line above, because with both mods
+        // installed the one applying the multiplier is not the one a player
+        // went looking for.
+        if (s.multiplier > 1) ImGui::TextColored(kGood, TR("x%d, by %s"), s.multiplier, s.provider);
+        else                  ImGui::TextColored(kMuted, "%s", TR("stacks are the size the game ships"));
+        ImGui::TextUnformatted(TR("Saved")); s_statusLabel.Next();
+        if (s.multiplierSetting > 1) ImGui::Text(TR("x%d"), s.multiplierSetting);
+        else                         ImGui::TextUnformatted(TR("off"));
+        if (s.applying && s.itemsRaised)
+        {
+            ImGui::TextUnformatted(TR("Items raised")); s_statusLabel.Next();
+            ImGui::Text(TR("%d of %d, the rest do not stack"), s.itemsRaised, s.itemsRaised + s.itemsUnstackable);
+            ImGui::TextUnformatted(TR("Largest limit")); s_statusLabel.Next();
+            ImGui::Text("%lld", static_cast<long long>(s.biggest));
+            // The provider's own ceiling, not the header's: a build of it
+            // newer than this menu may allow more.
+            if (s.ceiling > 0 && s.biggest >= s.ceiling)
+                ImGui::TextDisabled(TR("Some items reached the largest stack that mod allows, %d, and stopped there."), s.ceiling);
+        }
+
+        Section(TR("Stack multiplier"));
+        // A provider that has stood aside for another mod keeps standing
+        // aside, so a multiplier written here would be saved, would ask for a
+        // restart, and would change nothing after it. That happens when the
+        // mod it stood aside for is one this build cannot talk to, which the
+        // line above names.
+        const bool futile = !s.applying && s.standDownReason == STACK_STANDDOWN_OTHER_MOD;
+        // Only one of these can promise the player somewhere to go. A mod
+        // that stood aside for something this build cannot name leaves the
+        // second sentence, which says so rather than pointing at nothing.
+        if (futile && stack::RefusedModule()[0])
+            ImGui::TextColored(kWarn, TR("%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead."), s.provider, stack::RefusedModule());
+        else if (futile)
+            ImGui::TextColored(kWarn, TR("%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly."), s.provider);
+        ImGui::BeginDisabled(futile);
+        static const int kPicks[] = { 1, 2, 3, 5, 10, 20, 50, 100 };
+        for (int i = 0; i < static_cast<int>(sizeof kPicks / sizeof kPicks[0]); ++i)
+        {
+            // A provider that accepts less than 100 would refuse the pick with
+            // a reason; better not to offer it. Its own maximum, since that is
+            // what it will measure the value against.
+            if (s.maxMultiplier > 0 && kPicks[i] > s.maxMultiplier) break;
+            char label[32];
+            if (kPicks[i] == 1) snprintf(label, sizeof label, "%s", TR("Off"));
+            else                snprintf(label, sizeof label, "x%d", kPicks[i]);
+            ImGui::PushID(700 + i);
+            if (ImGui::RadioButton(label, s.multiplierSetting == kPicks[i]) && s.multiplierSetting != kPicks[i])
+            {
+                char why[160] = {};
+                // Written down because the provider's own log records what it
+                // did and not who asked: a multiplier that arrived from this
+                // menu and one typed into the ini read the same there.
+                if (api->applyMultiplier(kPicks[i], why, sizeof why))
+                {
+                    s_stackWhy[0] = 0;
+                    LOG("[stacks] asked %s for x%d", s.provider, kPicks[i]);
+                }
+                else
+                {
+                    snprintf(s_stackWhy, sizeof s_stackWhy, TR("%s refused the change: %s"), s.provider, why);
+                    LOG_ERR("[stacks] %s refused x%d: %s", s.provider, kPicks[i], why);
+                }
+            }
+            ImGui::PopID();
+            if (i != 3 && i != 7) ImGui::SameLine();
+        }
+        ImGui::EndDisabled();
+        if (live)
+            Help("Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, "
+                 "and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, "
+                 "because a stack already built cannot be shrunk under what is in it.");
+        else
+            Help("Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, "
+                 "and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.");
+        ImGui::TextColored(kWarn, "%s", TR("Empty your big stacks before turning this down or off."));
+        Help("Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, "
+             "and anything above the new limit can be lost.");
+    }
+
     static void TabStorage(Config& c)
     {
         const psm::Api* api = psm::Get();
@@ -2040,6 +2170,16 @@ namespace ml::gui
                     const bool sel = ImGui::BeginTabItem(label);
                     ImGui::PopFont();
                     if (sel) { ImGui::Dummy(ImVec2(0, 4 * g_scale)); TabStorage(c); ImGui::EndTabItem(); }
+                }
+                // Last, and only when a mod that raises stack limits is loaded.
+                if (stack::Installed())
+                {
+                    char label[96];
+                    snprintf(label, sizeof label, "%s###Stacks", TR("Stacks"));
+                    ImGui::PushFont(g_fontHead);
+                    const bool sel = ImGui::BeginTabItem(label);
+                    ImGui::PopFont();
+                    if (sel) { ImGui::Dummy(ImVec2(0, 4 * g_scale)); TabStacks(c); ImGui::EndTabItem(); }
                 }
                 ImGui::EndTabBar();
             }

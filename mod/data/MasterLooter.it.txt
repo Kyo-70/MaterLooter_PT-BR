@@ -435,3 +435,32 @@ Write the size dump to the log	Scrivi il dump delle dimensioni nel log
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Scrive ogni pressione di tasto, apertura e chiusura in PrivateStorageMaster.log, e conserva le ultime 24 sessioni. Disattivato, il log conserva il riepilogo di avvio, gli errori e il dump delle dimensioni, e le ultime due sessioni.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Scrive ogni pressione di tasto, apertura e chiusura in PrivateStorageMaster.log. Disattivato, il log conserva il riepilogo di avvio, gli errori e il dump delle dimensioni.
 your own camp farm (off)	il tuo orto del campo (disattivato)
+%d of %d, the rest do not stack	%d di %d, il resto non si impila.
+%s %s for game build %s	%s %s per la build di gioco %s
+%s refused the change: %s	%s ha rifiutato la modifica: %s
+Empty your big stacks before turning this down or off.	Svuota le tue pile grandi prima di abbassare questo valore o disattivarlo.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	Il limite di ogni oggetto impilabile viene moltiplicato all'avvio del gioco. L'impostazione viene salvata nel file ini di quel mod non appena la scegli.
+Item stacks: %s	Pile di oggetti: %s
+Items raised	Oggetti aumentati
+Largest limit	Limite più alto
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	Abbassare il moltiplicatore non riduce una pila già costruita. Uno slot che contiene più di quanto il gioco ora consenta mantiene ciò che ha finché non ne togli una parte, e tutto ciò che supera il nuovo limite può andare perso.
+Off	Disattivato
+off	disattivato
+Raising stack limits	Aumento dei limiti delle pile
+Restart the game for the multiplier you picked to take effect.	Riavvia il gioco perché il moltiplicatore scelto abbia effetto.
+Saved	Salvato
+Stack multiplier	Moltiplicatore delle pile
+Stacks	Pile
+stacks are the size the game ships	le pile hanno la dimensione con cui il gioco viene distribuito
+That mod did not hand over its stack settings.	Quel mod non ha fornito le sue impostazioni delle pile.
+This launch	Questo avvio
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Questa scheda richiede Master Stack, oppure una build di Private Storage Master che aumenta i limiti delle pile.
+Why	Perché
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	La maggior parte degli oggetti si può impilare fino a 100, quindi a x10 ne contengono 1000. Si applica a tutto ciò che si impila, e mai a ciò che non lo fa, come armi e armature, e le pile più profonde del gioco si fermano al limite che quel mod indica sopra. Il moltiplicatore viene letto all'avvio del gioco, quindi il gioco deve essere riavviato prima che si veda.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Alcuni oggetti hanno raggiunto la pila più grande che quel mod consente, %d, e si sono fermati lì.
+x%d, by %s	x%d, di %s
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s si è fatto da parte per un altro mod, quindi modificarlo qui non farebbe nulla. Quel mod non è uno che questo menu può raggiungere, quindi imposta il moltiplicatore direttamente lì.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s non è il mod che imposta le dimensioni delle pile, quindi modificarlo qui non farebbe nulla. Imposta invece il moltiplicatore in %s.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	Un moltiplicatore più alto ha effetto non appena viene scelto. Uno più basso attende il prossimo avvio.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	La maggior parte degli oggetti si può impilare fino a 100, quindi a x10 ne contengono 1000. Si applica a tutto ciò che si impila, e mai a ciò che non lo fa, come armi e armature, e le pile più profonde del gioco si fermano al limite che quel mod indica sopra. Scegliere un moltiplicatore più alto ha effetto subito; uno più basso attende il prossimo avvio, perché una pila già formata non può essere ridotta sotto quanto contiene.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	In attesa di un riavvio, oppure scegli di nuovo fuori nel mondo di gioco e ha effetto subito.

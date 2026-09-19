@@ -429,3 +429,32 @@ Write the size dump to the log	Ghi bản kê dung lượng vào nhật ký
 Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Ghi lại mọi lần nhấn phím, mở và đóng vào PrivateStorageMaster.log, và giữ lại 24 phiên gần nhất. Tắt, nhật ký chỉ giữ tóm tắt khởi động, lỗi và bản kê dung lượng, cùng hai phiên gần nhất.
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Ghi lại mọi lần nhấn phím, mở và đóng vào PrivateStorageMaster.log. Tắt, nhật ký chỉ giữ tóm tắt khởi động, lỗi và bản kê dung lượng.
 your own camp farm (off)	nông trại riêng của bạn (tắt)
+%d of %d, the rest do not stack	%d trên %d, phần còn lại không xếp chồng
+%s %s for game build %s	%s %s cho bản dựng trò chơi %s
+%s refused the change: %s	%s đã từ chối thay đổi: %s
+Empty your big stacks before turning this down or off.	Hãy dọn trống các chồng đồ lớn của bạn trước khi giảm hoặc tắt mục này.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	Giới hạn của mỗi vật phẩm có thể xếp chồng được nhân lên khi trò chơi khởi động. Thiết lập này được lưu vào tệp ini riêng của mod đó ngay khi bạn chọn nó.
+Item stacks: %s	Chồng vật phẩm: %s
+Items raised	Vật phẩm được nâng
+Largest limit	Giới hạn lớn nhất
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	Giảm hệ số nhân không làm nhỏ lại một chồng bạn đã xếp sẵn. Một ô chứa nhiều hơn mức trò chơi hiện cho phép vẫn giữ nguyên những gì trong đó cho tới khi bạn lấy bớt ra, và bất cứ thứ gì vượt quá giới hạn mới đều có thể mất.
+Off	Tắt
+off	tắt
+Raising stack limits	Nâng giới hạn chồng đồ
+Restart the game for the multiplier you picked to take effect.	Khởi động lại trò chơi để hệ số nhân bạn chọn có hiệu lực.
+Saved	Đã lưu
+Stack multiplier	Hệ số nhân chồng đồ
+Stacks	Chồng đồ
+stacks are the size the game ships	các chồng đồ có kích thước như lúc trò chơi phát hành
+That mod did not hand over its stack settings.	Mod đó đã không trao lại các thiết lập chồng đồ của nó.
+This launch	Lần khởi động này
+This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Thẻ này cần Master Stack, hoặc một bản dựng Private Storage Master có nâng giới hạn chồng đồ.
+Why	Vì sao
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	Hầu hết mọi thứ trò chơi cho phép bạn xếp chồng tới 100, nên ở x10 chúng chứa được 1000. Nó áp dụng cho mọi thứ có thể xếp chồng, và không bao giờ áp dụng cho thứ không xếp chồng được, như vũ khí và áo giáp, và những chồng đồ sâu nhất trong trò chơi dừng lại ở giới hạn mà mod đó báo cáo ở trên. Hệ số nhân được đọc khi trò chơi khởi động, nên phải khởi động lại trò chơi thì nó mới có hiệu lực.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Một số vật phẩm đã đạt tới chồng đồ lớn nhất mà mod đó cho phép, %d, và dừng lại ở đó.
+x%d, by %s	x%d, bởi %s
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s đã nhường chỗ cho một mod khác, nên việc thay đổi nó ở đây sẽ chẳng có tác dụng gì. Mod đó không phải là mod mà menu này có thể chạm tới, nên hãy đặt hệ số nhân trực tiếp ở đó.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s không phải là mod đặt kích thước chồng đồ, nên việc thay đổi nó ở đây sẽ chẳng có tác dụng gì. Thay vào đó, hãy đặt hệ số nhân ở %s.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	Hệ số nhân lớn hơn có hiệu lực ngay khi bạn chọn nó. Hệ số nhỏ hơn phải chờ đến lần khởi động sau.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	Hầu hết mọi thứ trò chơi cho phép bạn xếp chồng tới 100, nên ở x10 chúng chứa được 1000. Nó áp dụng cho mọi thứ có thể xếp chồng, và không bao giờ áp dụng cho thứ không xếp chồng được, như vũ khí và áo giáp, và những chồng đồ sâu nhất trong trò chơi dừng lại ở giới hạn mà mod đó báo cáo ở trên. Chọn hệ số nhân lớn hơn sẽ có hiệu lực ngay lập tức; hệ số nhỏ hơn phải chờ đến lần khởi động sau, vì một chồng đồ đã xếp thì không thể thu nhỏ xuống dưới mức đang có trong đó.
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	Đang chờ khởi động lại, hoặc chọn lại nó khi đang ở ngoài thế giới trong game và nó sẽ có hiệu lực ngay.
