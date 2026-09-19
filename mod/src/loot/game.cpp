@@ -567,10 +567,11 @@ namespace ml::game
         for (int i = 0; i < n; ++i) { types[i] = g_qty[i].first; qty[i] = g_qty[i].second; }
         return n;
     }
-    int InventoryEntries(uintptr_t me, InvEntry* out, int max)
+    int InventoryEntries(uintptr_t me, InvEntry* out, int max, uintptr_t* holderOut)
     {
         int n = 0;
         const uintptr_t holder = Holder(me);
+        if (holderOut) *holderOut = holder;
         if (!holder || !out || max <= 0) return 0;
         uintptr_t barr = 0; uint32_t bn = 0;
         if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) return 0;

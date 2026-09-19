@@ -79,10 +79,10 @@ namespace ml::sig
 
     // The game's GetInventoryHolder(actor): the holder of the bag an actor
     // actually uses. Most characters use their own, [[actor+0x68]+0xB8]. A
-    // character whose row says so borrows one instead, from
-    // [[actor+0xA0]+0xD0], and Damiane and Oongka do: their own holder is an
-    // empty 50-slot bag while everything they pick up lands in the shared
-    // one. The mode comes from a character-table lookup that runs through
+    // character whose row says so borrows another actor's instead: the actor
+    // at [[actor+0xA0]+0xD0], and that actor's own [[+0x68]+0xB8]. Damiane and
+    // Oongka do: their own holder is an empty 50-slot bag while everything
+    // they pick up lands in the shared one. The mode comes from a character-table lookup that runs through
     // protected code, so the mod calls this rather than copying it, on the
     // game thread. The two calls are table lookups that move between builds.
     inline constexpr const char* kSig_InvHolder =

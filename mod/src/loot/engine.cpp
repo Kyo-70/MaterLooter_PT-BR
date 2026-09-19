@@ -3894,8 +3894,7 @@ namespace ml::loot
         // later than it landed after every slot was read.
         auto snapshot = [&](std::unordered_map<uint16_t, long long>& into, uintptr_t& holderOut) {
             into.clear();
-            holderOut = game::Holder(g_me);
-            const int n = game::InventoryEntries(g_me, ents, 4096);
+            const int n = game::InventoryEntries(g_me, ents, 4096, &holderOut);
             for (int i = 0; i < n; ++i) into[ents[i].tid] += ents[i].count;
             return GetTickCount();
         };

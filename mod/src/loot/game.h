@@ -88,7 +88,10 @@ namespace ml::game
     void InventoryRefresh(uintptr_t player, bool force);
     bool InventoryHas(uint32_t instanceId);
     struct InvEntry { uint32_t iid; uint16_t tid; int bucket, slot; long long count; uintptr_t addr; };
-    int  InventoryEntries(uintptr_t player, InvEntry* out, int max);   // a fresh walk, every bucket
+    // A fresh walk, every bucket. holderOut, when given, is the holder this
+    // walk read, from the same lookup, so a caller never labels a sample with
+    // a holder looked up separately and published over in between.
+    int  InventoryEntries(uintptr_t player, InvEntry* out, int max, uintptr_t* holderOut = nullptr);
     // Issue #32 probe. Every inventory on the holder with the u16 at +0x10
     // that the delete matches its key's type against.
     struct BucketInfo { uintptr_t addr; uint16_t type, slotN, capC, used, cap; uint32_t exclN; };
