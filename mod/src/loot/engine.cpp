@@ -1635,8 +1635,12 @@ namespace ml::loot
                 // supply contracts came in during a camp clear with the mod's
                 // gathers pending and were offered. And one the mod did pick up,
                 // with the Quest items switch on, still belongs in the bag.
+                // Nor a key. The generic Key comes off 931 kinds of character,
+                // so a camp clear sent one to storage from nearly every body,
+                // and a key is only any use in the bag. The named keys belong
+                // to a place or a quest.
                 const Item* it = ItemDb::ByRow(type);
-                if (it && (it->klass == "document" || it->tags.find(" quest ") != std::string::npos)) continue;
+                if (it && (it->klass == "document" || it->klass == "key" || it->tags.find(" quest ") != std::string::npos)) continue;
                 HeldRise h{ type, units > 0 ? units : 1, now, false, inPlay };
                 h.handUnnamed = handUnnamed;
                 // A send whose yield is known vouches for that item whatever
