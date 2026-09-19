@@ -15,7 +15,7 @@ Walk past it and it is in your bag: dropped items, herbs and flowers, ore and st
 - Class groups with one click (weapons and armor, damaged gear, food and drink, materials, books and papers, furniture, treasure and keepsakes, and more), a full class table, tag rules and per-item overrides with a live verdict.
 - Quest items, memory chips, puzzle and mechanism parts, artifacts, recipes and your own equipment are protected by default. The Classes and Items tabs can lift that on purpose.
 - With [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) 1.1.0 or later installed, what the mod picks up can be moved into your storage as it lands. See [below](#storing-loot).
-- With Master Stack or Private Storage Master 1.1.2 or later installed, the Stacks tab sets how much more every stackable item holds. See [Bigger item stacks](#bigger-item-stacks).
+- With [Master Stack](https://www.nexusmods.com/crimsondesert/mods/3548) or Private Storage Master 1.1.2 or later installed, the Stacks tab sets how much more every stackable item holds. See [Bigger item stacks](#bigger-item-stacks).
 - Owned goods are skipped unless you opt in: the mod asks the same routine the game uses to decide between "Take" and "Steal".
 - Gather nodes are armed from a distance, so bushes fill their data without you standing on them.
 - Ore veins are broken rather than emptied, the way a pickaxe does it, so the contents drop on the ground and your tool's Mining Yield Up is applied by the game. Each vein is struck once.
