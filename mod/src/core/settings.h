@@ -158,6 +158,9 @@ namespace ml
         bool  skipQuestGear  = true;
         int   minValueCopper = 0;      // 0 = no value floor
         bool  takeUnknownItems = true; // items our database cannot name
+        // What a body or a carcass this mod searched pays that the rules
+        // refuse is put back on the ground through the game's own drop.
+        bool  dropRefused    = false;
         // A pet or a companion loots whatever the game lets it, and nothing in
         // the game looks at the item. On, whatever one of them picks up that
         // the item rules would have refused is deleted as it lands. Issue #32.

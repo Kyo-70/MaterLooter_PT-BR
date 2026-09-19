@@ -72,4 +72,22 @@ namespace ml::loot::hooks
     // False means the condition's vtable slot was not found on this build
     // and the switch does nothing; the log says which step gave up.
     bool PetLootingHooked();
+
+    // Leaving refused body loot on the ground. DROP.md.
+    //
+    // The routine the discard request's parser hands every drop to, found as
+    // the first call after GetInventoryHolder in that parser, and a detour on
+    // the server's parse of the mod's own search, which runs the engine's
+    // SearchParse either side of it. Both come from descriptors found by
+    // class name.
+    void InstallDrop(uintptr_t discardDesc, uintptr_t searchDesc);
+    bool DropReady();
+    // The per-thread context the drop routine reads out of the exe's TLS
+    // block at +0x250. Only the game's server thread has one.
+    uintptr_t ThreadContext();
+    // One call into the drop routine. Server thread only. False when it
+    // faulted; otherwise *err is the game's answer, 0 for success. The
+    // transform is the position at +0 and a rotation quaternion at +0xC.
+    bool CallDrop(uintptr_t holder, uint32_t* err, uintptr_t actor, uint16_t key,
+                  uint16_t slot, int64_t amount, const float* transform);
 }

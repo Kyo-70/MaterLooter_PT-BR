@@ -932,6 +932,108 @@ namespace ml::loot::hooks
 
     bool PetLootingHooked() { return g_petLootingHooked; }
 
+    // --- refused body loot back on the ground (DROP.md) --------------------
+    // A request's packet parser is slot 2 of its descriptor's vtable, called
+    // as (descriptor, error out, packet), and the packet holds the sender at
+    // +0 and the bytes at +0x18. Both parsers used here open by loading that
+    // byte pointer, which is the check that slot 2 is what it should be.
+    using FnParse = uint64_t (*)(void*, void*, void*, void*);
+    static FnParse oSearchParse = nullptr;
+    static uintptr_t g_dropFn = 0;
+
+    static uintptr_t ParserOf(uintptr_t desc)
+    {
+        uintptr_t vt = 0, fn = 0;
+        if (!desc || !mem::ReadPtr(desc, &vt) || !mem::ReadPtr(vt + 0x10, &fn) || !fn) return 0;
+        for (int i = 0; i < 0x40; ++i)
+        {
+            uint8_t b[4] = {};
+            if (!mem::Read8(fn + i, &b[0]) || !mem::Read8(fn + i + 1, &b[1]) ||
+                !mem::Read8(fn + i + 2, &b[2]) || !mem::Read8(fn + i + 3, &b[3])) return 0;
+            if ((b[0] == 0x49 || b[0] == 0x4D) && b[1] == 0x8B && (b[2] & 0xC7) == 0x40 && b[3] == 0x18) return fn;
+        }
+        LOG_ERR("[drop] slot 2 at +0x%llX does not read a packet the way a parser does",
+                static_cast<unsigned long long>(mem::Rva(fn)));
+        return 0;
+    }
+
+    // The discard parser does no work of its own. It asks GetInventoryHolder
+    // for the sender's bag and passes everything to one routine, +0x2B64C40
+    // on 2.03.00, called at +0x2A05B3F straight after the holder call at
+    // +0x2A05B01. So the routine is the first direct call after the one that
+    // lands on the holder function the mod already resolves.
+    static uintptr_t FindDropCall(uintptr_t parser)
+    {
+        const uintptr_t holderFn = game::F().invHolder;
+        if (!parser || !holderFn) return 0;
+        uintptr_t after = 0;
+        for (unsigned i = 0; i + 5 <= 0x800; ++i)
+        {
+            uint8_t op = 0; uint32_t rel = 0;
+            if (!mem::Read8(parser + i, &op)) return 0;
+            if (op != 0xE8 || !mem::Read32(parser + i + 1, &rel)) continue;
+            const uintptr_t to = parser + i + 5 + static_cast<intptr_t>(static_cast<int32_t>(rel));
+            if (!mem::InImage(to)) continue;
+            if (!after) { if (to == holderFn) after = parser + i + 5; continue; }
+            if (parser + i - after > 0x60) break;
+            return to;
+        }
+        return 0;
+    }
+
+    // gs:[0x58] is the thread's TLS array, and its first entry the exe's block.
+    uintptr_t ThreadContext()
+    {
+        const uintptr_t arr = static_cast<uintptr_t>(__readgsqword(0x58));
+        uintptr_t block = 0, ctx = 0;
+        if (!arr || !mem::ReadPtr(arr, &block) || !mem::ReadPtr(block + 0x250, &ctx)) return 0;
+        return ctx;
+    }
+
+    bool CallDrop(uintptr_t holder, uint32_t* err, uintptr_t actor, uint16_t key,
+                  uint16_t slot, int64_t amount, const float* transform)
+    {
+        using FnDrop = uint32_t* (*)(uintptr_t, uint32_t*, uintptr_t, uint16_t, uint16_t, int64_t, const float*);
+        if (!g_dropFn) return false;
+        __try { reinterpret_cast<FnDrop>(g_dropFn)(holder, err, actor, key, slot, amount, transform); return true; }
+        __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
+    }
+
+    // The search's own payload is the id, FF, then the body's entity id.
+    static uint64_t hkSearchParse(void* a, void* b, void* c, void* d)
+    {
+        uintptr_t sender = 0, buf = 0; uint32_t target = 0;
+        const uintptr_t p = reinterpret_cast<uintptr_t>(c);
+        if (p && mem::ReadPtr(p, &sender) && mem::ReadPtr(p + 0x18, &buf)) mem::Read32(buf + 3, &target);
+        const bool watch = loot::SearchParse(sender, target, false);
+        const uint64_t r = oSearchParse(a, b, c, d);
+        if (watch) loot::SearchParse(sender, target, true);
+        return r;
+    }
+
+    void InstallDrop(uintptr_t discardDesc, uintptr_t searchDesc)
+    {
+        const uintptr_t parser = ParserOf(discardDesc);
+        g_dropFn = FindDropCall(parser);
+        if (!g_dropFn)
+        {
+            LOG_ERR("[drop] the drop routine was not found (discard parser +0x%llX); Drop refused loot from bodies does nothing on this build",
+                    static_cast<unsigned long long>(mem::Rva(parser)));
+            return;
+        }
+        const uintptr_t search = ParserOf(searchDesc);
+        if (!search || !Hook("body search, server side", search, reinterpret_cast<void*>(&hkSearchParse), reinterpret_cast<void**>(&oSearchParse)))
+        {
+            LOG_ERR("[drop] the server's search parser could not be hooked; Drop refused loot from bodies does nothing on this build");
+            return;
+        }
+        LOG("[drop] drops go through +0x%llX, found in the discard parser at +0x%llX; searches are watched at +0x%llX",
+            static_cast<unsigned long long>(mem::Rva(g_dropFn)), static_cast<unsigned long long>(mem::Rva(parser)),
+            static_cast<unsigned long long>(mem::Rva(search)));
+    }
+
+    bool DropReady() { return g_dropFn && oSearchParse; }
+
     const char* PumpName() { return g_pump; }
     long PumpTicks() { return g_pumpTicks; }
     bool OwnerCaptured() { return InterlockedCompareExchange(&g_ownCaptured, 0, 0) != 0; }

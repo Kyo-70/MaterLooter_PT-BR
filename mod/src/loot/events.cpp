@@ -111,6 +111,36 @@ namespace ml::events
     long SentCount() { return g_sent; }
     long QueuedCount() { return g_pendActN; }
 
+    // TrocTrDiscardItemReq, the request a drop by hand raises, sits under mask
+    // 4, which the game's own DESC_MASK does not include, and its id moved
+    // between sessions (0x0AA5 on 2.03.00). So it is found by class name. The
+    // mod never sends it; it only wants the parser, which names the routine
+    // every drop goes through. DROP.md.
+    static void* LookupDesc(uintptr_t fn, uint32_t id, uint32_t mask);
+    static void FindDiscard(uint32_t knownMask)
+    {
+        const game::Fns& f = game::F();
+        uintptr_t discard = 0;
+        const uint32_t masks[] = { 4u, knownMask, 0xFFFFFFFFu };
+        for (const uint32_t mask : masks)
+        {
+            for (uint32_t id = 1; id <= 0x1FFF && !discard; ++id)
+            {
+                void* d = LookupDesc(f.descLookup, id, mask);
+                if (!d) continue;
+                const char* n = mem::RttiName(reinterpret_cast<uintptr_t>(d));
+                if (n && strstr(n, "TrocTrDiscardItemReq"))
+                {
+                    discard = reinterpret_cast<uintptr_t>(d);
+                    LOG("[drop] TrocTrDiscardItemReq is 0x%04X under mask 0x%08X", id, mask);
+                }
+            }
+            if (discard) break;
+        }
+        if (!discard) { LOG_ERR("[drop] no descriptor answers as TrocTrDiscardItemReq; Drop refused loot from bodies does nothing on this build"); return; }
+        ml::loot::hooks::InstallDrop(discard, g_desc[0].ptr);
+    }
+
     // Asks the game for each descriptor id and matches the class name.
     // The one call into the game, on its own so the resolver can hold a
     // std::string: MSVC will not mix __try with anything that unwinds.
@@ -233,6 +263,7 @@ namespace ml::events
             reinterpret_cast<FnTlsInit>(f.tlsInit)();
             ResolveDescriptors(mask);
             ProbeDescriptorMasks(mask);
+            FindDiscard(mask);
             if (!q || g_descFound < 3) { LOG_ERR("[test] sending stays disabled (queue %s, descriptors %d/3)", q ? "ok" : "missing", g_descFound); return; }
             g_sendAllowed = true;
             LOG_OK("[test] event path verified; sending enabled");
@@ -487,15 +518,67 @@ namespace ml::events
         return room;
     }
 
+    // The bodies this mod has searched lately, so the server side can tell
+    // its searches from one the player made by hand.
+    // Room for the whole send queue and as much again in flight, so a fight
+    // with more bodies than the queue holds cannot push out a mark before its
+    // search has been parsed.
+    struct SearchMark { uint32_t eid; DWORD at; };
+    static constexpr int kSearchMarks = 128;
+    static SearchMark g_searched[kSearchMarks] = {};
+    static int g_searchedNext = 0;
+    static SRWLOCK g_searchedLock = SRWLOCK_INIT;
+
+    // Marked before the search can leave, since the server may parse it the
+    // moment it does, and taken back if it never leaves.
+    static int MarkSearch(uint32_t eid)
+    {
+        AcquireSRWLockExclusive(&g_searchedLock);
+        const int slot = g_searchedNext;
+        g_searched[slot] = { eid, GetTickCount() };
+        g_searchedNext = (g_searchedNext + 1) % kSearchMarks;
+        ReleaseSRWLockExclusive(&g_searchedLock);
+        return slot;
+    }
+    static void UnmarkSearch(int slot, uint32_t eid)
+    {
+        AcquireSRWLockExclusive(&g_searchedLock);
+        if (g_searched[slot].eid == eid) g_searched[slot] = {};
+        ReleaseSRWLockExclusive(&g_searchedLock);
+    }
+    static void ClearSearchMarks()
+    {
+        AcquireSRWLockExclusive(&g_searchedLock);
+        for (SearchMark& m : g_searched) m = {};
+        ReleaseSRWLockExclusive(&g_searchedLock);
+    }
+
+    bool SearchedRecently(uint32_t eid)
+    {
+        if (!eid) return false;
+        const DWORD now = GetTickCount();
+        bool hit = false;
+        AcquireSRWLockShared(&g_searchedLock);
+        for (const SearchMark& m : g_searched) if (m.eid == eid && now - m.at < 10000) { hit = true; break; }
+        ReleaseSRWLockShared(&g_searchedLock);
+        return hit;
+    }
+
     bool Send(Action a, uint32_t target, uint32_t player, uint32_t route, uint8_t mode)
     {
         if (!g_sendAllowed) return false;
-        if (OnGameThread()) return SendNow(a, target, player, route, mode);
-        Lock();
-        const bool room = g_pendActN < 64;
-        if (room) g_pendAct[g_pendActN++] = { a, target, player, route, mode };
-        Unlock();
-        return room;
+        const int mark = a == Action::Search ? MarkSearch(target) : -1;
+        bool ok;
+        if (OnGameThread()) ok = SendNow(a, target, player, route, mode);
+        else
+        {
+            Lock();
+            ok = g_pendActN < 64;
+            if (ok) g_pendAct[g_pendActN++] = { a, target, player, route, mode };
+            Unlock();
+        }
+        if (!ok && mark >= 0) UnmarkSearch(mark, target);
+        return ok;
     }
 
     bool Arm(uintptr_t node, uintptr_t mode, uintptr_t arg3, uintptr_t ctx)
@@ -533,6 +616,9 @@ namespace ml::events
         const int n = g_pendActN + g_pendArmN + g_pendDrvN;
         g_pendActN = g_pendArmN = g_pendDrvN = 0;
         Unlock();
+        // The searches those were are cancelled, so a body the player then
+        // searches by hand is the player's.
+        ClearSearchMarks();
         return n;
     }
 

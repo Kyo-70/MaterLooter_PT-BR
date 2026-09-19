@@ -37,6 +37,9 @@ namespace ml::events
 
     // Send (or queue when off the game thread). Returns false when refused.
     bool Send(Action a, uint32_t targetEid, uint32_t playerEid, uint32_t route, uint8_t mode);
+    // Whether this mod sent a search for that body in the last ten seconds.
+    // Safe from any thread; the server's parse of a search asks it.
+    bool SearchedRecently(uint32_t targetEid);
     // Remove `amount` of one inventory slot's stack through the game's own
     // TrocTrDeleteItemFromInventoryOnceTimer. The payload names the slot's
     // instance (its u64), the inventory by a table key, and the slot index,

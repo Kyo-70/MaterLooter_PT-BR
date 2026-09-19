@@ -567,11 +567,24 @@ namespace ml::game
         for (int i = 0; i < n; ++i) { types[i] = g_qty[i].first; qty[i] = g_qty[i].second; }
         return n;
     }
+    uintptr_t HolderNow(uintptr_t actor)
+    {
+        uintptr_t h = 0;
+        if (!g_f.invHolder || !actor || !mem::Readable(actor, 0x100)) return 0;
+        if (!CallInvHolder(g_f.invHolder, actor, &h)) return 0;
+        return h && mem::Readable(h, 0x40) ? h : 0;
+    }
+
     int InventoryEntries(uintptr_t me, InvEntry* out, int max, uintptr_t* holderOut)
     {
-        int n = 0;
         const uintptr_t holder = Holder(me);
         if (holderOut) *holderOut = holder;
+        return HolderEntries(holder, out, max);
+    }
+
+    int HolderEntries(uintptr_t holder, InvEntry* out, int max)
+    {
+        int n = 0;
         if (!holder || !out || max <= 0) return 0;
         uintptr_t barr = 0; uint32_t bn = 0;
         if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) return 0;
@@ -598,8 +611,12 @@ namespace ml::game
 
     int InventoryBuckets(uintptr_t me, BucketInfo* out, int max)
     {
+        return HolderBuckets(Holder(me), out, max);
+    }
+
+    int HolderBuckets(uintptr_t holder, BucketInfo* out, int max)
+    {
         int n = 0;
-        const uintptr_t holder = Holder(me);
         if (!holder || !out || max <= 0) return 0;
         uintptr_t barr = 0; uint32_t bn = 0;
         if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) return 0;

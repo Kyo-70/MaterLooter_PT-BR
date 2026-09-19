@@ -92,10 +92,17 @@ namespace ml::game
     // walk read, from the same lookup, so a caller never labels a sample with
     // a holder looked up separately and published over in between.
     int  InventoryEntries(uintptr_t player, InvEntry* out, int max, uintptr_t* holderOut = nullptr);
+    // The same walk over a holder given outright, for the server side's own
+    // holder, which is a different object from the client's. DROP.md.
+    int  HolderEntries(uintptr_t holder, InvEntry* out, int max);
+    // GetInventoryHolder called now, on this thread. The answer depends on
+    // the thread: the server thread gets the server's holder.
+    uintptr_t HolderNow(uintptr_t actor);
     // Issue #32 probe. Every inventory on the holder with the u16 at +0x10
     // that the delete matches its key's type against.
     struct BucketInfo { uintptr_t addr; uint16_t type, slotN, capC, used, cap; uint32_t exclN; };
     int  InventoryBuckets(uintptr_t player, BucketInfo* out, int max);
+    int  HolderBuckets(uintptr_t holder, BucketInfo* out, int max);
     // The inventory-type table, found among the static tables by its first
     // two row keys, Money and Character: rows by index, and the delete
     // handler's own hash lookup replicated with safe reads (0xFFFF on a miss).

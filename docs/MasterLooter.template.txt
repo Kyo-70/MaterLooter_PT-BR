@@ -33,7 +33,7 @@ A backup is written when the game starts with settings changed since the last on
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
 a Master Looter shortcut	
-A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, nothing on the never-move list moves, and what no storage takes stays in the bag.	
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, nothing on the never-move list moves, and what no storage takes stays in the bag.	
 A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	
 A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	
 a seed planted in your camp farm	
@@ -103,6 +103,7 @@ Detailed log
 DirectX 12 hooks	
 does not respond	
 Draw water from wells	
+Drop refused loot from bodies	
 Each item goes to the first storage in this list that takes it.	
 Empty: auto-store may move anything a storage takes.	
 Engine	
@@ -309,7 +310,8 @@ Scan radius
 Scans %ld, events sent %ld, pump ticks %ld, guarded faults %ld, node kinds learned %d	
 Scans per second	
 search item name or key (3+ letters)	
-Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out is not checked against your filters, so this switch is all or nothing too.	
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches only. A body you search yourself keeps what it paid, and so does one a pet loots. Money, documents, quest items and protected items stay in the bag.	
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	
 Sending events	
 Set	
 set	
@@ -322,7 +324,7 @@ Showing current overrides. Type to search all %d items.
 Showing the nearest %d of %d. The rest are further away.	
 Size changes take effect the next time the game starts.	
 Sizes	
-Skinning the animals you kill, once per carcass. People go under Bodies. What skinning pays out is not checked against your filters. The mod never sees it before it lands, so this switch is all or nothing.	
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	
 Skip all	
 Skip items shops refuse to buy	
 Skip quest equipment	

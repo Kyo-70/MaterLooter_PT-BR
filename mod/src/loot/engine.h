@@ -53,6 +53,11 @@ namespace ml::loot
     void Start();          // spawns the worker; safe to call once per process
     void Stop();
     void OnGameTick();     // called by the pump hook on the game thread
+    // Called on the game's server thread either side of its parse of a body
+    // search. Before: true when this search is one to watch, having read the
+    // bag. After: what the search paid that the rules refuse goes back on the
+    // ground. DROP.md.
+    bool SearchParse(uintptr_t sender, uint32_t target, bool after);
 
     Status GetStatus();
     int  CopyNearby(Nearby* out, int max);

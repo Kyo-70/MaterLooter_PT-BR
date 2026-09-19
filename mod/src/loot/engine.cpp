@@ -3829,6 +3829,184 @@ namespace ml::loot
                strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
     }
 
+    // --- refused body loot back on the ground (DROP.md) -------------------
+    // A body or a carcass hands over everything it holds and no rule sees any
+    // of it first. With the switch on, what the rules refuse goes back on the
+    // ground through the routine the game's own discard request calls, one
+    // pile per stack.
+    //
+    // That routine only works on the game's server thread. It reads a context
+    // from the thread's TLS block at +0x250 that no other thread has, and a
+    // first try from the mod's own game thread faulted on it every time. The
+    // server also keeps its own actor for the player and its own holder for
+    // the same bag. So this runs inside the server's parse of the mod's own
+    // search, with the sender that parse was handed and the holder
+    // GetInventoryHolder gives it there. Everything a search pays lands during
+    // that parse: across eighteen searches in the first session, none paid
+    // anything later.
+    //
+    // What is new is told apart by instance, not by item: the bag is read
+    // slot by slot either side of the parse, and only an instance that was not
+    // there before, or the amount a stack grew by, is ever dropped. A sword
+    // the player already carried is never the one that goes, even when the
+    // search paid another of the same.
+    //
+    // The two snapshots are read and written on the server thread only.
+    static std::unordered_map<uint32_t, long long> g_searchBefore;   // instance -> count
+    static uintptr_t g_searchHolder = 0;
+
+    // Where the played body stands, in the frame the drop routine wants: the
+    // transform's +0x324, which +0x3D0 repeats. The +0xB4 the scan reads sits
+    // a regional origin away from it and that origin moves, so it is read off
+    // the body itself as the enumeration hands the body over. As Kliff there
+    // is no separate body and the search's own sender stands where he does;
+    // as Damiane or Oongka the sender is the identity, which stands somewhere
+    // else entirely, so the body's position is the only one to use.
+    struct DropAt { uint32_t eid; DWORD at; float pos[3]; };
+    static DropAt g_bodyDropAt{};
+    static SRWLOCK g_bodyDropLock = SRWLOCK_INIT;
+
+    static bool ReadWorldPos(uintptr_t ent, float out[3])
+    {
+        const uintptr_t tf = ent ? game::Transform(game::Comps(ent)) : 0;
+        float twin[3] = {};
+        if (!tf || !mem::ReadF32x3(tf + 0x324, out) || !mem::ReadF32x3(tf + 0x3D0, twin)) return false;
+        const float dx = out[0] - twin[0], dy = out[1] - twin[1], dz = out[2] - twin[2];
+        if (dx * dx + dy * dy + dz * dz > 4.0f) return false;
+        return !(fabsf(out[0]) < 1.0f && fabsf(out[1]) < 1.0f && fabsf(out[2]) < 1.0f);
+    }
+
+    static void PublishBodyDropAt(uintptr_t ent, uint32_t eid, const Vec3& scanAt, DWORD now)
+    {
+        float w[3];
+        if (!ReadWorldPos(ent, w)) return;
+        AcquireSRWLockExclusive(&g_bodyDropLock);
+        g_bodyDropAt = { eid, now, { w[0], w[1], w[2] } };
+        ReleaseSRWLockExclusive(&g_bodyDropLock);
+        static uint32_t s_said = 0;
+        if (g_debugLog && s_said != eid)
+        {
+            s_said = eid;
+            LOG("[drop] the body %08X stands at %.1f %.1f %.1f in the world, %.1f %.1f %.1f as the scan reads it",
+                eid, w[0], w[1], w[2], scanAt.x, scanAt.y, scanAt.z);
+        }
+    }
+
+    // -1 when the holder could not be read, which is not the same answer as an
+    // empty bag. Only the carried bag, the key every hand drop names.
+    static int ServerBag(uintptr_t holder, game::InvEntry* ents, int max)
+    {
+        static game::BucketInfo bks[64];
+        const int bn = game::HolderBuckets(holder, bks, 64);
+        if (bn <= 0) return -1;
+        const int n = game::HolderEntries(holder, ents, max);
+        const uint16_t bagType = game::InvTypeLookup(2);
+        if (bagType == 0xFFFF) return -1;
+        int k = 0;
+        for (int i = 0; i < n; ++i)
+            if (ents[i].bucket < bn && bks[ents[i].bucket].type == bagType) ents[k++] = ents[i];
+        return k;
+    }
+
+    bool SearchParse(uintptr_t sender, uint32_t target, bool after)
+    {
+        static game::InvEntry ents[4096];
+        if (!after)
+        {
+            g_searchHolder = 0;
+            if (!Settings::Get().dropRefused || !hooks::DropReady() || !sender) return false;
+            // A body the player searched by hand keeps what it paid.
+            if (!events::SearchedRecently(target)) return false;
+            uint32_t eid = 0;
+            if (!game::Eid(sender, &eid) || (eid >> 24) != game::kTagPlayer) return false;
+            if (!hooks::ThreadContext()) return false;
+            const uintptr_t holder = game::HolderNow(sender);
+            if (!holder) return false;
+            const int n = ServerBag(holder, ents, 4096);
+            if (n < 0) return false;
+            g_searchBefore.clear();
+            for (int i = 0; i < n; ++i) g_searchBefore[ents[i].iid] += ents[i].count;
+            g_searchHolder = holder;
+            return true;
+        }
+        const uintptr_t holder = g_searchHolder;
+        g_searchHolder = 0;
+        if (!holder) return false;
+        const int n = ServerBag(holder, ents, 4096);
+        if (n <= 0) return false;
+
+        // What each instance gained. An instance that was not there before
+        // gained all of it.
+        std::unordered_map<uint32_t, long long> gained;
+        {
+            std::unordered_map<uint32_t, long long> now;
+            for (int i = 0; i < n; ++i) now[ents[i].iid] += ents[i].count;
+            for (const auto& [iid, c] : now)
+            {
+                const auto b = g_searchBefore.find(iid);
+                const long long g = c - (b == g_searchBefore.end() ? 0 : b->second);
+                if (g > 0) gained[iid] = g;
+            }
+        }
+        if (gained.empty()) return true;
+
+        // Beside the player and a little up, near where a hand drop lands.
+        uint32_t senderEid = 0; game::Eid(sender, &senderEid);
+        float at[3] = {};
+        bool placed = false;
+        const char* where = "";
+        {
+            AcquireSRWLockShared(&g_bodyDropLock);
+            const DropAt b = g_bodyDropAt;
+            ReleaseSRWLockShared(&g_bodyDropLock);
+            const uint32_t body = g_bodyEid;
+            if (body && body != senderEid)
+            {
+                if (b.eid == body && GetTickCount() - b.at < 3000)
+                { at[0] = b.pos[0]; at[1] = b.pos[1]; at[2] = b.pos[2]; placed = true; where = "the body"; }
+            }
+            else if (ReadWorldPos(sender, at)) { placed = true; where = "the player"; }
+        }
+        const float tfm[7] = { at[0] + 0.8f, at[1] + 0.5f, at[2], 0.f, 0.f, 0.f, 1.f };
+
+        // The rules as one consistent copy: the menu edits the live maps under
+        // the settings lock, and this is not the thread holding it.
+        const Config cfg = Settings::Snapshot();
+        int drops = 0;
+        for (const auto& [iid, g] : gained)
+        {
+            long long left = g;
+            for (int i = 0; i < n && left > 0 && drops < 16; ++i)
+            {
+                game::InvEntry& e = ents[i];
+                if (e.iid != iid || e.count <= 0) continue;
+                const Item* it = ItemDb::ByRow(e.tid);
+                if (!it) break;   // no rule can be asked about a thing with no name
+                // Never a document or a quest item by any route, the rule
+                // auto-store keeps as well, and nothing the pet filter would
+                // refuse to delete.
+                if (it->klass == "document" || it->tags.find(" quest ") != std::string::npos) break;
+                const Rules::Verdict v = Rules::Decide(*it, cfg);
+                if (v.loot || NeverDelete(*it, v)) break;
+                if (!placed)
+                {
+                    LOG("[drop] no fresh world position for the body being played; %lld %s stays in the bag", left, it->name.c_str());
+                    break;
+                }
+                const long long take = e.count < left ? e.count : left;
+                uint32_t err = 0xFFFFFFFFu;
+                ++drops;
+                if (!hooks::CallDrop(holder, &err, sender, 2, static_cast<uint16_t>(e.slot), take, tfm))
+                { LOG_ERR("[drop] the game's drop faulted on %lld %s; it stays in the bag", take, it->name.c_str()); break; }
+                if (err) { LOG_ERR("[drop] the game would not drop %lld %s: error %08X", take, it->name.c_str(), err); break; }
+                LOG("[drop] left %lld %s beside %s from %08X: %s%s%s", take, it->name.c_str(), where, target,
+                    v.rule, v.detail.empty() ? "" : " ", v.detail.c_str());
+                left -= take; e.count -= take;
+            }
+        }
+        return true;
+    }
+
     static long long DeleteFromInventory(uint16_t tid, long long amount, const char* why)
     {
         static game::InvEntry ents[4096]; static game::BucketInfo bks[64];
@@ -4843,6 +5021,7 @@ namespace ml::loot
                 const bool played = game::TypeTag(e) == 0x04 && game::Cat2(e) == 0x0E;
                 if (played || g_holderN) TouchHolder(eid, q, now, played);
             }
+            if (g_bodyEid && eid == g_bodyEid) PublishBodyDropAt(e, eid, q, now);
             const float dx = q.x - mp.x, dy = q.y - mp.y, dz = q.z - mp.z;
             const float d = std::sqrt(dx * dx + dy * dy + dz * dz);
             if (d < nearestD) { nearestD = d; nearestEid = eid; nearestEnt = e; }

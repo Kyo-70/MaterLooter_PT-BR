@@ -130,6 +130,7 @@ namespace ml::Settings
         else if (k == "StopPetBodies")    c.stopPetBodies = Flag(v);
         else if (k == "MinValueCopper")   c.minValueCopper = std::max(0, atoi(v.c_str()));
         else if (k == "TakeUnknownItems") c.takeUnknownItems = Flag(v);
+        else if (k == "DropRefused")      c.dropRefused = Flag(v);
         else if (k == "DebugLog")         c.debugLog = Flag(v);
         else if (k == "DeleteTestName")   c.deleteTestName = v;
         else if (k == "EquipStrict")      c.equipStrict = Flag(v);
@@ -477,6 +478,7 @@ namespace ml::Settings
         snprintf(b, sizeof b, "BreakOre=%d\nDrawWells=%d\n", c.breakOre, c.drawWells); s += b;
         snprintf(b, sizeof b, "LootOwned=%d\nSkipQuestItems=%d\nSkipNoSell=%d\nSkipQuestGear=%d\nMinValueCopper=%d\nTakeUnknownItems=%d\nPetFilter=%d\nStopPetLooting=%d\nStopPetBodies=%d\nDebugLog=%d\nConfigVersion=%d\n",
                  c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.stopPetBodies, c.debugLog, c.configVersion); s += b;
+        snprintf(b, sizeof b, "DropRefused=%d\n", c.dropRefused); s += b;
         if (!c.deleteTestName.empty()) { snprintf(b, sizeof b, "DeleteTestName=%s\n", c.deleteTestName.c_str()); s += b; }
         if (c.equipStrict) { snprintf(b, sizeof b, "EquipStrict=1\n"); s += b; }
         if (c.dupeProbe)  { snprintf(b, sizeof b, "DupeProbe=1\n"); s += b; }
