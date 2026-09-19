@@ -5850,7 +5850,17 @@ namespace ml::loot
                             g_brokeWatch[k.eid] = now;
                         }
                     }
-                    else if (!events::Send(v.act, k.eid, g_meEid, route, 0)) { held("the game refused the event"); continue; }
+                    // A skin the mod does earns no knowledge of the creature,
+                    // because the game raises that reward from the hand skin's own
+                    // completion and the search alone never reaches it. Two hand
+                    // skins rewarded against none of 24 mod skins, issue #70. So a
+                    // carcass whose species the table names exactly carries the
+                    // reward with it. Only exact: a species guessed from a shared
+                    // word would teach the player about the wrong animal.
+                    else if (!events::Send(v.act, k.eid, g_meEid, route, 0,
+                                           v.act == Action::Search && k.speciesExact && k.species ? k.species->skin : 0,
+                                           v.act == Action::Search && k.speciesExact && k.species ? k.species->key : 0))
+                    { held("the game refused the event"); continue; }
                     ++taken;
                     {
                         const Item* y = v.act == Action::Gather ? NodeYield(k) : nullptr;

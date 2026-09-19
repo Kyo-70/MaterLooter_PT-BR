@@ -105,8 +105,10 @@ namespace ml::CreatureDb
             const std::string line = text.substr(pos, nl - pos);
             pos = nl + 1;
             if (header) { header = false; continue; }
-            std::string cols[5]; int c = 0;
-            for (const char* p = line.c_str(); *p && c < 5; ++p)
+            // A sixth column, skin, arrived in 1.6.32. A table written before
+            // it still loads, with no skinning reward for anything in it.
+            std::string cols[6]; int c = 0;
+            for (const char* p = line.c_str(); *p && c < 6; ++p)
             {
                 if (*p == '\t') { ++c; continue; }
                 if (*p == '\r' || *p == '\n') break;
@@ -118,6 +120,7 @@ namespace ml::CreatureDb
             cr.stringKey = cols[1]; cr.name = cols[2];
             cr.itemRow = atoi(cols[3].c_str());
             cr.klass = cols[4];
+            if (c >= 5) cr.skin = static_cast<uint32_t>(strtoul(cols[5].c_str(), nullptr, 10));
             g_byKey[cr.stringKey] = g_rows.size();
             g_rows.push_back(std::move(cr));
         }

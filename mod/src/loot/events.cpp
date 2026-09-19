@@ -12,6 +12,7 @@
 #include "hooks.h"
 #include "mem.h"
 #include "signatures.h"
+#include "../core/creaturedb.h"
 #include "../core/log.h"
 #include "../core/settings.h"
 
@@ -76,7 +77,7 @@ namespace ml::events
         return true;
     }
 
-    struct PendAct { Action act; uint32_t eid, player, route; uint8_t mode; };
+    struct PendAct { Action act; uint32_t eid, player, route; uint8_t mode; uint32_t skinInter, skinChr; };
     struct PendArm { uintptr_t node, mode, arg3, ctx; };
     // ev 0 means the vein's pair of transitions, which is what DriveBreak
     // wants. Any other value is one transition driven by id, which is what a
@@ -280,16 +281,17 @@ namespace ml::events
         if (!g_selfTested) SelfTest();
     }
 
-    static void* Build(Action act, uint32_t target, uint32_t player, uint32_t route, uint8_t mode, void** descOut)
+    // An event with its header filled and the id and FF written at the front
+    // of the payload, which every descriptor this mod sends starts with.
+    static void* NewEvent(uint16_t id, uint16_t size, uint32_t player, uint32_t route, void** descOut, unsigned char** bufOut)
     {
         const game::Fns& f = game::F();
-        const Desc& d = g_desc[Row(act)];
         reinterpret_cast<FnTlsInit>(f.tlsInit)();
         uint32_t mask = 0;
         if (!mem::Read32(f.descMask, &mask)) return nullptr;
-        void* desc = reinterpret_cast<FnDescLookup>(f.descLookup)(0, d.id, mask);
-        if (!desc) { LOG_ERR("[send] descriptor 0x%04X not found", d.id); return nullptr; }
-        unsigned char* e = static_cast<unsigned char*>(reinterpret_cast<FnAllocEvent>(f.allocEvent)(0, d.size));
+        void* desc = reinterpret_cast<FnDescLookup>(f.descLookup)(0, id, mask);
+        if (!desc) { LOG_ERR("[send] descriptor 0x%04X not found", id); return nullptr; }
+        unsigned char* e = static_cast<unsigned char*>(reinterpret_cast<FnAllocEvent>(f.allocEvent)(0, size));
         if (!e) { LOG_ERR("[send] event allocation failed"); return nullptr; }
 
         *reinterpret_cast<uint32_t*>(e + kOff_Ev_One)    = 1;
@@ -299,12 +301,23 @@ namespace ml::events
         *reinterpret_cast<uint32_t*>(e + kOff_Ev_Player + 4) = 0;
         *reinterpret_cast<uint32_t*>(e + kOff_Ev_Route)  = route;
         *reinterpret_cast<void**>(e + kOff_Ev_Desc)      = desc;
-        *reinterpret_cast<uint16_t*>(e + kOff_Ev_Size)   = d.size;
+        *reinterpret_cast<uint16_t*>(e + kOff_Ev_Size)   = size;
         *reinterpret_cast<uint8_t*>(e + kOff_Ev_Flag78)  = 1;
 
         unsigned char* buf = *reinterpret_cast<unsigned char**>(e + kOff_Ev_Buffer);
         if (!buf) { LOG_ERR("[send] event has no payload buffer"); return nullptr; }
-        buf[0] = static_cast<uint8_t>(d.id & 0xFF); buf[1] = static_cast<uint8_t>(d.id >> 8); buf[2] = 0xFF;
+        buf[0] = static_cast<uint8_t>(id & 0xFF); buf[1] = static_cast<uint8_t>(id >> 8); buf[2] = 0xFF;
+        if (descOut) *descOut = desc;
+        *bufOut = buf;
+        return e;
+    }
+
+    static void* Build(Action act, uint32_t target, uint32_t player, uint32_t route, uint8_t mode, void** descOut)
+    {
+        const Desc& d = g_desc[Row(act)];
+        unsigned char* buf = nullptr;
+        void* e = NewEvent(d.id, d.size, player, route, descOut, &buf);
+        if (!e) return nullptr;
         switch (act)
         {
         case Action::Search:                                   // id FF <eid>
@@ -324,7 +337,6 @@ namespace ml::events
             buf[8] = 0x01; buf[9] = 0x01; buf[10] = 0x00; buf[11] = 0xFF; buf[12] = 0x00;
             break;
         }
-        if (descOut) *descOut = desc;
         return e;
     }
 
@@ -415,7 +427,47 @@ namespace ml::events
         return k;
     }
 
-    static bool SendNow(Action act, uint32_t target, uint32_t player, uint32_t route, uint8_t mode)
+
+    // What a hand skin raises a fraction of a second after the search:
+    // TrocTrInteractionRewardOnceTimer, id FF, then the interaction key and
+    // the creature's character key, eleven bytes. Two hand skins on 19
+    // September 2026 read F8 07 FF 7A 42 0F 00 B2 7A 00 00, SmallAnimal_Skin
+    // and the Desert Fox, and the same with the Desert Porcupine. It carries
+    // no entity, so it names the kind of creature and not the carcass. The id
+    // is found by class name, like every other one here, since ids drift.
+    static uint16_t RewardId()
+    {
+        static uint16_t s_id = 0;
+        static bool s_looked = false;
+        if (!s_looked && !g_descMap.empty())
+        {
+            s_looked = true;
+            for (const DescName& d : g_descMap)
+                if (d.cls.find("TrocTrInteractionRewardOnceTimer") != std::string::npos)
+                {
+                    if (d.size == 11) s_id = d.id;
+                    else LOG_ERR("[skin] the interaction reward is %u bytes here, not 11; skins get no knowledge", d.size);
+                    break;
+                }
+            if (!s_id) LOG_ERR("[skin] no interaction reward descriptor; skins get no knowledge");
+        }
+        return s_id;
+    }
+
+    static void* BuildReward(uint32_t inter, uint32_t chr, uint32_t player, uint32_t route, void** descOut)
+    {
+        const uint16_t id = RewardId();
+        if (!id) return nullptr;
+        unsigned char* buf = nullptr;
+        void* e = NewEvent(id, 11, player, route, descOut, &buf);
+        if (!e) return nullptr;
+        *reinterpret_cast<uint32_t*>(buf + 3) = inter;
+        *reinterpret_cast<uint32_t*>(buf + 7) = chr;
+        return e;
+    }
+
+    static bool SendNow(Action act, uint32_t target, uint32_t player, uint32_t route, uint8_t mode,
+                        uint32_t skinInter = 0, uint32_t skinChr = 0)
     {
         if (!g_sendAllowed) return false;
         const game::Fns& f = game::F();
@@ -425,16 +477,27 @@ namespace ml::events
             void* desc = nullptr;
             void* ev = Build(act, target, player, route, mode, &desc);
             if (!ev) return false;
+            // Built before anything is sent, so a reward that cannot be built
+            // never follows a search that could.
+            void* rdesc = nullptr;
+            void* rev = act == Action::Search && skinInter && skinChr
+                ? BuildReward(skinInter, skinChr, player, route, &rdesc) : nullptr;
             uintptr_t q = 0;
             if (!mem::ReadPtr(f.queue, &q)) { LOG_ERR("[send] queue global unreadable"); return false; }
             InterlockedExchange(&g_sendTid, static_cast<LONG>(GetCurrentThreadId()));
             // Ours, so the spy does not report it back as something the game did.
             ml::loot::hooks::SelfSendBegin();
             reinterpret_cast<FnEnqueue>(f.enqueue)(reinterpret_cast<void*>(q), ev, desc, 0);
+            if (rev) reinterpret_cast<FnEnqueue>(f.enqueue)(reinterpret_cast<void*>(q), rev, rdesc, 0);
             ml::loot::hooks::SelfSendEnd();
             InterlockedExchange(&g_sendTid, 0);
             InterlockedIncrement(&g_sent);
             ok = true;
+            if (rev)
+            {
+                static int s_said = 0;
+                if (s_said < 20) { ++s_said; LOG("[skin] %08X: sent the skinning reward, interaction %u, character %u", target, skinInter, skinChr); }
+            }
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
@@ -579,17 +642,18 @@ namespace ml::events
         return hit;
     }
 
-    bool Send(Action a, uint32_t target, uint32_t player, uint32_t route, uint8_t mode)
+    bool Send(Action a, uint32_t target, uint32_t player, uint32_t route, uint8_t mode,
+              uint32_t skinInter, uint32_t skinChr)
     {
         if (!g_sendAllowed) return false;
         const int mark = a == Action::Search ? MarkSearch(target) : -1;
         bool ok;
-        if (OnGameThread()) ok = SendNow(a, target, player, route, mode);
+        if (OnGameThread()) ok = SendNow(a, target, player, route, mode, skinInter, skinChr);
         else
         {
             Lock();
             ok = g_pendActN < 64;
-            if (ok) g_pendAct[g_pendActN++] = { a, target, player, route, mode };
+            if (ok) g_pendAct[g_pendActN++] = { a, target, player, route, mode, skinInter, skinChr };
             Unlock();
         }
         if (!ok && mark >= 0) UnmarkSearch(mark, target);
@@ -649,7 +713,8 @@ namespace ml::events
         Unlock();
         for (int i = 0; i < xn; ++i) DeleteNow(dels[i]);
         for (int i = 0; i < rn; ++i) ArmNow(arms[i].node, arms[i].mode, arms[i].arg3, arms[i].ctx);
-        for (int i = 0; i < an; ++i) SendNow(acts[i].act, acts[i].eid, acts[i].player, acts[i].route, acts[i].mode);
+        for (int i = 0; i < an; ++i) SendNow(acts[i].act, acts[i].eid, acts[i].player, acts[i].route, acts[i].mode,
+                                             acts[i].skinInter, acts[i].skinChr);
         for (int i = 0; i < dn; ++i) DriveNow(drvs[i]);
         InterlockedExchange(&g_draining, 0);
     }
@@ -704,6 +769,50 @@ namespace ml::events
             {
                 uint32_t broke = 0;
                 if (mem::Read32(payload + 3, &broke) && broke) ml::loot::NoteBreakDrop(broke);
+            }
+        }
+        // Skinning knowledge, issue #70. A hand skin makes the game raise
+        // TrocTrInteractionRewardOnceTimer with the interaction key at +3 and
+        // the creature's character key at +7; a skin the mod does never gets
+        // one. Sending it ourselves needs that character key, which nothing on
+        // the actor has yielded (#39). So record who raised it and from where:
+        // the function that fills +7 reads the key from somewhere, and a stack
+        // names that function. Six a session, written whatever the log level.
+        {
+            static uint16_t s_rewardId = 0;
+            static bool s_rewardLooked = false;
+            static volatile LONG s_rewardSeen = 0;
+            if (!s_rewardLooked && !g_descMap.empty())
+            {
+                s_rewardLooked = true;
+                for (const DescName& d : g_descMap)
+                    if (d.cls.find("TrocTrInteractionRewardOnceTimer") != std::string::npos) { s_rewardId = d.id; break; }
+                LOG("[reward] interaction reward descriptor is 0x%04X", s_rewardId);
+            }
+            uintptr_t payload = 0; uint16_t size = 0, id = 0;
+            if (s_rewardId &&
+                mem::ReadPtr(ev + kOff_Ev_Buffer, &payload) &&
+                mem::Read16(ev + kOff_Ev_Size, &size) && size >= 11 &&
+                mem::Read16(payload, &id) && id == s_rewardId &&
+                InterlockedIncrement(&s_rewardSeen) <= 6)
+            {
+                uint32_t inter = 0, chr = 0;
+                mem::Read32(payload + 3, &inter);
+                mem::Read32(payload + 7, &chr);
+                const Creature* cr = CreatureDb::ByCharacterKey(chr);
+                LOG("[reward] raised by %08X route %08X thread %lu: interaction %u, character %u (%s)",
+                    who, rt, GetCurrentThreadId(), inter, chr, cr ? cr->name.c_str() : "not in the creature table");
+                void* frames[28] = {};
+                const USHORT n = RtlCaptureStackBackTrace(0, 28, frames, nullptr);
+                const uintptr_t base = reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));
+                char line[28 * 20 + 1] = {}; int p = 0;
+                for (USHORT i = 0; i < n && p < static_cast<int>(sizeof line) - 20; ++i)
+                {
+                    const uintptr_t a = reinterpret_cast<uintptr_t>(frames[i]);
+                    if (mem::InImage(a)) p += snprintf(line + p, sizeof line - p, " +%llX", static_cast<unsigned long long>(a - base));
+                    else p += snprintf(line + p, sizeof line - p, " ?%llX", static_cast<unsigned long long>(a));
+                }
+                LOG("[reward] stack:%s", line);
             }
         }
         // The three event kinds a vein's break could travel on, named whoever

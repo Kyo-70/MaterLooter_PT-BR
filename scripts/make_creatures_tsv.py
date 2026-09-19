@@ -1,7 +1,14 @@
 """Export the creatures a player can catch, with the class of the item they become.
 
 Writes mod/data/MasterLooter.creatures.tsv with columns:
-character_key, string_key, name, item_row, item_class
+character_key, string_key, name, item_row, item_class, skin
+
+skin is the interactioninfo key a hand skin of the creature is rewarded under,
+SmallAnimal_Skin or Animal_Skin, read out of its CharacterInfo record, or 0.
+The plugin sends that reward after its own skins, since the search alone never
+earns the creature's knowledge (issue #70). The record lists every interaction
+the character offers as a u32 key, and a seven-digit key does not turn up by
+chance: of the 1004 rows 169 carry the small one, 501 the other, none both.
 
 Every CharacterInfo record whose string key starts with Animal_ is a creature.
 Its class comes from the tagged item with the same English name when there is
@@ -16,6 +23,7 @@ plugin and never vote on species words.
 """
 import csv
 import os
+import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -63,11 +71,24 @@ def main():
                 return by_name[cand]
         return None
 
+    inter = {}
+    for key, rec in cdtables.load_table("interactioninfo"):
+        n = struct.unpack_from("<I", rec, 4)[0]
+        inter[rec[8:8 + n].decode("ascii", "replace")] = key
+    skins = [inter["SmallAnimal_Skin"], inter["Animal_Skin"]]
+    records = dict(cdtables.load_table("characterinfo"))
+
+    def skin_of(key):
+        rec = records.get(key, b"")
+        found = [s for s in skins if struct.pack("<I", s) in rec]
+        assert len(found) <= 1, (key, found)
+        return found[0] if found else 0
+
     chars = list(csv.DictReader(open(os.path.join(ROOT, "data", "character_drops.csv"), encoding="utf-8-sig")))
     n = 0
     counts = {}
     with open(DST, "w", encoding="utf-8", newline="\n") as f:
-        f.write("character_key\tstring_key\tname\titem_row\titem_class\n")
+        f.write("character_key\tstring_key\tname\titem_row\titem_class\tskin\n")
         for c in chars:
             sk = c["string_key"]
             if not sk.startswith("Animal_"):
@@ -77,7 +98,7 @@ def main():
                 klass, row = it["klass"], order.get(int(it["key"]), -1)
             else:
                 klass, row = guess(sk, c["name"]), -1
-            f.write("%s\t%s\t%s\t%d\t%s\n" % (c["key"], sk, c["name"], row, klass))
+            f.write("%s\t%s\t%s\t%d\t%s\t%d\n" % (c["key"], sk, c["name"], row, klass, skin_of(int(c["key"]))))
             counts[klass] = counts.get(klass, 0) + 1
             n += 1
     print("wrote", DST, n, "creatures", counts)

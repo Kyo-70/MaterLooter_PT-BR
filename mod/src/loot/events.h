@@ -36,7 +36,11 @@ namespace ml::events
                     uint32_t targetEid, float x, float y, float z);
 
     // Send (or queue when off the game thread). Returns false when refused.
-    bool Send(Action a, uint32_t targetEid, uint32_t playerEid, uint32_t route, uint8_t mode);
+    // A search given a skin interaction and a character key is followed on the
+    // game thread by the reward a hand skin raises, which is where the game
+    // grants the creature's knowledge. Issue #70.
+    bool Send(Action a, uint32_t targetEid, uint32_t playerEid, uint32_t route, uint8_t mode,
+              uint32_t skinInteraction = 0, uint32_t skinCharacter = 0);
     // Whether this mod sent a search for that body in the last ten seconds.
     // Safe from any thread; the server's parse of a search asks it.
     bool SearchedRecently(uint32_t targetEid);

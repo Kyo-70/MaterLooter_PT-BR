@@ -14,6 +14,9 @@ namespace ml
         std::string name;
         std::string klass;      // insect, fish, seafood, animal, amphibian
         int         itemRow = -1;
+        // The interactioninfo key skinning this creature by hand rewards,
+        // SmallAnimal_Skin or Animal_Skin, or 0 for one that is not skinned.
+        uint32_t    skin = 0;
     };
 
     namespace CreatureDb
