@@ -74,9 +74,20 @@ namespace ml
         // PsmHidingKeys export says so and covers it. That export is optional
         // and looked up by name, so a build of that plugin without it changes
         // nothing. The pad chords are not affected.
-        static bool HotkeysFree()
+        //
+        // vk is the key being tested. A key bound to Ctrl or Alt itself is
+        // always held with that modifier down, so the modifier it is does not
+        // count against it, or it could never fire at all; trowieuk1 bound the
+        // menu to Ctrl and it went dead in 1.6.27. The other modifier still
+        // does. Private Storage Master never holds back a bare modifier, so a
+        // modifier key does not ask it.
+        static bool IsCtrlKey(int vk) { return vk == VK_CONTROL || vk == VK_LCONTROL || vk == VK_RCONTROL; }
+        static bool IsAltKey(int vk)  { return vk == VK_MENU || vk == VK_LMENU || vk == VK_RMENU; }
+        static bool HotkeysFree(int vk)
         {
-            if ((GetAsyncKeyState(VK_CONTROL) & 0x8000) || (GetAsyncKeyState(VK_MENU) & 0x8000)) return false;
+            if (!IsCtrlKey(vk) && (GetAsyncKeyState(VK_CONTROL) & 0x8000)) return false;
+            if (!IsAltKey(vk) && (GetAsyncKeyState(VK_MENU) & 0x8000)) return false;
+            if (IsCtrlKey(vk) || IsAltKey(vk) || vk == VK_SHIFT || vk == VK_LSHIFT || vk == VK_RSHIFT) return true;
             using HidingFn = int (*)(void);
             static std::atomic<HidingFn> s_hiding{nullptr};
             static std::atomic<DWORD> s_nextTry{0};

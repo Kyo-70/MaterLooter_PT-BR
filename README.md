@@ -103,7 +103,7 @@ If Defender or your browser quarantines the download, restore it and exclude the
 
 All four keys are rebindable in the menu under General, and they also sit in `MasterLooter.ini` beside the plugin as `MenuKey`, `KeyToggle`, `KeyBurst` and `KeyWatch`, written as virtual-key codes. Edit the file and save it and the change is picked up about a second later without a restart, which is the quickest way to clear a clash with another ASI mod. Each of the four also takes a controller shortcut of two buttons at once rather than one, since every single button already does something in this game.
 
-Hold Ctrl or Alt and none of these keys fire. That keeps Private Storage Master's Ctrl+F10 from toggling auto-loot as well. Shift is left alone because the game sprints on it, and controller shortcuts work as they always did.
+Hold Ctrl or Alt and none of these keys fire, unless the key is Ctrl or Alt itself. That keeps Private Storage Master's Ctrl+F10 from toggling auto-loot as well. Shift is left alone because the game sprints on it, and controller shortcuts work as they always did.
 
 The menu keeps a pointer of its own rather than borrowing the game's, so clicks land where you point in fullscreen and in borderless windowed mode alike. On builds before 1.6.16 the two could come apart, and dragging the pointer into the top left corner was the way to put them back. Thanks to LuxDragon for finding that workaround and to Sov for the log that explained it.
 

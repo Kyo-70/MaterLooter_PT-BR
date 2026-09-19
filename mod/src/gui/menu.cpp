@@ -299,10 +299,9 @@ namespace ml::gui
         const bool front = State::ForegroundIsOurs();
         // Same rule as the loot hotkeys: a bare key fires only with Ctrl and Alt
         // up, the pad chord always does. See State::HotkeysFree.
-        const bool keysFree = State::HotkeysFree();
         const bool menuPad = hooks::PadChordHeld(c.padMenu);
         const bool key = front && (KeyDown(c.menuKey) || menuPad);
-        if (key && !s_keyWas && !st.rebindCapture && (menuPad || keysFree))
+        if (key && !s_keyWas && !st.rebindCapture && (menuPad || State::HotkeysFree(c.menuKey)))
         {
             // Insert: closed -> interactive; watching -> interactive; interactive -> closed.
             if (!st.menuOpen) { st.menuOpen = true; st.menuWatch = false; }
@@ -316,7 +315,7 @@ namespace ml::gui
 
         const bool watchPad = hooks::PadChordHeld(c.padWatch);
         const bool watch = front && (KeyDown(c.keyWatch) || watchPad);
-        if (watch && !s_watchWas && !st.rebindCapture && !st.textCapture && (watchPad || keysFree))
+        if (watch && !s_watchWas && !st.rebindCapture && !st.textCapture && (watchPad || State::HotkeysFree(c.keyWatch)))
         {
             // Home: closed -> watching; interactive -> watching; watching -> closed.
             if (!st.menuOpen) { st.menuOpen = true; st.menuWatch = true; }

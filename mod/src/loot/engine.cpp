@@ -5676,19 +5676,18 @@ namespace ml::loot
                 // The edge is taken on the key itself and the modifier test only
                 // decides whether that edge fires, so letting go of Ctrl while
                 // F10 is still down does not toggle anything either.
-                const bool keysFree = State::HotkeysFree();
                 const bool tp = ml::hooks::PadChordHeld(cfg.padToggle);
                 const bool t = KeyDown(cfg.keyToggle) || tp;
-                if (t && !toggleWas && (tp || keysFree)) { SetAuto(!cfg.enabled); cfg.enabled = !cfg.enabled; }
+                if (t && !toggleWas && (tp || State::HotkeysFree(cfg.keyToggle))) { SetAuto(!cfg.enabled); cfg.enabled = !cfg.enabled; }
                 toggleWas = t;
                 const bool bp = ml::hooks::PadChordHeld(cfg.padBurst);
                 const bool b = KeyDown(cfg.keyBurst) || bp;
-                if (b && !burstWas && (bp || keysFree)) { InterlockedExchange(&g_burst, 1); State::Get().Notify("Master Looter: looting everything in range", 1500); }
+                if (b && !burstWas && (bp || State::HotkeysFree(cfg.keyBurst))) { InterlockedExchange(&g_burst, 1); State::Get().Notify("Master Looter: looting everything in range", 1500); }
                 burstWas = b;
                 // Unbound reads as nothing held, so an unset key never fires.
                 const bool op = cfg.padOwned && ml::hooks::PadChordHeld(cfg.padOwned);
                 const bool o = (cfg.keyOwned && KeyDown(cfg.keyOwned)) || op;
-                if (o && !ownedWas && (op || keysFree)) { SetLootOwned(!cfg.lootOwned); cfg.lootOwned = !cfg.lootOwned; }
+                if (o && !ownedWas && (op || State::HotkeysFree(cfg.keyOwned))) { SetLootOwned(!cfg.lootOwned); cfg.lootOwned = !cfg.lootOwned; }
                 ownedWas = o;
             }
             if (InterlockedExchange(&g_forget, 0))
