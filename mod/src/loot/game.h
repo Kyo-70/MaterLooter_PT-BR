@@ -67,6 +67,12 @@ namespace ml::game
     // this. RefreshHolder is the game-thread half and must only run there.
     uintptr_t Holder(uintptr_t actor);
     void      RefreshHolder(uintptr_t actor);
+    // Drops the cached answer. It is a raw game pointer, so it goes in the
+    // world-change purge with the others.
+    void      ForgetHolder();
+    // The holder the last InventoryRefresh read from, 0 when it read nothing.
+    // A change means every sample taken before it was of a different bag.
+    uintptr_t LastInventoryHolder();
 
     bool     Eid(uintptr_t e, uint32_t* out);
     uint32_t Route(uintptr_t e);

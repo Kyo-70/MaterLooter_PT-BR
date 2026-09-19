@@ -1,6 +1,7 @@
 #include "engine.h"
 
 #include <algorithm>
+#include <atomic>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -719,7 +720,9 @@ namespace ml::loot
     static std::unordered_map<uintptr_t, uint32_t> g_actorEid; // node actor -> eid, from the last scans
     static std::unordered_map<uint32_t, DWORD> g_slotProbeAt;  // eid -> last gimmick slot dump
 
-    static uintptr_t g_me = 0;
+    // Atomic because the game thread reads it too, to ask the game which bag
+    // this actor uses.
+    static std::atomic<uintptr_t> g_me{ 0 };
     // Declared here, above the body helpers that read it.
     static uint32_t  g_meEid = 0, g_meRoute = 0;
     // When the scan last found nothing at all around the chosen actor.
@@ -1440,6 +1443,22 @@ namespace ml::loot
                 if (why) { if (Settings::Get().debugLog) LOG("[learn] player %s eid %08X (node type %u), we had skipped it: %s", events::ActionName(seen[i].act), seen[i].eid, nodeType, why); }
                 else if (WasSeen(seen[i].eid)) { if (Settings::Get().debugLog) LOG("[learn] player %s eid %08X (node type %u), the scan had it and did not act", events::ActionName(seen[i].act), seen[i].eid, nodeType); }
                 else if (s_missLogs < 40) { ++s_missLogs; LOG("[learn] player %s eid %08X (node type %u), the scan never saw it", events::ActionName(seen[i].act), seen[i].eid, nodeType); }
+            }
+        }
+        // A different holder from the last sample is a different bag: the scan
+        // moved to another actor, or the game has just said which bag this one
+        // uses. Diffing across that would read everything in the new bag as
+        // arriving at once, which auto-store would offer and the pet filter
+        // would judge, so every baseline starts again from this sample.
+        {
+            static uintptr_t s_holder = 0;
+            const uintptr_t hr = game::LastInventoryHolder();
+            if (hr != s_holder)
+            {
+                s_holder = hr;
+                g_invPrevValid = false;
+                g_bagPrevValid = false;
+                InvalidateBagBaseline();
             }
         }
         static uint16_t types[2048]; static long long qty[2048];
@@ -4841,6 +4860,9 @@ namespace ml::loot
                 g_spillWatch.clear();
                 // The bag that comes back after this is not the bag we sampled.
                 InvalidateBagBaseline();
+                // And the holder the game named for the old actor is a pointer
+                // into the world that just went.
+                game::ForgetHolder();
                 // Auto-store. Rises held from before the change read a bag that
                 // is not this one, and targets in the world that just went will
                 // not be delivered from it.

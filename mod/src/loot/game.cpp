@@ -260,8 +260,13 @@ namespace ml::game
     // The answer GetInventoryHolder last gave, and for which actor. Written on
     // the game thread and read by the worker, so the pair sits under one lock:
     // a holder read against the wrong actor is a bag of somebody else's.
+    // g_holderKnown separates "the game said this actor has no bag", which is
+    // an answer and stays 0, from "the game has not been asked yet", which
+    // falls back to the actor's own holder.
     static SRWLOCK   g_holderLock = SRWLOCK_INIT;
     static uintptr_t g_holderFor = 0, g_holderIs = 0;
+    static bool      g_holderKnown = false;
+    static uintptr_t g_invHolderRead = 0;
 
     static uintptr_t OwnHolder(uintptr_t actor)
     {
@@ -269,21 +274,25 @@ namespace ml::game
         return comps ? mem::Deref(comps, kOff_Comps_InvHolder) : 0;
     }
 
-    static uintptr_t CallInvHolder(uintptr_t fn, uintptr_t actor)
+    // False when the call faulted, which is no answer at all rather than an
+    // answer of no bag.
+    static bool CallInvHolder(uintptr_t fn, uintptr_t actor, uintptr_t* out)
     {
-        __try { return reinterpret_cast<uintptr_t (*)(uintptr_t)>(fn)(actor); }
-        __except (EXCEPTION_EXECUTE_HANDLER) { return 0; }
+        __try { *out = reinterpret_cast<uintptr_t (*)(uintptr_t)>(fn)(actor); return true; }
+        __except (EXCEPTION_EXECUTE_HANDLER) { *out = 0; return false; }
     }
 
     void RefreshHolder(uintptr_t actor)
     {
         const uintptr_t fn = g_f.invHolder;
         if (!fn || !actor || !mem::Readable(actor, 0x100)) return;
-        const uintptr_t h = CallInvHolder(fn, actor);
-        const uintptr_t use = (h && mem::Readable(h, 0x40)) ? h : 0;
+        uintptr_t h = 0;
+        if (!CallInvHolder(fn, actor, &h)) return;
+        if (h && !mem::Readable(h, 0x40)) return;   // an answer that does not read is no answer
+        const uintptr_t use = h;
         AcquireSRWLockExclusive(&g_holderLock);
-        const bool changed = g_holderFor != actor || g_holderIs != use;
-        g_holderFor = actor; g_holderIs = use;
+        const bool changed = g_holderFor != actor || g_holderIs != use || !g_holderKnown;
+        g_holderFor = actor; g_holderIs = use; g_holderKnown = true;
         ReleaseSRWLockExclusive(&g_holderLock);
         if (!changed || !use) return;
         const uintptr_t own = OwnHolder(actor);
@@ -304,10 +313,20 @@ namespace ml::game
     {
         if (!actor) return 0;
         AcquireSRWLockShared(&g_holderLock);
-        const uintptr_t h = g_holderFor == actor ? g_holderIs : 0;
+        const bool known = g_holderKnown && g_holderFor == actor;
+        const uintptr_t h = known ? g_holderIs : 0;
         ReleaseSRWLockShared(&g_holderLock);
-        return h ? h : OwnHolder(actor);
+        return known ? h : OwnHolder(actor);
     }
+
+    void ForgetHolder()
+    {
+        AcquireSRWLockExclusive(&g_holderLock);
+        g_holderFor = 0; g_holderIs = 0; g_holderKnown = false;
+        ReleaseSRWLockExclusive(&g_holderLock);
+    }
+
+    uintptr_t LastInventoryHolder() { return g_invHolderRead; }
 
     uint32_t Route(uintptr_t e) { uint32_t r = 0; mem::Read32(e + kOff_Ent_Route, &r); return r; }
     uint8_t TypeTag(uintptr_t e)
@@ -440,9 +459,11 @@ namespace ml::game
         std::vector<std::pair<int, int>> each;   // per bucket: slots, occupied
         std::vector<std::pair<uint16_t, long long>> qty;
         const uintptr_t holder = Holder(me);
-        if (!holder) { g_invN = 0; return; }
+        g_invHolderRead = holder;
+        if (!holder) { g_invN = 0; g_qty.clear(); g_bagQty.clear(); return; }
         uintptr_t barr = 0; uint32_t bn = 0;
-        if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) { g_invN = 0; return; }
+        if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64)
+        { g_invN = 0; g_invHolderRead = 0; g_qty.clear(); g_bagQty.clear(); return; }
         for (uint32_t b = 0; b < bn && n < 2048; ++b)
         {
             uintptr_t bk = 0, slots = 0; uint16_t sn = 0;
