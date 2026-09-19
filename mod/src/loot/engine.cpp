@@ -3198,6 +3198,16 @@ namespace ml::loot
         if (!catchable && c.dead != 1 && !c.inter && c.ai) return skip("creature");
         if (!catchable && c.dead != 1 && !c.inter) return skip("no interaction node");
 
+        // Mine ore veins for you, off, leaves every vein to the pickaxe. The
+        // arm loop has always honoured it, but a vein the player walks up to
+        // fills on its own, took the plain gather branch below, and was broken
+        // for them at the lower drop. rokugin, 19 September 2026. The chunks a
+        // vein throws are not veins by the table's breaks column, so they are
+        // still picked up.
+        if (!cfg.gatherVeins && c.nodeType && c.nodeType->tagged &&
+            KindFromName(c.nodeType->kind) == GatherKind::Ore && c.nodeType->breaks && !NotAVein(c.node))
+            return skip("an ore vein, left to your pickaxe while Mine ore veins for you is off");
+
         if (beastCorpse)     v.act = Action::Search;
         else if (catchable)  v.act = Action::Catch;
         else if (c.gather)   v.act = Action::Gather;
