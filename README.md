@@ -5,7 +5,7 @@ Auto-loot for Crimson Desert 2.03.00 with an in-game menu.
 > [!IMPORTANT]
 > **New in 1.6.28: loot can go straight into storage.** Install [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) 1.1.0 or later beside Master Looter, and what Master Looter picks up can be moved into your storage as it lands. Nothing you pick up by hand is touched. It starts off; see [Storing loot](#storing-loot) for how to turn it on.
 
-Walk past it and it is in your bag: dropped items, herbs and flowers, ore and stone chunks, timber, insects, fish, small animals, and the carcasses and bodies of anything you kill. Each kind has its own switch. Every item it picks up is checked against a database of 6,816 items with classes and tags, and the game's own Take-or-Steal check decides what is off limits. Skinning a carcass is the exception: the game hands the yield over without the mod seeing what it is, so that one switch is all or nothing. Everything is set from a menu inside the game.
+Walk past it and it is in your bag: dropped items, herbs and flowers, ore and stone chunks, timber, insects, fish, small animals, and the carcasses and bodies of anything you kill. Each kind has its own switch. Every item it picks up is checked against a database of 6,816 items with classes and tags, and the game's own Take-or-Steal check decides what is off limits. Searching a body or skinning a carcass is the exception. The game hands over the whole yield before the mod sees any of it, so what your rules refuse arrives anyway unless **Drop refused loot from bodies** under General is on, and then it goes straight back on the ground beside you. Everything is set from a menu inside the game.
 
 [Nexus Mods page](https://www.nexusmods.com/crimsondesert/mods/3402) · [Releases](https://github.com/shin2344234/master-looter/releases) · [Plugin manual](mod/README.md) · [Data pipeline](scripts/README.md)
 
@@ -90,11 +90,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.30:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.31:
 
-    6e91c981d3936e5819552ca9922fefb2f205ffe5e43711234c04e94b399cb982  MasterLooter-1.6.30-DMM.zip
-    980cbeec2544070a95241f46988690e5691a4a0e68264c3d13f6efe5e26542c3  MasterLooter-1.6.30.zip
-    6677363e10eecff23592870ba111bc7ce652944413eb6a68e5d29e2aabed94c7  MasterLooter.asi
+    11214cf36ec05b0a2a59f065d62492924c7b89fdd70e2c5aa47823a27a4eec3d  MasterLooter-1.6.31-DMM.zip
+    3c907050850de58d96b9d9177aee5c05f1dab565411c506d8d02f40ef47cb687  MasterLooter-1.6.31.zip
+    3d7cf978c876baaba4a41a6803ec59a48798d67910b4ca556ab8545641fcc9fe  MasterLooter.asi
 
 ## Controls
 
@@ -116,6 +116,8 @@ A worker thread finds the game's actor manager by its RTTI class name and reads 
 It works as Kliff, Damiane or Oongka. Playing anyone but Kliff, the actor the game raises your events under is not the character you are steering: it sits wherever the game parked it and never walks. The mod finds the body you are steering by the gear parented to it and searches from there, so nobody has to be in the party. Swapping characters is noticed by who walks: a few steps after the swap and the scan is on the new character. Verdicts that pass are queued, and a hook on the game's own per-frame tick sends the game's own loot events (pick up, gather, catch, search carcass), the same events the game sends when you press the interaction key.
 
 A pet or a companion loots whatever the game lets it, and nothing in the game looks at the item. Three switches under General deal with that, all off by default. "Stop pets picking up loose items" and "Stop pets looting bodies" answer no to the two questions the game asks before a pet loots, so the pet leaves those alone. With "Pets and companions follow the filters" on, a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, through the same removal event the game uses for its own deletions, with a notice on screen saying what went. Quest and protected items are never deleted. What you pick up yourself is kept, except while a hired mercenary is out, since nobody has checked that a mercenary asks the game the same question.
+
+Bodies and carcasses have a switch of their own, "Drop refused loot from bodies", off by default. The game runs its requests on a server thread of its own, and a search pays out while that thread handles it. The mod reads the bag on either side, judges each new item by the same rules a loose one gets, and hands whatever they refuse to the routine the game uses when you drop something yourself. Each stack lands as one pile beside you. A copy you already carried is never the one that goes, only a search the mod made is touched, and money, documents, quest items and protected items stay in the bag. [DROP.md](docs/investigations/DROP.md) has how the drop was found.
 
 Rule order for an identified item: item override, tag never, protected tags (memory fragments, mechanism parts), tag always, dev/quest/unsellable filters, copper value floor, class rule, then loot. Built-in protections apply before any of that: quest and shop objects, locked nodes, your own equipment and bag contents, gear worn by others, mechanism parts, container stacks, memory triggers, and anything the game's Take-or-Steal check calls theft. The [plugin manual](mod/README.md) has the details, the safety notes and the known limits.
 
