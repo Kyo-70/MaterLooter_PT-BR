@@ -92,9 +92,9 @@ Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properti
 
 If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.31:
 
-    11214cf36ec05b0a2a59f065d62492924c7b89fdd70e2c5aa47823a27a4eec3d  MasterLooter-1.6.31-DMM.zip
-    3c907050850de58d96b9d9177aee5c05f1dab565411c506d8d02f40ef47cb687  MasterLooter-1.6.31.zip
-    3d7cf978c876baaba4a41a6803ec59a48798d67910b4ca556ab8545641fcc9fe  MasterLooter.asi
+    9c56a64885c79644d33efa26a926692fcc3c44b60dec8a70c35b3cf128224d59  MasterLooter-1.6.31-DMM.zip
+    cfaefdfd68d6fed2b0553c72d3aa989e66f16f5f13ce75313263e57855ab1668  MasterLooter-1.6.31.zip
+    cb9dca0675621830864ce4a048143d3a514c305e2b450ba3d37350e7c83096f0  MasterLooter.asi
 
 ## Controls
 
@@ -117,7 +117,7 @@ It works as Kliff, Damiane or Oongka. Playing anyone but Kliff, the actor the ga
 
 A pet or a companion loots whatever the game lets it, and nothing in the game looks at the item. Three switches under General deal with that, all off by default. "Stop pets picking up loose items" and "Stop pets looting bodies" answer no to the two questions the game asks before a pet loots, so the pet leaves those alone. With "Pets and companions follow the filters" on, a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, through the same removal event the game uses for its own deletions, with a notice on screen saying what went. Quest and protected items are never deleted. What you pick up yourself is kept, except while a hired mercenary is out, since nobody has checked that a mercenary asks the game the same question.
 
-Bodies and carcasses have a switch of their own, "Drop refused loot from bodies", off by default. The game runs its requests on a server thread of its own, and a search pays out while that thread handles it. The mod reads the bag on either side, judges each new item by the same rules a loose one gets, and hands whatever they refuse to the routine the game uses when you drop something yourself. Each stack lands as one pile beside you. A copy you already carried is never the one that goes, only a search the mod made is touched, and money, documents, quest items and protected items stay in the bag. [DROP.md](docs/investigations/DROP.md) has how the drop was found.
+Bodies and carcasses have a switch of their own, "Drop refused loot from bodies", off by default. The game runs its requests on a server thread of its own, and a search pays out while that thread handles it. The mod reads the bag on either side, judges each new item by the same rules a loose one gets, and hands whatever they refuse to the routine the game uses when you drop something yourself. Each stack lands as one pile beside you. A copy you already carried is never the one that goes. The switch covers the mod's own searches and any body a pet or a companion loots, but never one you search yourself, and money, documents, quest items and protected items stay in the bag. [DROP.md](docs/investigations/DROP.md) has how the drop was found.
 
 Rule order for an identified item: item override, tag never, protected tags (memory fragments, mechanism parts), tag always, dev/quest/unsellable filters, copper value floor, class rule, then loot. Built-in protections apply before any of that: quest and shop objects, locked nodes, your own equipment and bag contents, gear worn by others, mechanism parts, container stacks, memory triggers, and anything the game's Take-or-Steal check calls theft. The [plugin manual](mod/README.md) has the details, the safety notes and the known limits.
 
