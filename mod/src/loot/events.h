@@ -40,6 +40,9 @@ namespace ml::events
     // Whether this mod sent a search for that body in the last ten seconds.
     // Safe from any thread; the server's parse of a search asks it.
     bool SearchedRecently(uint32_t targetEid);
+    // The same for a body a pet or a companion searched, as the event queue
+    // saw it raised under that companion's own id.
+    bool CompanionSearchedRecently(uint32_t targetEid);
     // Remove `amount` of one inventory slot's stack through the game's own
     // TrocTrDeleteItemFromInventoryOnceTimer. The payload names the slot's
     // instance (its u64), the inventory by a table key, and the slot index,

@@ -310,7 +310,7 @@ Scan radius
 Scans %ld, events sent %ld, pump ticks %ld, guarded faults %ld, node kinds learned %d	
 Scans per second	
 search item name or key (3+ letters)	
-Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches only. A body you search yourself keeps what it paid, and so does one a pet loots. Money, documents, quest items and protected items stay in the bag.	
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	
 Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	
 Sending events	
 Set	

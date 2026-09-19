@@ -553,6 +553,21 @@ namespace ml::events
         ReleaseSRWLockExclusive(&g_searchedLock);
     }
 
+    // Bodies a pet or a companion searched, by the target the search named.
+    static SearchMark g_petSearched[32] = {};
+    static int g_petSearchedNext = 0;
+
+    bool CompanionSearchedRecently(uint32_t eid)
+    {
+        if (!eid) return false;
+        const DWORD now = GetTickCount();
+        bool hit = false;
+        AcquireSRWLockShared(&g_searchedLock);
+        for (const SearchMark& m : g_petSearched) if (m.eid == eid && now - m.at < 10000) { hit = true; break; }
+        ReleaseSRWLockShared(&g_searchedLock);
+        return hit;
+    }
+
     bool SearchedRecently(uint32_t eid)
     {
         if (!eid) return false;
@@ -815,7 +830,14 @@ namespace ml::events
                     const LONG n = InterlockedCompareExchange(&g_petN, 0, 0);
                     if (n < 32) { g_pet[n] = { who, item, GetTickCount(), search }; InterlockedExchange(&g_petN, n + 1); }
                 }
-                if (search) InterlockedExchange(&g_petSearchAt, static_cast<LONG>(GetTickCount()));
+                if (search)
+                {
+                    InterlockedExchange(&g_petSearchAt, static_cast<LONG>(GetTickCount()));
+                    AcquireSRWLockExclusive(&g_searchedLock);
+                    g_petSearched[g_petSearchedNext] = { item, GetTickCount() };
+                    g_petSearchedNext = (g_petSearchedNext + 1) % 32;
+                    ReleaseSRWLockExclusive(&g_searchedLock);
+                }
                 if ((who >> 24) == game::kTagPlayer) InterlockedExchange(&g_mercenaryAt, static_cast<LONG>(GetTickCount()));
                 // Anything at all from a companion says one is out and doing
                 // something. A mercenary breaking a rock raises a drop event

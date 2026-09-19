@@ -3854,6 +3854,11 @@ namespace ml::loot
     // The two snapshots are read and written on the server thread only.
     static std::unordered_map<uint32_t, long long> g_searchBefore;   // instance -> count
     static uintptr_t g_searchHolder = 0;
+    // The search being parsed was a pet's or a companion's. Its sender is that
+    // companion, so the drop goes where the player stands, not where the pet
+    // does, and GetInventoryHolder is asked about the pet: the game gives a
+    // pet the bag its loot lands in.
+    static bool g_searchByPet = false;
 
     // Where the played body stands, in the frame the drop routine wants: the
     // transform's +0x324, which +0x3D0 repeats. The +0xB4 the scan reads sits
@@ -3887,7 +3892,7 @@ namespace ml::loot
         if (g_debugLog && s_said != eid)
         {
             s_said = eid;
-            LOG("[drop] the body %08X stands at %.1f %.1f %.1f in the world, %.1f %.1f %.1f as the scan reads it",
+            LOG("[drop] %08X, the character being played, stands at %.1f %.1f %.1f in the world, %.1f %.1f %.1f as the scan reads it",
                 eid, w[0], w[1], w[2], scanAt.x, scanAt.y, scanAt.z);
         }
     }
@@ -3914,11 +3919,18 @@ namespace ml::loot
         if (!after)
         {
             g_searchHolder = 0;
+            g_searchByPet = false;
             if (!Settings::Get().dropRefused || !hooks::DropReady() || !sender) return false;
-            // A body the player searched by hand keeps what it paid.
-            if (!events::SearchedRecently(target)) return false;
+            // A body the player searched by hand keeps what it paid. One this
+            // mod searched, or one a pet or a companion did, is judged.
             uint32_t eid = 0;
-            if (!game::Eid(sender, &eid) || (eid >> 24) != game::kTagPlayer) return false;
+            if (!game::Eid(sender, &eid)) return false;
+            if (events::SearchedRecently(target))
+            {
+                if ((eid >> 24) != game::kTagPlayer) return false;
+            }
+            else if (events::CompanionSearchedRecently(target)) g_searchByPet = true;
+            else return false;
             if (!hooks::ThreadContext()) return false;
             const uintptr_t holder = game::HolderNow(sender);
             if (!holder) return false;
@@ -3927,6 +3939,13 @@ namespace ml::loot
             g_searchBefore.clear();
             for (int i = 0; i < n; ++i) g_searchBefore[ents[i].iid] += ents[i].count;
             g_searchHolder = holder;
+            if (g_searchByPet)
+            {
+                static int s_said = 0;
+                if (s_said++ < 3)
+                    LOG("[drop] watching a companion's search of %08X: sender %08X, bag holder %llX, %d stacks in the bag",
+                        target, eid, static_cast<unsigned long long>(holder), n);
+            }
             return true;
         }
         const uintptr_t holder = g_searchHolder;
@@ -3960,7 +3979,13 @@ namespace ml::loot
             const DropAt b = g_bodyDropAt;
             ReleaseSRWLockShared(&g_bodyDropLock);
             const uint32_t body = g_bodyEid;
-            if (body && body != senderEid)
+            if (g_searchByPet)
+            {
+                const uint32_t me = body ? body : g_meEid;
+                if (b.eid == me && GetTickCount() - b.at < 3000)
+                { at[0] = b.pos[0]; at[1] = b.pos[1]; at[2] = b.pos[2]; placed = true; where = body ? "the body" : "the player"; }
+            }
+            else if (body && body != senderEid)
             {
                 if (b.eid == body && GetTickCount() - b.at < 3000)
                 { at[0] = b.pos[0]; at[1] = b.pos[1]; at[2] = b.pos[2]; placed = true; where = "the body"; }
@@ -3999,8 +4024,8 @@ namespace ml::loot
                 if (!hooks::CallDrop(holder, &err, sender, 2, static_cast<uint16_t>(e.slot), take, tfm))
                 { LOG_ERR("[drop] the game's drop faulted on %lld %s; it stays in the bag", take, it->name.c_str()); break; }
                 if (err) { LOG_ERR("[drop] the game would not drop %lld %s: error %08X", take, it->name.c_str(), err); break; }
-                LOG("[drop] left %lld %s beside %s from %08X: %s%s%s", take, it->name.c_str(), where, target,
-                    v.rule, v.detail.empty() ? "" : " ", v.detail.c_str());
+                LOG("[drop] left %lld %s beside %s from %08X%s: %s%s%s", take, it->name.c_str(), where, target,
+                    g_searchByPet ? ", which a pet or a companion searched" : "", v.rule, v.detail.empty() ? "" : " ", v.detail.c_str());
                 left -= take; e.count -= take;
             }
         }
@@ -4902,6 +4927,10 @@ namespace ml::loot
             }
         }
         g_meRoute = game::Route(g_me);
+        // Where to leave what a pet's search paid: the player, since the
+        // search's sender is the pet. As Damiane or Oongka the enumeration
+        // publishes the body instead.
+        if (!g_bodyEid) PublishBodyDropAt(g_me, g_meEid, mp, now);
         game::InventoryRefresh(g_me, !g_pend.empty());
         if (g_debugLog) game::DumpInventoryShape(g_me, g_bagFull);
         LearnFromInventory(now);

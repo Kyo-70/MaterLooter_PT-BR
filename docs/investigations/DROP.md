@@ -157,7 +157,12 @@ the carried bag slot by slot on either side of the server's parse of its
 search. Only an instance that is new, or the amount a stack grew by, gets
 judged and dropped. A copy the player already carried is never the one that
 goes. It covers searches the mod queued in the last ten seconds
-and nothing the player searched by hand. The drop lands where the played body
+and searches the event queue saw a pet or a companion raise, and nothing the
+player searched by hand. For a pet's search the sender is the pet, so the bag
+is the one GetInventoryHolder gives for the pet and the drop lands where the
+player stands, which the scan publishes each pass. That half has not been
+played yet; its first three searches in a session log the sender and the
+holder. The drop lands where the played body
 stands: as Kliff that is the sender's own transform, and as Damiane or Oongka
 it is the body's transform, read as the scan's enumeration hands the body
 over, since the sender there is the identity standing somewhere else.
