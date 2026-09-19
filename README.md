@@ -30,7 +30,7 @@ Walk past it and it is in your bag: dropped items, herbs and flowers, ore and st
 
 New in 1.6.28. With [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) installed beside it, whatever Master Looter picks up can be moved into your storage a moment after it lands in the bag, the same move you would make standing at the storage.
 
-You need Master Looter 1.6.28 or later and Private Storage Master 1.1.0 or later, both in `bin64`. Master Looter only stores what it picks up itself, so it has to be looting: auto-loot on, or the loot-everything key.
+You need Master Looter 1.6.28 or later and Private Storage Master 1.1.0 or later, both in `bin64`. Playing as Damiane or Oongka takes Master Looter 1.6.29 and Private Storage Master 1.1.1 or later, because neither of them carries a bag of their own and the game fills the one it lends them. Master Looter only stores what it picks up itself, so it has to be looting: auto-loot on, or the loot-everything key.
 
 To turn it on:
 
@@ -88,11 +88,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.28:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.29:
 
-    a214ba2f7e61d9c1c982ac0f5bec1e72b8f63b6d890d65217886dd5ba42b9996  MasterLooter-1.6.28-DMM.zip
-    fa3485daa791b80794d0a9cfd5f2633dcd809ff20210d9cb8053e4616fbe13b7  MasterLooter-1.6.28.zip
-    305b2749898e9ad445fc4b3ce0f10389b927d5ebf1030daf94f401c046753e9c  MasterLooter.asi
+    ba053f747eb7bb711d008dc35ffcb2f823365bddbe760fb9ee42556863fe2cc7  MasterLooter-1.6.29-DMM.zip
+    ab3b10ee1354a27101b9b04f84d4f49dffd8c2409544291a7e80fc422e99584e  MasterLooter-1.6.29.zip
+    72843c1cdbe7196dbf1f3eb1c29eeb02ddcadaec00afcc295c58a58a12daf772  MasterLooter.asi
 
 ## Controls
 
