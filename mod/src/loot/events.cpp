@@ -87,6 +87,8 @@ namespace ml::events
     static PendDelete g_pendDel[16]; static int g_pendDelN = 0;
     static PetPickup g_pet[32]; static volatile LONG g_petN = 0;
     static volatile LONG g_companionAt = 0;   // last tick a companion raised anything
+    static volatile LONG g_mercenaryAt = 0;   // the same, for a player-tagged companion
+    static volatile LONG g_petSearchAt = 0;   // last body search a companion raised
     static volatile LONG g_lastDeleteAt = 0;
     unsigned long LastDeleteSentAt() { return static_cast<unsigned long>(InterlockedCompareExchange(&g_lastDeleteAt, 0, 0)); }
     static PendArm g_pendArm[32]; static int g_pendArmN = 0;
@@ -371,6 +373,8 @@ namespace ml::events
         return ok;
     }
     uint32_t CompanionActiveAt() { return static_cast<uint32_t>(InterlockedCompareExchange(&g_companionAt, 0, 0)); }
+    uint32_t MercenaryActiveAt() { return static_cast<uint32_t>(InterlockedCompareExchange(&g_mercenaryAt, 0, 0)); }
+    uint32_t PetSearchAt() { return static_cast<uint32_t>(InterlockedCompareExchange(&g_petSearchAt, 0, 0)); }
 
     int DrainPetPickups(PetPickup* out, int max)
     {
@@ -725,6 +729,8 @@ namespace ml::events
                     const LONG n = InterlockedCompareExchange(&g_petN, 0, 0);
                     if (n < 32) { g_pet[n] = { who, item, GetTickCount(), search }; InterlockedExchange(&g_petN, n + 1); }
                 }
+                if (search) InterlockedExchange(&g_petSearchAt, static_cast<LONG>(GetTickCount()));
+                if ((who >> 24) == game::kTagPlayer) InterlockedExchange(&g_mercenaryAt, static_cast<LONG>(GetTickCount()));
                 // Anything at all from a companion says one is out and doing
                 // something. A mercenary breaking a rock raises a drop event
                 // and no pick-up, so the bag can rise with nothing here to

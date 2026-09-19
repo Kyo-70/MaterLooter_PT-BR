@@ -15,6 +15,10 @@ namespace ml
         bool  showHud        = true;   // brief on-screen notice when auto-loot is toggled
         bool  notifyBagFull  = true;   // say so on screen when things stop reaching the bag
         bool  notifyAutoStore = true;  // say on screen what Private Storage Master put away
+        // Offer to storage what a pet or a companion loots from a body, as
+        // well as what this mod picks up itself. Only what the item rules
+        // allow, and only while loot storing is on in Private Storage Master.
+        bool  petLootToStorage = false;
         // Wrap the swapchain so the overlay draws under DLSS frame generation.
         // Off falls back to the plain present hook, which costs the overlay only
         // when frame generation is on, and takes this mod off a path other
@@ -159,8 +163,12 @@ namespace ml
         // the item rules would have refused is deleted as it lands. Issue #32.
         bool  petFilter      = false;
         // Answer the game's own pet-looting condition with no, so a pet
-        // never picks anything up and there is nothing to filter after.
+        // never picks a loose item up. Until version 7 this one switch
+        // covered bodies as well; the ini key is kept so an old file still
+        // means what it said.
         bool  stopPetLooting = false;
+        // The other half of the same rule: a pet never loots a body.
+        bool  stopPetBodies  = false;
         bool  debugLog       = false;
         // With the verbose log on, delete two of this item once per session
         // through the same path the pet filter uses, and log the inventory

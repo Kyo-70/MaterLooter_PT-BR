@@ -781,7 +781,7 @@ namespace ml::loot::hooks
     static uint64_t hkHasInteraction(void* self, void* a2, void* a3, void* a4)
     {
         NoteInteractionAsked(self, a2);
-        if (Settings::Get().stopPetLooting)
+        if (Settings::Get().stopPetBodies)
         {
             unsigned short key = 0;
             if (mem::Read16(reinterpret_cast<uintptr_t>(self) + kOff_CondArg, &key) &&
@@ -889,10 +889,10 @@ namespace ml::loot::hooks
         g_petLootingHooked = a && b;
         if (g_petLootingHooked)
             LOG_OK("[pet] pet looting hooked: +%llX labelled \"%s\" for loose items, +%llX labelled \"%s\" for bodies. "
-                   "Stop pets looting is %s.",
+                   "Stop pets taking loose items is %s, stop pets looting bodies is %s.",
                    static_cast<unsigned long long>(pet - mem::Game().base), petLabel,
                    static_cast<unsigned long long>(has - mem::Game().base), hasLabel,
-                   Settings::Get().stopPetLooting ? "on" : "off");
+                   Settings::Get().stopPetLooting ? "on" : "off", Settings::Get().stopPetBodies ? "on" : "off");
         else
             LOG_ERR("[pet] only part of pet looting could be hooked (loose items %s, bodies %s), so the switch that "
                     "stops pets looting is reported as unavailable.", a ? "yes" : "no", b ? "yes" : "no");

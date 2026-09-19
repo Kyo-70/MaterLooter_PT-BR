@@ -1201,6 +1201,8 @@ namespace ml::loot
     // delivered late must still read as the player's.
     struct HandTouch { uint32_t eid; DWORD at; };
     static constexpr DWORD kHandMs = 12000;
+    // How long a companion's body search vouches for what arrives after it.
+    static constexpr DWORD kPetStoreMs = 8000;
     static std::vector<HandTouch> g_handTouches;
     static std::vector<std::pair<uint16_t, long long>> g_invPrev;
     static bool g_invPrevValid = false;
@@ -1292,6 +1294,23 @@ namespace ml::loot
         // rock raises a drop event and nothing else, and it is still out.
         const DWORD c = events::CompanionActiveAt();
         return c && (now - c) < kPetOutMs;
+    }
+
+    static bool MercenaryOutRecently(DWORD now)
+    {
+        const DWORD m = events::MercenaryActiveAt();
+        return m && (now - m) < kPetOutMs;
+    }
+
+    // Whether a pet is told no before it reaches for a loose item the rules
+    // refuse: the condition hook is in and one of the two switches that
+    // answer through it is on. Then a refused loose item that lands in the
+    // bag was not the pet's, whatever event it came in on, and it is the
+    // player's to keep. A mercenary is the exception until a session shows it
+    // asks the same question, so while one is out the old caution holds.
+    static bool PetPrevented(const Config& cfg, DWORD now)
+    {
+        return hooks::PetLootingHooked() && (cfg.petFilter || cfg.stopPetLooting) && !MercenaryOutRecently(now);
     }
 
     static bool IsFilterRule(const char* why)
@@ -1427,7 +1446,17 @@ namespace ml::loot
                 static int s_missLogs = 0;
                 if (why && seen[i].act == Action::Take && Settings::Get().petFilter && IsFilterRule(why) && g_petHand.size() < 64)
                 {
-                    if (PetOutRecently(now))
+                    if (PetPrevented(Settings::Get(), now))
+                    {
+                        static int s_said = 0;
+                        if (s_said < 8)
+                        {
+                            ++s_said;
+                            LOG("[pet] eid %08X was picked up and the rules refuse it, but a pet is told no before it "
+                                "reaches for anything they refuse, so this one was yours and stays in the bag.", seen[i].eid);
+                        }
+                    }
+                    else if (PetOutRecently(now))
                         g_petHand.push_back({ g_meEid, seen[i].eid, seen[i].at, false });
                     else
                     {
@@ -1589,6 +1618,16 @@ namespace ml::loot
             bool handUnnamed = false;
             for (const HandTouch& t : g_handTouches)
                 if (now - t.at < kHandMs && !g_tidByEid.count(t.eid) && !g_yieldByEid.count(t.eid)) handUnnamed = true;
+            // A pet or a companion that just searched a body. The search is
+            // stamped with its own id, so this is the one kind of companion
+            // loot that can be told from the player's. It vouches the way this
+            // mod's own body search does, for eight seconds because the game
+            // can hold a delivery that long, and only when nothing was done by
+            // hand, since a hand pick-up could have paid the same rise.
+            const Config& petCfg = Settings::Get();
+            const DWORD petSearch = events::PetSearchAt();
+            const bool petVouch = petCfg.petLootToStorage && petSearch && now - petSearch < kPetStoreMs &&
+                                  !(g_changeAt && static_cast<LONG>(petSearch - g_changeAt) < 0) && !handOpen;
             for (const auto& [type, units] : bagRose)
             {
                 // Never a document or a quest item, by any route. Those are
@@ -1604,18 +1643,34 @@ namespace ml::loot
                 // else the player is doing; a hand pick-up of the same item is
                 // caught later by AutoStorePass. A send that could have paid
                 // anything vouches only when nothing was done by hand.
+                // A body search or an unnamed gather hands over whatever it
+                // holds, and the rules never saw any of it. What they refuse
+                // is not offered: it stays in the bag, where a pet's haul of
+                // the same thing stays too, rather than being put away as if
+                // the player had asked for it. An item the database cannot
+                // name has no rule to ask and is offered as before.
+                const bool rulesAllow = !it || Rules::Decide(*it, Settings::Get()).loot;
                 if (!handUnnamed)
                 {
                     for (const PendSend& p : g_pend)
                     {
                         if (!p.mine || p.itemRow >= 0 || p.yieldRow >= 0) continue;
                         if (g_changeAt && static_cast<LONG>(p.at - g_changeAt) < 0) continue;
-                        if (!handOpen) h.fallback = true;
+                        if (!handOpen && rulesAllow) h.fallback = true;
                     }
                     for (const MineYield& m : g_mineYields)
                     {
                         if (g_changeAt && static_cast<LONG>(m.at - g_changeAt) < 0) continue;
                         if (m.row == type) h.fallback = true;
+                    }
+                    // Only what the rules allow. With the pet filter on, a
+                    // refused item is on its way out of the bag already, and
+                    // with it off the player said what they want carried.
+                    if (petVouch && !h.fallback && it && rulesAllow)
+                    {
+                        h.fallback = true;
+                        if (g_debugLog) LOG("[store] +%lld %s came from a companion's body search; offered with the mod's own",
+                                            h.units, it->name.c_str());
                     }
                 }
                 if (g_heldRises.size() < 256) g_heldRises.push_back(h);
@@ -4050,10 +4105,18 @@ namespace ml::loot
         // The companion has to have acted since this baseline was taken. One
         // that helped half a minute ago explains nothing about what arrived in
         // the last two seconds.
-        const DWORD companionAt = events::CompanionActiveAt();
+        //
+        // Once the pet is told no before it reaches, a pet cannot put a
+        // refused loose item in the bag, and what it takes from a body is
+        // judged by the window above, which opens on the search stamped with
+        // its own id. So only a mercenary still needs the sweep: it is the
+        // companion that started it, and nobody has seen whether it asks.
+        const bool prevented = hooks::PetLootingHooked() && (cfg.petFilter || cfg.stopPetLooting);
+        const DWORD companionAt = prevented ? events::MercenaryActiveAt() : events::CompanionActiveAt();
         const bool companionSince = (companionAt && static_cast<long>(companionAt - snapAt) >= 0) ||
-                                    (g_petSeenAt && static_cast<long>(g_petSeenAt - snapAt) >= 0);
-        if (cfg.petFilter && PetOutRecently(now) && companionSince && snapAt && now - snapAt >= 2000)
+                                    (!prevented && g_petSeenAt && static_cast<long>(g_petSeenAt - snapAt) >= 0);
+        const bool companionOut = prevented ? MercenaryOutRecently(now) : PetOutRecently(now);
+        if (cfg.petFilter && companionOut && companionSince && snapAt && now - snapAt >= 2000)
         {
             std::unordered_map<uint16_t, long long> fresh;
             uintptr_t freshHolder = 0;

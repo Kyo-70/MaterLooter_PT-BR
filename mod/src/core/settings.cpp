@@ -69,6 +69,7 @@ namespace ml::Settings
         else if (k == "ShowHud")          c.showHud = Flag(v);
         else if (k == "NotifyBagFull")    c.notifyBagFull = Flag(v);
         else if (k == "NotifyAutoStore")  c.notifyAutoStore = Flag(v);
+        else if (k == "PetLootToStorage") c.petLootToStorage = Flag(v);
         else if (k == "WrapSwapChain")    c.wrapSwapChain = Flag(v);
         else if (k == "HookDX12")         c.hookDX12 = Flag(v);
         else if (k == "EnableDred")       c.enableDred = Flag(v);
@@ -126,6 +127,7 @@ namespace ml::Settings
         else if (k == "SkipQuestGear")    c.skipQuestGear = Flag(v);
         else if (k == "PetFilter")        c.petFilter = Flag(v);
         else if (k == "StopPetLooting")   c.stopPetLooting = Flag(v);
+        else if (k == "StopPetBodies")    c.stopPetBodies = Flag(v);
         else if (k == "MinValueCopper")   c.minValueCopper = std::max(0, atoi(v.c_str()));
         else if (k == "TakeUnknownItems") c.takeUnknownItems = Flag(v);
         else if (k == "DebugLog")         c.debugLog = Flag(v);
@@ -383,7 +385,22 @@ namespace ml::Settings
             c.configVersion = 6;
             migrated = true;
         }
-        if (!fromFile) c.configVersion = 6;
+        // Stop pets looting was one switch for loose items and bodies both.
+        // It is two now, so someone who can live with a pet stripping corpses
+        // can still keep it off loose junk, and the other way round. Whoever
+        // had the one switch on had both halves on, so both stay on.
+        if (fromFile && c.configVersion < 7)
+        {
+            if (c.stopPetLooting && !c.stopPetBodies)
+            {
+                c.stopPetBodies = true;
+                LOG("Settings migrated to version 7: Stop pets looting is two switches now, loose items and bodies, "
+                    "and both are on because the one switch was.");
+            }
+            c.configVersion = 7;
+            migrated = true;
+        }
+        if (!fromFile) c.configVersion = 7;
         return migrated;
     }
 
@@ -418,10 +435,12 @@ namespace ml::Settings
         LOG("Settings ranges: scan %.1f loot %.1f gather %.1f catch %.1f corpse %.1f arm %.1f min %.2f.",
             c.scanRange, c.lootRange, c.gatherRange, c.catchRange, c.corpseRange, c.armRange, c.minRange);
         LOG("Settings switches: ground %d plants %d crops %d ore %d wood %d furniture %d containers %d unknown %d "
-            "corpses %d bodies %d veins %d arm %d owned %d quest %d nosell %d questgear %d pet %d stoppet %d minvalue %d.",
+            "corpses %d bodies %d veins %d arm %d owned %d quest %d nosell %d questgear %d pet %d stoppet %d stoppetbodies %d "
+            "petstore %d minvalue %d.",
             c.pickUpItems, c.gatherPlants, c.gatherCrops, c.gatherOre, c.gatherWood, c.lootFurniture,
             c.lootContainers, c.gatherUnknown, c.lootCorpses, c.searchBodies, c.gatherVeins, c.autoArm,
-            c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.petFilter, c.stopPetLooting, c.minValueCopper);
+            c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.petFilter, c.stopPetLooting, c.stopPetBodies,
+            c.petLootToStorage, c.minValueCopper);
     }
 
     // The whole config as ini text: the live file, a preset and a backup are
@@ -435,7 +454,7 @@ namespace ml::Settings
         s += "[MasterLooter]\n";
         snprintf(b, sizeof b, "Enabled=%d\nMenuKey=%d\nShowHud=%d\nNotifyBagFull=%d\nKeyToggle=%d\nKeyBurst=%d\nKeyWatch=%d\n",
                  c.enabled, c.menuKey, c.showHud, c.notifyBagFull, c.keyToggle, c.keyBurst, c.keyWatch); s += b;
-        snprintf(b, sizeof b, "NotifyAutoStore=%d\n", c.notifyAutoStore); s += b;
+        snprintf(b, sizeof b, "NotifyAutoStore=%d\nPetLootToStorage=%d\n", c.notifyAutoStore, c.petLootToStorage); s += b;
         snprintf(b, sizeof b, "WrapSwapChain=%d\n", c.wrapSwapChain); s += b;
         snprintf(b, sizeof b, "HookDX12=%d\n", c.hookDX12); s += b;
         snprintf(b, sizeof b, "EnableDred=%d\n", c.enableDred); s += b;
@@ -456,8 +475,8 @@ namespace ml::Settings
                  c.scanRange, c.lootRange, c.gatherRange, c.catchRange, c.corpseRange, c.minRange); s += b;
         snprintf(b, sizeof b, "AutoArm=%d\nArmRange=%.1f\nArmContainers=%d\nGatherVeins=%d\n", c.autoArm, c.armRange, c.armContainers, c.gatherVeins); s += b;
         snprintf(b, sizeof b, "BreakOre=%d\nDrawWells=%d\n", c.breakOre, c.drawWells); s += b;
-        snprintf(b, sizeof b, "LootOwned=%d\nSkipQuestItems=%d\nSkipNoSell=%d\nSkipQuestGear=%d\nMinValueCopper=%d\nTakeUnknownItems=%d\nPetFilter=%d\nStopPetLooting=%d\nDebugLog=%d\nConfigVersion=%d\n",
-                 c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.debugLog, c.configVersion); s += b;
+        snprintf(b, sizeof b, "LootOwned=%d\nSkipQuestItems=%d\nSkipNoSell=%d\nSkipQuestGear=%d\nMinValueCopper=%d\nTakeUnknownItems=%d\nPetFilter=%d\nStopPetLooting=%d\nStopPetBodies=%d\nDebugLog=%d\nConfigVersion=%d\n",
+                 c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.stopPetBodies, c.debugLog, c.configVersion); s += b;
         if (!c.deleteTestName.empty()) { snprintf(b, sizeof b, "DeleteTestName=%s\n", c.deleteTestName.c_str()); s += b; }
         if (c.equipStrict) { snprintf(b, sizeof b, "EquipStrict=1\n"); s += b; }
         if (c.dupeProbe)  { snprintf(b, sizeof b, "DupeProbe=1\n"); s += b; }

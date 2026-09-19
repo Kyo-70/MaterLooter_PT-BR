@@ -768,10 +768,12 @@ namespace ml::gui
         Help(TR("Items with an unknown value are never filtered by it."));
         dirty |= ImGui::Checkbox(TR("Take items the database cannot name"), &c.takeUnknownItems);
         Help(TR("Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies."));
-        dirty |= ImGui::Checkbox(TR("Stop pets looting at all"), &c.stopPetLooting);
-        Help(TR("The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does."));
+        dirty |= ImGui::Checkbox(TR("Stop pets picking up loose items"), &c.stopPetLooting);
+        Help(TR("The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested."));
+        dirty |= ImGui::Checkbox(TR("Stop pets looting bodies"), &c.stopPetBodies);
+        Help(TR("The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round."));
         dirty |= ImGui::Checkbox(TR("Pets and companions follow the filters"), &c.petFilter);
-        Help(TR("A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off."));
+        Help(TR("A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up."));
         dirty |= ImGui::Checkbox(TR("Verbose log"), &c.debugLog);
         if (dirty) Settings::MarkDirty();
     }
@@ -1284,8 +1286,8 @@ namespace ml::gui
         // The pet-looting switch is the one setting in the mod that cannot
         // work at all when its hook is missing, and the line saying so goes
         // in at startup, long out of the log panel by the time anyone looks.
-        OnOff("Stop pets looting", loot::hooks::PetLootingHooked(), "hooked, the switch works",
-              "not available on this build, the switch does nothing");
+        OnOff("Stop pets looting", loot::hooks::PetLootingHooked(), "hooked, both switches work",
+              "not available on this build, neither switch does anything");
         const char* tbl = s.itemTable == 1 ? "rows verified against our database" : s.itemTable == 2 ? "names readable, rows differ" : s.itemTable == -1 ? "unavailable" : "not probed yet";
         OnOff("Item table", s.itemTable > 0, tbl, tbl);
         ImGui::Text(TR("Scans %ld, events sent %ld, pump ticks %ld, guarded faults %ld, node kinds learned %d"), s.scans, s.sent, s.pumpTicks, s.faults, s.learned);
@@ -1733,10 +1735,13 @@ namespace ml::gui
             bool on = s_psmAuto.enabled != 0;
             if (ImGui::Checkbox(TR("Put what Master Looter picks up into storage"), &on)) { s_psmAuto.enabled = on; PsmApplyAuto(api); }
             Help("A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. "
-                 "Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, "
+                 "Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, "
                  "nothing on the never-move list moves, and what no storage takes stays in the bag.");
             if (ImGui::Checkbox(TR("Show a notice when loot is stored"), &c.notifyAutoStore)) Settings::MarkDirty();
             Help("At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.");
+            if (ImGui::Checkbox(TR("Store what your pet loots from bodies"), &c.petLootToStorage)) Settings::MarkDirty();
+            Help("A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. "
+                 "Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.");
             ImGui::BeginDisabled(!on);
             ImGui::TextDisabled("%s", TR("Each item goes to the first storage in this list that takes it."));
             for (const int i : kPsmAutoOrder)

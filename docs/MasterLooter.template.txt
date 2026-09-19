@@ -34,7 +34,9 @@ A key or controller combo opens that storage from anywhere, and again closes it.
 a Master Looter key	
 a Master Looter shortcut	
 A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand. Nothing moves while a storage is open or outside free play, nothing on the never-move list moves, and what no storage takes stays in the bag.	
-A pet loots whatever it likes and the game has no switch for it. On: anything a pet, a mercenary or a companion picks up that your item rules, tags, classes or value floor would have refused is deleted from the inventory as it lands, and a notice says what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWorth knowing before you turn this on: the game raises a companion's pick-up of a loose item as if you had picked it up yourself, and there is no way to tell the two apart. So while one is out and active, something you pick up by hand that your own rules refuse is deleted along with theirs. With nobody out, nothing you pick up is ever touched. If you would rather keep everything and sort it yourself, leave this off.	
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up.	
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	
+a seed planted in your camp farm	
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	
 Abyss and Kuku	
 Abyss gear, Kuku pots and their parts.	
@@ -46,6 +48,7 @@ also %s
 always	
 always beats the class rule; never beats always	
 Ammunition	
+an ore vein, left to your pickaxe while Mine ore veins for you is off	
 Anything tagged quest, across every class. Off keeps story pickups and puzzle pieces for your own hands.	
 Arm mechanism containers too	
 Arm nodes ourselves	
@@ -333,11 +336,13 @@ someone is wearing this; taking it would copy it
 stack at one point (storage contents)	
 Status	
 Stop pets looting	
-Stop pets looting at all	
+Stop pets looting bodies	
+Stop pets picking up loose items	
 Storage	
 Storage keys	
 Storage sizes	
 Store loot	
+Store what your pet loots from bodies	
 Storing loot needs a newer Private Storage Master.	
 Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room, whether you pick one up off the floor or take it from its own interaction node. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house. Chests and the other things that hold something answer to Containers instead. Off by default.	
 Tag	
@@ -351,7 +356,8 @@ take this one by hand, looting it can lock the quest
 takes effect next launch	
 the capacity dump	
 The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.	
-The game asks two questions before a pet loots, one for a loose item on the ground and one for a body, and this answers both with no. A pet reaches for nothing, so nothing of yours is ever deleted afterwards and your own pick-ups are never in question. The cleaner of the two answers if you simply do not want a pet looting. Whether it reaches a mercenary has not been tested. The game carries one looting rule of this kind and both of its questions are answered no, so it may; Pets and companions follow the filters is the switch that certainly does.	
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	
 The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands. Veins take several seconds to answer where a bush takes a fraction of one.	
 The game removes taken objects with a delay. This stops the same object being sent twice while it fades.	
 The game treats this as stealing and will put a bounty on you.	

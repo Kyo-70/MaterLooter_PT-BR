@@ -54,6 +54,12 @@ namespace ml::events
     // GetTickCount of the last event raised by anyone but the player:
     // a pet, a mercenary, a companion. Zero until one acts.
     uint32_t CompanionActiveAt();
+    // The same for a hired mercenary alone: player-tagged like you, with its
+    // own id. Nobody has seen whether a mercenary asks the pet-looting
+    // question, so while one is out the filter still watches the bag.
+    uint32_t MercenaryActiveAt();
+    // GetTickCount of the last body search raised by a pet or a companion.
+    uint32_t PetSearchAt();
     // Arm a gimmick node so the game fills its interaction data. Queued off-thread.
     bool Arm(uintptr_t gimmickComp, uintptr_t mode, uintptr_t arg3, uintptr_t ctx); // arg3 0 = a zeroed scratch buffer
     // Game thread only: run queued sends and arms.
