@@ -3885,10 +3885,16 @@ namespace ml::loot
         static DWORD snapAt = 0, windowUntil = 0;
         static uint16_t tids[64]; static int tidN = 0; static bool anyUnknown = false;
         static game::InvEntry ents[4096];
+        // Which holder each sample read. Two samples of different holders are
+        // two different bags, as when the game names the bag Damiane or Oongka
+        // borrows a moment after the scan settles on her, and comparing them
+        // reads a whole bag as arriving at once. Neither path compares them.
+        static uintptr_t snapHolder = 0, baseHolder = 0;
         // The snapshot's time is the end of the walk, so a pick-up stamped
         // later than it landed after every slot was read.
-        auto snapshot = [&](std::unordered_map<uint16_t, long long>& into) {
+        auto snapshot = [&](std::unordered_map<uint16_t, long long>& into, uintptr_t& holderOut) {
             into.clear();
+            holderOut = game::Holder(g_me);
             const int n = game::InventoryEntries(g_me, ents, 4096);
             for (int i = 0; i < n; ++i) into[ents[i].tid] += ents[i].count;
             return GetTickCount();
@@ -3934,8 +3940,8 @@ namespace ml::loot
         {
             if (!windowUntil)
             {
-                if (snapAt && static_cast<long>(pp[0].at - snapAt) >= 0) base = snap;
-                else { snapshot(base); LOG("[pet] no inventory snapshot from before the pick-up; whatever landed already is kept"); }
+                if (snapAt && static_cast<long>(pp[0].at - snapAt) >= 0) { base = snap; baseHolder = snapHolder; }
+                else { snapshot(base, baseHolder); LOG("[pet] no inventory snapshot from before the pick-up; whatever landed already is kept"); }
                 tidN = 0; anyUnknown = false;
             }
             for (int i = 0; i < n; ++i)
@@ -3964,7 +3970,14 @@ namespace ml::loot
         if (windowUntil)
         {
             if (static_cast<long>(now - windowUntil) < 0) return;
-            snapAt = snapshot(snap);
+            snapAt = snapshot(snap, snapHolder);
+            if (snapHolder != baseHolder)
+            {
+                LOG("[pet] the bag being read changed during the window, so the two samples are of different bags "
+                    "and nothing is judged");
+                windowUntil = 0; tidN = 0; anyUnknown = false; base.clear();
+                return;
+            }
             // The test the sweep has always made. Without it this path deleted
             // 4,433 Copper out of a bag that had just gained 45 kinds.
             {
@@ -4034,15 +4047,16 @@ namespace ml::loot
         if (cfg.petFilter && PetOutRecently(now) && companionSince && snapAt && now - snapAt >= 2000)
         {
             std::unordered_map<uint16_t, long long> fresh;
-            const DWORD freshAt = snapshot(fresh);
+            uintptr_t freshHolder = 0;
+            const DWORD freshAt = snapshot(fresh, freshHolder);
 
             // Everything below compares two samples of the same bag. If the
             // world moved between them it is not the same bag, so take the new
             // one as the baseline and judge nothing this pass.
-            if (TakeBagBaselineStale())
+            if (TakeBagBaselineStale() || freshHolder != snapHolder)
             {
-                LOG("[pet] the world changed since the last bag sample, so this one starts fresh and nothing is judged");
-                snap.swap(fresh); snapAt = freshAt; return;
+                LOG("[pet] the world, or the bag being read, changed since the last bag sample, so this one starts fresh and nothing is judged");
+                snap.swap(fresh); snapAt = freshAt; snapHolder = freshHolder; return;
             }
 
             // A companion picks things up one or two at a time. A dozen kinds
@@ -4054,7 +4068,7 @@ namespace ml::loot
             {
                 LOG("[pet] the bag changed shape at once (%d kinds up, %d down, largest rise %lld): that is a bag being "
                     "replaced and not a companion looting, so nothing is deleted and the baseline resets", risen, fallen, biggest);
-                snap.swap(fresh); snapAt = freshAt; return;
+                snap.swap(fresh); snapAt = freshAt; snapHolder = freshHolder; return;
             }
 
             char notice[240] = ""; int nw = 0;
@@ -4082,9 +4096,10 @@ namespace ml::loot
             }
             snap.swap(fresh);
             snapAt = freshAt;
+            snapHolder = freshHolder;
             return;
         }
-        if (now - snapAt >= 400) snapAt = snapshot(snap);
+        if (now - snapAt >= 400) snapAt = snapshot(snap, snapHolder);
     }
 
     static const char* RowName(uint16_t row)
