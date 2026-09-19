@@ -81,6 +81,7 @@ namespace ml::game
         g_f.ownCheck     = Scan("own_check", kSig_OwnCheck, false);
         g_f.armFn        = Scan("node_arm", kSig_ArmDispatch, false);
         g_f.stateDriver  = Scan("gimmick_driver", kSig_StateDriver, false);
+        g_f.invHolder    = Scan("inv_holder", kSig_InvHolder, false);
         g_f.itemTableGlobal    = TableGlobal(kStr_ItemInfoTable);
         g_f.gimmickTableGlobal = TableGlobal(kStr_GimmickInfoTable);
         if (g_sigN < 16) g_sigs[g_sigN++] = { "iteminfo table", g_f.itemTableGlobal, g_f.itemTableGlobal ? 1u : 0u, false };
@@ -255,6 +256,59 @@ namespace ml::game
     }
 
     bool Eid(uintptr_t e, uint32_t* out) { return mem::Read32(e + kOff_Ent_Eid, out); }
+
+    // The answer GetInventoryHolder last gave, and for which actor. Written on
+    // the game thread and read by the worker, so the pair sits under one lock:
+    // a holder read against the wrong actor is a bag of somebody else's.
+    static SRWLOCK   g_holderLock = SRWLOCK_INIT;
+    static uintptr_t g_holderFor = 0, g_holderIs = 0;
+
+    static uintptr_t OwnHolder(uintptr_t actor)
+    {
+        const uintptr_t comps = actor ? Comps(actor) : 0;
+        return comps ? mem::Deref(comps, kOff_Comps_InvHolder) : 0;
+    }
+
+    static uintptr_t CallInvHolder(uintptr_t fn, uintptr_t actor)
+    {
+        __try { return reinterpret_cast<uintptr_t (*)(uintptr_t)>(fn)(actor); }
+        __except (EXCEPTION_EXECUTE_HANDLER) { return 0; }
+    }
+
+    void RefreshHolder(uintptr_t actor)
+    {
+        const uintptr_t fn = g_f.invHolder;
+        if (!fn || !actor || !mem::Readable(actor, 0x100)) return;
+        const uintptr_t h = CallInvHolder(fn, actor);
+        const uintptr_t use = (h && mem::Readable(h, 0x40)) ? h : 0;
+        AcquireSRWLockExclusive(&g_holderLock);
+        const bool changed = g_holderFor != actor || g_holderIs != use;
+        g_holderFor = actor; g_holderIs = use;
+        ReleaseSRWLockExclusive(&g_holderLock);
+        if (!changed || !use) return;
+        const uintptr_t own = OwnHolder(actor);
+        uint32_t who = 0, whose = 0;
+        Eid(actor, &who);
+        uintptr_t owner = 0;
+        if (mem::ReadPtr(use + 8, &owner) && owner) Eid(owner, &whose);
+        static uint32_t s_said = 0;
+        if (use != own && s_said != who)
+        {
+            s_said = who;
+            LOG("[inv] %08X keeps no bag of its own: the game hands it the bag of %08X, which is the one read from now on",
+                who, whose);
+        }
+    }
+
+    uintptr_t Holder(uintptr_t actor)
+    {
+        if (!actor) return 0;
+        AcquireSRWLockShared(&g_holderLock);
+        const uintptr_t h = g_holderFor == actor ? g_holderIs : 0;
+        ReleaseSRWLockShared(&g_holderLock);
+        return h ? h : OwnHolder(actor);
+    }
+
     uint32_t Route(uintptr_t e) { uint32_t r = 0; mem::Read32(e + kOff_Ent_Route, &r); return r; }
     uint8_t TypeTag(uintptr_t e)
     {
@@ -385,8 +439,7 @@ namespace ml::game
         int n = 0, cap = 0;
         std::vector<std::pair<int, int>> each;   // per bucket: slots, occupied
         std::vector<std::pair<uint16_t, long long>> qty;
-        const uintptr_t comps  = Comps(me);
-        const uintptr_t holder = comps ? mem::Deref(comps, kOff_Comps_InvHolder) : 0;
+        const uintptr_t holder = Holder(me);
         if (!holder) { g_invN = 0; return; }
         uintptr_t barr = 0; uint32_t bn = 0;
         if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) { g_invN = 0; return; }
@@ -496,8 +549,7 @@ namespace ml::game
     int InventoryEntries(uintptr_t me, InvEntry* out, int max)
     {
         int n = 0;
-        const uintptr_t comps  = Comps(me);
-        const uintptr_t holder = comps ? mem::Deref(comps, kOff_Comps_InvHolder) : 0;
+        const uintptr_t holder = Holder(me);
         if (!holder || !out || max <= 0) return 0;
         uintptr_t barr = 0; uint32_t bn = 0;
         if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) return 0;
@@ -525,8 +577,7 @@ namespace ml::game
     int InventoryBuckets(uintptr_t me, BucketInfo* out, int max)
     {
         int n = 0;
-        const uintptr_t comps  = Comps(me);
-        const uintptr_t holder = comps ? mem::Deref(comps, kOff_Comps_InvHolder) : 0;
+        const uintptr_t holder = Holder(me);
         if (!holder || !out || max <= 0) return 0;
         uintptr_t barr = 0; uint32_t bn = 0;
         if (!mem::ReadPtr(holder + kOff_Inv_Buckets, &barr) || !mem::Read32(holder + kOff_Inv_BucketN, &bn) || bn > 64) return 0;
@@ -698,8 +749,7 @@ namespace ml::game
         if (s_dumps >= 24) return;
         if (s_dumps && g_invN == s_lastN) return;
         if (s_last && now - s_last < 1500) return;
-        const uintptr_t comps  = Comps(me);
-        const uintptr_t holder = comps ? mem::Deref(comps, kOff_Comps_InvHolder) : 0;
+        const uintptr_t holder = Holder(me);
         if (!holder) return;
         s_lastN = g_invN;
         s_last = now; ++s_dumps;

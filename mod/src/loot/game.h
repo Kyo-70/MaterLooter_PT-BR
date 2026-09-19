@@ -24,6 +24,7 @@ namespace ml::game
         uintptr_t areaSweepHit = 0;  // fallback pump (hook at the match itself)
         uintptr_t ownCheck = 0, armFn = 0;
         uintptr_t stateDriver = 0;   // gimmick transition driver, used to break veins
+        uintptr_t invHolder = 0;     // GetInventoryHolder(actor), called on the game thread
         uintptr_t descMask = 0, queue = 0;                  // globals
         uintptr_t itemTableGlobal = 0, gimmickTableGlobal = 0;
     };
@@ -60,6 +61,12 @@ namespace ml::game
     // The actor the game itself treats as the one being played, read from its
     // own global rather than guessed at. 0 when it cannot be followed.
     uintptr_t LocalPlayer();
+    // The holder of the bag an actor uses, as the game's own GetInventoryHolder
+    // last answered for it on the game thread, or the actor's own holder when
+    // there is no answer for that actor yet. Every inventory read goes through
+    // this. RefreshHolder is the game-thread half and must only run there.
+    uintptr_t Holder(uintptr_t actor);
+    void      RefreshHolder(uintptr_t actor);
 
     bool     Eid(uintptr_t e, uint32_t* out);
     uint32_t Route(uintptr_t e);

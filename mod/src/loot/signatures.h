@@ -77,6 +77,19 @@ namespace ml::sig
         "48 8D AC 24 70 FF FF FF 48 81 EC 90 01 00 00 4D 8B E9 49 8B F0 4C 8B FA 48 8B F9 "
         "33 C9 89 8D D0 00 00 00";
 
+    // The game's GetInventoryHolder(actor): the holder of the bag an actor
+    // actually uses. Most characters use their own, [[actor+0x68]+0xB8]. A
+    // character whose row says so borrows one instead, from
+    // [[actor+0xA0]+0xD0], and Damiane and Oongka do: their own holder is an
+    // empty 50-slot bag while everything they pick up lands in the shared
+    // one. The mode comes from a character-table lookup that runs through
+    // protected code, so the mod calls this rather than copying it, on the
+    // game thread. The two calls are table lookups that move between builds.
+    inline constexpr const char* kSig_InvHolder =
+        "40 53 48 83 EC 20 48 8B 41 68 48 8B D9 48 8B 48 20 0F B7 41 30 48 8D 4C 24 30 66 89 44 24 30 E8 ?? ?? ?? ?? "
+        "48 8D 88 BE 00 00 00 B8 FF FF 00 00 66 39 01 75 04 B0 03 EB 09 E8 ?? ?? ?? ?? 0F B6 40 5F 0F B6 C8 84 C0 74 ?? "
+        "83 F9 01 75 ?? 48 8B 9B A0 00 00 00 48 85 DB 74 ?? 48 8B 9B D0 00 00 00";
+
     // How many item entities one drop-table row spawns. Watched, never called.
     //   if (!instigator) return 1;
     //   bonus = playerBuffFor(collectKey) + gimmickComponent[+0x1A0];

@@ -5706,7 +5706,18 @@ namespace ml::loot
         hooks::Remove();
     }
 
-    void OnGameTick() { events::Drain(); }
+    // On the game thread. Besides draining events, it asks the game which bag
+    // the scanned actor uses, four times a second, because as Damiane or Oongka
+    // it is not the actor's own and only the game can say whose it is.
+    void OnGameTick()
+    {
+        events::Drain();
+        static DWORD s_holderAt = 0;
+        const DWORD now = GetTickCount();
+        if (now - s_holderAt < 250) return;
+        s_holderAt = now;
+        game::RefreshHolder(g_me);
+    }
 
     Status GetStatus() { std::lock_guard<std::mutex> lk(g_mu); return g_status; }
     int CopyNearby(Nearby* out, int max)
