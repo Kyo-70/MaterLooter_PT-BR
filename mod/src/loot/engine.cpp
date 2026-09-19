@@ -2597,9 +2597,23 @@ namespace ml::loot
         return IStr(node, "gimmick_attach_");
     }
 
+    // A seed the player has just planted in the camp farm. The game builds one
+    // of these for each of its 20 farm plants, gimmick_camp_farm_<plant>_seed,
+    // and tags it catch_onehand, so it reads as a loose seed and the mod took it
+    // straight back out of the soil. Kuradeon on the posts tab, 19 September
+    // 2026, with GatherCampFarm=0 set: the switch covers the growing stages the
+    // node table carries and never covered this one, which the table leaves out.
+    // Taking a planted seed undoes the planting whatever the switch says, so it
+    // is never taken at all.
+    static bool PlantedSeed(const char* node)
+    {
+        return node && node[0] && IStr(node, "gimmick_camp_farm_") && IStr(node, "_seed");
+    }
+
     static bool OffLimits(const char* node, bool unwornEquip = false)
     {
         if (!node || !node[0]) return false;
+        if (PlantedSeed(node)) return true;
         // "puzzle" earns its place: the game tags gimmick_puzzle_ice_wall_break,
         // _ice_block_break, _stone_wall_break and _pickaxe_break_point as
         // collect_mine, so they read as ordinary ore and the mod would open
@@ -2952,6 +2966,7 @@ namespace ml::loot
             // cloak, and both hold an open and shut state the game drives
             // through the interaction. Taking one as loose loot skips that.
             if (IStr(c.node, "equip_openclose")) return skip("take this one by hand, looting it can lock the quest");
+            if (PlantedSeed(c.node)) return skip("a seed planted in your camp farm");
             // Gear that is being worn, which the game keeps in the world as an
             // object of its own under /00_common/equip/. Taking one hands over a
             // copy and leaves the original equipped, so the player ends up with

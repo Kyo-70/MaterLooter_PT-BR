@@ -95,6 +95,11 @@ CONTAINER_WORDS = ("_chest", "_box", "dropset")
 # loose seed, but nothing here says whether gathering one lifts something the
 # player has planted. Ground items is on by default, so getting this wrong would
 # empty somebody's farm without them asking for it. Test before mapping it.
+#
+# Answered on 19 September 2026: it does. Kuradeon's planted seeds went straight
+# back into the bag. The engine refuses every gimmick_camp_farm_*_seed by name
+# (PlantedSeed in engine.cpp), in the verdict and in arming, so these stay out
+# of the table and no switch can turn them back on.
 CATCH_SKIP = ("camp_farm",)
 
 # Tags held back for the same reason, named rather than mapped.
