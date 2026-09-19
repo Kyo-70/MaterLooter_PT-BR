@@ -44,6 +44,11 @@ namespace ml::sig
     // Primary: the per-tick movement integrator (Trinity's kSig_MoveUpdate).
     // Fires once per frame for the player on the game thread.
     inline constexpr const char* kSig_MoveUpdate = "48 8B C4 4C 89 48 ?? 48 89 50 ?? 55 41 56";
+    // The same entry with another mod's five-byte jump over it, which is what
+    // Trinity.asi does. The jump splits the second instruction, so both of its
+    // leftover bytes are wildcards. The tail on its own matches six functions;
+    // none of the other five has an E9 seven bytes before it.
+    inline constexpr const char* kSig_MoveUpdateJumped = "E9 ?? ?? ?? ?? ?? ?? 48 89 50 ?? 55 41 56";
 
     // Fallback: the function CDLoot hooks as "area_sweep". The match lands 0x0F
     // bytes into the function on an instruction boundary (push rbp); it runs
@@ -121,6 +126,11 @@ namespace ml::sig
     // game's own first calls. Pattern runs to the read of the 5th argument.
     inline constexpr const char* kSig_OwnCheck =
         "48 89 5C 24 08 48 89 74 24 10 48 89 7C 24 18 55 41 54 41 55 41 56 41 57 48 8B EC "
+        "48 81 EC 80 00 00 00 49 8B ?? 4C 8B ?? 4C 8B ?? 0F B6 7D 50";
+    // Under another mod's entry jump, as Trinity.asi leaves it. The jump
+    // replaces the first instruction exactly, and the rest is unique alone.
+    inline constexpr const char* kSig_OwnCheckJumped =
+        "E9 ?? ?? ?? ?? 48 89 74 24 10 48 89 7C 24 18 55 41 54 41 55 41 56 41 57 48 8B EC "
         "48 81 EC 80 00 00 00 49 8B ?? 4C 8B ?? 4C 8B ?? 0F B6 7D 50";
 
     // --- Node arming --------------------------------------------------------

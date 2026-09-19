@@ -161,6 +161,83 @@ namespace ml::farhook
         return true;
     }
 
+    // Sixteen bytes of int3 padding in the game's code, 16-aligned, inside a
+    // run of at least 48, so the block sits between functions and no
+    // instruction's immediate can be what it is made of. Each block is handed
+    // out once, and the middle of the run is taken so a neighbour's own use of
+    // the edge is left alone.
+    static uintptr_t g_caves[8];
+    static int g_caveN = 0;
+    static uintptr_t FindCave(uintptr_t from)
+    {
+        const uintptr_t base = reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));
+        const auto* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(base);
+        const auto* nt = reinterpret_cast<const IMAGE_NT_HEADERS64*>(base + dos->e_lfanew);
+        const IMAGE_SECTION_HEADER* sec = IMAGE_FIRST_SECTION(nt);
+        for (unsigned s = 0; s < nt->FileHeader.NumberOfSections; ++s, ++sec)
+        {
+            if (!(sec->Characteristics & IMAGE_SCN_MEM_EXECUTE)) continue;
+            const auto* p = reinterpret_cast<const unsigned char*>(base + sec->VirtualAddress);
+            const size_t n = sec->Misc.VirtualSize;
+            size_t run = 0;
+            for (size_t i = 0; i < n; ++i)
+            {
+                if (p[i] != 0xCC) { run = 0; continue; }
+                if (++run < 48) continue;
+                // i is the 48th int3 of a run; take the 16-aligned block in its middle.
+                const uintptr_t start = (reinterpret_cast<uintptr_t>(p + i - 47) + 16 + 15) & ~static_cast<uintptr_t>(15);
+                bool used = false;
+                for (int c = 0; c < g_caveN; ++c) if (g_caves[c] == start) used = true;
+                const int64_t d = static_cast<int64_t>(start) - static_cast<int64_t>(from);
+                if (used || d > 0x7FFF0000LL || d < -0x7FFF0000LL) { run = 0; continue; }
+                return start;
+            }
+        }
+        return 0;
+    }
+
+    bool InstallOverJump(const char* name, uintptr_t target, void* detour, void** original, char* why, unsigned whyLen)
+    {
+        (void)name;
+        why[0] = 0;
+        if (!target) { snprintf(why, whyLen, "no target"); return false; }
+        if (g_n >= 24 || g_caveN >= 8) { snprintf(why, whyLen, "hook table full"); return false; }
+        const auto* at = reinterpret_cast<const unsigned char*>(target);
+        if (at[0] != 0xE9) { snprintf(why, whyLen, "the entry is not a jmp rel32"); return false; }
+        int32_t rel;
+        memcpy(&rel, at + 1, 4);
+        const uintptr_t theirs = target + 5 + static_cast<int64_t>(rel);
+
+        // The original: straight on to the other mod's detour.
+        unsigned char* tramp = Alloc(14);
+        if (!tramp) { snprintf(why, whyLen, "trampoline page allocation failed"); return false; }
+        tramp[0] = 0xFF; tramp[1] = 0x25; tramp[2] = tramp[3] = tramp[4] = tramp[5] = 0;
+        memcpy(tramp + 6, &theirs, 8);
+
+        const uintptr_t cave = FindCave(target + 5);
+        if (!cave) { snprintf(why, whyLen, "no int3 padding in reach for a relay"); return false; }
+        unsigned char relay[16];
+        memset(relay, 0xCC, sizeof relay);
+        relay[0] = 0xFF; relay[1] = 0x25; relay[2] = relay[3] = relay[4] = relay[5] = 0;
+        memcpy(relay + 6, &detour, 8);
+        // Nothing jumps into padding, so the relay can be written before the
+        // entry points at it; the same order as Install, trampoline first.
+        *original = tramp;
+        if (!WriteCode(cave, relay, sizeof relay, why, whyLen)) { *original = nullptr; return false; }
+        g_caves[g_caveN++] = cave;
+
+        unsigned char entry[5];
+        entry[0] = 0xE9;
+        const int32_t toCave = static_cast<int32_t>(static_cast<int64_t>(cave) - static_cast<int64_t>(target + 5));
+        memcpy(entry + 1, &toCave, 4);
+        Entry& e = g_entries[g_n];
+        e.target = target; e.stolen = 5;
+        memcpy(e.orig, at, 5);
+        if (!WriteCode(target, entry, 5, why, whyLen)) { *original = nullptr; return false; }
+        ++g_n;
+        return true;
+    }
+
     void RemoveAll()
     {
         char why[64];

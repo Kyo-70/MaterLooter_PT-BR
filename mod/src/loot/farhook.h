@@ -13,5 +13,14 @@ namespace ml::farhook
     // Installs a detour. *original receives the trampoline (callable as the
     // original function). Returns false and fills `why` on failure.
     bool Install(const char* name, uintptr_t target, void* detour, void** original, char* why, unsigned whyLen);
+
+    // For a target another mod has already detoured with a five-byte `jmp
+    // rel32` over its entry. Install would refuse the relative branch, and
+    // its twelve-byte patch would land where that mod's trampoline jumps back
+    // to. Instead a fourteen-byte relay to the detour goes into a run of int3
+    // padding inside the game image, which a rel32 always reaches, and only
+    // the jump's four-byte offset changes to point at it. *original jumps on
+    // to the other mod's detour, so both run and the original runs last.
+    bool InstallOverJump(const char* name, uintptr_t target, void* detour, void** original, char* why, unsigned whyLen);
     void RemoveAll();
 }

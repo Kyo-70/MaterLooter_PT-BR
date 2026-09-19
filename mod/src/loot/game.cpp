@@ -33,6 +33,41 @@ namespace ml::game
         return a;
     }
 
+    // A function another mod has already detoured starts with that mod's jump,
+    // so a pattern that begins at the entry finds nothing. kaster21's log on 19
+    // September 2026 had own_check and move_update both at 0 hits with
+    // Trinity.asi loaded, and without own_check no node, body or dropped item
+    // is ever asked about, so nothing but catches was looted. The second
+    // pattern carries the jump in place of the bytes it covers, and a match
+    // only counts when the jump leaves the game module.
+    static uintptr_t ScanJumped(const char* name, const char* pattern, const char* jumped)
+    {
+        const uintptr_t a = Scan(name, pattern, false);
+        if (a) return a;
+        size_t hits = 0;
+        const uintptr_t j = mem::FindUnique(jumped, &hits);
+        if (!j) return 0;
+        const uintptr_t dest = mem::RipAt(j, 5);
+        if (mem::InImage(dest)) { LOG_ERR("[sig] %-14s under a jump that stays in the game, so not taken", name); return 0; }
+        char owner[MAX_PATH] = "an unknown module";
+        HMODULE mod = nullptr;
+        if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                               reinterpret_cast<LPCSTR>(dest), &mod) && mod)
+        {
+            char path[MAX_PATH];
+            if (GetModuleFileNameA(mod, path, MAX_PATH))
+            {
+                const char* base = strrchr(path, '\\');
+                strncpy_s(owner, base ? base + 1 : path, _TRUNCATE);
+            }
+        }
+        for (int i = g_sigN - 1; i >= 0; --i)
+            if (g_sigs[i].name == name) { g_sigs[i].addr = j; g_sigs[i].hits = hits; break; }
+        LOG("[sig] %-14s +0x%llX, under a jump %s put over its entry; hooking on top of it",
+            name, static_cast<unsigned long long>(mem::Rva(j)), owner);
+        return j;
+    }
+
     // Table resolvers are clones; the one we want references its table-name
     // string with `lea r8,[rip+..]` and has the 16-bit-key prologue above it.
     struct TableHunt { const char* name; uintptr_t fn; };
@@ -76,9 +111,9 @@ namespace ml::game
             else LOG("[sig] DESC_MASK +0x%llX queue +0x%llX", static_cast<unsigned long long>(mem::Rva(g_f.descMask)),
                      static_cast<unsigned long long>(mem::Rva(g_f.queue)));
         }
-        g_f.moveUpdate   = Scan("move_update", kSig_MoveUpdate, false);
+        g_f.moveUpdate   = ScanJumped("move_update", kSig_MoveUpdate, kSig_MoveUpdateJumped);
         g_f.areaSweepHit = Scan("area_sweep", kSig_AreaSweep, false);
-        g_f.ownCheck     = Scan("own_check", kSig_OwnCheck, false);
+        g_f.ownCheck     = ScanJumped("own_check", kSig_OwnCheck, kSig_OwnCheckJumped);
         g_f.armFn        = Scan("node_arm", kSig_ArmDispatch, false);
         g_f.stateDriver  = Scan("gimmick_driver", kSig_StateDriver, false);
         g_f.invHolder    = Scan("inv_holder", kSig_InvHolder, false);

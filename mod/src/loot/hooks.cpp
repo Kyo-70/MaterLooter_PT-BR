@@ -646,6 +646,24 @@ namespace ml::loot::hooks
     static bool Hook(const char* what, uintptr_t target, void* detour, void** original)
     {
         if (!target) return false;
+        // Another mod's jump already sits on the entry. The ordinary install
+        // would refuse it as a relative branch, and its twelve-byte patch
+        // would land on the spot that mod's own trampoline jumps back to.
+        // MinHook is no way out: it needs a page within 1 GB of the target and
+        // there is none near this image. So the jump is redirected through a
+        // relay in the image's own padding, and ours then calls theirs.
+        uint8_t first = 0;
+        if (mem::Read8(target, &first) && first == 0xE9 && !mem::InImage(mem::RipAt(target, 5)))
+        {
+            char why[96];
+            if (!farhook::InstallOverJump(what, target, detour, original, why, sizeof why))
+            {
+                LOG_ERR("[hook] %s: could not stack on the other mod's jump: %s", what, why);
+                return false;
+            }
+            LOG("[hook] %s hooked at +0x%llX, stacked on another mod's jump", what, static_cast<unsigned long long>(mem::Rva(target)));
+            return true;
+        }
         char why[96];
         if (!farhook::Install(what, target, detour, original, why, sizeof why))
         {
