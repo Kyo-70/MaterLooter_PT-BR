@@ -2,7 +2,7 @@
 #include "stack_api.h"
 
 // The item stack multiplier, from whichever plugin beside this one provides
-// it. Master Stack and Private Storage Master both can; Master Stack wins
+// it. Stack Master and Private Storage Master both can; Stack Master wins
 // when both are loaded, by their own arrangement, and the other stands down.
 //
 // Nothing here links against either. Each module is looked up by name and
@@ -22,7 +22,7 @@ namespace ml::stack
     };
 
     // The provider to edit: the one that says it is applying the multiplier,
-    // Master Stack first when both claim it, and otherwise the first that
+    // Stack Master first when both claim it, and otherwise the first that
     // answered at all, since applying it there turns the feature on. Null
     // when neither is installed or neither has a usable interface. Cheap to
     // call every frame; a miss is retried every two seconds.
@@ -42,7 +42,7 @@ namespace ml::stack
     // multiplier written to the other changes nothing.
     const char* RefusedOther();
 
-    // Just the module name from that refusal, "MasterStack.asi", for a
+    // Just the module name from that refusal, "StackMaster.asi", for a
     // sentence that has to name the mod to set the multiplier in. Empty when
     // nothing was refused, which is also the case when the mod in charge is
     // one this build has never heard of.

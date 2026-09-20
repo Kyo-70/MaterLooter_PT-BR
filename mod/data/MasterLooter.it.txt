@@ -454,7 +454,7 @@ Stacks	Pile
 stacks are the size the game ships	le pile hanno la dimensione con cui il gioco viene distribuito
 That mod did not hand over its stack settings.	Quel mod non ha fornito le sue impostazioni delle pile.
 This launch	Questo avvio
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Questa scheda richiede Master Stack, oppure una build di Private Storage Master che aumenta i limiti delle pile.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	Questa scheda richiede Stack Master, oppure una build di Private Storage Master che aumenta i limiti delle pile.
 Why	Perché
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	La maggior parte degli oggetti si può impilare fino a 100, quindi a x10 ne contengono 1000. Si applica a tutto ciò che si impila, e mai a ciò che non lo fa, come armi e armature, e le pile più profonde del gioco si fermano al limite che quel mod indica sopra. Il moltiplicatore viene letto all'avvio del gioco, quindi il gioco deve essere riavviato prima che si veda.
 Some items reached the largest stack that mod allows, %d, and stopped there.	Alcuni oggetti hanno raggiunto la pila più grande che quel mod consente, %d, e si sono fermati lì.

@@ -1668,7 +1668,7 @@ namespace ml::gui
         return changed;
     }
 
-    // The item stack multiplier, from Master Stack or from Private Storage
+    // The item stack multiplier, from Stack Master or from Private Storage
     // Master, whichever is applying it. Nothing here knows which: the link
     // picks the provider and this edits it. The multiplier is read at startup
     // by that mod, so a change here only shows in the game after a restart,
@@ -1682,7 +1682,7 @@ namespace ml::gui
         if (!api)
         {
             ImGui::TextColored(kWarn, TR("Item stacks: %s"), stack::Why());
-            ImGui::TextWrapped("%s", TR("This tab needs Master Stack, or a build of Private Storage Master that raises stack limits."));
+            ImGui::TextWrapped("%s", TR("This tab needs Stack Master, or a build of Private Storage Master that raises stack limits."));
             return;
         }
         StackStatus s{};

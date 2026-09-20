@@ -448,7 +448,7 @@ Stacks	스택
 stacks are the size the game ships	스택이 게임 출시 크기 그대로임
 That mod did not hand over its stack settings.	그 모드가 스택 설정을 넘겨주지 않았습니다.
 This launch	이번 실행
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	이 탭에는 Master Stack이나 스택 한도를 올리는 빌드의 Private Storage Master가 필요합니다.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	이 탭에는 Stack Master나 스택 한도를 올리는 빌드의 Private Storage Master가 필요합니다.
 Why	이유
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	게임에서는 대부분의 아이템을 100개까지 쌓을 수 있어서, x10이면 1000개까지 들어갑니다. 스택이 되는 모든 것에 적용되며, 무기와 방어구처럼 스택이 되지 않는 것에는 결코 적용되지 않습니다. 게임에서 가장 깊은 스택은 위에 표시된 그 모드의 한도에서 멈춥니다. 이 배율은 게임이 시작될 때 읽히므로, 적용되려면 게임을 재시작해야 합니다.
 Some items reached the largest stack that mod allows, %d, and stopped there.	일부 아이템은 그 모드가 허용하는 가장 큰 스택인 %d에 도달해 거기서 멈췄습니다.

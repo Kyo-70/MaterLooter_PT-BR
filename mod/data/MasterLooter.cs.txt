@@ -447,7 +447,7 @@ Stacks	Hromady
 stacks are the size the game ships	hromady mají výchozí velikost hry
 That mod did not hand over its stack settings.	Ten mod nepředal svá nastavení hromad.
 This launch	Toto spuštění
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Tato záložka potřebuje Master Stack nebo verzi Private Storage Master, která zvyšuje limity hromad.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	Tato záložka potřebuje Stack Master nebo verzi Private Storage Master, která zvyšuje limity hromad.
 Why	Proč
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	U většiny věcí ti hra dovolí hromadu 100 kusů, takže při x10 pojme 1000. Platí pro všechno, co se dá hromadit, a nikdy pro to, co ne, jako zbraně a brnění, a nejhlubší hromady ve hře se zastaví na limitu, který ten mod hlásí výše. Násobitel se načte při startu hry, takže hru je nutné restartovat, než se projeví.
 Some items reached the largest stack that mod allows, %d, and stopped there.	Některé předměty dosáhly největší hromady, kterou ten mod dovoluje, %d, a zastavily se tam.

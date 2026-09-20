@@ -396,7 +396,7 @@ This chest holds one of each collectible, so its slots cannot be changed.
 This launch	
 This session: %ld picked up, %ld gathered, %ld caught, %ld carcasses	
 This tab needs a build of Private Storage Master that matches this version of Master Looter.	
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	
 Timber and branches on the ground, and the nodes that yield them. What most of these hold is read out of the game data itself, so refusing the class wood on the Classes tab leaves the trees standing as well as the timber under them. Where the game says nothing about a node, this switch is the only control it has.	
 To leave one species alone, set what it becomes to never on the Items tab: Item_Tench, Item_Ricefish, Item_Iguana. The mod reads the creature's own row in the game's character table, so it knows which species it is looking at before it catches anything. A few unusual creatures still fall back to guessing from their model name and are caught by category only.	
 Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.	

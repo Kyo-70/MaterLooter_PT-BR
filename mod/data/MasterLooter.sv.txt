@@ -448,7 +448,7 @@ Stacks	Staplar
 stacks are the size the game ships	staplarna har den storlek spelet levereras med
 That mod did not hand over its stack settings.	Den modden gav inte ifrån sig sina stapelinställningar.
 This launch	Den här starten
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Den här fliken behöver Master Stack, eller en version av Private Storage Master som höjer stapelgränserna.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	Den här fliken behöver Stack Master, eller en version av Private Storage Master som höjer stapelgränserna.
 Why	Varför
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	De flesta saker kan du stapla upp till 100 av i spelet, så vid x10 rymmer de 1000. Den gäller allt som staplas, och aldrig det som inte gör det, som vapen och rustning, och de djupaste staplarna i spelet stannar vid gränsen som den modden rapporterar ovan. Multiplikatorn läses när spelet startar, så spelet måste startas om innan den syns.
 Some items reached the largest stack that mod allows, %d, and stopped there.	Vissa föremål nådde den största stapeln som den modden tillåter, %d, och stannade där.

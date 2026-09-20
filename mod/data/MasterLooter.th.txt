@@ -447,7 +447,7 @@ Stacks	สแตก
 stacks are the size the game ships	สแตกมีขนาดเท่าตอนเกมวางจำหน่าย
 That mod did not hand over its stack settings.	มอดนั้นไม่ได้ส่งมอบการตั้งค่าสแตกของมันมา
 This launch	การเปิดเกมครั้งนี้
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	แท็บนี้ต้องการ Master Stack หรือ Private Storage Master รุ่นที่เพิ่มขีดจำกัดสแตก
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	แท็บนี้ต้องการ Stack Master หรือ Private Storage Master รุ่นที่เพิ่มขีดจำกัดสแตก
 Why	ทำไม
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	ของส่วนใหญ่ในเกมให้คุณสแตกได้ถึง 100 ชิ้น ดังนั้นที่ x10 จะเก็บได้ 1000 ชิ้น มีผลกับทุกอย่างที่สแตกได้ และไม่มีผลกับสิ่งที่สแตกไม่ได้ เช่น อาวุธและชุดเกราะ และสแตกที่ลึกที่สุดในเกมจะหยุดอยู่ที่ขีดจำกัดที่มอดนั้นรายงานไว้ด้านบน ตัวคูณนี้จะถูกอ่านตอนเกมเริ่มทำงาน จึงต้องรีสตาร์ทเกมก่อนจึงจะเห็นผล
 Some items reached the largest stack that mod allows, %d, and stopped there.	ไอเทมบางชิ้นถึงสแตกใหญ่ที่สุดที่มอดนั้นอนุญาต %d แล้วหยุดอยู่ตรงนั้น

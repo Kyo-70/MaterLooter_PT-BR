@@ -447,7 +447,7 @@ Stacks	スタック
 stacks are the size the game ships	スタックはゲーム出荷時のサイズです
 That mod did not hand over its stack settings.	そのMODはスタック設定を渡しませんでした。
 This launch	今回の起動
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	このタブにはMaster Stack、またはスタック上限を引き上げるPrivate Storage Masterのビルドが必要です。
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	このタブにはStack Master、またはスタック上限を引き上げるPrivate Storage Masterのビルドが必要です。
 Why	理由
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	ほとんどのものはゲーム内で100までスタックできるので、x10なら1000個入ります。スタックできるものすべてに適用され、武器や防具のようにスタックできないものには一切適用されません。ゲーム内で最も深いスタックは、上に表示されているそのMODの上限で止まります。この倍率はゲーム起動時に読み込まれるため、反映されるにはゲームを再起動する必要があります。
 Some items reached the largest stack that mod allows, %d, and stopped there.	一部のアイテムはそのMODが許可する最大スタック数(%d)に達し、そこで止まりました。

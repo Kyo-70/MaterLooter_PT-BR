@@ -15,7 +15,7 @@ Walk past it and it is in your bag: dropped items, herbs and flowers, ore and st
 - Class groups with one click (weapons and armor, damaged gear, food and drink, materials, books and papers, furniture, treasure and keepsakes, and more), a full class table, tag rules and per-item overrides with a live verdict.
 - Quest items, memory chips, puzzle and mechanism parts, artifacts, recipes and your own equipment are protected by default. The Classes and Items tabs can lift that on purpose.
 - With [Private Storage Master](https://www.nexusmods.com/crimsondesert/mods/3521) 1.1.0 or later installed, what the mod picks up can be moved into your storage as it lands. See [below](#storing-loot).
-- With [Master Stack](https://www.nexusmods.com/crimsondesert/mods/3548) or Private Storage Master 1.1.2 or later installed, the Stacks tab sets how much more every stackable item holds. See [Bigger item stacks](#bigger-item-stacks).
+- With [Stack Master](https://www.nexusmods.com/crimsondesert/mods/3548) or Private Storage Master 1.1.2 or later installed, the Stacks tab sets how much more every stackable item holds. See [Bigger item stacks](#bigger-item-stacks).
 - Owned goods are skipped unless you opt in: the mod asks the same routine the game uses to decide between "Take" and "Steal".
 - Gather nodes are armed from a distance, so bushes fill their data without you standing on them.
 - Ore veins are broken rather than emptied, the way a pickaxe does it, so the contents drop on the ground and your tool's Mining Yield Up is applied by the game. Each vein is struck once.
@@ -52,7 +52,7 @@ With an older Private Storage Master the section reads "Storing loot needs a new
 
 ## Bigger item stacks
 
-New in 1.6.33. The Stacks tab sets how much more every stackable item holds, and it appears only when a mod that can do that is installed beside Master Looter: Master Stack, or Private Storage Master 1.1.2 or later. Master Looter changes nothing itself; the tab is a front end for whichever of those is installed, and with both there Master Stack does the work.
+New in 1.6.33. The Stacks tab sets how much more every stackable item holds, and it appears only when a mod that can do that is installed beside Master Looter: Stack Master, or Private Storage Master 1.1.2 or later. Master Looter changes nothing itself; the tab is a front end for whichever of those is installed, and with both there Stack Master does the work.
 
 Pick Off, x2, x3, x5, x10, x20, x50 or x100. Most things the game stacks 100 of, so x10 holds 1000, and the deepest stacks in the game stop at the ceiling that mod reports, 999999 today. What you pick goes into that mod's own ini at once. A bigger multiplier than the one running takes hold immediately where that mod can manage it, which needs Private Storage Master loaded and you out in the world rather than in a storage screen. A smaller one always waits for the next launch, because a stack you already built cannot be shrunk under what is in it. The tab says which of the two you are looking at, and shows a restart line only when one is really needed.
 
@@ -101,11 +101,11 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.32:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.33:
 
-    d1f4f90e684efa4d8fcd9810e139cd9a4f0e934706f605f496717d8a16524d81  MasterLooter-1.6.32-DMM.zip
-    2d6cdd02c11532786dda355178c6b4eb9aadb3a0071047bd0bb35b9b51b3cd95  MasterLooter-1.6.32.zip
-    60e21f0460da7ce5fb6b80224ddd4eb91b7d39b287725e14e8409876be89630a  MasterLooter.asi
+    bb60abd926b165c0a90531174afae1347b0513a3e023280d53822ad315a0c154  MasterLooter-1.6.33-DMM.zip
+    e1f1c8b48c31d3206346a2341c14a1c70c0a235bfbfb18ffc5dd7501121f8008  MasterLooter-1.6.33.zip
+    05ece10e321a655445f4a7d0dc8361edda24a8eee4f357f458e654fa68ed6a40  MasterLooter.asi
 
 ## Controls
 

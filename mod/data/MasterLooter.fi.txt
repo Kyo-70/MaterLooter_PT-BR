@@ -450,7 +450,7 @@ Stacks	Pinot
 stacks are the size the game ships	pinot ovat pelin oletuskokoisia
 That mod did not hand over its stack settings.	Se modi ei luovuttanut pino-asetuksiaan.
 This launch	Tämä käynnistys
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Tämä välilehti tarvitsee Master Stackin tai Private Storage Masterin version, joka korottaa pinorajoja.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	Tämä välilehti tarvitsee Stack Masterin tai Private Storage Masterin version, joka korottaa pinorajoja.
 Why	Miksi
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	Useimpia asioita peli antaa pinota 100 kappaletta, joten x10:llä niitä mahtuu 1000. Se koskee kaikkea, mikä pinoutuu, eikä koskaan sitä, mikä ei, kuten aseita ja panssareita, ja pelin syvimmät pinot pysähtyvät rajaan, jonka se modi ilmoittaa yllä. Kerroin luetaan pelin käynnistyessä, joten peli täytyy käynnistää uudelleen, ennen kuin se näkyy.
 Some items reached the largest stack that mod allows, %d, and stopped there.	Jotkin esineet saavuttivat suurimman pinon, jonka se modi sallii, %d, ja pysähtyivät siihen.

@@ -25,9 +25,9 @@ namespace ml::stack
         char  g_refusedOther[160] = "";
         char  g_refusedModule[40] = "";
 
-        // Master Stack first: when both are loaded it is the one that applies
+        // Stack Master first: when both are loaded it is the one that applies
         // the multiplier and Private Storage Master stands down.
-        const wchar_t* const kModules[] = { L"MasterStack.asi", L"PrivateStorageMaster.asi" };
+        const wchar_t* const kModules[] = { L"StackMaster.asi", L"PrivateStorageMaster.asi" };
 
         bool Bind(HMODULE h, const wchar_t* name, Api* out)
         {
@@ -63,9 +63,9 @@ namespace ml::stack
         // How much a stand-down reason is worth saying, when no provider is
         // applying the multiplier and its reason is the only thing the tab can
         // show. A provider that is merely switched off, or that stood aside for
-        // the other one, sends the player to the wrong file: with Master Stack
-        // installed and off, Private Storage Master says "Master Stack sets the
-        // stack sizes instead" and the setting to change is Master Stack's.
+        // the other one, sends the player to the wrong file: with Stack Master
+        // installed and off, Private Storage Master says "Stack Master sets the
+        // stack sizes instead" and the setting to change is Stack Master's.
         // A broken hook outranks both, because that is the one a player can
         // act on.
         int Actionable(int reason)
@@ -145,7 +145,7 @@ namespace ml::stack
             if (!g_why[0] || strcmp(g_why, "not installed") == 0) continue;
             refused = true;
             // Kept even when the other provider binds. A refusal used to be
-            // reported only when nothing bound at all, so a Master Stack this
+            // reported only when nothing bound at all, so a Stack Master this
             // build cannot speak to went unmentioned while the tab quietly
             // edited the mod standing down for it.
             WideCharToMultiByte(CP_UTF8, 0, name, -1, g_refusedModule, sizeof g_refusedModule - 1, nullptr, nullptr);

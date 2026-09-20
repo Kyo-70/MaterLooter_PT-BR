@@ -447,7 +447,7 @@ Stacks	Stapels
 stacks are the size the game ships	de stapels hebben de grootte waarmee het spel wordt uitgeleverd
 That mod did not hand over its stack settings.	Die mod heeft zijn stapelinstellingen niet doorgegeven.
 This launch	Deze sessie
-This tab needs Master Stack, or a build of Private Storage Master that raises stack limits.	Dit tabblad heeft Master Stack nodig, of een build van Private Storage Master die stapellimieten verhoogt.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	Dit tabblad heeft Stack Master nodig, of een build van Private Storage Master die stapellimieten verhoogt.
 Why	Waarom
 Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	De meeste dingen mag je in het spel tot 100 stapelen, dus bij x10 passen er 1000 in. Dit geldt voor alles wat stapelt, en nooit voor wat dat niet doet, zoals wapens en harnassen, en de diepste stapels in het spel stoppen bij de limiet die door die mod hierboven wordt gemeld. De vermenigvuldigingsfactor wordt gelezen wanneer het spel start, dus het spel moet opnieuw worden gestart voordat die te zien is.
 Some items reached the largest stack that mod allows, %d, and stopped there.	Sommige voorwerpen bereikten de grootste stapel die door die mod wordt toegestaan, %d, en stopten daar.
