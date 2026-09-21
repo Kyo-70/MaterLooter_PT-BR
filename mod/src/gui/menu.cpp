@@ -331,6 +331,19 @@ namespace ml::gui
             LOG("[menu] watch key: menu %s", st.menuOpen
                     ? (st.menuWatch ? "watching; it is on screen and the game keeps your clicks" : "open")
                     : "closed");
+            // Both of RevOGUwU's logs show the menu on screen for half an hour
+            // and never opened with the menu key, so it was this key, and the
+            // dim line under the title did not tell them why their clicks went
+            // to the game. Say it once where it cannot be missed.
+            if (st.menuOpen && st.menuWatch)
+            {
+                const std::string use = Settings::KeyName(c.menuKey);
+                const std::string shut = Settings::KeyName(c.keyWatch);
+                char msg[200];
+                snprintf(msg, sizeof msg, "Master Looter: menu in watch mode, so the game keeps your mouse. %s to use it, %s to close it.",
+                         use.c_str(), shut.c_str());
+                st.Notify(msg, 5000, true);
+            }
         }
         s_watchWas = watch;
 
@@ -2043,9 +2056,15 @@ namespace ml::gui
         if (!st.notice[0] || static_cast<LONG>(st.noticeUntil - now) <= 0) return;
         const LONG left = static_cast<LONG>(st.noticeUntil - now);
         const float alpha = left < 600 ? left / 600.0f : 1.0f;
-        const ImVec2 size = ImGui::CalcTextSize(st.notice);
         const ImVec2 disp = ImGui::GetIO().DisplaySize;
-        ImGui::SetNextWindowPos(ImVec2((disp.x - size.x) * 0.5f - 14 * g_scale, disp.y * 0.12f));
+        // A notice naming what the pet filter deleted, or both copies of the
+        // plugin, runs longer than the screen is wide, so it wraps at 60% of
+        // the width. Measured in the notice's own font, which is the larger one.
+        const float wrap = disp.x * 0.6f;
+        ImGui::PushFont(g_fontHead);
+        const ImVec2 size = ImGui::CalcTextSize(st.notice, nullptr, false, wrap);
+        ImGui::PopFont();
+        ImGui::SetNextWindowPos(ImVec2((disp.x - size.x) * 0.5f - 18 * g_scale, disp.y * 0.12f));
         ImGui::SetNextWindowBgAlpha(0.70f * alpha);
         ImGui::PushStyleVar(ImGuiStyleVar_Alpha, alpha);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(18 * g_scale, 9 * g_scale));
@@ -2053,7 +2072,9 @@ namespace ml::gui
                                                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoNav))
         {
             ImGui::PushFont(g_fontHead);
+            ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + wrap);
             ImGui::TextColored(kGold, "%s", st.notice);
+            ImGui::PopTextWrapPos();
             ImGui::PopFont();
         }
         ImGui::End();
@@ -2140,11 +2161,14 @@ namespace ml::gui
             ImGui::SameLine();
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - closeW);
             if (ImGui::SmallButton(TR("Watch"))) st.menuWatch = true;
-            if (ImGui::BeginItemTooltip()) { ImGui::Text(TR("Keep the menu on screen while you play. %s brings it back, %s closes it."), Settings::KeyName(c.menuKey), Settings::KeyName(c.keyWatch)); ImGui::EndTooltip(); }
+            // KeyName returns one shared buffer for most keys, so two calls in
+            // one argument list print the same name twice. Copy the first.
+            const std::string menuKeyName = Settings::KeyName(c.menuKey);
+            if (ImGui::BeginItemTooltip()) { ImGui::Text(TR("Keep the menu on screen while you play. %s brings it back, %s closes it."), menuKeyName.c_str(), Settings::KeyName(c.keyWatch)); ImGui::EndTooltip(); }
             ImGui::SameLine();
             if (ImGui::SmallButton(TR("Close"))) open = false;
             if (st.menuWatch)
-                ImGui::TextColored(kGoldDim, TR("Watch mode: the game has your controls. %s to interact, %s to close."), Settings::KeyName(c.menuKey), Settings::KeyName(c.keyWatch));
+                ImGui::TextColored(kGold, TR("Watch mode: the game has your controls. %s to interact, %s to close."), menuKeyName.c_str(), Settings::KeyName(c.keyWatch));
             {
                 const ImVec2 a = ImGui::GetCursorScreenPos();
                 const float w = ImGui::GetContentRegionAvail().x;

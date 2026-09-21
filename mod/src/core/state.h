@@ -20,7 +20,7 @@ namespace ml
         // A short on-screen notice ("auto-loot on"), drawn until `noticeUntil`.
         // An important one is drawn whether or not the toggle notice is wanted:
         // someone who turned that off still wants to hear about a full bag.
-        char  notice[96]      = "";
+        char  notice[320]     = "";   // the pet filter names what it deleted, which runs past 200
         DWORD noticeUntil     = 0;
         bool  noticeImportant = false;
 
