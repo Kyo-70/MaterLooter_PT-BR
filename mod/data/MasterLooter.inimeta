@@ -661,7 +661,7 @@
           "default": "0",
           "true": "1",
           "false": "0",
-          "help": "On: a pet is told no before it reaches for a loose item your rules refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched. Nothing you pick up yourself is ever deleted, whether or not a pet or a mercenary is out.",
+          "help": "On: a pet is told no before it reaches for a loose item your rules refuse, and whatever it takes from a body that your item rules, tags or classes refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched. Nothing you pick up yourself is ever deleted, whether or not a pet or a mercenary is out.",
           "order": 53
         },
         "StopPetLooting": {
