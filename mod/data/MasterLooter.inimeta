@@ -1,0 +1,845 @@
+// INI Master metadata for MasterLooter.ini, embedded in MasterLooter.asi as the
+// INIMETA resource (see src/resources.rc). Keep it in step with settings.cpp.
+{
+  "inimeta": 1,
+  "name": "Master Looter",
+  "author": "Seth",
+  "url": "https://www.nexusmods.com/crimsondesert/mods/3402",
+  "ini": "MasterLooter.ini",
+  "live": true,
+  "description": "Auto-loot for Crimson Desert. The in-game menu (Insert) edits this same file, and hand edits are picked up within a second while the game runs.",
+  "sections": {
+    "MasterLooter": {
+      "label": "Master Looter",
+      "order": 1,
+      "keys": {
+        "Enabled": {
+          "label": "Auto-loot enabled",
+          "type": "bool",
+          "group": "General",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works.",
+          "order": 1
+        },
+        "ShowHud": {
+          "label": "Show a brief notice when auto-loot is toggled",
+          "type": "bool",
+          "group": "General",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Nothing else is drawn while the menu is closed.",
+          "order": 2
+        },
+        "NotifyBagFull": {
+          "label": "Say so on screen when the bag stops taking things",
+          "type": "bool",
+          "group": "General",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "How full the bag is is read from the bag itself, so the notice appears the moment it fills, whether or not you are looting. If those numbers ever stop making sense the mod falls back to watching what happens after a pick-up: three in a row that reach nothing raise the notice, and one landing clears it.",
+          "order": 3
+        },
+        "Language": {
+          "label": "Menu language",
+          "type": "enum",
+          "group": "General",
+          "default": "",
+          "help": "The language of the in-game menu. Any other code reads MasterLooter.<code>.txt from beside the plugin.",
+          "options": [
+            {
+              "value": "",
+              "label": "English"
+            },
+            {
+              "value": "bg",
+              "label": "Български"
+            },
+            {
+              "value": "zh-cn",
+              "label": "简体中文"
+            },
+            {
+              "value": "zh-tw",
+              "label": "繁體中文"
+            },
+            {
+              "value": "cs",
+              "label": "Čeština"
+            },
+            {
+              "value": "da",
+              "label": "Dansk"
+            },
+            {
+              "value": "nl",
+              "label": "Nederlands"
+            },
+            {
+              "value": "fi",
+              "label": "Suomi"
+            },
+            {
+              "value": "fr",
+              "label": "Français"
+            },
+            {
+              "value": "de",
+              "label": "Deutsch"
+            },
+            {
+              "value": "el",
+              "label": "Ελληνικά"
+            },
+            {
+              "value": "hu",
+              "label": "Magyar"
+            },
+            {
+              "value": "id",
+              "label": "Bahasa Indonesia"
+            },
+            {
+              "value": "it",
+              "label": "Italiano"
+            },
+            {
+              "value": "ja",
+              "label": "日本語"
+            },
+            {
+              "value": "ko",
+              "label": "한국어"
+            },
+            {
+              "value": "nb",
+              "label": "Norsk"
+            },
+            {
+              "value": "pl",
+              "label": "Polski"
+            },
+            {
+              "value": "pt-br",
+              "label": "Português (Brasil)"
+            },
+            {
+              "value": "pt-pt",
+              "label": "Português (Portugal)"
+            },
+            {
+              "value": "ro",
+              "label": "Română"
+            },
+            {
+              "value": "ru",
+              "label": "Русский"
+            },
+            {
+              "value": "es",
+              "label": "Español (España)"
+            },
+            {
+              "value": "es-419",
+              "label": "Español (Latinoamérica)"
+            },
+            {
+              "value": "sv",
+              "label": "Svenska"
+            },
+            {
+              "value": "th",
+              "label": "ไทย"
+            },
+            {
+              "value": "tr",
+              "label": "Türkçe"
+            },
+            {
+              "value": "uk",
+              "label": "Українська"
+            },
+            {
+              "value": "vi",
+              "label": "Tiếng Việt"
+            }
+          ],
+          "custom": true,
+          "order": 4
+        },
+        "MenuKey": {
+          "label": "Open and close the menu",
+          "type": "key",
+          "group": "Keys",
+          "default": "45",
+          "format": "vk",
+          "order": 5
+        },
+        "KeyToggle": {
+          "label": "Auto-loot on / off",
+          "type": "key",
+          "group": "Keys",
+          "default": "121",
+          "format": "vk",
+          "order": 6
+        },
+        "KeyBurst": {
+          "label": "Loot everything in range once",
+          "type": "key",
+          "group": "Keys",
+          "default": "122",
+          "format": "vk",
+          "order": 7
+        },
+        "KeyWatch": {
+          "label": "Watch mode",
+          "type": "key",
+          "group": "Keys",
+          "default": "36",
+          "help": "The menu stays up while you keep playing.",
+          "format": "vk",
+          "order": 8
+        },
+        "KeyOwned": {
+          "label": "Take goods that belong to someone, on / off",
+          "type": "key",
+          "group": "Keys",
+          "default": "0",
+          "help": "Unbound until you set it. The game calls taking owned goods stealing and puts a bounty on you for it, so this is the switch you want on for a moment and off again, which is a poor fit for a menu.",
+          "format": "vk",
+          "order": 9
+        },
+        "PadMenu": {
+          "label": "Open and close the menu (controller)",
+          "type": "int",
+          "group": "Controller",
+          "default": "0",
+          "help": "An XInput button mask, two buttons or more, 0 for none. Set it from the Controller section of the in-game menu, which records the buttons you press. Every single button already does something in this game, so pick a pair that does nothing together.",
+          "advanced": true,
+          "order": 10
+        },
+        "PadToggle": {
+          "label": "Auto-loot on / off (controller)",
+          "type": "int",
+          "group": "Controller",
+          "default": "0",
+          "help": "An XInput button mask, two buttons or more, 0 for none. Set it from the Controller section of the in-game menu, which records the buttons you press. Every single button already does something in this game, so pick a pair that does nothing together.",
+          "advanced": true,
+          "order": 11
+        },
+        "PadBurst": {
+          "label": "Loot everything in range once (controller)",
+          "type": "int",
+          "group": "Controller",
+          "default": "0",
+          "help": "An XInput button mask, two buttons or more, 0 for none. Set it from the Controller section of the in-game menu, which records the buttons you press. Every single button already does something in this game, so pick a pair that does nothing together.",
+          "advanced": true,
+          "order": 12
+        },
+        "PadWatch": {
+          "label": "Watch mode (controller)",
+          "type": "int",
+          "group": "Controller",
+          "default": "0",
+          "help": "An XInput button mask, two buttons or more, 0 for none. Set it from the Controller section of the in-game menu, which records the buttons you press. Every single button already does something in this game, so pick a pair that does nothing together.",
+          "advanced": true,
+          "order": 13
+        },
+        "PadOwned": {
+          "label": "Take owned goods on / off (controller)",
+          "type": "int",
+          "group": "Controller",
+          "default": "0",
+          "help": "An XInput button mask, two buttons or more, 0 for none. Set it from the Controller section of the in-game menu, which records the buttons you press. Every single button already does something in this game, so pick a pair that does nothing together.",
+          "advanced": true,
+          "order": 14
+        },
+        "ScansPerSec": {
+          "label": "Scans per second",
+          "type": "int",
+          "group": "Pace",
+          "default": "5",
+          "help": "How often the scene is read. The scan runs on its own thread; only the final take costs the game a fraction of a millisecond.",
+          "min": 1,
+          "max": 30,
+          "order": 15
+        },
+        "PerScan": {
+          "label": "Objects per scan",
+          "type": "int",
+          "group": "Pace",
+          "default": "0",
+          "help": "0 means no limit.",
+          "min": 0,
+          "max": 64,
+          "order": 16
+        },
+        "BurstPerKey": {
+          "label": "Objects per burst press",
+          "type": "int",
+          "group": "Pace",
+          "default": "0",
+          "help": "0 means everything in range.",
+          "min": 0,
+          "max": 64,
+          "order": 17
+        },
+        "RetryAfterMs": {
+          "label": "Retry the same object after",
+          "type": "int",
+          "group": "Pace",
+          "default": "6000",
+          "help": "The game removes taken objects with a delay. This stops the same object being sent twice while it fades.",
+          "min": 500,
+          "max": 60000,
+          "step": 500,
+          "unit": "ms",
+          "order": 18
+        },
+        "SkipQuestItems": {
+          "label": "Skip quest items",
+          "type": "bool",
+          "group": "Filters",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Items tagged quest are left alone, so puzzles and story pickups are not auto-taken. It reads the item's own tags, so it covers anything you pick up and every node whose contents the mod can name. Two things fall outside it. A node it cannot name is decided by the switch for its kind, because there is no item there to read a tag from. And skinning a carcass pays out without the mod ever seeing what arrived.",
+          "order": 19
+        },
+        "SkipQuestGear": {
+          "label": "Skip quest equipment",
+          "type": "bool",
+          "group": "Filters",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Tools and gear the game marks important that no shop will buy: the fertilizer and lubricant sprayers, the Kuku spears, the scout rings and necklaces. 180 items, nearly all worth a single copper, and taking one off the floor early can put a quest step out of order.\n\nIt reads the two marks together, so an item carrying only one of them is not covered. The Field Sprayer is unsellable and not marked important, and still comes in.",
+          "order": 20
+        },
+        "SkipNoSell": {
+          "label": "Skip items shops refuse to buy",
+          "type": "bool",
+          "group": "Filters",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "order": 21
+        },
+        "MinValueCopper": {
+          "label": "Minimum value",
+          "type": "int",
+          "group": "Filters",
+          "default": "0",
+          "help": "0 turns the floor off. Items with an unknown value are never filtered by it.",
+          "min": 0,
+          "unit": "copper",
+          "order": 22
+        },
+        "TakeUnknownItems": {
+          "label": "Take items the database cannot name",
+          "type": "bool",
+          "group": "Filters",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Some world objects carry no readable item name. On: take them anyway. Off: leave them alone.\n\nThis covers loose items only. A pick-up the node table vouches for, such as a coin pile or a stack of gold bars, is taken whichever way this is set: the table naming the prefab is what identifies it, and the item inside it having no name is a separate question. Its own category switch still applies.",
+          "order": 23
+        },
+        "DropRefused": {
+          "label": "Drop refused loot from bodies",
+          "type": "bool",
+          "group": "Filters",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.",
+          "order": 24
+        },
+        "LootOwned": {
+          "label": "Take goods that belong to someone",
+          "type": "bool",
+          "group": "Filters",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "The game treats this as stealing and will put a bounty on you. Off uses the game's own Take or Steal check; owned goods are skipped until it has been observed once.",
+          "order": 25
+        },
+        "PickUpItems": {
+          "label": "Ground items",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Items lying in the world, including drops from enemies.",
+          "order": 26
+        },
+        "LootCorpses": {
+          "label": "Carcasses",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies.",
+          "order": 27
+        },
+        "SearchBodies": {
+          "label": "Bodies",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies puts back down what they refuse.",
+          "order": 28
+        },
+        "GatherPlants": {
+          "label": "Plants",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Herb, flower and mushroom nodes, and the same lying on the ground, seeds included. Food crops have their own switch. To keep the herbs and leave the seeds, or the other way round, refuse the class in [Classes]: herb and seed are separate there.",
+          "order": 29
+        },
+        "GatherCrops": {
+          "label": "Crops",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Vegetables, fruit and grain: sweet potato, barley, cabbage, apples, grapes and the rest of the farmed and foraged food, on the plant or lying loose.",
+          "order": 30
+        },
+        "GatherCampFarm": {
+          "label": "Camp farm crops",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "The growing crops on a camp farm, which are plants a player planted. Not in the in-game menu yet; this ini line is the only switch for it.",
+          "order": 31
+        },
+        "GatherOre": {
+          "label": "Ore and stone",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Every rock: ore and stone chunks on the ground, veins, boulders, rubble piles and quarry stone. To keep the ore and leave the stone, refuse the class stone in [Classes].",
+          "order": 32
+        },
+        "GatherWood": {
+          "label": "Wood",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Timber and branches on the ground, and the nodes that yield them. Refusing the class wood in [Classes] leaves the trees standing as well as the timber under them.",
+          "order": 33
+        },
+        "GatherUnknown": {
+          "label": "Unidentified nodes",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Nodes the prefab table does not name and that have not yielded anything yet this session. Off leaves them alone. On makes the mod gather them to find out, which means a plant can be taken while Plants is off.",
+          "order": 34
+        },
+        "CatchInsects": {
+          "label": "Insects",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Butterflies, beetles, dragonflies, bees, spiders, scorpions, snails and the other small things the game files as insects.",
+          "order": 35
+        },
+        "CatchFish": {
+          "label": "Fish",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Fish, and whatever else you catch in the water: crabs, shrimp, squid, starfish and seahorses.",
+          "order": 36
+        },
+        "CatchAnimals": {
+          "label": "Small animals",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Rats, squirrels, birds, lizards, frogs and salamanders: anything else the game puts in the bag whole.",
+          "order": 37
+        },
+        "LootContainers": {
+          "label": "Containers",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Chests, crates and drop-set nodes you open, and anything on the ground whose job is to hold something: bottles, jars, clay pots, waterskins, vases and the storage boxes you place. What comes out of a chest is not checked against your filters, so for those this switch is all or nothing.",
+          "order": 38
+        },
+        "LootFurniture": {
+          "label": "Furniture",
+          "type": "bool",
+          "group": "What to collect",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Tables, chairs, beds, carpets, lamps, candles, paintings, pots and the rest of a furnished room. Most of it is worth a copper or two, but the carpets and the luxury beds run to thousands, so turn this on before furnishing a house.",
+          "order": 39
+        },
+        "ScanRange": {
+          "label": "Scan radius",
+          "type": "float",
+          "group": "Ranges",
+          "default": "40.0",
+          "help": "What enters the working list at all. The ranges below are clamped to it.",
+          "min": 5,
+          "max": 200,
+          "step": 1,
+          "unit": "m",
+          "order": 40
+        },
+        "LootRange": {
+          "label": "Items on the ground",
+          "type": "float",
+          "group": "Ranges",
+          "default": "15.0",
+          "help": "0 means no limit. Never further than the scan radius.",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "unit": "m",
+          "order": 41
+        },
+        "GatherRange": {
+          "label": "Gathering",
+          "type": "float",
+          "group": "Ranges",
+          "default": "6.0",
+          "help": "0 means no limit. Never further than the scan radius.",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "unit": "m",
+          "order": 42
+        },
+        "CatchRange": {
+          "label": "Catching",
+          "type": "float",
+          "group": "Ranges",
+          "default": "8.0",
+          "help": "0 means no limit. Never further than the scan radius.",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "unit": "m",
+          "order": 43
+        },
+        "CorpseRange": {
+          "label": "Carcasses and bodies",
+          "type": "float",
+          "group": "Ranges",
+          "default": "12.0",
+          "help": "0 means no limit. Never further than the scan radius.",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "unit": "m",
+          "order": 44
+        },
+        "MinRange": {
+          "label": "Dead zone around you",
+          "type": "float",
+          "group": "Ranges",
+          "default": "0.35",
+          "help": "Objects closer than this are treated as your own equipment. A safety net; your gear is also recognised by other means.",
+          "min": 0,
+          "max": 5,
+          "step": 0.05,
+          "unit": "m",
+          "order": 45
+        },
+        "AutoArm": {
+          "label": "Arm nodes ourselves",
+          "type": "bool",
+          "group": "Gathering",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "The game fills a node's data only when it thinks you can reach it. Arming asks it to do that from a distance, which is also what lets an ore vein be harvested where it stands.",
+          "order": 46
+        },
+        "ArmRange": {
+          "label": "Arming range",
+          "type": "float",
+          "group": "Gathering",
+          "default": "8.0",
+          "help": "Arming ignores walls. Keep it short or you will gather through the wall of the next room. 0 uses the gathering range. Ore is always reached for at up to 25 m.",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "m",
+          "order": 47
+        },
+        "GatherVeins": {
+          "label": "Mine ore veins for you",
+          "type": "bool",
+          "group": "Gathering",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming.",
+          "order": 48
+        },
+        "BreakOre": {
+          "label": "Break veins open rather than emptying them",
+          "type": "bool",
+          "group": "Gathering",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Breaking drives the game's own state machine at the vein, so the node spills its contents on the ground and disappears exactly as it does under a pickaxe. Emptying lifts the ore straight out and skips the drop. Neither route pays your tool's Mining Yield Up, so set the extra ore below to make up the difference.",
+          "order": 49
+        },
+        "OreBonus": {
+          "label": "Extra ore per vein",
+          "type": "int",
+          "group": "Gathering",
+          "default": "0",
+          "help": "Adds the ore your mining tool would have paid, through the same drop path the game uses. Set it to what your tool pays by hand minus one: a drill that gives three by hand wants 2 here. Only applies to a vein this mod broke.",
+          "min": 0,
+          "max": 10,
+          "order": 50
+        },
+        "DrawWells": {
+          "label": "Draw water from wells",
+          "type": "bool",
+          "group": "Gathering",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Winds the handle for you and takes what comes up. Off by default, because a well it gets wrong is a well left standing without its bucket.",
+          "order": 51
+        },
+        "ArmContainers": {
+          "label": "Arm mechanism containers too",
+          "type": "bool",
+          "group": "Gathering",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.",
+          "order": 52
+        },
+        "PetFilter": {
+          "label": "Pets and companions follow the filters",
+          "type": "bool",
+          "group": "Pets",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "On: a pet is told no before it reaches for a loose item your rules refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.",
+          "order": 53
+        },
+        "StopPetLooting": {
+          "label": "Stop pets picking up loose items",
+          "type": "bool",
+          "group": "Pets",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "The game asks before a pet takes an item lying on the ground, and this answers no.",
+          "order": 54
+        },
+        "StopPetBodies": {
+          "label": "Stop pets looting bodies",
+          "type": "bool",
+          "group": "Pets",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "The game asks separately before a pet loots a body, and this answers no.",
+          "order": 55
+        },
+        "NotifyAutoStore": {
+          "label": "Show a notice when loot is stored",
+          "type": "bool",
+          "group": "Private Storage Master",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Needs Private Storage Master with loot storing on.",
+          "order": 56
+        },
+        "PetLootToStorage": {
+          "label": "Store what your pet loots from bodies",
+          "type": "bool",
+          "group": "Private Storage Master",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "On, what a pet or a companion loots from a body goes to storage the same way as Master Looter's own pickups, as long as your item rules allow it.",
+          "order": 57
+        },
+        "WrapSwapChain": {
+          "label": "Wrap the swapchain",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "On, the overlay draws under DLSS frame generation. Off, it draws through the present hook instead, and the mod stays off a path other overlay mods patch as well. Try this if the game will not start alongside another overlay mod.",
+          "live": false,
+          "advanced": true,
+          "order": 58
+        },
+        "HookDX12": {
+          "label": "Install the DirectX hooks",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Off means no menu and no overlay, with looting untouched. For telling a render-layer conflict with another mod apart from everything else.",
+          "live": false,
+          "advanced": true,
+          "order": 59
+        },
+        "HookXInput": {
+          "label": "Hook the controller",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Lets the menu take the pad while it is open and spots the two-button shortcuts. Off leaves the controller entirely alone.",
+          "live": false,
+          "advanced": true,
+          "order": 60
+        },
+        "EnableDred": {
+          "label": "D3D12 crash breadcrumbs (DRED)",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Diagnostic only: page-fault reporting when the GPU device is lost.",
+          "live": false,
+          "advanced": true,
+          "order": 61
+        },
+        "DebugLog": {
+          "label": "Verbose log",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Writes much more to MasterLooter.log. Turn it on for a bug report.",
+          "order": 62
+        },
+        "EquipStrict": {
+          "label": "Strict worn-gear check",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "For a game that duplicates gear on pick-up.",
+          "advanced": true,
+          "order": 63
+        },
+        "DupeProbe": {
+          "label": "Duplication probe",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Watches the bag either side of every loot and logs whether the world object survived it.",
+          "advanced": true,
+          "order": 64
+        },
+        "DescriptorDump": {
+          "label": "Dump event descriptors",
+          "type": "bool",
+          "group": "Overlay and diagnostics",
+          "default": "0",
+          "true": "1",
+          "false": "0",
+          "help": "Logs every event descriptor at startup.",
+          "advanced": true,
+          "order": 65
+        },
+        "DeleteTestName": {
+          "label": "Delete test item",
+          "type": "string",
+          "group": "Overlay and diagnostics",
+          "default": "",
+          "help": "Research: deletes the named item through the pet filter's path. Leave empty.",
+          "hidden": true,
+          "order": 66
+        },
+        "ConfigVersion": {
+          "label": "Config version",
+          "type": "int",
+          "group": "Overlay and diagnostics",
+          "default": "7",
+          "help": "Written by the mod so old files can be migrated. Do not change it.",
+          "hidden": true,
+          "readonly": true,
+          "order": 67
+        }
+      }
+    },
+    "Classes": {
+      "label": "Classes",
+      "order": 2,
+      "description": "One line per item class: 1 loots it, 0 skips it. Classes not listed are looted."
+    },
+    "Tags": {
+      "label": "Tags",
+      "order": 3,
+      "description": "1 always loots an item carrying the tag, -1 never does. A tag rule wins over the class rule."
+    },
+    "Items": {
+      "label": "Items",
+      "order": 4,
+      "description": "Item keys: 1 always loot, -1 never loot. An item rule wins over everything."
+    },
+    "NodeYields": {
+      "label": "Node yields",
+      "order": 5,
+      "advanced": true,
+      "description": "What each gather node turned out to hold, learned from what fell out of it. The mod fills this in; delete a line to have it work that one out again."
+    },
+    "NotVeins": {
+      "label": "Not veins",
+      "order": 6,
+      "advanced": true,
+      "description": "Nodes the mod has learned are not ore veins. The mod fills this in."
+    }
+  }
+}

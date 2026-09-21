@@ -44,6 +44,11 @@ ML_LANG_VI       RCDATA "../data/MasterLooter.vi.txt"
 ML_LANG_ZH_CN    RCDATA "../data/MasterLooter.zh-cn.txt"
 ML_LANG_ZH_TW    RCDATA "../data/MasterLooter.zh-tw.txt"
 
+// Setting labels, types, ranges and help for INI Master, which reads this
+// resource from the plugin's bytes without loading it. The type must be
+// INIMETA. Keep the file in step with ApplyGeneral in settings.cpp.
+ML_INIMETA       INIMETA "../data/MasterLooter.inimeta"
+
 // Built from version.h so the file properties and the version the plugin
 // prints cannot disagree. They disagreed for five releases.
 VS_VERSION_INFO VERSIONINFO

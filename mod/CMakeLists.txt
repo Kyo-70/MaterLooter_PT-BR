@@ -73,7 +73,7 @@ add_library(MasterLooter SHARED
 # (resources.rc, which still names each translation); rebuild when any changes.
 file(GLOB ML_LANG_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/data/MasterLooter.*.txt")
 set_source_files_properties(src/resources.rc PROPERTIES OBJECT_DEPENDS
-    "${CMAKE_SOURCE_DIR}/data/MasterLooter.items.tsv;${CMAKE_SOURCE_DIR}/data/MasterLooter.creatures.tsv;${CMAKE_SOURCE_DIR}/data/MasterLooter.nodes.tsv;${ML_LANG_FILES}")
+    "${CMAKE_SOURCE_DIR}/data/MasterLooter.items.tsv;${CMAKE_SOURCE_DIR}/data/MasterLooter.creatures.tsv;${CMAKE_SOURCE_DIR}/data/MasterLooter.nodes.tsv;${CMAKE_SOURCE_DIR}/data/MasterLooter.inimeta;${ML_LANG_FILES}")
 
 target_include_directories(MasterLooter PRIVATE src ${minhook_SOURCE_DIR}/src/hde)
 target_link_libraries(MasterLooter PRIVATE imgui minhook d3d12 dxgi dwmapi imm32 xinput9_1_0)
