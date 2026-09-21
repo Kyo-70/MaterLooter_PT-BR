@@ -343,3 +343,131 @@ your rules refuse all stone	你的规则拒绝了所有石头
 your rules refuse everything this node holds	你的规则拒绝了这个资源点里的一切
 part of a mechanism, not loose loot	机关的一部分，不是散落的战利品
 yours, just out of your hand	刚从你手中脱离，仍属于你
+
+# 以下各行由机器于 2026 年 9 月 21 日翻译新增，
+# 尚未经过母语者校对。
+%d last time	上次为 %d
+%d of %d, the rest do not stack	%d / %d，其余不可堆叠
+%s %s for game build %s	%s %s (游戏版本 %s)
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s 已经让位给了另一个 Mod，因此在这里更改不会有任何效果。那个 Mod 不是本菜单能够触及的对象，请直接在它那边设置倍率。
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s 并不是设置堆叠数量的那个 Mod，因此在这里更改不会有任何效果。请改到 %s 中设置倍率。
+%s refused the change: %s	%s 拒绝了这次更改：%s
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	每次启动游戏时，如果设置自上次以来有变动，就会写入一份备份，最多保留最近 12 份，存放在插件同目录下的 MasterLooter.backups 中。预设保存在 MasterLooter.presets 中。重装前可复制任一文件夹进行保留。
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	选择更大的倍率会立即生效，选择更小的倍率则要等到下次启动才会生效。
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	一个按键或手柄组合键可以在任何地方打开该存储，再按一次则将其关闭。按下另一个存储的按键会直接切换到那一个。
+a Master Looter key	一个 Master Looter 按键
+a Master Looter shortcut	一个 Master Looter 快捷键
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	物品进入背包片刻之后，Private Storage Master 会将其移入下方列表中第一个愿意接收它的存储，其效果与你亲自在存储处操作时相同。只有 Master Looter 拾取的物品才会被移动，你亲手捡起的东西绝不会被移动，而从尸体或动物尸体拾取的物品，只有你的物品规则允许的部分才会被移动。存储处于打开状态或不在自由游玩状态时不会发生移动，钥匙、文件、任务物品以及“永不移动”列表中的物品都会留在原地，任何存储都不愿接收的物品则留在背包中。
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that your item rules, tags or classes refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.	宠物想捡什么就捡什么，而游戏本身没有任何开关能管这件事。开启后：宠物在伸手去拿一件会被你的物品规则、标签、类别或价值下限拒绝的散落物品之前，会先被告知不行；而它从尸体上拿到的、会被你的物品规则、标签或类别拒绝的东西，会在进入背包的一刻被删除，并由提示告诉你消失了什么。任务物品和受保护的物品永远不会被删除，已经在你包里的东西也不会被动。
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	宠物或同伴搜刮尸体时，会把找到的东西放进你的背包。开启后，只要你的物品规则允许，这些物品就会像 Master Looter 自己拾取的东西一样被送入存储。宠物捡起的散落物品会被游戏当作你自己的拾取行为上报，因此这些东西会留在背包中。
+a seed planted in your camp farm	种在你自家农场里的种子
+Add	添加
+add an item: type 3+ letters of its name	添加物品：输入其名称中至少 3 个字符
+also %s	还有 %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	一处矿脉，在“自动为你开采矿脉”关闭时留给你自己的镐子
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	每秒最多显示一行，写明每个存储的名称以及送入了多少件。关闭后不会显示任何内容，只会记入日志。
+Click again to reset	再次点击以重置
+Detailed log	详细日志
+Drop refused loot from bodies	将尸体上被拒绝的战利品放回地面
+Each item goes to the first storage in this list that takes it.	每件物品都会送入这份列表中第一个愿意接收它的存储。
+Empty your big stacks before turning this down or off.	调低或关闭此项之前，请先清空你的大堆叠。
+Empty: auto-store may move anything a storage takes.	空：自动存储可以移动任何存储愿意接收的东西。
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	游戏启动时，每种可堆叠物品的上限都会按倍率放大。设置一经选择即会保存到那个 Mod 自己的 ini 中。
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	每个存储的容量以及已使用的格数，都会写入 PrivateStorageMaster.log。提交容量相关报告时请附带此文件。
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	对于使用 JSON 调整容量的 Mod：下方的存储容量设置会被忽略，容量由游戏或那个 Mod 决定。
+game size (%d)	游戏原有容量 (%d)
+Game window	游戏窗口
+hold a button, then press the one that opens it (Escape cancels)	先按住一个按键，再按下用于打开它的按键（按 Escape 取消）
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	按住一个或多个按键，然后按下用于打开该存储的按键。被按下的那个按键在其余按键被按住期间会对游戏隐藏。
+Hold other keys back while Ctrl is down	按住 Ctrl 时拦截其他按键
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	有多少个人仓库格子来自你购买的扩容包和剧情进度。滑块显示的总数已包含这些，因此基础容量等于总数减去这些格子。
+item %u	物品 %u
+Item stacks: %s	物品堆叠：%s
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	自动存储始终会留在背包里的物品。默认列表包含所有货币：银币、钱袋、金条、营地资金与物资、代币和债券。下方的“重置为默认”会恢复这份列表。
+Items raised	已提升上限的物品
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	它的设置存放在插件旁边的 PrivateStorageMaster.ini 中。这里所做的更改会立即保存到那里。
+Largest limit	最大上限
+Last error	上一次错误
+Leave every size alone	所有容量都保持不变
+left as the game has them	保持游戏原有设定
+load a save to see it	加载存档后才能看到
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	调低倍率不会缩小你已经堆好的堆叠。一个格子里数量超过游戏当前允许上限时，会保留原有内容，直到你取出一部分为止，而超出新上限的部分则可能会丢失。
+more matches; type more of the name	匹配项过多；请输入更多名称字符
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	游戏中大多数物品原本最多能堆叠 100 个，因此在 x10 倍率下可以堆叠到 1000 个。它对一切可堆叠的物品生效，对武器和护甲这类不可堆叠的物品则完全不起作用，游戏中堆叠层数最深的物品也不会超过上方那个 Mod 报告的上限。选择更大的倍率会立即生效；选择更小的倍率则要等到下次启动，因为已经堆好的堆叠无法被压缩到低于其现有数量。
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	游戏中大多数物品原本最多能堆叠 100 个，因此在 x10 倍率下可以堆叠到 1000 个。它对一切可堆叠的物品生效，对武器和护甲这类不可堆叠的物品则完全不起作用，游戏中堆叠层数最深的物品也不会超过上方那个 Mod 报告的上限。倍率是在游戏启动时读取的，因此必须重启游戏才能看到效果。
+Never move	永不移动
+no item by that name that is not listed already	没有这个名称、且尚未列在其中的物品
+none seen	未检测到
+not found, bound keys also reach the game	未找到，绑定的按键同时也会传递给游戏
+Not on this game version: Private Storage Master could not find the move it needs.	当前游戏版本不支持：Private Storage Master 找不到它需要的那个移动函数。
+nothing	无
+now %d of %d used	当前已使用 %d / %d
+Off	关闭
+off	关闭
+off, see the error below	关闭，请查看下方的错误信息
+off, the mod is disabled	关闭，该 Mod 已被禁用
+on XInput slot %d	位于 XInput 插槽 %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	开启后，只会移动刚刚新增的数量，你原本已经携带的食物和药水会留在背包里。关闭后，整堆都会被移走。
+Only move what was picked up	只移动新拾取的部分
+Open now	当前打开
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	请按下一个按键，可搭配 Ctrl、Shift 或 Alt（按 Escape 取消）
+Private Storage expansions	个人仓库扩容
+Private Storage Master %s for game build %s	Private Storage Master %s (游戏版本 %s)
+Private Storage Master did not hand over its defaults	Private Storage Master 未能提供其默认设置
+Private Storage Master did not hand over its store loot settings.	Private Storage Master 未能提供其“存储战利品”设置。
+Private Storage Master on	启用 Private Storage Master
+Private Storage Master refused the change	Private Storage Master 拒绝了这次更改
+Private Storage Master: %s	Private Storage Master：%s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	同时安装了 PrivateStorageAnywhere.asi。这两者会更改游戏的相同部分，请移除那一个。
+Put what Master Looter picks up into storage	把 Master Looter 拾取的东西存入存储
+Raising stack limits	正在提升堆叠上限
+read from the save	从存档读取
+Reload from the ini	从 ini 重新加载
+Remove	移除
+Reset to defaults	重置为默认
+Restart the game for the multiplier you picked to take effect.	重启游戏后，你所选择的倍率才会生效。
+Saved	已保存
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	搜刮尸体或动物尸骸会一次性交出它拥有的一切，模组要等它进入背包后才能看到。开启后：其中被你的物品规则、标签、类别或价值下限拒绝的部分，会通过游戏本身丢弃物品时所用的同一套掉落机制，直接放回你身旁的地面上，每一堆各自成一份。这既涵盖模组自身的搜刮，也涵盖宠物或同伴搜刮尸体的情况，它们被拒绝的物品同样会落在你身旁。你亲手搜刮的尸体，其所得会照常保留。金钱、文件、任务物品和受保护的物品仍会留在背包中。
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	搜刮你击杀的人，每具尸体一次。动物归在“动物尸体”下。搜刮所得会在你的过滤规则看到之前就已到手，这一点和动物尸体相同，而“常规”下的“将尸体上被拒绝的战利品放回地面”会把它们拒绝的部分放回地面。
+set	手动设置
+set this launch	本次启动已设置
+Settings file	设置文件
+Show a notice when loot is stored	存入存储时显示提示
+Size changes take effect the next time the game starts.	容量更改要到下次启动游戏后才会生效。
+Sizes	容量
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	剥取你击杀的动物的皮，每具动物尸骸一次。人归在“尸体”下。剥皮所得在到手之前，模组完全看不到，因此你的过滤规则无法阻止其进入背包。若想让被拒绝的部分放回地面，请开启“常规”下的“将尸体上被拒绝的战利品放回地面”。
+Some changes take effect the next time the game starts.	部分更改要到下次启动游戏后才会生效。
+Some items reached the largest stack that mod allows, %d, and stopped there.	部分物品已达到该 Mod 允许的最大堆叠数 %d，并停在了这个上限。
+Stack multiplier	堆叠倍率
+Stacks	堆叠
+stacks are the size the game ships	堆叠维持游戏原有大小
+Stop pets looting bodies	阻止宠物搜刮尸体
+Stop pets picking up loose items	阻止宠物拾取散落物品
+Storage	存储
+Storage keys	存储按键
+Storage sizes	存储容量
+Store loot	存储战利品
+Store what your pet loots from bodies	存储宠物从尸体上拾取的战利品
+Storing loot needs a newer Private Storage Master.	存储战利品功能需要更新版本的 Private Storage Master。
+That mod did not hand over its stack settings.	那个 Mod 未能提供其堆叠设置。
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	宠物去拿地上的散落物品之前，游戏会先询问，而这一项对此回答否。宠物会绕过它，之后也就无需再删除任何东西。雇佣兵是否会问同样的问题尚未测试。
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	宠物搜刮尸体之前，游戏会单独询问一次，而这一项对此回答否。如果你希望宠物能剥取尸体却不捡拾散落物品，或者相反，就只开启这两项中的一个。
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	按键绑定已在首次运行时从 PrivateStorageAnywhere.ini 中导入。
+the key-block toggle	按键拦截开关
+The list is full at %d items.	列表已满，达到 %d 件物品上限。
+the size dump	容量转储
+The total, purchased expansions and story slots included. The left end keeps the game's size.	总容量，已包含购买的扩容和剧情赠送的格子。滑块最左端保持游戏原有容量。
+This chest holds one of each collectible, so its slots cannot be changed.	这个箱子只收纳每种收藏品各一件，因此其格数无法更改。
+This launch	本次启动
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	此标签页需要与当前版本 Master Looter 相匹配的 Private Storage Master 版本。
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	此标签页需要 Stack Master，或者需要一个能够提升堆叠上限的 Private Storage Master 版本。
+Turn that on and off	开关此功能的按键
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	正在等待重启，或者在游戏世界中再次选择它即可立即生效。
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	当 Ctrl（或你的存储按键所使用的任意修饰键）被按住时，其他按键会被拦截而无法传递给游戏，这样从存储按键上滑脱就不会误触发技能。移动、Space、Tab、Enter、Escape、Alt+F4，以及游戏中与 Ctrl 搭配使用的按键 (Z、Shift、+) 仍会正常传递。
+Why	原因
+working	正常
+Write the size dump to the log	将容量转储写入日志
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	将每次按键、打开和关闭都写入 PrivateStorageMaster.log，并保留最近 24 次会话的记录。关闭后，日志中只保留启动摘要、错误信息和容量转储，并只保留最近两次会话的记录。
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	将每次按键、打开和关闭都写入 PrivateStorageMaster.log。关闭后，日志中只保留启动摘要、错误信息和容量转储。
+x%d, by %s	x%d，来自 %s
+your own camp farm (off)	自家农场 (已关闭)

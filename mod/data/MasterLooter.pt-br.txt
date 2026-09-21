@@ -3,6 +3,9 @@
 #
 # As linhas acrescentadas depois da tradução inicial também foram revisadas
 # e harmonizadas com a terminologia brasileira do jogo.
+# Linhas acrescentadas após a tradução abaixo são traduções
+# automáticas onde marcadas como tal, e ainda não passaram por essa
+# revisão.
 # Correções são bem-vindas no GitHub
 # (github.com/shin2344234/master-looter) ou na página do mod no Nexus.
 #
@@ -344,3 +347,132 @@ your rules refuse all ore, jewels and stone	suas regras recusam todos os minéri
 your rules refuse all stone	suas regras recusam todas as pedras
 your rules refuse everything this node holds	suas regras recusam tudo o que este ponto contém
 yours, just out of your hand	seu, recém-saído da sua mão
+
+# --- traduzido automaticamente em 21 de setembro de 2026 ---
+# As linhas abaixo foram traduzidas automaticamente em 21 de
+# setembro de 2026 e ainda não foram revisadas por Kyo-70.
+%d last time	%d da última vez
+%d of %d, the rest do not stack	%d de %d; o restante não empilha
+%s %s for game build %s	%s %s para a versão %s do jogo
+%s has stood aside for another mod, so changing it here would do nothing. That mod is not one this menu can reach, so set the multiplier in it directly.	%s cedeu lugar a outro mod, portanto alterar isto aqui não teria efeito. Esse mod está fora do alcance deste menu; defina o multiplicador diretamente nele.
+%s is not the mod setting stack sizes, so changing it here would do nothing. Set the multiplier in %s instead.	%s não é o mod que define os tamanhos de pilha, portanto alterar isto aqui não teria efeito. Defina o multiplicador em %s.
+%s refused the change: %s	%s recusou a alteração: %s
+A backup is written when the game starts with settings changed since the last one, and the last twelve are kept, in MasterLooter.backups next to the plugin. Presets sit in MasterLooter.presets. Copy either folder to keep it across a reinstall.	Uma cópia de segurança é criada quando o jogo inicia com configurações alteradas desde a última vez, e as doze mais recentes são mantidas em MasterLooter.backups, ao lado do plugin. As predefinições ficam em MasterLooter.presets. Copie qualquer uma das pastas para preservá-la durante uma reinstalação.
+A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	Um multiplicador maior entra em vigor assim que você o escolhe. Um menor aguarda a próxima inicialização.
+A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	Uma tecla ou combinação do controle abre esse armazenamento de qualquer lugar, e o fecha de novo. A tecla de outro armazenamento muda direto para ele.
+a Master Looter key	uma tecla do Master Looter
+a Master Looter shortcut	um atalho do Master Looter
+A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	Um instante depois que um item cai na bolsa, o Private Storage Master o move para o primeiro armazenamento abaixo que o aceita, o mesmo movimento que você faria junto ao armazenamento. Só o que o Master Looter recolheu é movido, nunca o que você pegou com as próprias mãos, e de um corpo ou de uma carcaça só o que suas regras de item permitem. Nada se move enquanto um armazenamento está aberto ou fora do modo de jogo livre; chaves, documentos, itens de missão e tudo o que estiver na lista de nunca mover permanecem no lugar, e o que nenhum armazenamento aceita fica na bolsa.
+A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that your item rules, tags or classes refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.	Um mascote saqueia o que quiser, e o jogo não oferece uma opção para impedir isso. Ativada: o mascote é impedido de pegar um item solto que suas regras de item, etiquetas, classes ou valor mínimo recusariam, e o que ele retira de um corpo e que suas regras de item, etiquetas ou classes recusam é removido do inventário assim que chega, com um aviso informando o que foi removido. Itens de missão e itens protegidos nunca são removidos, e nada que já está na sua bolsa é afetado.
+A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	Um mascote ou companheiro que saqueia um corpo coloca o que encontrou na sua bolsa. Ativada, esses itens vão para o armazenamento do mesmo jeito que as coletas do próprio Master Looter, desde que suas regras de item os permitam. Itens soltos que um mascote pega são relatados pelo jogo como coletas suas, então esses permanecem na bolsa.
+a seed planted in your camp farm	uma semente plantada na sua fazenda de acampamento
+Add	Adicionar
+add an item: type 3+ letters of its name	adicionar um item: digite 3+ letras do nome
+also %s	também %s
+an ore vein, left to your pickaxe while Mine ore veins for you is off	um veio de minério, deixado para sua picareta enquanto Minerar veios para você está desativado
+At most one line a second, naming each storage and how many went into it. Off, nothing is shown and it goes to the log only.	No máximo uma linha por segundo, nomeando cada armazenamento e quantos itens foram parar nele. Desativado, nada é exibido e tudo vai apenas para o registro.
+Click again to reset	Clique novamente para redefinir
+Detailed log	Registro detalhado
+Drop refused loot from bodies	Descartar saque recusado de corpos
+Each item goes to the first storage in this list that takes it.	Cada item vai para o primeiro armazenamento desta lista que o aceita.
+Empty your big stacks before turning this down or off.	Esvazie suas pilhas grandes antes de diminuir ou desativar isto.
+Empty: auto-store may move anything a storage takes.	Vazio: o armazenamento automático pode mover qualquer coisa que um armazenamento aceite.
+Every stackable item's limit is multiplied when the game starts. The setting is saved in that mod's own ini as soon as you pick it.	O limite de todo item empilhável é multiplicado quando o jogo inicia. A configuração é salva no próprio ini daquele mod assim que você a escolhe.
+Every storage's size and how many slots are in use, written to PrivateStorageMaster.log. Attach it to a size report.	O tamanho de cada armazenamento e quantos espaços estão em uso, gravados em PrivateStorageMaster.log. Anexe-o a um relatório de tamanho.
+For JSON capacity mods: the storage sizes below are ignored and the game, or that mod, decides.	Para mods de capacidade em JSON: os tamanhos de armazenamento abaixo são ignorados, e o jogo, ou aquele mod, decide.
+game size (%d)	tamanho do jogo (%d)
+Game window	Janela do jogo
+hold a button, then press the one that opens it (Escape cancels)	segure um botão e depois pressione o que o abre (Escape cancela)
+Hold one or more buttons, then press the one that opens the storage. The pressed button is hidden from the game while the others are held.	Segure um ou mais botões e depois pressione o que abre o armazenamento. O botão pressionado fica oculto do jogo enquanto os outros são mantidos.
+Hold other keys back while Ctrl is down	Reter as demais teclas enquanto Ctrl está pressionado
+How many Private Storage slots come from expansions you bought and from the story. The slider's total counts them, so the base size is the total less these.	Quantos espaços do Armazenamento Privado vêm de expansões que você comprou e da história. O total do controle deslizante os conta, então o tamanho base é o total menos esses.
+item %u	item %u
+Item stacks: %s	Pilhas de itens: %s
+Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.	Itens que o armazenamento automático sempre deixa na bolsa. O padrão é toda moeda: prata, bolsas de moedas, barras de ouro, fundos e suprimentos do acampamento, fichas e títulos. Redefinir para o padrão abaixo restaura essa lista.
+Items raised	Itens aumentados
+Its settings live in PrivateStorageMaster.ini beside the plugin. Changes here are saved there at once.	Suas configurações ficam em PrivateStorageMaster.ini ao lado do plugin. As alterações feitas aqui são salvas lá imediatamente.
+Largest limit	Maior limite
+Last error	Último erro
+Leave every size alone	Manter todos os tamanhos como estão
+left as the game has them	mantidos como o jogo os define
+load a save to see it	carregue um jogo salvo para ver isso
+Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	Diminuir o multiplicador não reduz uma pilha que você já formou. Um espaço com mais itens do que o jogo agora permite mantém o que tem até que você retire parte dele, e qualquer quantidade acima do novo limite pode ser perdida.
+more matches; type more of the name	mais resultados; digite mais do nome
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. Picking a bigger multiplier takes hold at once; a smaller one waits for the next launch, because a stack already built cannot be shrunk under what is in it.	A maioria das coisas o jogo permite empilhar até 100, então em x10 elas chegam a 1000. Isso vale para tudo que empilha e nunca para o que não empilha, como armas e armaduras, e as pilhas mais altas do jogo param no limite que aquele mod informa acima. Escolher um multiplicador maior entra em vigor de imediato; um menor aguarda a próxima inicialização, porque uma pilha já formada não pode ser reduzida abaixo do que ela contém.
+Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies to everything that stacks and never to what does not, like weapons and armour, and the deepest stacks in the game stop at the limit that mod reports above. The multiplier is read when the game starts, so the game has to be restarted before it shows.	A maioria das coisas o jogo permite empilhar até 100, então em x10 elas chegam a 1000. Isso vale para tudo que empilha e nunca para o que não empilha, como armas e armaduras, e as pilhas mais altas do jogo param no limite que aquele mod informa acima. O multiplicador é lido quando o jogo inicia, então o jogo precisa ser reiniciado antes que ele apareça.
+Never move	Nunca mover
+no item by that name that is not listed already	nenhum item com esse nome que ainda não esteja listado
+none seen	nenhum encontrado
+not found, bound keys also reach the game	não encontrado; as teclas vinculadas também chegam ao jogo
+Not on this game version: Private Storage Master could not find the move it needs.	Não nesta versão do jogo: o Private Storage Master não conseguiu encontrar a função de movimentação de que precisa.
+nothing	nada
+now %d of %d used	agora %d de %d em uso
+Off	Desativado
+off	desativado
+off, see the error below	desativado, veja o erro abaixo
+off, the mod is disabled	desativado, o mod está desligado
+on XInput slot %d	no slot XInput %d
+On, only the amount that just arrived is moved, so food and potions you already carried stay in the bag. Off, the whole stack goes.	Ativado, apenas a quantidade que acabou de chegar é movida, então comida e poções que você já carregava permanecem na bolsa. Desativado, a pilha inteira vai.
+Only move what was picked up	Mover somente o que foi coletado
+Open now	Abrir agora
+press a key, with Ctrl, Shift or Alt if you want (Escape cancels)	pressione uma tecla, com Ctrl, Shift ou Alt se quiser (Escape cancela)
+Private Storage expansions	Expansões do Armazenamento Privado
+Private Storage Master %s for game build %s	Private Storage Master %s para a versão %s do jogo
+Private Storage Master did not hand over its defaults	O Private Storage Master não forneceu seus padrões
+Private Storage Master did not hand over its store loot settings.	O Private Storage Master não forneceu suas configurações de armazenar saque.
+Private Storage Master on	Private Storage Master ativado
+Private Storage Master refused the change	O Private Storage Master recusou a alteração
+Private Storage Master: %s	Private Storage Master: %s
+PrivateStorageAnywhere.asi is also installed. The two change the same parts of the game; remove that one.	PrivateStorageAnywhere.asi também está instalado. Os dois alteram as mesmas partes do jogo; remova aquele.
+Put what Master Looter picks up into storage	Colocar no armazenamento o que o Master Looter coleta
+Raising stack limits	Aumento dos limites de pilha
+read from the save	lido do jogo salvo
+Reload from the ini	Recarregar do ini
+Remove	Remover
+Reset to defaults	Redefinir para o padrão
+Restart the game for the multiplier you picked to take effect.	Reinicie o jogo para que o multiplicador escolhido entre em vigor.
+Saved	Salvo
+Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.	Revistar um corpo ou uma carcaça entrega tudo o que ele contém, e o mod só vê isso depois que já está na bolsa. Ativada: o que suas regras de item, etiquetas, classes ou valor mínimo recusam é colocado de volta no chão ao seu lado, pelo mesmo descarte que o jogo usa quando você larga algo, uma pilha por vez. Isso cobre tanto as revistas do próprio mod quanto os corpos que um mascote ou companheiro saqueia, cujos itens recusados também caem ao seu lado. Um corpo que você revista com as próprias mãos mantém o que pagou. Dinheiro, documentos, itens de missão e itens protegidos permanecem na bolsa.
+Searching the people you kill, once per body. Animals go under Carcasses. What a search pays out arrives before your filters see it, the same as a carcass, and Drop refused loot from bodies under General puts back down what they refuse.	Revista cada pessoa abatida uma única vez. Animais ficam na categoria Carcaças. O que a revista entrega chega antes que seus filtros o vejam, assim como numa carcaça, e Descartar saque recusado de corpos, em Geral, devolve ao chão o que eles recusam.
+set	definido
+set this launch	definido nesta inicialização
+Settings file	Arquivo de configurações
+Show a notice when loot is stored	Mostrar um aviso quando o saque é armazenado
+Size changes take effect the next time the game starts.	Alterações de tamanho entram em vigor na próxima vez que o jogo iniciar.
+Sizes	Tamanhos
+Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	Esfola cada animal abatido uma única vez. Pessoas ficam na categoria Corpos. O mod nunca vê o que o esfolamento entrega antes de chegar, então seus filtros não conseguem impedir a chegada. Para que o que eles recusam volte para o chão, ative Descartar saque recusado de corpos, em Geral.
+Some changes take effect the next time the game starts.	Algumas alterações entram em vigor na próxima vez que o jogo iniciar.
+Some items reached the largest stack that mod allows, %d, and stopped there.	Alguns itens atingiram a maior pilha que aquele mod permite, %d, e pararam nesse ponto.
+Stack multiplier	Multiplicador de pilha
+Stacks	Pilhas
+stacks are the size the game ships	as pilhas têm o tamanho original do jogo
+Stop pets looting bodies	Impedir que mascotes saqueiem corpos
+Stop pets picking up loose items	Impedir que mascotes peguem itens soltos
+Storage	Armazenamento
+Storage keys	Teclas de armazenamento
+Storage sizes	Tamanhos de armazenamento
+Store loot	Armazenar saque
+Store what your pet loots from bodies	Armazenar o que seu mascote saqueia de corpos
+Storing loot needs a newer Private Storage Master.	Armazenar saque requer uma versão mais recente do Private Storage Master.
+That mod did not hand over its stack settings.	Aquele mod não forneceu suas configurações de pilha.
+The game asks before a pet takes an item lying on the ground, and this answers no. The pet walks past it and nothing needs deleting afterwards. Whether a mercenary asks the same question has not been tested.	O jogo pergunta antes que um mascote pegue um item no chão, e esta opção responde que não. O mascote passa direto por ele, e nada precisa ser removido depois. Ainda não foi testado se um mercenário faz a mesma pergunta.
+The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round.	O jogo pergunta separadamente antes que um mascote saqueie um corpo, e esta opção responde que não. Ative apenas uma das duas se quiser que o mascote revire corpos mas não colete itens soltos, ou o contrário.
+The key bindings were brought over from PrivateStorageAnywhere.ini on the first run.	As teclas foram trazidas de PrivateStorageAnywhere.ini na primeira execução.
+the key-block toggle	a opção de bloqueio de teclas
+The list is full at %d items.	A lista está cheia com %d itens.
+the size dump	o despejo de tamanhos
+The total, purchased expansions and story slots included. The left end keeps the game's size.	O total, incluindo expansões compradas e espaços da história. A extremidade esquerda mantém o tamanho do jogo.
+This chest holds one of each collectible, so its slots cannot be changed.	Este baú guarda um de cada colecionável, então seus espaços não podem ser alterados.
+This launch	Esta inicialização
+This tab needs a build of Private Storage Master that matches this version of Master Looter.	Esta aba requer uma versão do Private Storage Master compatível com esta versão do Master Looter.
+This tab needs Stack Master, or a build of Private Storage Master that raises stack limits.	Esta aba requer o Stack Master, ou uma versão do Private Storage Master que aumente os limites de pilha.
+Turn that on and off	Ativar e desativar isso
+Waiting for a restart, or pick it again out in the world and it takes hold at once.	Aguardando um reinício, ou escolha-a de novo no mundo e ela entra em vigor de imediato.
+While Ctrl, or any modifier your storage keys use, is held, other keys are kept from the game, so a slip off a storage key does not fire a skill. Movement, Space, Tab, Enter, Escape, Alt+F4 and the keys the game uses with Ctrl (Z, Shift, +) still go through.	Enquanto Ctrl, ou qualquer modificador usado pelas suas teclas de armazenamento, está pressionado, as demais teclas são retidas do jogo, então escorregar de uma tecla de armazenamento não ativa uma habilidade. Movimento, Espaço, Tab, Enter, Escape, Alt+F4 e as teclas que o jogo usa com Ctrl (Z, Shift, +) ainda passam.
+Why	Por quê
+working	funcionando
+Write the size dump to the log	Gravar o despejo de tamanhos no registro
+Writes every key press, open and close to PrivateStorageMaster.log, and keeps the last 24 sessions. Off, the log keeps the startup summary, errors and the size dump, and the last two sessions.	Grava cada tecla pressionada, abertura e fechamento em PrivateStorageMaster.log, mantendo as últimas 24 sessões. Desativado, o registro mantém o resumo de inicialização, os erros e o despejo de tamanhos, além das duas últimas sessões.
+Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Grava cada tecla pressionada, abertura e fechamento em PrivateStorageMaster.log. Desativado, o registro mantém o resumo de inicialização, os erros e o despejo de tamanhos.
+x%d, by %s	x%d, por %s
+your own camp farm (off)	sua própria fazenda de acampamento (desativada)
