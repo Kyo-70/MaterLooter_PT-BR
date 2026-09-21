@@ -3833,6 +3833,32 @@ namespace ml::loot
                strcmp(r.rule, "dev item") == 0 || strcmp(r.rule, "quest equipment") == 0;
     }
 
+    // Everything above, and two more that only matter where an item is about to
+    // stop existing. NeverDelete has three other callers: the pet-prevention
+    // hook, which leaves a refused item on the ground, and the body-drop path,
+    // which puts one back on the ground. Neither costs the player the item, so
+    // neither wants this list, and widening NeverDelete itself would have let a
+    // pet start pocketing the unsellable things its owner switched off.
+    //
+    // LuxDragon lost a Sealed Abyss Artifact on 1.6.34, issue #84. He runs Skip
+    // unsellable items, which is an ordinary way of saying do not fill my bag
+    // with what I cannot sell, and the sweep read that refusal as leave to
+    // destroy one. An Abyss Artifact carries no-discard and would have lived. A
+    // Sealed Abyss Artifact carries no-sell and nothing else that is checked.
+    //
+    // The line is whether the player named the thing. An item override, a tag
+    // never and a class skipped each name what they refuse, so acting on one is
+    // doing as asked. Skip unsellable and the value floor are switches across
+    // the whole database about what is not worth carrying, which is a different
+    // statement from what is worth losing. Counted before it was written: 1,055
+    // items carry no-sell, NeverDelete already spared 366, and this covers the
+    // remaining 689, among them 424 keepsakes, 150 sealed artifacts and 5 keys.
+    static bool NeverDestroy(const Item& it, const Rules::Verdict& r)
+    {
+        return NeverDelete(it, r) ||
+               strcmp(r.rule, "unsellable") == 0 || strcmp(r.rule, "below value floor") == 0;
+    }
+
     // --- refused body loot back on the ground (DROP.md) -------------------
     // A body or a carcass hands over everything it holds and no rule sees any
     // of it first. With the switch on, what the rules refuse goes back on the
@@ -4275,7 +4301,7 @@ namespace ml::loot
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) { LOG("[pet] +%lld of row %u, not in the item database: kept", delta, kv.first); ++kept; continue; }
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
-                const bool spare = NeverDelete(*it, r);
+                const bool spare = NeverDestroy(*it, r);
                 if (r.loot || spare) { LOG("[pet] +%lld %s: kept (%s%s%s)", delta, it->name.c_str(), r.rule, r.detail.empty() ? "" : " ", r.detail.c_str()); ++kept; continue; }
                 char why[120]; snprintf(why, sizeof why, "pet loot, %s%s%s", r.rule, r.detail.empty() ? "" : " ", r.detail.c_str());
                 const long long sent = DeleteFromInventory(kv.first, delta, why); ++deleted;
@@ -4359,7 +4385,7 @@ namespace ml::loot
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) continue;                      // unknown row: never touched
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
-                const bool spare = NeverDelete(*it, r);
+                const bool spare = NeverDestroy(*it, r);
                 if (r.loot || spare) continue;
                 const long long sent = DeleteFromInventory(kv.first, delta, "companion loot, swept");
                 LOG("[pet] sweep: +%lld %s arrived with a companion out and the rules refuse it (%s%s%s)",
