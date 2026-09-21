@@ -1286,6 +1286,22 @@ namespace ml::loot
     static void InvalidateBagBaseline() { InterlockedExchange(&g_bagBaselineStale, 1); }
     static bool TakeBagBaselineStale() { return InterlockedExchange(&g_bagBaselineStale, 0) != 0; }
     static void NotePetActivity(DWORD now) { g_petSeenAt = now ? now : 1; }
+
+    // Is this raiser the player rather than something following them?
+    //
+    // g_meEid is the A0 identity, and as Kliff that is also the thing that
+    // walks, so one test was enough for a year. As Damiane or Oongka the
+    // identity is a fixture at 0,1000,0 and the body that picks things up is a
+    // separate B0 actor, which is neither g_meEid nor player-tagged, so the
+    // filter read every one of her own pick-ups as a pet's. LuxDragon lost a
+    // Sealed Abyss Artifact to that on 1.6.34 with nothing out at all, issue
+    // #85: his log reads "[pet] B0100002 (a pet) picked up ... Sealed Abyss
+    // Artifact" two lines after naming B0100002 tag 04 byte 0E, the pair that
+    // means a played body, 0.6 m from an identity standing at the placeholder.
+    static bool RaisedByPlayer(uint32_t eid)
+    {
+        return eid && (eid == g_meEid || eid == g_bodyEid || PlayedHolder(eid));
+    }
     static bool PetOutRecently(DWORD now)
     {
         if (g_petSeenAt && (now - g_petSeenAt) < kPetOutMs) return true;
@@ -4245,7 +4261,7 @@ namespace ml::loot
             {
                 // Stamped with the pet's own id, so a pet is out and working.
                 // The hand path above reads this before it queues anything.
-                if (pp[i].pet != g_meEid) NotePetActivity(now);
+                if (!RaisedByPlayer(pp[i].pet)) NotePetActivity(now);
                 const auto it = g_tidByEid.find(pp[i].item);
                 const uint16_t tid = it == g_tidByEid.end() ? 0 : it->second;
                 const Item* db = tid ? ItemDb::ByRow(tid) : nullptr;
@@ -4255,11 +4271,11 @@ namespace ml::loot
                 // looting rule, written for pets, with no mercenary of its own.
                 // So a line here naming a player-tagged raiser is the evidence
                 // that a mercenary loots at all, which no session has shown yet.
-                const char* kind = pp[i].pet == g_meEid ? "you" :
+                const char* kind = RaisedByPlayer(pp[i].pet) ? "you" :
                                    (pp[i].pet >> 24) == game::kTagPlayer ? "a hired companion" : "a pet";
                 LOG("[pet] %08X (%s) %s %08X: %s%s", pp[i].pet, kind, pp[i].search ? "searched" : "picked up", pp[i].item,
                     db ? db->name.c_str() : pp[i].search ? "a body; judged by what lands" : tid ? "row known, unnamed" : "never in scan range; judged by what lands",
-                    pp[i].pet == g_meEid ? " (raised as the player, on an item the scan had refused)" : "");
+                    RaisedByPlayer(pp[i].pet) ? " (raised as the player, on an item the scan had refused)" : "");
             }
             windowUntil = now + 2500;
             return;
