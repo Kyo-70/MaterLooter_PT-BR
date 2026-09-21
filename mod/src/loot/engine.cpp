@@ -5454,9 +5454,10 @@ namespace ml::loot
         // ginseng, 20 September 2026, issue #83: a ripe plot is six entities on
         // one spot, the planted seed, the plant parented to it, and four
         // harvestable Ginseng nodes parented to the plant, so every one of the
-        // six counted the other five and all six were refused as storage. No
-        // other camp farm crop grows four harvest nodes on one plant, which is
-        // why ginseng alone showed it. Relatives are not counted now.
+        // six counted the other five and all six were refused as storage. A
+        // plant with three nodes stays under the threshold, which is why a ripe
+        // four-node ginseng alone showed it. Relatives are not counted now,
+        // siblings included.
         //
         // Measured before it was written: across 33 logs this test has fired 17
         // times and all 17 are that ginseng. It has never once refused real
@@ -5466,18 +5467,32 @@ namespace ml::loot
         std::unordered_map<uint32_t, size_t> byEid;
         for (size_t i = 0; i < list.size(); ++i)
             if (list[i].eid) byEid.emplace(list[i].eid, i);
-        // Walks up from `node`, so it answers for a grandparent as well as a
-        // parent. The hop limit is for a parent loop in game data, not depth:
-        // the deepest chain seen is three.
-        auto descendsFrom = [&](size_t anc, size_t node) {
+        // Two things are related when one is the other's ancestor or they share
+        // one. Siblings matter as much as parents: LuxDragon's log on 1.6.35
+        // had a plant whose four harvest nodes all hung off it, each saw the
+        // other three at its point, and all four were still refused as storage
+        // while the plants with three nodes went through. A parent that is
+        // missing from this pass still counts, by its id. The hop limit is for
+        // a parent loop in game data, not depth: the deepest chain seen is three.
+        auto lineage = [&](size_t node, uint32_t (&out)[9]) {
+            int n = 0;
+            out[n++] = list[node].eid;
             uint32_t p = list[node].parent;
             for (int hop = 0; hop < 8 && p; ++hop)
             {
+                out[n++] = p;
                 auto it = byEid.find(p);
-                if (it == byEid.end()) return false;
-                if (it->second == anc) return true;
+                if (it == byEid.end()) break;
                 p = list[it->second].parent;
             }
+            return n;
+        };
+        auto related = [&](size_t a, size_t b) {
+            uint32_t la[9], lb[9];
+            const int na = lineage(a, la), nb = lineage(b, lb);
+            for (int x = 0; x < na; ++x)
+                for (int y = 0; y < nb; ++y)
+                    if (la[x] && la[x] == lb[y]) return true;
             return false;
         };
         for (size_t i = 0; i < list.size(); ++i)
@@ -5489,7 +5504,7 @@ namespace ml::loot
                 if (i == j) continue;
                 const float dx = list[j].pos.x - list[i].pos.x, dy = list[j].pos.y - list[i].pos.y, dz = list[j].pos.z - list[i].pos.z;
                 const float dd = dx * dx + dy * dy + dz * dz;
-                if (dd <= 0.0004f && !descendsFrom(i, j) && !descendsFrom(j, i))
+                if (dd <= 0.0004f && !related(i, j))
                     ++around; // within 2 cm and no relation: the same point, as storage contents are
                 if (!list[i].gather && !list[i].item && list[i].dead != 1 && list[i].inter && list[j].filled &&
                     (list[j].gather || list[j].item) && list[j].type == list[i].type && dd <= 0.25f) list[i].twin = true;
