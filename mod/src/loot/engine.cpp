@@ -5406,6 +5406,38 @@ namespace ml::loot
             else ++it;
         }
         // Container contents sit in one point; a bush comes as a data node plus an empty twin.
+        //
+        // A child's position is its parent's, so anything the game parents is
+        // also "at one point" and is not a pile of anything. LuxDragon's
+        // ginseng, 20 September 2026, issue #83: a ripe plot is six entities on
+        // one spot, the planted seed, the plant parented to it, and four
+        // harvestable Ginseng nodes parented to the plant, so every one of the
+        // six counted the other five and all six were refused as storage. No
+        // other camp farm crop grows four harvest nodes on one plant, which is
+        // why ginseng alone showed it. Relatives are not counted now.
+        //
+        // Measured before it was written: across 33 logs this test has fired 17
+        // times and all 17 are that ginseng. It has never once refused real
+        // storage contents in any log on hand, so it keeps its unparented case
+        // rather than being taken out, and if a chest ever parents its contents
+        // this will need the evidence that does not exist yet.
+        std::unordered_map<uint32_t, size_t> byEid;
+        for (size_t i = 0; i < list.size(); ++i)
+            if (list[i].eid) byEid.emplace(list[i].eid, i);
+        // Walks up from `node`, so it answers for a grandparent as well as a
+        // parent. The hop limit is for a parent loop in game data, not depth:
+        // the deepest chain seen is three.
+        auto descendsFrom = [&](size_t anc, size_t node) {
+            uint32_t p = list[node].parent;
+            for (int hop = 0; hop < 8 && p; ++hop)
+            {
+                auto it = byEid.find(p);
+                if (it == byEid.end()) return false;
+                if (it->second == anc) return true;
+                p = list[it->second].parent;
+            }
+            return false;
+        };
         for (size_t i = 0; i < list.size(); ++i)
         {
             if (!list[i].filled) continue;
@@ -5415,7 +5447,8 @@ namespace ml::loot
                 if (i == j) continue;
                 const float dx = list[j].pos.x - list[i].pos.x, dy = list[j].pos.y - list[i].pos.y, dz = list[j].pos.z - list[i].pos.z;
                 const float dd = dx * dx + dy * dy + dz * dz;
-                if (dd <= 0.0004f) ++around; // within 2 cm: the same point, as storage contents are
+                if (dd <= 0.0004f && !descendsFrom(i, j) && !descendsFrom(j, i))
+                    ++around; // within 2 cm and no relation: the same point, as storage contents are
                 if (!list[i].gather && !list[i].item && list[i].dead != 1 && list[i].inter && list[j].filled &&
                     (list[j].gather || list[j].item) && list[j].type == list[i].type && dd <= 0.25f) list[i].twin = true;
             }
