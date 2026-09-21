@@ -322,6 +322,15 @@ namespace ml::gui
             if (!st.menuOpen) { st.menuOpen = true; st.menuWatch = true; }
             else if (!st.menuWatch) st.menuWatch = true;
             else { st.menuOpen = false; st.menuWatch = false; }
+            // RevOGUwU, #82. Watch mode wrote nothing anywhere: this branch had
+            // no line of its own, and State::Captures() is false while watching,
+            // so input::MenuOpened() never runs and "[input] menu opened" never
+            // appears either. A player who opens the menu with this key and then
+            // reports that it ignores the mouse hands over a log with no trace
+            // of the menu at all, which is the report and the log both.
+            LOG("[menu] watch key: menu %s", st.menuOpen
+                    ? (st.menuWatch ? "watching; it is on screen and the game keeps your clicks" : "open")
+                    : "closed");
         }
         s_watchWas = watch;
 
