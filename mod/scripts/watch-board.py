@@ -38,20 +38,22 @@ MOD = "https://www.nexusmods.com/crimsondesert/mods/3402"
 GLINT = "https://www.nexusmods.com/crimsondesert/mods/3472"
 FLIGHT = "https://www.nexusmods.com/crimsondesert/mods/3488"
 PSM = "https://www.nexusmods.com/crimsondesert/mods/3521"
+BOUNTY = "https://www.nexusmods.com/crimsondesert/mods/3560"
 # (state suffix, line prefix, page). Master Looter keeps the bare "posts" and
 # "bugs" state keys it has always had, so a state file written before Glint
 # Spotter was added still reads and nothing is replayed. Anything from the
 # second board is prefixed, because it belongs to a different piece of work and
 # is meant to be handed straight over rather than acted on here.
 BOARDS = [("", "", MOD), ("_glint", "glint ", GLINT), ("_flight", "flight ", FLIGHT),
-          ("_psm", "psm ", PSM)]
+          ("_psm", "psm ", PSM), ("_bounty", "bounty ", BOUNTY)]
 # (state suffix, line prefix, repo), matching BOARDS so one pass tags every
 # line with the mod it belongs to and nothing has to be worked out from the
 # text. Master Looter keeps the bare key and the bare prefix.
 REPOS = [("", "", "shin2344234/master-looter"),
          ("_glint", "glint ", "shin2344234/glint-spotter"),
          ("_flight", "flight ", "shin2344234/flight-freedom"),
-         ("_psm", "psm ", "shin2344234/private-storage-master")]
+         ("_psm", "psm ", "shin2344234/private-storage-master"),
+         ("_bounty", "bounty ", "shin2344234/bounty-teleportation")]
 GH = REPOS[0][2]
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128 Safari/537.36"
 INTERVAL = 900
@@ -64,7 +66,13 @@ DISCORD_FORUM_NAME = "help-n-bug-reports"
 # Each keeps its last message id under "discord_ch_<id>" and seeds itself
 # quietly the first pass it is seen, so adding one replays nothing.
 DISCORD_CHANNELS = [
+    ("1547305565393387621", "master-looter", ""),
+    ("1548418656617365515", "glint-spotter", "glint "),
+    ("1549066085838356480", "flight-freedom", "flight "),
     ("1550158204841889852", "private-storage-master", "psm "),
+    ("1551402120354332702", "stamina-master", "stamina "),
+    ("1551402158040031293", "stack-master", "stack "),
+    ("1551402210259374170", "bounty-teleportation", "bounty "),
 ]
 SETH = "355497711568551947"
 DISCORD_SELF = {SETH, "1547307453107150979"}   # Seth, the bot
@@ -355,20 +363,33 @@ SOURCES = [
     ("glint nexus post: ",  "Glint Spotter, posts tab", GLINT + "?tab=posts"),
     ("glint nexus bug: ",   "Glint Spotter, bugs tab",  GLINT + "?tab=bugs"),
     ("glint github: ",      "Glint Spotter, GitHub",    "https://github.com/shin2344234/glint-spotter/issues"),
+    ("glint discord: ",     "Discord, #glint-spotter",  None),
     ("glint watch: ",       "Glint Spotter, the watcher itself", None),
     ("flight nexus post: ", "Flight Freedom, posts tab", FLIGHT + "?tab=posts"),
     ("flight nexus bug: ",  "Flight Freedom, bugs tab",  FLIGHT + "?tab=bugs"),
     ("flight github: ",     "Flight Freedom, GitHub",   "https://github.com/shin2344234/flight-freedom/issues"),
+    ("flight discord: ",    "Discord, #flight-freedom", None),
     ("flight watch: ",      "Flight Freedom, the watcher itself", None),
     ("psm nexus post: ",    "Private Storage Master, posts tab", PSM + "?tab=posts"),
     ("psm nexus bug: ",     "Private Storage Master, bugs tab",  PSM + "?tab=bugs"),
     ("psm github: ",        "Private Storage Master, GitHub",    "https://github.com/shin2344234/private-storage-master/issues"),
     ("psm discord: ",       "Discord, #private-storage-master",  None),
     ("psm watch: ",         "Private Storage Master, the watcher itself", None),
+    ("bounty nexus post: ", "Bounty Teleportation, posts tab", BOUNTY + "?tab=posts"),
+    ("bounty nexus bug: ",  "Bounty Teleportation, bugs tab",  BOUNTY + "?tab=bugs"),
+    ("bounty github: ",     "Bounty Teleportation, GitHub",    "https://github.com/shin2344234/bounty-teleportation/issues"),
+    ("bounty discord: ",    "Discord, #bounty-teleportation", None),
+    ("bounty watch: ",      "Bounty Teleportation, the watcher itself", None),
+    # Stamina Master and Stack Master are watched on Discord only. Neither
+    # has a board or a repo in BOARDS or REPOS yet.
+    ("stamina discord: ",   "Discord, #stamina-master", None),
+    ("stamina watch: ",     "Stamina Master, the watcher itself", None),
+    ("stack discord: ",     "Discord, #stack-master",   None),
+    ("stack watch: ",       "Stack Master, the watcher itself", None),
     ("nexus post: ",        "Master Looter, posts tab", MOD + "?tab=posts"),
     ("nexus bug: ",         "Master Looter, bugs tab",  MOD + "?tab=bugs"),
     ("github: ",            "Master Looter, GitHub",    "https://github.com/" + GH + "/issues"),
-    ("discord: ",           "Discord, " + DISCORD_FORUM_NAME + " (any of the four mods)", None),
+    ("discord: ",           "Discord",                  None),
     ("watch: ",             "The watcher itself",       None),
 ]
 
