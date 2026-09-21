@@ -442,6 +442,21 @@ namespace ml::Settings
             c.lootContainers, c.gatherUnknown, c.lootCorpses, c.searchBodies, c.gatherVeins, c.autoArm,
             c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.petFilter, c.stopPetLooting, c.stopPetBodies,
             c.petLootToStorage, c.minValueCopper);
+        // RevOGUwU, issue #82, 20 September 2026: two logs of a menu that
+        // would not take a click, and neither could be read, because the
+        // startup said which ranges and switches were set and never which key
+        // opens the menu. A rebound MenuKey and a key the mod never sees look
+        // identical without this. KeyName hands back one shared static buffer
+        // for anything outside its switch, so each name is copied before the
+        // next call overwrites it.
+        char km[64], kw[64], kt[64], kb[64], ko[64];
+        snprintf(km, sizeof km, "%s", KeyName(c.menuKey));
+        snprintf(kw, sizeof kw, "%s", KeyName(c.keyWatch));
+        snprintf(kt, sizeof kt, "%s", KeyName(c.keyToggle));
+        snprintf(kb, sizeof kb, "%s", KeyName(c.keyBurst));
+        snprintf(ko, sizeof ko, "%s", c.keyOwned ? KeyName(c.keyOwned) : "unbound");
+        LOG("Settings keys: menu %s, watch %s, on and off %s, loot once %s, take owned %s.%s",
+            km, kw, kt, kb, ko, c.padMenu ? " A pad chord opens the menu as well." : "");
     }
 
     // The whole config as ini text: the live file, a preset and a backup are

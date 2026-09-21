@@ -4288,7 +4288,7 @@ namespace ml::loot
             if (nw && cfg.showHud)
             {
                 char msg[300];
-                snprintf(msg, sizeof msg, "Master Looter: deleted %s, picked up by a pet against your filters", notice);
+                snprintf(msg, sizeof msg, "Master Looter: deleted %s. Your rules refuse it and a companion is out, so it was removed whoever picked it up.", notice);
                 State::Get().Notify(msg, 6000, true);
             }
             windowUntil = 0; base.clear();
@@ -4370,7 +4370,7 @@ namespace ml::loot
             if (nw && cfg.showHud)
             {
                 char msg[300];
-                snprintf(msg, sizeof msg, "Master Looter: deleted %s, picked up by a companion against your filters", notice);
+                snprintf(msg, sizeof msg, "Master Looter: deleted %s. Your rules refuse it and a companion is out, so it was removed whoever picked it up.", notice);
                 State::Get().Notify(msg, 6000, true);
             }
             snap.swap(fresh);
