@@ -1254,14 +1254,49 @@ namespace ml::loot
         return ItemDb::ByRow(it->second.row);
     }
 
-    // A pet's pick-up of a loose item reaches the queue as the PLAYER's own
-    // pick-up, raised under A0100001 like one done by hand; only its body
-    // searches are stamped with its own id. So a hand pick-up of something
-    // the scan had refused by an item rule is handed to the pet filter as if
-    // the pet had raised it. The rules that count are the ones a person sets:
-    // an item marked never, a tag marked never, a class switched off, the
-    // value floor and the no-sell switch. Filled here, drained by the filter.
-    static std::vector<events::PetPickup> g_petHand;
+    // What the player has just taken by hand, so neither delete path touches
+    // it. Seth decided on 21 September 2026 that a pick-up of your own is
+    // never deleted, after LuxDragon lost a recipe he had picked up as Damiane
+    // with a mercenary out: the filter used to hand any refused pick-up of the
+    // player's to the pet window while a companion was about, since the game
+    // can raise a pet's pick-up as the player's own. Prevention tells a pet no
+    // before it reaches for a refused loose item now, so that caution had
+    // stopped paying for itself and was costing the player things he chose.
+    // A row is kept for a few seconds, long enough for the sweep's two-second
+    // diff to see it; a gather or catch names no row, so it marks the whole
+    // bag as the player's for that long instead.
+    struct HandRow { uint16_t tid; DWORD at; };
+    static std::vector<HandRow> g_handRows;
+    static DWORD g_handUnknownAt = 0;
+    static constexpr DWORD kHandKeepMs = 5000;
+
+    static void NoteHandTake(uint32_t eid, bool namesRow, DWORD now)
+    {
+        const auto it = namesRow ? g_tidByEid.find(eid) : g_tidByEid.end();
+        if (it != g_tidByEid.end() && it->second)
+        {
+            if (g_handRows.size() >= 64) g_handRows.erase(g_handRows.begin());
+            g_handRows.push_back({ it->second, now ? now : 1 });
+        }
+        else g_handUnknownAt = now ? now : 1;
+    }
+
+    // Whether the player took this row, or took something unnamed, at or
+    // after `since`.
+    static bool HandTookRow(uint16_t tid, DWORD since)
+    {
+        for (const HandRow& h : g_handRows)
+            if (h.tid == tid && static_cast<long>(h.at - since) >= 0) return true;
+        return false;
+    }
+    static void AgeHandRows(DWORD now)
+    {
+        while (!g_handRows.empty() && now - g_handRows.front().at > kHandKeepMs) g_handRows.erase(g_handRows.begin());
+    }
+    static bool HandTookUnknown(DWORD since)
+    {
+        return g_handUnknownAt && static_cast<long>(g_handUnknownAt - since) >= 0;
+    }
 
     // Only while a pet is demonstrably out and looting. A pet's body search is
     // the one event stamped with the pet's own id, so it is proof; its pick-up
@@ -1422,6 +1457,7 @@ namespace ml::loot
         for (int i = 0; i < sn; ++i)
         {
             if (g_handTouches.size() < 128) g_handTouches.push_back({ seen[i].eid, now });
+            NoteHandTake(seen[i].eid, seen[i].act == Action::Take, now);
             // A carcass or body searched by hand is empty now, so it joins the
             // same never-again set the mod's own searches go into. Before this
             // only the mod's searches were remembered: on 16 September 2026 Seth
@@ -1460,29 +1496,14 @@ namespace ml::loot
             {
                 const char* why = LastVerdict(seen[i].eid);
                 static int s_missLogs = 0;
-                if (why && seen[i].act == Action::Take && Settings::Get().petFilter && IsFilterRule(why) && g_petHand.size() < 64)
+                if (why && seen[i].act == Action::Take && Settings::Get().petFilter && IsFilterRule(why))
                 {
-                    if (PetPrevented(Settings::Get(), now))
+                    static int s_said = 0;
+                    if (s_said < 8)
                     {
-                        static int s_said = 0;
-                        if (s_said < 8)
-                        {
-                            ++s_said;
-                            LOG("[pet] eid %08X was picked up and the rules refuse it, but a pet is told no before it "
-                                "reaches for anything they refuse, so this one was yours and stays in the bag.", seen[i].eid);
-                        }
-                    }
-                    else if (PetOutRecently(now))
-                        g_petHand.push_back({ g_meEid, seen[i].eid, seen[i].at, false });
-                    else
-                    {
-                        static int s_said = 0;
-                        if (s_said < 8)
-                        {
-                            ++s_said;
-                            LOG("[pet] eid %08X was picked up by hand and the rules refuse it, but no pet has looted "
-                                "in the last %lu seconds, so it stays in the bag.", seen[i].eid, kPetOutMs / 1000);
-                        }
+                        ++s_said;
+                        LOG("[pet] eid %08X was picked up by hand and the rules refuse it; a pick-up of your own "
+                            "is never deleted, so it stays in the bag.", seen[i].eid);
                     }
                 }
                 if (why) { if (Settings::Get().debugLog) LOG("[learn] player %s eid %08X (node type %u), we had skipped it: %s", events::ActionName(seen[i].act), seen[i].eid, nodeType, why); }
@@ -4195,8 +4216,9 @@ namespace ml::loot
 
     static void PetFilterTick(const Config& cfg, DWORD now)
     {
+        AgeHandRows(now);
         static std::unordered_map<uint16_t, long long> base, snap;
-        static DWORD snapAt = 0, windowUntil = 0;
+        static DWORD snapAt = 0, windowUntil = 0, windowFrom = 0;
         static uint16_t tids[64]; static int tidN = 0; static bool anyUnknown = false;
         static game::InvEntry ents[4096];
         // Which holder each sample read. Two samples of different holders are
@@ -4247,21 +4269,38 @@ namespace ml::loot
 
         events::PetPickup pp[64];
         int n = events::DrainPetPickups(pp, 32);
-        for (const events::PetPickup& h : g_petHand) if (n < 64) pp[n++] = h;
-        g_petHand.clear();
+        // The played body's own pick-ups arrive here too, since as Damiane or
+        // Oongka it is not the identity the event layer compares against.
+        // They are the player's, so they are recorded and taken out here.
+        {
+            int k = 0;
+            for (int i = 0; i < n; ++i)
+            {
+                if (RaisedByPlayer(pp[i].pet))
+                {
+                    NoteHandTake(pp[i].item, !pp[i].search, now);
+                    const auto it = g_tidByEid.find(pp[i].item);
+                    const Item* db = it == g_tidByEid.end() ? nullptr : ItemDb::ByRow(it->second);
+                    LOG("[pet] %08X (you) %s %08X: %s; yours, so never deleted", pp[i].pet, pp[i].search ? "searched" : "picked up",
+                        pp[i].item, db ? db->name.c_str() : "unnamed");
+                    continue;
+                }
+                pp[k++] = pp[i];
+            }
+            n = k;
+        }
         if (n > 0)
         {
             if (!windowUntil)
             {
-                if (snapAt && static_cast<long>(pp[0].at - snapAt) >= 0) { base = snap; baseHolder = snapHolder; }
-                else { snapshot(base, baseHolder); LOG("[pet] no inventory snapshot from before the pick-up; whatever landed already is kept"); }
+                if (snapAt && static_cast<long>(pp[0].at - snapAt) >= 0) { base = snap; baseHolder = snapHolder; windowFrom = snapAt; }
+                else { windowFrom = snapshot(base, baseHolder); LOG("[pet] no inventory snapshot from before the pick-up; whatever landed already is kept"); }
                 tidN = 0; anyUnknown = false;
             }
             for (int i = 0; i < n; ++i)
             {
                 // Stamped with the pet's own id, so a pet is out and working.
-                // The hand path above reads this before it queues anything.
-                if (!RaisedByPlayer(pp[i].pet)) NotePetActivity(now);
+                NotePetActivity(now);
                 const auto it = g_tidByEid.find(pp[i].item);
                 const uint16_t tid = it == g_tidByEid.end() ? 0 : it->second;
                 const Item* db = tid ? ItemDb::ByRow(tid) : nullptr;
@@ -4271,11 +4310,9 @@ namespace ml::loot
                 // looting rule, written for pets, with no mercenary of its own.
                 // So a line here naming a player-tagged raiser is the evidence
                 // that a mercenary loots at all, which no session has shown yet.
-                const char* kind = RaisedByPlayer(pp[i].pet) ? "you" :
-                                   (pp[i].pet >> 24) == game::kTagPlayer ? "a hired companion" : "a pet";
-                LOG("[pet] %08X (%s) %s %08X: %s%s", pp[i].pet, kind, pp[i].search ? "searched" : "picked up", pp[i].item,
-                    db ? db->name.c_str() : pp[i].search ? "a body; judged by what lands" : tid ? "row known, unnamed" : "never in scan range; judged by what lands",
-                    RaisedByPlayer(pp[i].pet) ? " (raised as the player, on an item the scan had refused)" : "");
+                const char* kind = (pp[i].pet >> 24) == game::kTagPlayer ? "a hired companion" : "a pet";
+                LOG("[pet] %08X (%s) %s %08X: %s", pp[i].pet, kind, pp[i].search ? "searched" : "picked up", pp[i].item,
+                    db ? db->name.c_str() : pp[i].search ? "a body; judged by what lands" : tid ? "row known, unnamed" : "never in scan range; judged by what lands");
             }
             windowUntil = now + 2500;
             return;
@@ -4313,9 +4350,17 @@ namespace ml::loot
                 if (delta <= 0) continue;
                 bool named = false;
                 for (int i = 0; i < tidN; ++i) if (tids[i] == kv.first) named = true;
-                if (!anyUnknown && !named) continue;
+                // Something the player took unnamed in the same window could be
+                // any row, so an unnamed pet pick-up no longer widens the net.
+                const bool handUnknown = HandTookUnknown(windowFrom - 1500);
+                if (!(anyUnknown && !handUnknown) && !named) continue;
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) { LOG("[pet] +%lld of row %u, not in the item database: kept", delta, kv.first); ++kept; continue; }
+                if (HandTookRow(kv.first, windowFrom - 1500))
+                {
+                    LOG("[pet] +%lld %s: kept, you picked one up yourself in the same window", delta, it->name.c_str());
+                    ++kept; continue;
+                }
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
                 const bool spare = NeverDestroy(*it, r);
                 if (r.loot || spare) { LOG("[pet] +%lld %s: kept (%s%s%s)", delta, it->name.c_str(), r.rule, r.detail.empty() ? "" : " ", r.detail.c_str()); ++kept; continue; }
@@ -4330,7 +4375,7 @@ namespace ml::loot
             if (nw && cfg.showHud)
             {
                 char msg[300];
-                snprintf(msg, sizeof msg, "Master Looter: deleted %s. Your rules refuse it and a companion is out, so it was removed whoever picked it up.", notice);
+                snprintf(msg, sizeof msg, "Master Looter: deleted %s. A companion picked it up and your rules refuse it.", notice);
                 State::Get().Notify(msg, 6000, true);
             }
             windowUntil = 0; base.clear();
@@ -4392,6 +4437,12 @@ namespace ml::loot
                 snap.swap(fresh); snapAt = freshAt; snapHolder = freshHolder; return;
             }
 
+            // A gather or a catch of the player's names no row, so the whole
+            // pass is the player's and nothing in it is judged.
+            if (HandTookUnknown(snapAt - 1500))
+            {
+                snap.swap(fresh); snapAt = freshAt; snapHolder = freshHolder; return;
+            }
             char notice[240] = ""; int nw = 0;
             for (const auto& kv : fresh)
             {
@@ -4400,6 +4451,7 @@ namespace ml::loot
                 if (delta <= 0) continue;
                 const Item* it = ItemDb::ByRow(kv.first);
                 if (!it) continue;                      // unknown row: never touched
+                if (HandTookRow(kv.first, snapAt - 1500)) continue;   // yours
                 const Rules::Verdict r = Rules::Decide(*it, cfg);
                 const bool spare = NeverDestroy(*it, r);
                 if (r.loot || spare) continue;
@@ -4412,7 +4464,7 @@ namespace ml::loot
             if (nw && cfg.showHud)
             {
                 char msg[300];
-                snprintf(msg, sizeof msg, "Master Looter: deleted %s. Your rules refuse it and a companion is out, so it was removed whoever picked it up.", notice);
+                snprintf(msg, sizeof msg, "Master Looter: deleted %s. A companion picked it up and your rules refuse it.", notice);
                 State::Get().Notify(msg, 6000, true);
             }
             snap.swap(fresh);

@@ -785,7 +785,8 @@ namespace ml::gui
         dirty |= ImGui::Checkbox(TR("Stop pets looting bodies"), &c.stopPetBodies);
         Help(TR("The game asks separately before a pet loots a body, and this answers no. Turn on one of the two and not the other if you want a pet stripping corpses but not collecting loose items, or the other way round."));
         dirty |= ImGui::Checkbox(TR("Pets and companions follow the filters"), &c.petFilter);
-        Help(TR("A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.\n\nWhat you pick up yourself is kept, because the pet cannot be the one who took a refused loose item. A hired mercenary is the exception: nobody has checked that it asks the same question, so while one is out, a refused item that lands in the bag is deleted whoever picked it up."));
+        // Two strings, so the first keeps its translations when the second changes.
+        Help((std::string(TR("A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that they refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.")) + "\n\n" + TR("Nothing you pick up yourself is ever deleted, whether or not a pet or a mercenary is out.")).c_str());
         dirty |= ImGui::Checkbox(TR("Verbose log"), &c.debugLog);
         if (dirty) Settings::MarkDirty();
     }
