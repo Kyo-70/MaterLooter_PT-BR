@@ -78,7 +78,8 @@ namespace ml
         // being harvested, sweet potatoes and barley among them.
         bool  gatherCrops    = true;
         // A camp farm's growing crops, which are plants the player planted.
-        // Off, and set from the ini rather than the menu.
+        // Set from the ini rather than the menu. It started off, and version 6
+        // turned it on for everyone; the migration in settings.cpp says why.
         //
         // 24 camp-farm prefabs carry no gimmick tag and no name the generator
         // knows, so until they were named they were unidentified nodes and
@@ -210,7 +211,7 @@ namespace ml
         // without it: how many descriptors this build has, any that moved, the
         // three the mod sends, and any it could not find.
         bool  descriptorDump = false;
-        int   configVersion  = 6;      // bumps when a default changes in a way old files should follow
+        int   configVersion  = 7;      // bumps when a default changes in a way old files should follow; Migrate() stamps a fresh file with the same number
 
         // [Classes] class -> 1 loot / 0 skip. Absent means loot.
         std::map<std::string, int> classRule;

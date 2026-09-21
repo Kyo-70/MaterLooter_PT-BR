@@ -1,5 +1,7 @@
 // INI Master metadata for MasterLooter.ini, embedded in MasterLooter.asi as the
-// INIMETA resource (see src/resources.rc). Keep it in step with settings.cpp.
+// INIMETA resource (see src/resources.rc). Keep it in step with settings.cpp;
+// scripts/check_inimeta.py compares the two and package.py refuses to run when
+// they disagree.
 {
   "inimeta": 1,
   "name": "Master Looter",
@@ -767,7 +769,7 @@
           "default": "0",
           "true": "1",
           "false": "0",
-          "help": "For a game that duplicates gear on pick-up.",
+          "help": "Refuses every piece in the game's worn-gear folder, as 1.6.12 to 1.6.20 did, instead of only what the game marks as worn. Turn it on if looting a weapon or shield ever leaves you with two of it; duplicates can corrupt a save.",
           "advanced": true,
           "order": 63
         },

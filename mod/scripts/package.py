@@ -74,6 +74,12 @@ def main():
         sys.exit("MasterLooter.asi in dist is not signed. Run mod/scripts/sign.ps1 first, or pass --unsigned on purpose.")
     if ok is None:
         print("note: no signing tools under private/tools, so the signature was not checked")
+    # The plugin carries INI Master's description of its settings, and a key,
+    # default or range copied across wrong fails nowhere else.
+    import subprocess
+    check = os.path.join(MOD, "..", "scripts", "check_inimeta.py")
+    if subprocess.run([sys.executable, check]).returncode != 0:
+        sys.exit("mod/data/MasterLooter.inimeta disagrees with settings.cpp; fix it and rebuild before packaging.")
     full = write_zip("MasterLooter-%s.zip" % version, FULL)
     dmm = write_zip("MasterLooter-%s-DMM.zip" % version, DMM)
     print("\nSHA-256 for %s:" % version)
