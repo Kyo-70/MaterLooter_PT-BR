@@ -12,4 +12,8 @@ namespace ml::Mod
     // Only that process (not a launcher that also loaded the ASI) owns the log,
     // the INI and the item database.
     void OnRenderProcess();
+
+    // Polled by the loot engine. The first time a second copy of the plugin
+    // has been refused in this process, logs it and puts it on screen.
+    void ReportSecondCopy();
 }

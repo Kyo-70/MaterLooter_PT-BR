@@ -19,6 +19,54 @@ namespace ml::Mod
 {
     static bool g_initialized = false;
 
+    // One copy per game. The ASI loader loads every .asi it finds, and a copy
+    // installed by hand in bin64 beside one a mod manager deployed elsewhere
+    // is two plugins, each with its own ini beside it. Both hook the game and
+    // both loot, so switching auto-loot off in one menu leaves the other
+    // looting, and only removing a file stops it. Two copies in one folder are
+    // worse, since the second's log claim rotates away the first's session.
+    // The first copy to start writes its path into a block named for this
+    // process; a later one finds it, writes its own path beside it, and
+    // does nothing else.
+    struct Instances { wchar_t first[MAX_PATH]; wchar_t second[MAX_PATH]; };
+    static HANDLE     g_instMap = nullptr;
+    static Instances* g_inst    = nullptr;
+
+    // True when this is the first copy, or when the check could not run.
+    static bool ClaimInstance(HMODULE module)
+    {
+        wchar_t name[64];
+        swprintf(name, 64, L"Local\\MasterLooter.Instances.%lu", GetCurrentProcessId());
+        g_instMap = CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, sizeof(Instances), name);
+        if (!g_instMap) return true;
+        const bool existed = GetLastError() == ERROR_ALREADY_EXISTS;
+        g_inst = static_cast<Instances*>(MapViewOfFile(g_instMap, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(Instances)));
+        if (!g_inst) return true;
+        wchar_t self[MAX_PATH] = L"";
+        GetModuleFileNameW(module, self, MAX_PATH);
+        if (!existed) { wcsncpy_s(g_inst->first, self, _TRUNCATE); return true; }
+        if (!g_inst->second[0]) wcsncpy_s(g_inst->second, self, _TRUNCATE);
+        return false;
+    }
+
+    static std::wstring FolderOf(const wchar_t* path)
+    {
+        const wchar_t* slash = wcsrchr(path, L'\\');
+        return slash ? std::wstring(path, slash + 1) : std::wstring();
+    }
+
+    void ReportSecondCopy()
+    {
+        static bool said = false;
+        if (said || !g_inst || !g_inst->second[0]) return;
+        said = true;
+        LOG_ERR("A second copy of Master Looter was loaded from %ls and has been kept idle. This copy, %ls, is the one "
+                "running. Two copies both loot, and switching auto-loot off stops only one of them, so delete the "
+                "one you do not use.", g_inst->second, g_inst->first);
+        State::Get().Notify("Master Looter: a second copy of the plugin is installed and was not started. "
+                            "The log names both files; delete one.", 10000, true);
+    }
+
     static bool HostIsGame()
     {
         char exe[MAX_PATH] = "";
@@ -320,6 +368,18 @@ namespace ml::Mod
             return;
 
         Paths::Init(module);
+        if (HostIsGame() && !ClaimInstance(module))
+        {
+            // Only a copy in another folder has a log of its own to write to.
+            // One sharing the first copy's folder must not touch its log.
+            if (g_inst && _wcsicmp(FolderOf(g_inst->first).c_str(), Paths::Dir().c_str()) != 0)
+            {
+                Log::Claim();
+                LOG_ERR("Master Looter is already running in this game from %ls, so this copy (%ls) has not started. "
+                        "Delete one of the two.", g_inst->first, g_inst->second);
+            }
+            return;
+        }
         // The log goes to disk now, not at the first rendered frame. A crash
         // before anything is presented is exactly when someone needs the file,
         // and waiting meant that case left nothing behind at all. Only in the

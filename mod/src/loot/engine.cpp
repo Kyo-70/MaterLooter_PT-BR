@@ -20,6 +20,7 @@
 #include "../core/nodedb.h"
 #include "../hooks/xinput_hook.h"
 #include "../core/itemdb.h"
+#include "../core/mod.h"
 #include "../core/log.h"
 #include "../core/paths.h"
 #include "../core/rules.h"
@@ -6116,6 +6117,7 @@ namespace ml::loot
         bool toggleWas = false, burstWas = false, ownedWas = false;
         while (InterlockedCompareExchange(&g_running, 0, 0))
         {
+            ml::Mod::ReportSecondCopy();
             // A copy: the render thread edits the live Config while the menu is up.
             Config cfg = Settings::Snapshot();
             RefreshKindRules(cfg);
