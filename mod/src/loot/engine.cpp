@@ -597,94 +597,6 @@ namespace ml::loot
     static constexpr int kWhyPerMinute = 120;
     static constexpr int kWhyCeiling   = 60000;
     static std::unordered_map<uint32_t, DWORD> g_firstSeen; // eid -> when first listed
-    // Issue #81, Ahplla: ore got slower somewhere around 1.6.28 and 1.6.32 took
-    // most of it back, and nobody can say which step grew. Every step on the
-    // way from a node being listed to its vein breaking is stamped here, and
-    // one line is written when the break is queued, so a log answers the
-    // question instead of a stopwatch and an opinion.
-    //
-    // Holds are the reason this exists rather than a pair of timestamps. A
-    // candidate can pass its verdict and then sit behind five separate gates,
-    // and until now that showed in the log as nothing at all. Reasons are
-    // string literals from one call site each, so they compare by pointer.
-    struct GatherTime
-    {
-        struct Hold { const char* why; int n; DWORD first, last; };
-        // seen is the first tick this node was considered, not the first tick
-        // the game listed it: g_firstSeen has one writer, on a path a vein
-        // reaches only after it has already been armed, so reading the
-        // baseline out of it put seen and firstArm on the same tick.
-        DWORD seen = 0, last = 0, firstArm = 0, filled = 0;
-        int   arms = 0;
-        // Ore only. The arm loop admits every gather kind, and a minute of
-        // riding through a forest would spend the whole line budget on plants
-        // before reaching the veins this was built to measure.
-        bool  ore = false;
-        // Ten reasons can hold a vein and the slots fill in source order, so
-        // six of them silently dropped the three ore-specific gates, which are
-        // last. dropped counts anything past the tenth.
-        Hold  holds[10]{};
-        int   nholds = 0, dropped = 0;
-        bool  reported = false;
-        char  node[96]{};
-        void Held(const char* why, DWORD now)
-        {
-            for (int i = 0; i < nholds; ++i)
-                if (holds[i].why == why) { ++holds[i].n; holds[i].last = now; return; }
-            if (nholds < 10) holds[nholds++] = { why, 1, now, now };
-            else             ++dropped;
-        }
-    };
-    static std::unordered_map<uint32_t, GatherTime> g_gtime;
-    static int g_timeLines = 0;
-    static constexpr int kTimeLines = 200;
-    static GatherTime& GTime(uint32_t eid, DWORD now)
-    {
-        GatherTime& t = g_gtime[eid];
-        if (!t.seen) t.seen = now;
-        t.last = now;
-        return t;
-    }
-    // Called wherever an ore vein is considered, which is what makes `seen`
-    // mean the first scan that looked at it and `last` the final one.
-    static void NoteOre(uint32_t eid, const char* node, DWORD now)
-    {
-        GatherTime& t = GTime(eid, now);
-        t.ore = true;
-        if (!t.node[0] && node && node[0]) snprintf(t.node, sizeof t.node, "%s", node);
-    }
-    // `what` is how it ended: "broke" for a queued break, or why it never got
-    // one. Written once per entity whichever way it goes, because a vein that
-    // quietly never breaks is half of what was reported.
-    static void ReportGTime(uint32_t eid, DWORD end, const char* what)
-    {
-        auto it = g_gtime.find(eid);
-        if (it == g_gtime.end() || it->second.reported || !it->second.ore) return;
-        GatherTime& t = it->second;
-        t.reported = true;
-        if (g_timeLines >= kTimeLines) return;
-        if (++g_timeLines == kTimeLines) LOG("[time] that is %d lines; the rest of this session is not timed.", kTimeLines);
-        char holds[640] = "none";
-        if (t.nholds)
-        {
-            int n = 0;
-            for (int i = 0; i < t.nholds && n < static_cast<int>(sizeof holds) - 1; ++i)
-                n += snprintf(holds + n, sizeof holds - static_cast<size_t>(n), "%s[%s x%d over %lu ms]",
-                              i ? ", " : "", t.holds[i].why, t.holds[i].n,
-                              static_cast<unsigned long>(t.holds[i].last - t.holds[i].first));
-            if (t.dropped && n > 0 && n < static_cast<int>(sizeof holds) - 1)
-                snprintf(holds + n, sizeof holds - static_cast<size_t>(n), ", and %d more kind(s) not recorded", t.dropped);
-        }
-        // A step that never happened prints -1 rather than a difference
-        // against a zero stamp, which would read as a plausible duration.
-        const long toArm  = t.firstArm ? static_cast<long>(t.firstArm - t.seen) : -1;
-        const long toFill = t.filled && t.firstArm ? static_cast<long>(t.filled - t.firstArm) : -1;
-        const long toEnd  = t.filled ? static_cast<long>(end - t.filled) : -1;
-        LOG("[time] eid %08X %s: %s after %lu ms. seen->arm %ld ms (%d arm%s), arm->filled %ld ms, filled->end %ld ms. holds: %s",
-            eid, t.node[0] ? t.node : "(no prefab)", what,
-            static_cast<unsigned long>(end - t.seen), toArm, t.arms,
-            t.arms == 1 ? "" : "s", toFill, toEnd, holds);
-    }
     static std::unordered_set<uint32_t>        g_containers;
     struct Spot { Vec3 p; uint16_t tid; DWORD when; uint32_t eid; };
     static std::vector<Spot> g_spots;                       // recently sent, by place and type
@@ -5256,9 +5168,6 @@ namespace ml::loot
                 g_heldRises.clear();
                 g_ownSends.clear();
                 g_mineYields.clear();
-                // Half a measurement across a load is not a measurement: the
-                // node either went with the old world or starts again in the new.
-                g_gtime.clear();
                 // A well run is the fourth holder of a raw component pointer and
                 // the queues were only three of them. Winding a well is eleven
                 // seconds of timed transitions spread over many scans, and
@@ -5614,17 +5523,6 @@ namespace ml::loot
         // retry records once they are stale. (g_searched stays: a carcass must
         // never be searched twice, whatever the session length.)
         if (g_why.size() > 8192) g_why.clear();
-        // Anything the scan has lost sight of for eight seconds is gone, one
-        // way or another. Say so before forgetting it, since "sometimes the
-        // ore is not looted at all" is half of #81 and leaves no other trace.
-        for (auto gt = g_gtime.begin(); gt != g_gtime.end();)
-        {
-            if (g_seen.count(gt->first)) { ++gt; continue; }
-            if (now - gt->second.last < 8000) { ++gt; continue; }
-            ReportGTime(gt->first, gt->second.last, "left without being looted");
-            gt = g_gtime.erase(gt);
-        }
-        if (g_gtime.size() > 4096) g_gtime.clear();
         if (g_firstSeen.size() > 8192) g_firstSeen.clear();
         if (g_ownAns.size() > 4096) g_ownAns.clear();
         if (g_done.size() > 4096)
@@ -5767,13 +5665,6 @@ namespace ml::loot
                     // with 1 and alternate on each retry.
                     rec.mode = 1;
                     rec.at = now; rec.judged = false;
-                    if (oreNode)
-                    {
-                        NoteOre(k.eid, k.node, now);
-                        GatherTime& gt = GTime(k.eid, now);
-                        if (!gt.firstArm) gt.firstArm = now;
-                        ++gt.arms;
-                    }
                     static int s_armLogs = 0;
                     // The game's own 4th argument is an actor and differs on every
                     // call, which fits the node's own actor (the object that owns the
@@ -5813,7 +5704,6 @@ namespace ml::loot
                 if (it == g_armed.end()) continue;
                 static int s_okLogs = 0;
                 if (s_okLogs < 40) { ++s_okLogs; LOG("[arm] eid %08X filled %lu ms after arming with combo %d (%s, type %u)", k.eid, static_cast<unsigned long>(now - it->second.at), it->second.ctxKind, k.gather ? "gather" : "item", k.tid); }
-                { GatherTime& gt = GTime(k.eid, now); if (!gt.filled) gt.filled = now; }
                 // One node of a prefab answering clears any doubt about the
                 // prefab, and the count of past refusals with it.
                 if (k.nodeType)
@@ -5837,8 +5727,6 @@ namespace ml::loot
                     Cand& k = list[i];
                     const Verdict& v = verdicts[i];
                     if (!k.filled || !v.loot) continue;
-                    if (v.act == Action::Gather && k.nodeType && KindFromName(k.nodeType->kind) == GatherKind::Ore)
-                        NoteOre(k.eid, k.node, now);
                     if ((pass == 0) != (v.act == Action::Search)) continue; // corpses first: they vanish first
                     // These hold an object back after its verdict has already
                     // passed, so without a line they are invisible: the log
@@ -5846,7 +5734,6 @@ namespace ml::loot
                     static int s_heldLogs = 0;
                     auto held = [&](const char* why) {
                         if (cfg.debugLog && s_heldLogs < 60) { ++s_heldLogs; LOG("[hold] %s %.1f m: %s", Label(k), k.d, why); }
-                        GTime(k.eid, now).Held(why, now);
                         return true;
                     };
                     bool justArmed = false;
@@ -5960,7 +5847,6 @@ namespace ml::loot
                         // the 20:26 session, which is duplication rather than mining.
                         // A vein the game respawns returns as a new entity, so retiring
                         // this one does not bar it for good.
-                        ReportGTime(k.eid, now, "broke");
                         g_searched.insert(key);
                         // Judged a second and a half from now: a vein will have
                         // dropped by then, and anything that has not is not one.
@@ -5993,7 +5879,6 @@ namespace ml::loot
                     { commit(); held("the game refused the event"); continue; }
                     commit();
                     ++taken;
-                    if (v.act == Action::Gather) ReportGTime(k.eid, now, "gathered");
                     {
                         const Item* y = v.act == Action::Gather ? NodeYield(k) : nullptr;
                         g_pend.push_back({ now, v.act, v.act == Action::Gather ? k.gtid : static_cast<uint16_t>(0), k.db ? k.db->row : -1, false,
