@@ -34,6 +34,7 @@ import io, json, os, re, subprocess, sys, time, html, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 STATE = os.path.join(REPO, "private", "watch-state.json")
+OWNER = os.path.join(REPO, "private", "watch-owner.txt")
 MOD = "https://www.nexusmods.com/crimsondesert/mods/3402"
 GLINT = "https://www.nexusmods.com/crimsondesert/mods/3472"
 FLIGHT = "https://www.nexusmods.com/crimsondesert/mods/3488"
@@ -452,7 +453,19 @@ def load():
 
 
 def save(st):
-    io.open(STATE, "w", encoding="utf-8").write(json.dumps(st, indent=1))
+    # Through a temporary file, so a watcher starting up never reads half a
+    # file, takes it for no state at all and seeds itself over the top.
+    tmp = STATE + ".tmp"
+    with io.open(tmp, "w", encoding="utf-8") as f:
+        f.write(json.dumps(st, indent=1))
+    os.replace(tmp, STATE)
+
+
+def owner():
+    try:
+        return io.open(OWNER, encoding="utf-8").read().strip()
+    except OSError:
+        return ""
 
 
 def once(st):
@@ -611,7 +624,21 @@ def main():
         for l in once(st):
             print(l)
         return
+    # One loop at a time, and the newest wins. Two loops each kept the state in
+    # memory and wrote it back whole, so whichever saved last threw away what the
+    # other had seen, and the next watcher to start reported it again. That was
+    # sparksgarcia0718's reply on the bounty tab, printed twice on 22 September
+    # 2026. A Monitor that expires can leave its python running, and a second
+    # session starting its own watch is the other way to get two.
+    me = "%d %.3f" % (os.getpid(), time.time())
+    io.open(OWNER, "w", encoding="utf-8").write(me)
     while True:
+        if owner() != me:
+            print("watch: a newer watcher took over (%s); this one is stopping." % (owner() or "owner file gone"))
+            return
+        # Re-read every pass rather than trusting memory, so a --once run from
+        # another session between passes is built on and not overwritten.
+        st = load()
         for l in once(st):
             print(l)
         time.sleep(INTERVAL)
