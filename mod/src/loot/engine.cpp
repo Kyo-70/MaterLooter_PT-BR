@@ -5429,10 +5429,36 @@ namespace ml::loot
         // load. Forgetting the body puts the scan back on the actor, and a
         // swap back to Damiane or Oongka is caught by her body walking, or
         // by the barren clock.
+        //
+        // Unless the body is walking too. Summoning Kliff as a mercenary moves
+        // the player actor, and LuxDragon's session of 22 September 2026 shows
+        // what that costs: the actor walked, the scan left Damiane for Kliff,
+        // her body took it back when Kliff wandered out of range, and it went
+        // round again 36 times in half an hour, so looting followed whichever
+        // of them the mod had last. A real swap parks the body it leaves; the
+        // body being played never stands still for long while its owner is
+        // moving. So the actor's walk only counts when the held body has
+        // stopped.
         if (g_bodyEid && g_bodyEid != g_meEid && apOk && g_actorMovedAt && now - g_actorMovedAt < 2000)
         {
-            LOG("[player] the player actor %08X walked, so it is the body being played, at %.1f %.1f %.1f; the character was swapped", g_meEid, ap.x, ap.y, ap.z);
-            ForgetBody("the player actor walked");
+            const Holder* held = nullptr;
+            for (int i = 0; i < g_holderN; ++i) if (g_holders[i].eid == g_bodyEid) { held = &g_holders[i]; break; }
+            const bool bodyWalks = held && held->movedAt && now - held->movedAt < 4000;
+            if (bodyWalks)
+            {
+                static DWORD s_saidAt = 0;
+                if (!s_saidAt || now - s_saidAt > 30000)
+                {
+                    s_saidAt = now;
+                    LOG("[player] the player actor %08X walked, but the body %08X is walking too, so this is a companion "
+                        "of yours moving the actor and not a character swap; the scan stays on the body", g_meEid, g_bodyEid);
+                }
+            }
+            else
+            {
+                LOG("[player] the player actor %08X walked, so it is the body being played, at %.1f %.1f %.1f; the character was swapped", g_meEid, ap.x, ap.y, ap.z);
+                ForgetBody("the player actor walked");
+            }
         }
         const bool settling = now < s_holdUntil;
         (void)total;
