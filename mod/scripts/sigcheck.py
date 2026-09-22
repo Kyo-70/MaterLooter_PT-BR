@@ -125,7 +125,16 @@ def main():
     for name, pat in pats:
         hits = scan(buf, secs, pat)
         tag = "ok " if len(hits) == 1 else ("MULTI" if hits else "MISS")
-        if len(hits) != 1 and name not in ("kSig_LeaR8Rip", "kSig_TableResolver16", "kSig_TableIndex", "kSig_OwnCallSite"):
+        # The MULTI four match many call sites by design. The two Jumped
+        # patterns are the Trinity.asi fallbacks, and each starts with the E9
+        # another mod writes over the entry, so on a clean exe they match
+        # nothing and the miss says only that nobody has detoured that
+        # function. Without this the check failed on every clean game, which
+        # is every game on this machine, 2949 included.
+        if not hits and name.endswith("Jumped"):
+            tag = "none"
+        if len(hits) != 1 and name not in ("kSig_LeaR8Rip", "kSig_TableResolver16", "kSig_TableIndex",
+                                           "kSig_OwnCallSite", "kSig_MoveUpdateJumped", "kSig_OwnCheckJumped"):
             bad += 1
         print("%-5s %-24s hits=%-3d %s" % (tag, name, len(hits), " ".join("+0x%X" % h for h in hits[:6])))
         if len(hits) == 1:
