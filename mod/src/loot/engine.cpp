@@ -4291,6 +4291,27 @@ namespace ml::loot
                         pp[i].item, db ? db->name.c_str() : "unnamed");
                     continue;
                 }
+                // A pick-up of something the scan never saw names nothing, and
+                // judging every rise in the bag behind it deleted what the
+                // player had just been handed. Every entity in the world that
+                // is not the player lands in this queue, a bandit taking up a
+                // sword as much as a pet, and LuxDragon's bounty note on 23
+                // September 2026 arrived in the bag 2.7 s after one such
+                // pick-up by B06034FB, which no scan ever placed near him, and
+                // was deleted for his document rule. Across every log on hand
+                // this path never caught a pet's loot: of four windows, two
+                // landed nothing and two deleted the player's own things. A
+                // body search still opens the window, since a pet's search
+                // names only the body and what it holds is never known first.
+                {
+                    const auto it = g_tidByEid.find(pp[i].item);
+                    if (!pp[i].search && (it == g_tidByEid.end() || !it->second))
+                    {
+                        LOG("[pet] %08X picked up %08X, which the scan never saw, so nothing in the bag can be tied to it "
+                            "and nothing is judged", pp[i].pet, pp[i].item);
+                        continue;
+                    }
+                }
                 pp[k++] = pp[i];
             }
             n = k;
@@ -4318,7 +4339,7 @@ namespace ml::loot
                 // that a mercenary loots at all, which no session has shown yet.
                 const char* kind = (pp[i].pet >> 24) == game::kTagPlayer ? "a hired companion" : "a pet";
                 LOG("[pet] %08X (%s) %s %08X: %s", pp[i].pet, kind, pp[i].search ? "searched" : "picked up", pp[i].item,
-                    db ? db->name.c_str() : pp[i].search ? "a body; judged by what lands" : tid ? "row known, unnamed" : "never in scan range; judged by what lands");
+                    db ? db->name.c_str() : pp[i].search ? "a body; judged by what lands" : "row known, unnamed");
             }
             windowUntil = now + 2500;
             return;
