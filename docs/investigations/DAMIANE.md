@@ -137,10 +137,21 @@ call site is `+0xA877BD`: `mov rcx, [+0x6D691B8]`, `mov rcx, [rcx+10h]`, `call
 +0x8B4510`. That accessor reads a controller at `[rcx+58h]` and returns the
 actor at `[controller+0D8h]`. Since `2160f7e` the plugin follows the same chain
 with guarded reads and writes a `[control]` line whenever the actor it names,
-or the scan's own centre, changes. Nothing decides on it yet. If it names
-Damiane's body while she is played and Kliff once he is, with and without
-Kliff summoned, it replaces the walking rules; a swap with a companion
-following is the case those rules cannot see.
+or the scan's own centre, changes.
+
+It is also how rule 3 went wrong. The handler for
+`TrocTrChangePlayerbleCharacterAck`, slot 6 of its vtable at `+0xBFE330`, loads
+the take-or-steal global `+0x6D691B0`, adds `0x30`, and passes that to the same
+accessor. So `[[0x6D691B0]+0x30]+0x58` is the user, the route object rule 3
+found, and the controlled actor is one hop further at `+0xD8`. Right after the
+call the handler sends something to that actor's component at `+0x68 -> +0x1C0`,
+which is what a swap would do to the character it just handed control to.
+
+The engine uses it in one place only: the player actor walked while the held
+body walked too, which is a summoned mercenary and a companion following after
+a real swap alike. The controller naming the actor means a swap and the body is
+forgotten; naming the body keeps it. Anywhere else it is logged and not obeyed
+until a session shows it naming Damiane's body while she is played.
 
 ## Telling a body from a wagon
 

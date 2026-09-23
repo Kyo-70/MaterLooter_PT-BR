@@ -5417,13 +5417,18 @@ namespace ml::loot
         // moving. So the actor's walk only counts when the held body has
         // stopped.
         // What the game's own controller is driving, beside what the scan
-        // chose. Only logged for now: if it names Damiane's body while she is
-        // played and Kliff when he is, whether or not he is also summoned, it
-        // answers the question the walking rules below keep guessing at.
+        // chose. The swap acknowledgement's handler, +0xBFE330 in exe 2949,
+        // reads the take-or-steal global +0x6D691B0, adds 0x30 and hands it
+        // to the same accessor, so the object DAMIANE.md rule 3 reached, the
+        // route object, is the user the accessor starts from, and the actor
+        // it drives sits one hop past it. That makes it the one piece of
+        // evidence that can separate a swap from a summon below; everywhere
+        // else it is only logged, until a session confirms it names Damiane's
+        // body while she is played.
+        uint32_t ctlEid = 0;
         {
             static uint32_t s_ctlSaid = 0, s_ctlCentre = 0;
             static int s_ctlLines = 0;
-            uint32_t ctlEid = 0;
             const uintptr_t ctlA = game::ControlledActor();
             if (ctlA) game::Eid(ctlA, &ctlEid);
             const uint32_t centre = g_bodyEid ? g_bodyEid : g_meEid;
@@ -5452,7 +5457,24 @@ namespace ml::loot
             // test needs, so it goes in the log every time.
             const uint8_t actorTag = g_me ? game::TypeTag(g_me) : 0, actorCat = g_me ? game::Cat2(g_me) : 0;
             const uint8_t bodyTag = held ? held->tagNow : 0, bodyCat = held ? held->catNow : 0;
-            if (bodyWalks)
+            // Where walking cannot tell, the controller can. Kliff summoned
+            // while Damiane is played, and Damiane following once Kliff is
+            // swapped in, both walk the actor and the body together; the
+            // controller names her body in the first and the actor in the
+            // second. Anything else it says, or nothing, leaves the walking
+            // rule to decide. If it turns out to name the actor even while
+            // Damiane is played, the cost is the behaviour before 7a41fba, a
+            // scan that follows a summoned mercenary, and not a lost body.
+            const bool ctlSaysActor = ctlEid && ctlEid == g_meEid;
+            const bool ctlSaysBody  = ctlEid && ctlEid == g_bodyEid;
+            if (bodyWalks && ctlSaysActor)
+            {
+                LOG("[player] the player actor %08X walked with the body %08X walking too, and the game's controller "
+                    "drives the actor, so the character was swapped (actor tag %02X cat %02X, body tag %02X cat %02X)",
+                    g_meEid, g_bodyEid, actorTag, actorCat, bodyTag, bodyCat);
+                ForgetBody("the game's controller drives the player actor");
+            }
+            else if (bodyWalks)
             {
                 static DWORD s_saidAt = 0;
                 if (!s_saidAt || now - s_saidAt > 30000)
@@ -5460,7 +5482,8 @@ namespace ml::loot
                     s_saidAt = now;
                     LOG("[player] the player actor %08X walked, but the body %08X is walking too, so this is a companion "
                         "of yours moving the actor and not a character swap; the scan stays on the body (actor tag %02X cat %02X, "
-                        "body tag %02X cat %02X)", g_meEid, g_bodyEid, actorTag, actorCat, bodyTag, bodyCat);
+                        "body tag %02X cat %02X, controller %s)", g_meEid, g_bodyEid, actorTag, actorCat, bodyTag, bodyCat,
+                        ctlSaysBody ? "on the body" : ctlEid ? "on neither" : "unread");
                 }
             }
             else
