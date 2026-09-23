@@ -132,6 +132,18 @@ namespace ml::sig
     inline constexpr const char* kSig_OwnCheckJumped =
         "E9 ?? ?? ?? ?? 48 89 74 24 10 48 89 7C 24 18 55 41 54 41 55 41 56 41 57 48 8B EC "
         "48 81 EC 80 00 00 00 49 8B ?? 4C 8B ?? 4C 8B ?? 0F B6 7D 50";
+    // Under any other patch, found from the one call site that tests the
+    // answer this way: mov rcx, [rcx+0x120]; call own_check; test al, al;
+    // jz +4; mov bl, 2. CDAutoLoot writes `mov rax, imm64; jmp rax` over the
+    // first fifteen bytes, which neither pattern above survives. The call
+    // names the function whatever its entry holds, and the body from +15 on,
+    // past anything a fifteen-byte patch covers, confirms it. Both are unique
+    // in exe 1.0.0.2949 and agree on +0x25D8520.
+    inline constexpr const char* kSig_OwnCheckCaller = "48 8B 89 20 01 00 00 E8 ?? ?? ?? ?? 84 C0 74 04 B3 02";
+    inline constexpr unsigned    kOff_OwnCheckCaller_Call = 7;
+    inline constexpr const char* kSig_OwnCheckBody =
+        "55 41 54 41 55 41 56 41 57 48 8B EC 48 81 EC 80 00 00 00 49 8B ?? 4C 8B ?? 4C 8B ?? 0F B6 7D 50";
+    inline constexpr unsigned    kOff_OwnCheckBody = 15;
 
     // --- Node arming --------------------------------------------------------
     // void arm(gimmickComponent, u8 mode, const u32* nameId)

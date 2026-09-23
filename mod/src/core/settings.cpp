@@ -435,10 +435,10 @@ namespace ml::Settings
         // mod did and never what it had been told to do.
         LOG("Settings ranges: scan %.1f loot %.1f gather %.1f catch %.1f corpse %.1f arm %.1f min %.2f.",
             c.scanRange, c.lootRange, c.gatherRange, c.catchRange, c.corpseRange, c.armRange, c.minRange);
-        LOG("Settings switches: ground %d plants %d crops %d ore %d wood %d furniture %d containers %d unknown %d "
+        LOG("Settings switches: auto %d ground %d plants %d crops %d ore %d wood %d furniture %d containers %d unknown %d "
             "corpses %d bodies %d veins %d arm %d owned %d quest %d nosell %d questgear %d pet %d stoppet %d stoppetbodies %d "
             "petstore %d minvalue %d.",
-            c.pickUpItems, c.gatherPlants, c.gatherCrops, c.gatherOre, c.gatherWood, c.lootFurniture,
+            c.enabled, c.pickUpItems, c.gatherPlants, c.gatherCrops, c.gatherOre, c.gatherWood, c.lootFurniture,
             c.lootContainers, c.gatherUnknown, c.lootCorpses, c.searchBodies, c.gatherVeins, c.autoArm,
             c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.petFilter, c.stopPetLooting, c.stopPetBodies,
             c.petLootToStorage, c.minValueCopper);

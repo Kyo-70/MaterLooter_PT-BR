@@ -68,6 +68,31 @@ namespace ml::game
         return j;
     }
 
+    // Where a function is named by a call to it and its entry may be anyone's.
+    // The body check past the patched bytes is what keeps a stray match from
+    // being taken for it.
+    static uintptr_t ScanFromCaller(const char* name, const char* caller, unsigned callAt, const char* body, unsigned bodyAt)
+    {
+        size_t hits = 0;
+        const uintptr_t site = mem::FindUnique(caller, &hits);
+        if (!site) return 0;
+        const uintptr_t fn = mem::RipAt(site + callAt, 5);
+        if (!mem::InImage(fn) || !mem::MatchAt(fn + bodyAt, body))
+        {
+            LOG_ERR("[sig] %-14s its call site names +0x%llX, which is not the function it should be; not taken",
+                    name, static_cast<unsigned long long>(mem::Rva(fn)));
+            return 0;
+        }
+        uint8_t e[12] = {};
+        for (unsigned i = 0; i < sizeof e; ++i) mem::Read8(fn + i, &e[i]);
+        for (int i = g_sigN - 1; i >= 0; --i)
+            if (g_sigs[i].name && strcmp(g_sigs[i].name, name) == 0) { g_sigs[i].addr = fn; g_sigs[i].hits = 1; break; }
+        LOG("[sig] %-14s +0x%llX, found from its caller; its entry reads %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X, "
+            "so another mod has patched it and this one will stack on the patch",
+            name, static_cast<unsigned long long>(mem::Rva(fn)), e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8], e[9], e[10], e[11]);
+        return fn;
+    }
+
     // Table resolvers are clones; the one we want references its table-name
     // string with `lea r8,[rip+..]` and has the 16-bit-key prologue above it.
     struct TableHunt { const char* name; uintptr_t fn; };
@@ -114,6 +139,8 @@ namespace ml::game
         g_f.moveUpdate   = ScanJumped("move_update", kSig_MoveUpdate, kSig_MoveUpdateJumped);
         g_f.areaSweepHit = Scan("area_sweep", kSig_AreaSweep, false);
         g_f.ownCheck     = ScanJumped("own_check", kSig_OwnCheck, kSig_OwnCheckJumped);
+        if (!g_f.ownCheck)
+            g_f.ownCheck = ScanFromCaller("own_check", kSig_OwnCheckCaller, kOff_OwnCheckCaller_Call, kSig_OwnCheckBody, kOff_OwnCheckBody);
         g_f.armFn        = Scan("node_arm", kSig_ArmDispatch, false);
         g_f.stateDriver  = Scan("gimmick_driver", kSig_StateDriver, false);
         g_f.invHolder    = Scan("inv_holder", kSig_InvHolder, false);

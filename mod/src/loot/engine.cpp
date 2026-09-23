@@ -798,6 +798,9 @@ namespace ml::loot
         // being played moves; a body left behind by a character swap does not.
         Vec3  lastPos;
         DWORD movedAt;
+        // The pair its own entity showed on the latest pass, where `played`
+        // above only ever turns on. 0 until it is seen.
+        uint8_t tagNow, catNow;
         int Score() const { return gear * 8 + kids; }
     };
     // Walking is half a metre to fifteen metres between two sightings, which
@@ -942,13 +945,15 @@ namespace ml::loot
     // object a scan, the body a metre from the centre, and after fifteen
     // seconds without a child the body aged out of its own table, twice in one
     // session. Seeing the holder is as good as seeing one of its children.
-    static void TouchHolder(uint32_t eid, const Vec3& at, DWORD now, bool played)
+    static void TouchHolder(uint32_t eid, uintptr_t e, uint8_t tag, const Vec3& at, DWORD now, bool played)
     {
         for (int i = 0; i < g_holderN; ++i)
             if (g_holders[i].eid == eid)
             {
                 g_holders[i].seen = now; g_holders[i].pos = at;
                 if (played) g_holders[i].played = true;
+                g_holders[i].tagNow = tag;
+                g_holders[i].catNow = game::Cat2(e);
                 NoteHolderPos(g_holders[i], at, now);
                 return;
             }
@@ -5146,8 +5151,9 @@ namespace ml::loot
             // the body's pair of bytes is read on the way. The tag is one
             // deref and gates the category read, so most objects cost one.
             {
-                const bool played = game::TypeTag(e) == 0x04 && game::Cat2(e) == 0x0E;
-                if (played || g_holderN) TouchHolder(eid, q, now, played);
+                const uint8_t tag = game::TypeTag(e);
+                const bool played = tag == 0x04 && game::Cat2(e) == 0x0E;
+                if (played || g_holderN) TouchHolder(eid, e, tag, q, now, played);
             }
             if (g_bodyEid && eid == g_bodyEid) PublishBodyDropAt(e, eid, q, now);
             const float dx = q.x - mp.x, dy = q.y - mp.y, dz = q.z - mp.z;
@@ -5444,6 +5450,14 @@ namespace ml::loot
             const Holder* held = nullptr;
             for (int i = 0; i < g_holderN; ++i) if (g_holders[i].eid == g_bodyEid) { held = &g_holders[i]; break; }
             const bool bodyWalks = held && held->movedAt && now - held->movedAt < 4000;
+            // Both pairs, live. A companion following the one being played
+            // walks too, so after a real swap to Kliff with Damiane in the
+            // party the test above cannot tell the two cases apart, and
+            // LuxDragon's first run of this build kept the scan on her. What
+            // either body's bytes read in each case is the evidence a better
+            // test needs, so it goes in the log every time.
+            const uint8_t actorTag = g_me ? game::TypeTag(g_me) : 0, actorCat = g_me ? game::Cat2(g_me) : 0;
+            const uint8_t bodyTag = held ? held->tagNow : 0, bodyCat = held ? held->catNow : 0;
             if (bodyWalks)
             {
                 static DWORD s_saidAt = 0;
@@ -5451,12 +5465,15 @@ namespace ml::loot
                 {
                     s_saidAt = now;
                     LOG("[player] the player actor %08X walked, but the body %08X is walking too, so this is a companion "
-                        "of yours moving the actor and not a character swap; the scan stays on the body", g_meEid, g_bodyEid);
+                        "of yours moving the actor and not a character swap; the scan stays on the body (actor tag %02X cat %02X, "
+                        "body tag %02X cat %02X)", g_meEid, g_bodyEid, actorTag, actorCat, bodyTag, bodyCat);
                 }
             }
             else
             {
-                LOG("[player] the player actor %08X walked, so it is the body being played, at %.1f %.1f %.1f; the character was swapped", g_meEid, ap.x, ap.y, ap.z);
+                LOG("[player] the player actor %08X walked, so it is the body being played, at %.1f %.1f %.1f; the character "
+                    "was swapped (actor tag %02X cat %02X, body %08X tag %02X cat %02X)", g_meEid, ap.x, ap.y, ap.z,
+                    actorTag, actorCat, g_bodyEid, bodyTag, bodyCat);
                 ForgetBody("the player actor walked");
             }
         }
@@ -6144,6 +6161,7 @@ namespace ml::loot
         while (InterlockedCompareExchange(&g_running, 0, 0))
         {
             ml::Mod::ReportSecondCopy();
+            ml::Mod::ReportOtherLootMod();
             // A copy: the render thread edits the live Config while the menu is up.
             Config cfg = Settings::Snapshot();
             RefreshKindRules(cfg);
@@ -6160,7 +6178,7 @@ namespace ml::loot
                 toggleWas = t;
                 const bool bp = ml::hooks::PadChordHeld(cfg.padBurst);
                 const bool b = KeyDown(cfg.keyBurst) || bp;
-                if (b && !burstWas && (bp || State::HotkeysFree(cfg.keyBurst))) { InterlockedExchange(&g_burst, 1); State::Get().Notify("Master Looter: looting everything in range", 1500); }
+                if (b && !burstWas && (bp || State::HotkeysFree(cfg.keyBurst))) RequestBurst();
                 burstWas = b;
                 // Unbound reads as nothing held, so an unset key never fires.
                 const bool op = cfg.padOwned && ml::hooks::PadChordHeld(cfg.padOwned);
@@ -6249,10 +6267,18 @@ namespace ml::loot
     }
     long SessionCount(int action) { return (action >= 0 && action < 4) ? g_session[action] : 0; }
     void ForgetLearned() { InterlockedExchange(&g_forget, 1); }   // the worker owns the table; it clears it on its next pass
-    void RequestBurst() { InterlockedExchange(&g_burst, 1); State::Get().Notify("Master Looter: looting everything in range", 1500); }
+    // Both logged, because a report that auto-loot would not turn off came
+    // with a log that could not say whether it had ever been on.
+    void RequestBurst()
+    {
+        InterlockedExchange(&g_burst, 1);
+        LOG("[loot] looting everything in range once, on the burst key");
+        State::Get().Notify("Master Looter: looting everything in range", 1500);
+    }
     void SetAuto(bool on)
     {
         { std::lock_guard<std::recursive_mutex> lk(Settings::Mutex()); Settings::Get().enabled = on; Settings::MarkDirty(); }
+        LOG("[loot] auto-loot switched %s by its key", on ? "on" : "off");
         State::Get().Notify(on ? "Master Looter: auto-loot on" : "Master Looter: auto-loot off");
     }
 

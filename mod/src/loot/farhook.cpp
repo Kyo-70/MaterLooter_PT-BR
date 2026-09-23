@@ -238,6 +238,59 @@ namespace ml::farhook
         return true;
     }
 
+    // `mov rax, imm64; jmp rax` keeps the address at +2; `jmp [rip+0]` at +6.
+    static unsigned AbsJumpAt(const unsigned char* at)
+    {
+        if (at[0] == 0x48 && at[1] == 0xB8 && at[10] == 0xFF && at[11] == 0xE0) return 2;
+        if (at[0] == 0xFF && at[1] == 0x25 && at[2] == 0 && at[3] == 0 && at[4] == 0 && at[5] == 0) return 6;
+        return 0;
+    }
+
+    uintptr_t AbsJumpTarget(uintptr_t target)
+    {
+        if (!target) return 0;
+        __try
+        {
+            const auto* at = reinterpret_cast<const unsigned char*>(target);
+            const unsigned off = AbsJumpAt(at);
+            if (!off) return 0;
+            uintptr_t to;
+            memcpy(&to, at + off, 8);
+            return to;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) { return 0; }
+    }
+
+    bool InstallOverAbsJump(const char* name, uintptr_t target, void* detour, void** original, char* why, unsigned whyLen)
+    {
+        (void)name;
+        why[0] = 0;
+        if (!target) { snprintf(why, whyLen, "no target"); return false; }
+        if (g_n >= 24) { snprintf(why, whyLen, "hook table full"); return false; }
+        const auto* at = reinterpret_cast<const unsigned char*>(target);
+        const unsigned off = AbsJumpAt(at);
+        if (!off) { snprintf(why, whyLen, "the entry is not an absolute jump"); return false; }
+        uintptr_t theirs;
+        memcpy(&theirs, at + off, 8);
+
+        // The original: straight on to where the other mod's patch went.
+        unsigned char* tramp = Alloc(14);
+        if (!tramp) { snprintf(why, whyLen, "trampoline page allocation failed"); return false; }
+        tramp[0] = 0xFF; tramp[1] = 0x25; tramp[2] = tramp[3] = tramp[4] = tramp[5] = 0;
+        memcpy(tramp + 6, &theirs, 8);
+
+        // Trampoline first, as in Install. The eight bytes are the operand of
+        // one instruction and no thread can be stopped inside them, so a
+        // thread before the write takes ours and one past it takes theirs.
+        Entry& e = g_entries[g_n];
+        e.target = target + off; e.stolen = 8;
+        memcpy(e.orig, at + off, 8);
+        *original = tramp;
+        if (!WriteCode(target + off, &detour, 8, why, whyLen)) { *original = nullptr; return false; }
+        ++g_n;
+        return true;
+    }
+
     void RemoveAll()
     {
         char why[64];

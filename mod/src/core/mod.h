@@ -16,4 +16,10 @@ namespace ml::Mod
     // Polled by the loot engine. The first time a second copy of the plugin
     // has been refused in this process, logs it and puts it on screen.
     void ReportSecondCopy();
+
+    // Polled by the loot engine. The first time, looks for another loot mod
+    // loaded in this process, and logs it and puts it on screen if there is
+    // one. OtherLootMod returns its file name afterwards, or nullptr.
+    void ReportOtherLootMod();
+    const char* OtherLootMod();
 }

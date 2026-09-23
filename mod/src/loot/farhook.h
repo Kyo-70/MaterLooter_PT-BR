@@ -22,5 +22,16 @@ namespace ml::farhook
     // the jump's four-byte offset changes to point at it. *original jumps on
     // to the other mod's detour, so both run and the original runs last.
     bool InstallOverJump(const char* name, uintptr_t target, void* detour, void** original, char* why, unsigned whyLen);
+
+    // For an entry another mod has patched with an absolute jump: `mov rax,
+    // imm64; jmp rax`, which is what CDAutoLoot writes and what Install here
+    // writes too, or `jmp [rip+0]` with the address after it. Only the eight
+    // address bytes change, to the detour, and *original jumps to the address
+    // they held, so the other mod's detour still runs and the original last.
+    bool InstallOverAbsJump(const char* name, uintptr_t target, void* detour, void** original, char* why, unsigned whyLen);
+
+    // What InstallOverAbsJump would take over: the address such a patch jumps
+    // to, or 0 when the entry is not one.
+    uintptr_t AbsJumpTarget(uintptr_t target);
     void RemoveAll();
 }

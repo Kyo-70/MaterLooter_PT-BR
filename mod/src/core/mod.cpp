@@ -1,6 +1,7 @@
 #include "mod.h"
 
 #include <MinHook.h>
+#include <TlHelp32.h>
 #include <cstring>
 
 #include "creaturedb.h"
@@ -93,6 +94,58 @@ namespace ml::Mod
     // way it would have. It just writes down where first.
     static LPTOP_LEVEL_EXCEPTION_FILTER g_prevFilter = nullptr;
     static HMODULE g_self = nullptr;
+
+    // Another loot mod in the same game. CDAutoLoot, which loads as
+    // CDLoot.asi, picks things up by its own rules and its own on and off key,
+    // so a player who switches this one off and still sees the bag fill is
+    // watching the other one. Nothing in the log named it until this did: a
+    // report on 22 September 2026 read as auto-loot that would not turn off,
+    // in a session where this mod had taken nothing. Any module with "loot"
+    // in its name counts; another copy of this plugin is ReportSecondCopy's.
+    static char g_otherLoot[MAX_PATH] = "";
+    static volatile LONG g_otherLootLooked = 0;
+
+    const char* OtherLootMod()
+    {
+        return InterlockedCompareExchange(&g_otherLootLooked, 0, 0) && g_otherLoot[0] ? g_otherLoot : nullptr;
+    }
+
+    void ReportOtherLootMod()
+    {
+        if (InterlockedCompareExchange(&g_otherLootLooked, 0, 0)) return;
+        HANDLE snap = INVALID_HANDLE_VALUE;
+        for (int i = 0; i < 5 && snap == INVALID_HANDLE_VALUE; ++i)
+        {
+            snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+            if (snap == INVALID_HANDLE_VALUE && GetLastError() != ERROR_BAD_LENGTH) break;
+        }
+        wchar_t path[MAX_PATH] = L"";
+        if (snap != INVALID_HANDLE_VALUE)
+        {
+            MODULEENTRY32W me; me.dwSize = sizeof me;
+            for (BOOL ok = Module32FirstW(snap, &me); ok; ok = Module32NextW(snap, &me))
+            {
+                if (me.hModule == g_self) continue;
+                wchar_t low[MAX_PATH];
+                wcsncpy_s(low, me.szModule, _TRUNCATE);
+                _wcslwr_s(low);
+                if (!wcsstr(low, L"loot") || wcsstr(low, L"masterlooter")) continue;
+                WideCharToMultiByte(CP_UTF8, 0, me.szModule, -1, g_otherLoot, sizeof g_otherLoot, nullptr, nullptr);
+                wcsncpy_s(path, me.szExePath, _TRUNCATE);
+                break;
+            }
+            CloseHandle(snap);
+        }
+        InterlockedExchange(&g_otherLootLooked, 1);
+        if (!g_otherLoot[0]) return;
+        LOG_ERR("[conflict] %s is loaded as well, from %ls, and by its name it is another loot mod. Each picks things up by "
+                "its own rules, and this mod's on and off key and switches do not reach the other, so things keep going "
+                "into the bag with this one off. Run one loot mod at a time.", g_otherLoot, path);
+        char msg[240];
+        snprintf(msg, sizeof msg, "Master Looter: another loot mod, %s, is installed. Switching this one off does not "
+                 "stop it; remove one of the two.", g_otherLoot);
+        State::Get().Notify(msg, 10000, true);
+    }
 
     // Naming a module from an address, for both handlers below.
     static void WhereIs(void* at, char* mod, size_t modN, unsigned long long* off, bool* isSelf)

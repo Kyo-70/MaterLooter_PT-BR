@@ -660,7 +660,12 @@ namespace ml::gui
     static void TabGeneral(Config& c)
     {
         bool dirty = false;
-        if (ImGui::Checkbox(TR("Auto-loot enabled"), &c.enabled)) { dirty = true; State::Get().Notify(c.enabled ? "Master Looter: auto-loot on" : "Master Looter: auto-loot off"); }
+        if (ImGui::Checkbox(TR("Auto-loot enabled"), &c.enabled))
+        {
+            dirty = true;
+            LOG("[loot] auto-loot switched %s in the menu", c.enabled ? "on" : "off");
+            State::Get().Notify(c.enabled ? "Master Looter: auto-loot on" : "Master Looter: auto-loot off");
+        }
         Help(TR("The engine scans around you and takes what the rules allow. Off means nothing is taken automatically; the burst key still works."));
         {
             const float a = 300 * g_scale, b = ItemRight() + 16 * g_scale;

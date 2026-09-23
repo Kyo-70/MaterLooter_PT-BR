@@ -10,6 +10,7 @@
 #include "mem.h"
 #include "signatures.h"
 #include "../core/log.h"
+#include "../core/mod.h"
 #include "../core/settings.h"
 #include "../core/state.h"
 
@@ -664,6 +665,24 @@ namespace ml::loot::hooks
             LOG("[hook] %s hooked at +0x%llX, stacked on another mod's jump", what, static_cast<unsigned long long>(mem::Rva(target)));
             return true;
         }
+        // Or an absolute jump, the shape CDAutoLoot's fifteen-byte patch takes
+        // and this mod's own does. Install would copy it into a trampoline and
+        // run it from there, which works until that mod takes its patch back
+        // and leaves the trampoline jumping into memory it has freed. Swapping
+        // the address alone keeps both mods in the chain the same way the
+        // relative case above does.
+        if (const uintptr_t theirs = farhook::AbsJumpTarget(target); theirs && !mem::InImage(theirs))
+        {
+            char why[96];
+            if (!farhook::InstallOverAbsJump(what, target, detour, original, why, sizeof why))
+            {
+                LOG_ERR("[hook] %s: could not stack on the other mod's patch: %s", what, why);
+                return false;
+            }
+            LOG("[hook] %s hooked at +0x%llX, stacked on another mod's absolute jump to %p", what,
+                static_cast<unsigned long long>(mem::Rva(target)), reinterpret_cast<void*>(theirs));
+            return true;
+        }
         char why[96];
         if (!farhook::Install(what, target, detour, original, why, sizeof why))
         {
@@ -932,7 +951,16 @@ namespace ml::loot::hooks
         }
         InstallOreBonus();
         InstallPetLooting();
-        Hook("ownership oracle", f.ownCheck, reinterpret_cast<void*>(&hkOwn), reinterpret_cast<void**>(&oOwn));
+        // Unhooked, the routine can still be called: the mod works the context
+        // out from the player and the tag from the game's code, and only loses
+        // the chance to watch the game ask first. Refusing everything instead,
+        // which is what an unhooked oracle meant before, stopped all looting
+        // but catches for anyone running a mod that patches it.
+        if (!Hook("ownership oracle", f.ownCheck, reinterpret_cast<void*>(&hkOwn), reinterpret_cast<void**>(&oOwn)) && f.ownCheck)
+        {
+            oOwn = reinterpret_cast<FnOwn>(f.ownCheck);
+            LOG("[owner] the ownership check is not hooked, so the mod will call it directly and work out what to ask from the player.");
+        }
         Hook("node arming", f.armFn, reinterpret_cast<void*>(&hkArm), reinterpret_cast<void**>(&oArm));
         Hook("gimmick driver", f.stateDriver, reinterpret_cast<void*>(&hkStateDriver), reinterpret_cast<void**>(&oStateDriver));
         if (Settings::Get().debugLog && mem::MatchAt(mem::Game().base + ml::sig::kRva_InvDelete, ml::sig::kSig_InvDeletePrologue))
@@ -1192,8 +1220,19 @@ namespace ml::loot::hooks
         static bool s_noHook = false, s_noArgs = false, s_noCtxNow = false;
         if (!oOwn)
         {
-            OnceErr(s_noHook, "[owner] the ownership check is not hooked, so the mod cannot ask whether anything belongs to someone. "
-                              "Bodies, dropped items and nodes all stay where they are. Switch on Take goods that belong to someone to loot without asking.");
+            if (const char* other = ml::Mod::OtherLootMod())
+            {
+                if (!s_noHook)
+                {
+                    s_noHook = true;
+                    LOG_ERR("[owner] the ownership check could not be found, and %s is loaded, which is another loot mod that patches the same routine. "
+                            "This mod leaves bodies, dropped items and nodes alone, and the other mod is doing the looting. "
+                            "Run one loot mod at a time.", other);
+                }
+            }
+            else
+                OnceErr(s_noHook, "[owner] the ownership check could not be found, so the mod cannot ask whether anything belongs to someone. "
+                                  "Bodies, dropped items and nodes all stay where they are. Switch on Take goods that belong to someone to loot without asking.");
             return -1;
         }
         if (!me || !target)
