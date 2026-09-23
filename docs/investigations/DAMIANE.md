@@ -129,6 +129,19 @@ up, which is what the scan already did for everything except the player.
 5. **Gear holders as extra candidates, decided from one pass.** The pass that
    chose never contained them.
 
+## The controller chain, logged and not yet trusted
+
+Rule 3's global is not the only one near it. Crimson Route finds the
+controlled character through a services object, and in exe 1.0.0.2949 the one
+call site is `+0xA877BD`: `mov rcx, [+0x6D691B8]`, `mov rcx, [rcx+10h]`, `call
++0x8B4510`. That accessor reads a controller at `[rcx+58h]` and returns the
+actor at `[controller+0D8h]`. Since `2160f7e` the plugin follows the same chain
+with guarded reads and writes a `[control]` line whenever the actor it names,
+or the scan's own centre, changes. Nothing decides on it yet. If it names
+Damiane's body while she is played and Kliff once he is, with and without
+Kliff summoned, it replaces the walking rules; a swap with a companion
+following is the case those rules cannot see.
+
 ## Telling a body from a wagon
 
 The first version counted children raw, and that is not enough. A wagon carries
