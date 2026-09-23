@@ -210,6 +210,29 @@ namespace ml::game
         if (!g_f.ownCheck)
             g_f.ownCheck = ScanFromCaller("own_check", kSig_OwnCheckCaller, kOff_OwnCheckCaller_Call, kSig_OwnCheckBody, kOff_OwnCheckBody);
         g_f.armFn        = Scan("node_arm", kSig_ArmDispatch, false);
+        {
+            // The two displacements come out of the accessor itself: the first
+            // mov rdi, [rcx+disp8] and the first mov r14, [rax+disp32] in it.
+            size_t hits = 0;
+            const uintptr_t site = mem::FindUnique(kSig_ControlSite, &hits);
+            const uintptr_t g = site ? mem::RipAt(site, 7) : 0;
+            const uintptr_t acc = site ? mem::RipAt(site + kOff_ControlSite_Call, 5) : 0;
+            unsigned ctl = 0, act = 0;
+            for (unsigned i = 0; acc && i < 0x180 && (!ctl || !act); ++i)
+            {
+                uint8_t d8 = 0; uint32_t d32 = 0;
+                if (!ctl && mem::MatchAt(acc + i, "48 8B 79") && mem::Read8(acc + i + 3, &d8)) ctl = d8;
+                else if (ctl && !act && mem::MatchAt(acc + i, "4C 8B B0") && mem::Read32(acc + i + 3, &d32) && d32 < 0x1000) act = d32;
+            }
+            if (g && mem::InImage(g) && ctl && act)
+            {
+                g_f.controlGlobal = g; g_f.ctlController = ctl; g_f.ctlActor = act;
+                LOG("[sig] controller     global +0x%llX, accessor +0x%llX, controller at +0x%X, its actor at +0x%X",
+                    static_cast<unsigned long long>(mem::Rva(g)), static_cast<unsigned long long>(mem::Rva(acc)), ctl, act);
+            }
+            else LOG("[sig] controller     not resolved (%zu site hits, controller +0x%X, actor +0x%X); the scan does not use it",
+                     hits, ctl, act);
+        }
         g_f.stateDriver  = Scan("gimmick_driver", kSig_StateDriver, false);
         g_f.invHolder    = Scan("inv_holder", kSig_InvHolder, false);
         g_f.itemTableGlobal    = TableGlobal(kStr_ItemInfoTable);
@@ -337,6 +360,18 @@ namespace ml::game
         return mem::Readable(p, kOff_Mgr_ListsEnd) ? p : 0;
     }
     bool ActorManagerFound() { return g_mgrSlot != 0; }
+
+    uintptr_t ControlledActor()
+    {
+        if (!g_f.controlGlobal) return 0;
+        const uintptr_t svcs = mem::Deref(g_f.controlGlobal, 0);
+        const uintptr_t svc  = svcs ? mem::Deref(svcs, kOff_ControlSite_Svc) : 0;
+        const uintptr_t ctl  = svc ? mem::Deref(svc, g_f.ctlController) : 0;
+        const uintptr_t a    = ctl ? mem::Deref(ctl, g_f.ctlActor) : 0;
+        if (!a || !mem::Readable(a, 0x100)) return 0;
+        uint32_t eid = 0;
+        return Eid(a, &eid) && eid ? a : 0;
+    }
     uintptr_t ActorManagerSlot() { return g_mgrSlot; }
 
     // ----------------------------------------------------------- entities ----

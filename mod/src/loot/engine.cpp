@@ -5416,6 +5416,29 @@ namespace ml::loot
         // body being played never stands still for long while its owner is
         // moving. So the actor's walk only counts when the held body has
         // stopped.
+        // What the game's own controller is driving, beside what the scan
+        // chose. Only logged for now: if it names Damiane's body while she is
+        // played and Kliff when he is, whether or not he is also summoned, it
+        // answers the question the walking rules below keep guessing at.
+        {
+            static uint32_t s_ctlSaid = 0, s_ctlCentre = 0;
+            static int s_ctlLines = 0;
+            uint32_t ctlEid = 0;
+            const uintptr_t ctlA = game::ControlledActor();
+            if (ctlA) game::Eid(ctlA, &ctlEid);
+            const uint32_t centre = g_bodyEid ? g_bodyEid : g_meEid;
+            if ((ctlEid != s_ctlSaid || centre != s_ctlCentre) && s_ctlLines < 80)
+            {
+                ++s_ctlLines;
+                s_ctlSaid = ctlEid; s_ctlCentre = centre;
+                Vec3 cp{};
+                const bool cpOk = ctlA && game::WorldPos(ctlA, &cp);
+                LOG("[control] the game's controller drives %08X (tag %02X cat %02X)%s at %.1f %.1f %.1f; the scan is centred on %08X, "
+                    "the player actor is %08X", ctlEid, ctlA ? game::TypeTag(ctlA) : 0, ctlA ? game::Cat2(ctlA) : 0,
+                    ctlEid && ctlEid == centre ? ", the same" : ctlEid ? ", a different one" : "",
+                    cpOk ? cp.x : 0.f, cpOk ? cp.y : 0.f, cpOk ? cp.z : 0.f, centre, g_meEid);
+            }
+        }
         if (g_bodyEid && g_bodyEid != g_meEid && apOk && g_actorMovedAt && now - g_actorMovedAt < 2000)
         {
             const Holder* held = nullptr;

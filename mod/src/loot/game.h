@@ -27,6 +27,8 @@ namespace ml::game
         uintptr_t invHolder = 0;     // GetInventoryHolder(actor), called on the game thread
         uintptr_t descMask = 0, queue = 0;                  // globals
         uintptr_t itemTableGlobal = 0, gimmickTableGlobal = 0;
+        uintptr_t controlGlobal = 0;                        // see ControlledActor
+        unsigned  ctlController = 0, ctlActor = 0;
     };
 
     // The game hashes gimmick state and event names with Jenkins lookup3
@@ -54,6 +56,10 @@ namespace ml::game
     // under another mod's jump over that entry when it is not found plain.
     uintptr_t FindEntry(const char* pattern, size_t* hits);
     uintptr_t ActorManager();
+    // The actor the game's controller is driving, by the chain Crimson Route
+    // uses: services global, +0x10, the controller, its actor. Read without
+    // calling the accessor, every hop guarded. 0 when any hop is missing.
+    uintptr_t ControlledActor();
     bool ActorManagerFound();
     // Address of the global the manager pointer is read from, for the log.
     uintptr_t ActorManagerSlot();

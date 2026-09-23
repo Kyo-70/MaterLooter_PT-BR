@@ -145,6 +145,19 @@ namespace ml::sig
         "55 41 54 41 55 41 56 41 57 48 8B EC 48 81 EC 80 00 00 00 49 8B ?? 4C 8B ?? 4C 8B ?? 0F B6 7D 50";
     inline constexpr unsigned    kOff_OwnCheckBody = 15;
 
+    // --- The character being controlled ------------------------------------
+    // The one call site that fetches the local actor through the game's
+    // services object: mov rcx, [rip+X]; mov rcx, [rcx+10h]; call accessor;
+    // nop; cmp [rbp+0], r12b; je. Crimson Route resolves the controlled
+    // character the same way. The accessor reads a controller at [rcx+58h]
+    // and its actor at [controller+0D8h]; both displacements are read out of
+    // its own instructions at run time. Unique in exe 1.0.0.2949 at
+    // +0xA877BD, global +0x6D691B8, accessor +0x8B4510.
+    inline constexpr const char* kSig_ControlSite =
+        "48 8B 0D ?? ?? ?? ?? 48 8B 49 10 E8 ?? ?? ?? ?? 90 44 38 65 00 0F 84";
+    inline constexpr unsigned kOff_ControlSite_Call = 11;
+    inline constexpr unsigned kOff_ControlSite_Svc  = 0x10;
+
     // --- Node arming --------------------------------------------------------
     // void arm(gimmickComponent, u8 mode, const u32* nameId)
     //
