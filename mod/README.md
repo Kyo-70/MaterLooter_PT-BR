@@ -97,9 +97,9 @@ Needs Visual Studio 2022 Build Tools with the C++ workload (CMake and Ninja come
     py -3 ..\scripts\make_itemdb_tsv.py
     py -3 ..\scripts\make_creatures_tsv.py
     build.bat
-    py -3 scripts\package.py
+    powershell -ExecutionPolicy Bypass -File scripts\package.ps1 -Unsigned
 
-Output lands in `dist\`, with the README, licence and notices alongside; `package.py` zips it as `MasterLooter-<version>.zip` (plugin and documents) and `MasterLooter-<version>-DMM.zip` (plugin only). Copy `MasterLooter.asi` into the game's `bin64\` next to the ASI loader (`winmm.dll`) while the game is closed, or import the DMM zip. The first two data scripts need the game tables extracted into `extracted\` (see the repository README); the committed `mod\data` TSVs are current for 2.01.00, so a plain `build.bat` is enough to build the plugin.
+Output lands in `dist\`, with the README, licence and notices alongside; `package.ps1` zips it as `MasterLooter-<version>.zip` (plugin and documents) and `MasterLooter-<version>-DMM.zip` (plugin only). Copy `MasterLooter.asi` into the game's `bin64\` next to the ASI loader (`winmm.dll`) while the game is closed, or import the DMM zip. The first two data scripts need the game tables extracted into `extracted\` (see the repository README); the committed `mod\data` TSVs are current for 2.01.00, so a plain `build.bat` is enough to build the plugin.
 
 ## Files
 
@@ -108,7 +108,7 @@ Output lands in `dist\`, with the README, licence and notices alongside; `packag
 - `src/hooks`: DX12 present hook and swapchain wrapper, window procedure subclass, XInput neutraliser.
 - `src/gui`: style, menu key polling, the menu and HUD, and `storage_link`, which finds Private Storage Master's exports by name for the Storage tab and for storing loot. `psm_api.h` is that plugin's interface header, copied unchanged.
 - `src/loot`: signatures, guarded memory and pattern scanning, game structures, the event protocol, MinHook detours, and the engine itself.
-- `scripts/adapt_trinity_dx12.py` regenerates the DX12 files from a Trinity checkout; `scripts/sigcheck.py` checks the signatures offline; `scripts/package.py` zips a release.
+- `scripts/adapt_trinity_dx12.py` regenerates the DX12 files from a Trinity checkout; `scripts/sigcheck.py` checks the signatures offline; `scripts/package.ps1` zips a release.
 
 ## Licence
 

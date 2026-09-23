@@ -138,9 +138,9 @@ Visual Studio 2022 Build Tools with the C++ workload (CMake and Ninja come with 
 
     cd mod
     build.bat
-    py -3 scripts\package.py
+    powershell -ExecutionPolicy Bypass -File scripts\package.ps1 -Unsigned
 
-`dist\` receives the plugin, the documents and the two release archives. The item database and the creature table in `mod\data` are current for 2.01.00 and are compiled into the plugin; regenerating them after a game patch is described in [scripts/README.md](scripts/README.md). After a patch, `py -3 mod\scripts\sigcheck.py` reports which signatures still resolve against the installed exe.
+`dist\` receives the plugin and the documents, and `package.ps1` builds the two release archives from them. Releases are signed first with `scripts\sign.ps1`, which is why a local build needs `-Unsigned`. The item database and the creature table in `mod\data` are current for 2.01.00 and are compiled into the plugin; regenerating them after a game patch is described in [scripts/README.md](scripts/README.md). After a patch, `py -3 mod\scripts\sigcheck.py` reports which signatures still resolve against the installed exe.
 
 ## Repository layout
 

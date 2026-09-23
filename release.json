@@ -1,0 +1,42 @@
+{
+  "name": "Master Looter",
+  "fileBase": "MasterLooter",
+  "version": {
+    "header": "mod/src/version.h",
+    "macro": "ML_VERSION"
+  },
+  "scriptsDir": "mod/scripts",
+  "dist": "mod/dist",
+  "sources": [
+    "mod/src",
+    "mod/data",
+    "mod/CMakeLists.txt"
+  ],
+  "manualZip": [
+    "mod/README.md",
+    "mod/THIRD_PARTY_NOTICES.md",
+    "LICENSE"
+  ],
+  "gates": [
+    {
+      "name": "the inimeta matches settings.cpp",
+      "run": "py -3 scripts\\check_inimeta.py"
+    }
+  ],
+  "evergreen": [
+    "private/nexus/nexus-description.bbcode",
+    "README.md"
+  ],
+  "github": "shin2344234/master-looter",
+  "nexus": {
+    "game": "crimsondesert",
+    "page": "3402",
+    "modId": "38521561681226",
+    "dmmFileId": "7932777",
+    "manualFileId": ""
+  },
+  "discord": {
+    "channel": "1547305058922668072"
+  },
+  "requires": []
+}
