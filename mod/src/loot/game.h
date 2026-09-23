@@ -50,6 +50,9 @@ namespace ml::game
     // --- actor manager ------------------------------------------------------
     // The one ClientActorManager, found by RTTI class name and then by the
     // global that points at it. 0 until the world exists; retries every 3 s.
+    // A unique match for a pattern that starts at a function entry, found
+    // under another mod's jump over that entry when it is not found plain.
+    uintptr_t FindEntry(const char* pattern, size_t* hits);
     uintptr_t ActorManager();
     bool ActorManagerFound();
     // Address of the global the manager pointer is read from, for the log.
@@ -58,9 +61,6 @@ namespace ml::game
     // --- entities -----------------------------------------------------------
     inline constexpr uint8_t kTagPlayer = 0xA0;
     inline constexpr uint8_t kTagWorld  = 0xB0;
-    // The actor the game itself treats as the one being played, read from its
-    // own global rather than guessed at. 0 when it cannot be followed.
-    uintptr_t LocalPlayer();
     // The holder of the bag an actor uses, as the game's own GetInventoryHolder
     // last answered for it on the game thread, or the actor's own holder when
     // there is no answer for that actor yet. Every inventory read goes through

@@ -623,7 +623,7 @@ namespace ml::loot::hooks
     {
         const int bonus = Settings::Get().oreBonus;
         size_t hits = 0;
-        const uintptr_t at = mem::FindUnique(ml::sig::kSig_DropCount, &hits);
+        const uintptr_t at = game::FindEntry(ml::sig::kSig_DropCount, &hits);
         if (!at)
         {
             LOG_ERR("[ore] the drop count function was not found (%d candidate patterns matched), so the "

@@ -4654,31 +4654,14 @@ namespace ml::loot
         uint32_t id = 0;
         if (g_me && (!game::Eid(g_me, &id) || id != g_meEid)) g_me = 0;
 
-        // The game keeps its own pointer to the character being played, and
-        // reading it beats every rule the engine used to guess with. See
-        // game::LocalPlayer.
-        bool gameSaysWho = false;
-        if (const uintptr_t lp = game::LocalPlayer())
-        {
-            gameSaysWho = true;
-            uint32_t lpEid = 0;
-            if (game::Eid(lp, &lpEid) && (lp != g_me || lpEid != g_meEid))
-            {
-                static uint32_t s_said = 0;
-                if (s_said != lpEid)
-                {
-                    s_said = lpEid;
-                    LOG("[player] the game is playing %08X (tag %02X); scanning around that", lpEid, lpEid >> 24);
-                }
-                if (g_meEid && g_meEid != lpEid) ForgetBody("the game is playing someone else");
-                g_me = lp; g_meEid = lpEid;
-            }
-            g_barrenSince = 0;
-        }
+        // There used to be a read here of the game's own pointer to the one
+        // being played, the take-or-steal routine's global at a fixed RVA. The
+        // RVA went stale in a patch and it answered nothing in any log since,
+        // and when it did answer it named the A0 identity and switched off the
+        // barren clock, which is what finds Damiane's body. DAMIANE.md rule 3.
         // Re-pick when the world around the current one is empty. Nothing in
         // range for several seconds while the player is standing in a field is
         // the signature of measuring from the wrong actor.
-        // Only when the game's own pointer could not be followed.
         // And on a timer while the centre is not a player-tagged actor. A
         // holder is only ever taken because no actor had anything around it,
         // which is a fact about one enumeration pass rather than about the
@@ -4689,15 +4672,6 @@ namespace ml::loot
         // fixture with nothing near it and the holder really is the answer, so
         // this runs for the life of that session and has to stay cheap; it
         // re-enumerates the world, which the ordinary scan has already done.
-        //
-        // And never against the game's own answer. The character being played is
-        // not always player-tagged, as the note above says and as Damiane proves,
-        // so where LocalPlayer has spoken this timer would have fought it: it
-        // would replace a confirmed centre with whatever A0 follower happened to
-        // be standing near some scenery, the next scan would put it back, and
-        // each flip calls ForgetBody. The barren branch is held off the same way,
-        // by LocalPlayer clearing g_barrenSince above; this needs saying outright
-        // because it is not routed through that clock.
         static DWORD s_holderRepick = 0;
         // And never off a played body. A holder carrying the played pair is
         // the answer as Damiane and as Oongka, not a mistake to be recovered
@@ -4710,7 +4684,7 @@ namespace ml::loot
         // while BestHolder has already put the scan on a played body, and a
         // guard that only read g_meEid would rescue the one at the cost of
         // the other.
-        const bool onGearHolder = !gameSaysWho && g_meEid
+        const bool onGearHolder = g_meEid
                                   && static_cast<uint8_t>(g_meEid >> 24) != game::kTagPlayer
                                   && !PlayedHolder(g_meEid) && !PlayedHolder(g_bodyEid)
                                   && now - s_holderRepick > 4000;
@@ -4726,15 +4700,12 @@ namespace ml::loot
         // re-opened, and with the rule no longer firing the count decides, which
         // is what would have happened with the fuller pass.
         static uint32_t s_soleChoice = 0;
-        // Never against the game's own answer, the same reservation the
-        // rescue timer carries: where LocalPlayer has named the centre, no
-        // rule of ours gets to argue with it.
-        const bool soleDisproved = !gameSaysWho && s_soleChoice && s_soleChoice == g_meEid
+        const bool soleDisproved = s_soleChoice && s_soleChoice == g_meEid
                                    && ActorsSeen(now) > 1;
         // A pass the timer alone asked for is a rescue and nothing more: it may
         // move the centre onto a player-tagged actor and it may do nothing else
         // whatever. Letting it choose freely would be issue #66 wearing a new
-        // hat. As Damiane with no answer from LocalPlayer the centre is her body,
+        // hat. As Damiane the centre is her body,
         // scoring perhaps 106, and the aeroplane beside it scores 410; a re-pick
         // with no margin hands the aeroplane the centre and calls ForgetBody on
         // the way out, throwing away the played flag and the hold that

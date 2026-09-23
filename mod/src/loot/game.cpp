@@ -4,9 +4,11 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <string>
 #include <utility>
 #include <vector>
 
+#include "farhook.h"
 #include "mem.h"
 #include "signatures.h"
 #include "../core/itemdb.h"
@@ -23,12 +25,88 @@ namespace ml::game
     static int       g_sigN = 0;
     static bool      g_requiredOk = false;
 
+    static void OwnerOf(uintptr_t dest, char* owner, size_t n)
+    {
+        strncpy_s(owner, n, "an unknown module", _TRUNCATE);
+        HMODULE mod = nullptr;
+        if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                               reinterpret_cast<LPCSTR>(dest), &mod) && mod)
+        {
+            char path[MAX_PATH];
+            if (GetModuleFileNameA(mod, path, MAX_PATH))
+            {
+                const char* base = strrchr(path, '\\');
+                strncpy_s(owner, n, base ? base + 1 : path, _TRUNCATE);
+            }
+        }
+    }
+
+    // A pattern that starts at a function entry finds nothing once another mod
+    // has put its jump there. Trinity.asi writes a five-byte E9 over
+    // move_update and own_check; CDAutoLoot writes mov rax, imm64; jmp rax over
+    // the event queue, own_check and node arming, twelve bytes plus two or
+    // three of its own. The event queue is required, so where CDAutoLoot loads
+    // first the whole engine used to switch itself off. Each form is tried
+    // with the bytes it can cover wildcarded and the rest of the pattern
+    // intact, and a match only counts when it is unique and the jump there
+    // leaves the game module.
+    static uintptr_t FindUnderPatch(const char* pattern, char* owner, size_t ownerN)
+    {
+        std::vector<std::string> t;
+        for (const char* p = pattern; *p; )
+        {
+            while (*p == ' ') ++p;
+            const char* q = p;
+            while (*q && *q != ' ') ++q;
+            if (q > p) t.emplace_back(p, q);
+            p = q;
+        }
+        struct Form { const char* head; unsigned headN, cover, minTail; bool rel; };
+        static const Form forms[] = {
+            { "E9 ?? ?? ?? ??", 5, 8, 8, true },
+            { "48 B8 ?? ?? ?? ?? ?? ?? ?? ?? FF E0", 12, 16, 6, false },
+            { "FF 25 00 00 00 00 ?? ?? ?? ?? ?? ?? ?? ??", 14, 16, 6, false },
+        };
+        for (const Form& f : forms)
+        {
+            if (t.size() < f.cover + f.minTail) continue;
+            std::string v = f.head;
+            for (unsigned i = f.headN; i < f.cover; ++i) v += " ??";
+            for (size_t i = f.cover; i < t.size(); ++i) { v += ' '; v += t[i]; }
+            size_t hits = 0;
+            const uintptr_t j = mem::FindUnique(v.c_str(), &hits);
+            if (!j) continue;
+            const uintptr_t dest = f.rel ? mem::RipAt(j, 5) : farhook::AbsJumpTarget(j);
+            if (!dest || mem::InImage(dest)) continue;
+            OwnerOf(dest, owner, ownerN);
+            return j;
+        }
+        return 0;
+    }
+
+    uintptr_t FindEntry(const char* pattern, size_t* hits)
+    {
+        uintptr_t a = mem::FindUnique(pattern, hits);
+        char owner[MAX_PATH] = "";
+        if (!a && !*hits && (a = FindUnderPatch(pattern, owner, sizeof owner)) != 0)
+        {
+            *hits = 1;
+            LOG("[sig] +0x%llX found under a jump %s put over its entry", static_cast<unsigned long long>(mem::Rva(a)), owner);
+        }
+        return a;
+    }
+
     static uintptr_t Scan(const char* name, const char* pattern, bool required)
     {
         size_t hits = 0;
-        const uintptr_t a = mem::FindUnique(pattern, &hits);
-        if (g_sigN < 16) g_sigs[g_sigN++] = { name, a, hits, required };
-        if (a) LOG("[sig] %-14s +0x%llX", name, static_cast<unsigned long long>(mem::Rva(a)));
+        uintptr_t a = mem::FindUnique(pattern, &hits);
+        char owner[MAX_PATH] = "";
+        if (!a && !hits) a = FindUnderPatch(pattern, owner, sizeof owner);
+        if (g_sigN < 16) g_sigs[g_sigN++] = { name, a, a ? 1u : hits, required };
+        if (a && owner[0])
+            LOG("[sig] %-14s +0x%llX, under a jump %s put over its entry; hooking on top of it",
+                name, static_cast<unsigned long long>(mem::Rva(a)), owner);
+        else if (a) LOG("[sig] %-14s +0x%llX", name, static_cast<unsigned long long>(mem::Rva(a)));
         else   LOG_ERR("[sig] %-14s %s (%zu hits)%s", name, hits ? "AMBIGUOUS" : "not found", hits, required ? " - required" : "");
         return a;
     }
@@ -49,18 +127,8 @@ namespace ml::game
         if (!j) return 0;
         const uintptr_t dest = mem::RipAt(j, 5);
         if (mem::InImage(dest)) { LOG_ERR("[sig] %-14s under a jump that stays in the game, so not taken", name); return 0; }
-        char owner[MAX_PATH] = "an unknown module";
-        HMODULE mod = nullptr;
-        if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                               reinterpret_cast<LPCSTR>(dest), &mod) && mod)
-        {
-            char path[MAX_PATH];
-            if (GetModuleFileNameA(mod, path, MAX_PATH))
-            {
-                const char* base = strrchr(path, '\\');
-                strncpy_s(owner, base ? base + 1 : path, _TRUNCATE);
-            }
-        }
+        char owner[MAX_PATH];
+        OwnerOf(dest, owner, sizeof owner);
         for (int i = g_sigN - 1; i >= 0; --i)
             if (g_sigs[i].name == name) { g_sigs[i].addr = j; g_sigs[i].hits = hits; break; }
         LOG("[sig] %-14s +0x%llX, under a jump %s put over its entry; hooking on top of it",
@@ -272,51 +340,6 @@ namespace ml::game
     uintptr_t ActorManagerSlot() { return g_mgrSlot; }
 
     // ----------------------------------------------------------- entities ----
-    // Who the game says you are playing.
-    //
-    // The take-or-steal routine opens by asking whether the object it was given
-    // belongs to the character being played, and it does that from a global
-    // rather than from anything passed in:
-    //
-    //   mov rax, [rip + 0x68b0d85]     ; RVA 0x6C29760
-    //   mov rcx, [rax + 0x30]
-    //   mov rax, [rbx + 0xa0]
-    //   cmp [rcx + 0x58], rax          ; equal means "this is the player"
-    //   jne  <bail>
-    //
-    // So global -> +0x30 -> +0x58 is the game's own answer, and it is a fact
-    // rather than a heuristic. The engine used to guess: first player-tagged
-    // actor enumerated, then the actor the ownership hook saw, then whichever
-    // had the most world around it. A party has several player-tagged actors
-    // and all three rules picked wrong at least once.
-    //
-    // The exe has relocations stripped and no ASLR, so the RVA is fixed, but it
-    // is read through the module base anyway and every hop is guarded.
-    uintptr_t LocalPlayer()
-    {
-        constexpr uintptr_t kRva_PlayerGlobal = 0x6C29760;
-        constexpr unsigned  kOff_Holder = 0x30, kOff_Actor = 0x58;
-        const uintptr_t g = mem::Game().base + kRva_PlayerGlobal;
-        const uintptr_t root = mem::Deref(g, 0);
-        const uintptr_t holder = root ? mem::Deref(root, kOff_Holder) : 0;
-        const uintptr_t actor = holder ? mem::Deref(holder, kOff_Actor) : 0;
-        if (!actor || !mem::Readable(actor, 0x100)) return 0;
-        uint32_t eid = 0;
-        if (!Eid(actor, &eid) || !eid) return 0;
-        // The tag is not checked, because the character being played is not
-        // necessarily player-tagged: as Damiane it is not, and requiring 0xA0
-        // here threw the answer away once already.
-        //
-        // What is checked is that this is a body standing somewhere. The chain
-        // has been seen to land on the player's route object rather than an
-        // actor, which reads as id 90100000 and has no transform, and accepting
-        // that left the engine scanning around nothing at all. Anything without
-        // a position is not the thing to measure from.
-        Vec3 probe;
-        if (!WorldPos(actor, &probe)) return 0;
-        return actor;
-    }
-
     bool Eid(uintptr_t e, uint32_t* out) { return mem::Read32(e + kOff_Ent_Eid, out); }
 
     // The answer GetInventoryHolder last gave, and for which actor. Written on
