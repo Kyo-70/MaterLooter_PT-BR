@@ -1461,7 +1461,11 @@ namespace ml::gui
     {
         if (!api->getNeverMove || s_psmNeverN < 0) return;
         ImGui::TextUnformatted(TR("Never move"));
-        Help("Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back.");
+        // Two strings, so the first keeps its translations. The Arrow joined
+        // Private Storage Master's defaults in its 1.1.4 after Fyreon87's log
+        // of 24 September 2026 showed arrows picked back up going to storage.
+        Help((std::string(TR("Items auto-store always leaves in the bag. The default is every currency: silver, coin pouches, gold bars, camp funds and supplies, tokens and bonds. Reset to defaults below puts that list back."))
+              + "\n\n" + TR("Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.")).c_str());
         int drop = -1;
         if (ImGui::BeginChild("##nevermove", ImVec2(0, 150 * g_scale), ImGuiChildFlags_Borders))
         {

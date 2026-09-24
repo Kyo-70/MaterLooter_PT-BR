@@ -38,7 +38,7 @@ To turn it on:
 1. Press Insert to open the menu and go to the Storage tab. The tab is only there when Private Storage Master is installed.
 2. Under Store loot, tick **Put what Master Looter picks up into storage**. It starts off. Setting `AutoStore=1` in `PrivateStorageMaster.ini` does the same.
 3. Tick the storages that may receive loot. Each item goes to the first ticked storage in the list that takes it, in this order: Collectibles Chest, Abyss gear storage, Gatherables Chest, Kuku Cooler, Bird Feed, Camp Straw, Wardrobe and Private Storage. Wardrobe and Private Storage start unticked. Camp Provisions never receives loot.
-4. If you like, add items to the **Never move** list under the checkboxes. Type three or more letters of a name and pick from the matches. Every currency is on it from the start.
+4. If you like, add items to the **Never move** list under the checkboxes. Type three or more letters of a name and pick from the matches. Every currency is on it from the start, and since Private Storage Master 1.1.4 the Arrow is too.
 
 **Only move what was picked up** is on by default. It moves just the amount that arrived, so the food and potions you were already carrying stay in the bag. Turned off, the whole stack goes.
 

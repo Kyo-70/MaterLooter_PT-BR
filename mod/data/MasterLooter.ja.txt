@@ -460,3 +460,4 @@ Most things the game lets you stack 100 of, so at x10 they hold 1000. It applies
 Waiting for a restart, or pick it again out in the world and it takes hold at once.	再起動待ちか、フィールドでもう一度選べばすぐに反映されます。
 you dropped this	自分で捨てたもの
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	ホタルの群れのように、ゲームが専用のアイテムを与えていない生き物は、このスイッチとクラスタブで判定されます。ホタルの群れはそこでinsectとして扱われます。照らし合わせるアイテムがないため、タグやアイテムのルールは届きません。
+Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	Private Storage Master 1.1.4 からは Arrow も初期状態でリストに入っているため、拾い直した矢は矢筒に残ります。

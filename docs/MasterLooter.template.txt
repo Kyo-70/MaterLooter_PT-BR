@@ -343,6 +343,7 @@ Show a brief notice when auto-loot is toggled
 Show a notice when loot is stored	
 Showing current overrides. Type to search all %d items.	
 Showing the nearest %d of %d. The rest are further away.	
+Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	
 Size changes take effect the next time the game starts.	
 Sizes	
 Skinning the animals you kill, once per carcass. People go under Bodies. The mod never sees what skinning pays out before it lands, so your filters cannot stop it arriving. To have what they refuse put back on the ground, turn on Drop refused loot from bodies under General.	

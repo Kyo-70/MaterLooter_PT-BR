@@ -482,3 +482,4 @@ your own camp farm (off)	sua própria fazenda de acampamento (desativada)
 # de 2026 e ainda não foram revisadas por Kyo-70.
 you dropped this	você largou isto
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	Uma criatura à qual o jogo não dá um item próprio, como uma colônia de vaga-lumes, é julgada por esta opção e pela aba Classes, onde uma colônia de vaga-lumes conta como insect. Nenhuma regra de etiqueta ou item consegue alcançá-la, porque não há item com o qual compará-la.
+Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	Desde o Private Storage Master 1.1.4 o Arrow também está na lista por padrão, então as flechas que você recolhe ficam na aljava.
