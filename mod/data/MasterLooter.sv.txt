@@ -462,3 +462,4 @@ Waiting for a restart, or pick it again out in the world and it takes hold at on
 you dropped this	du släppte den
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	En varelse som spelet inte ger ett eget föremål, till exempel en eldflugekoloni, bedöms av den här brytaren och av fliken Klasser, där en eldflugekoloni räknas som insect. Ingen etikett- eller föremålsregel kan nå den, eftersom det inte finns något föremål att pröva regeln mot.
 Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	Sedan Private Storage Master 1.1.4 finns Arrow också med som standard, så pilar du plockar upp igen stannar i kogret.
+a placed Field Pot or Bonfire	en utplacerad fältgryta eller en lägereld

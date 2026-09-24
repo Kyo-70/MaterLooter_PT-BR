@@ -462,3 +462,4 @@ Waiting for a restart, or pick it again out in the world and it takes hold at on
 you dropped this	l-ai aruncat tu
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	O creatură căreia jocul nu îi dă un obiect propriu, cum ar fi o colonie de licurici, este judecată de acest comutator și de fila Clase, unde o colonie de licurici contează ca insect. Nicio regulă de etichetă sau obiect nu o poate atinge, pentru că nu există niciun obiect cu care să fie comparată.
 Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	De la Private Storage Master 1.1.4 și Arrow este implicit pe listă, așa că săgețile pe care le aduni înapoi rămân în tolbă.
+a placed Field Pot or Bonfire	o oală de câmp sau un foc de tabără amplasat

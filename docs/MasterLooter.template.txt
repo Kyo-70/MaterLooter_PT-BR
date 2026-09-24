@@ -43,6 +43,7 @@ a Master Looter shortcut
 A moment after an item lands in the bag, Private Storage Master moves it into the first storage below that takes it, the same move you would make at the storage. Only what Master Looter picked up is moved, never what you picked up by hand, and from a body or a carcass only what your item rules allow. Nothing moves while a storage is open or outside free play, keys, documents, quest items and anything on the never-move list stay put, and what no storage takes stays in the bag.	
 A pet loots whatever it likes and the game has no switch for it. On: a pet is told no before it reaches for a loose item your item rules, tags, classes or value floor refuse, and whatever it takes from a body that your item rules, tags or classes refuse is deleted from the inventory as it lands, with a notice saying what went. Quest and protected items are never deleted, and nothing already in your bag is touched.	
 A pet or a companion that loots a body puts what it found in your bag. On, those items go to storage the same way as Master Looter's own pickups, as long as your item rules allow them. Loose items a pet picks up are reported by the game as your own pickups, so those stay in the bag.	
+a placed Field Pot or Bonfire	
 a seed planted in your camp farm	
 A well bucket and the like are never looted, but arming one makes the game offer its interaction so you can use it by hand.	
 Abyss and Kuku	

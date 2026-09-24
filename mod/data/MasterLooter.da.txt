@@ -462,3 +462,4 @@ Waiting for a restart, or pick it again out in the world and it takes hold at on
 you dropped this	du smed det
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	Et væsen, som spillet ikke giver sin egen genstand, såsom en ildfluekoloni, bedømmes af denne kontakt og af fanen Klasser, hvor en ildfluekoloni tæller som insect. Ingen mærkat- eller genstandsregel kan nå det, fordi der ikke er nogen genstand at holde reglen op imod.
 Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	Siden Private Storage Master 1.1.4 er Arrow også på den som standard, så pile, du samler op igen, bliver i koggeret.
+a placed Field Pot or Bonfire	en opstillet feltgryde eller et bål

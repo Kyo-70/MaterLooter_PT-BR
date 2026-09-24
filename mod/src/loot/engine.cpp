@@ -2849,10 +2849,24 @@ namespace ml::loot
         return node && node[0] && IStr(node, "gimmick_camp_farm_") && IStr(node, "_seed");
     }
 
+    // A Field Pot or a Bonfire, the two cooking fires a player can place. The
+    // prefab is the placed form of an item with a blueprint, class
+    // cooking-facility, and the game tags it as nothing, so it answered to
+    // Unidentified nodes alone and no class rule could reach it. Sov1737's log
+    // of 24 September 2026 gathers a Field Pot twice at 19:29, having refused
+    // that class at 19:07. Nothing in the log says whose it was, and filing it under
+    // Furniture, which is on by default, would have every player's mod pick
+    // up the fires in their own camp, so it is never touched at all.
+    static bool PlacedCookFire(const char* node)
+    {
+        return node && node[0] && IStr(node, "gimmick_craft_cook_campfire_");
+    }
+
     static bool OffLimits(const char* node, bool unwornEquip = false)
     {
         if (!node || !node[0]) return false;
         if (PlantedSeed(node)) return true;
+        if (PlacedCookFire(node)) return true;
         // "puzzle" earns its place: the game tags gimmick_puzzle_ice_wall_break,
         // _ice_block_break, _stone_wall_break and _pickaxe_break_point as
         // collect_mine, so they read as ordinary ore and the mod would open
@@ -3210,6 +3224,7 @@ namespace ml::loot
             // through the interaction. Taking one as loose loot skips that.
             if (IStr(c.node, "equip_openclose")) return skip("take this one by hand, looting it can lock the quest");
             if (PlantedSeed(c.node)) return skip("a seed planted in your camp farm");
+            if (PlacedCookFire(c.node)) return skip("a placed Field Pot or Bonfire");
             // Gear that is being worn, which the game keeps in the world as an
             // object of its own under /00_common/equip/. Taking one hands over a
             // copy and leaves the original equipped, so the player ends up with

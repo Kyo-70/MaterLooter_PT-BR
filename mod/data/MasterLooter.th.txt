@@ -461,3 +461,4 @@ Waiting for a restart, or pick it again out in the world and it takes hold at on
 you dropped this	คุณทิ้งไว้เอง
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	สิ่งมีชีวิตที่เกมไม่ได้ให้ไอเทมของมันเอง เช่น ฝูงหิ่งห้อย จะถูกตัดสินด้วยสวิตช์นี้และแท็บประเภท ซึ่งฝูงหิ่งห้อยนับเป็น insect กฎแท็กหรือไอเทมใดก็เอื้อมไม่ถึง เพราะไม่มีไอเทมให้เทียบ
 Since Private Storage Master 1.1.4 the Arrow is on it by default as well, so arrows you pick back up stay in the quiver.	ตั้งแต่ Private Storage Master 1.1.4 เป็นต้นไป Arrow ก็อยู่ในรายการตั้งแต่แรกด้วย ลูกธนูที่คุณเก็บกลับมาจึงอยู่ในซองธนูต่อ
+a placed Field Pot or Bonfire	หม้อสนามหรือกองไฟที่วางไว้
