@@ -451,6 +451,7 @@ Writes the settings as they are now into \"%s\". Load it, change what you like, 
 Writes the settings as they are now, named %s.	
 x%d, by %s	
 yes	
+you dropped this	
 your own camp farm (off)	
 your rules refuse all ore, jewels and stone	
 your rules refuse all stone	

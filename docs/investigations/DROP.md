@@ -172,3 +172,61 @@ which read -6485.6 970.3 100.9 in the world against -485.6 970.3 100.9 in the
 scan's frame. A Poison Arrow dropped at 12:56:14.037 was a world object 1.1 m
 from the body 0.4 s later. No refusal and no fault from the drop in 35
 searches.
+
+## What the player drops
+
+Built on 24 September 2026 and played the same morning. Until then the scan saw an item
+dropped out of the bag as an ordinary world object and took it straight back.
+
+The discard request is the only sign a hand drop gives, since nothing about it
+reaches the event queue, so the mod detours the discard parser as well, on the
+server thread and whatever the switch above says. `hkDiscardParse` reads the
+packet the way the parser does and gives up on one whose length field at +3
+disagrees with the packet's own at +0x10. `HandDropParse` then reads the slot
+the payload names out of the bag GetInventoryHolder gives the sender. The slot
+gives the item row; the payload gives the amount and the world position.
+
+The note reaches the scan before the original parse runs, so nothing the
+parse puts in the world can reach a scan that is not expecting it. After the
+parse the slot is read again for the log only. A slot that still holds the
+whole stack does not withdraw the note, because nothing yet shows that the
+routine empties the slot before it returns; if it empties it a moment later,
+withdrawing would give every drop back to the scan. A note for a drop the game
+refused finds nothing and closes when its window runs out.
+
+`ClaimHandDrops` runs on every scan pass between Fill and the verdicts. It
+turns the payload's position into the scan's frame with the difference between
+the played body's +0x324 and +0xB4, read on that pass or at most three seconds
+before it, the pair the mod already reads to place refused body loot. Anything of the same item row within 5 m
+of that point is a candidate, nearest first, up to the amount dropped, as long
+as the scan first filled it on a later pass than the last one it had finished
+when the drop was parsed. What already lay there is left to the ordinary rules.
+When the converted point lands more than 10 m from the player on a note the
+scan took at once, the frames are taken not to have converted and the player's
+own position is used. A note stays open 15 seconds and closes 3 seconds after
+its first match, because the pieces of one stack land together. Each match is
+refused as "you dropped this" for the rest of the session, by entity id, and
+by instance id for any other piece of the same stack with the same row.
+
+A drop made while the scan is off, with auto-loot off and the menu shut, cannot
+be tested for newness. Its note waits for a pass that can convert the spot,
+takes the nearest objects of that row as the scan reaches them, and starts its
+15 seconds once the player is within 5 m of the spot. A note made while the
+scan ran falls back to the same rules if the scan stops before the note is
+done, which shows as a pass more than two seconds after the one before it:
+after a gap every object reads as new and the player may be anywhere. Notes
+that are over are removed before a pass looks for anything, so a stale one
+never claims on the pass that ends it.
+
+The world object keeps the bag slot's instance id. The first session with the
+watch in it, on 24 September 2026, dropped a Short Hair Hide and two Shovels,
+and each object carried the id its slot had held (`000F4998`, `000F498D`,
+`000F498E`), recognised about 0.2 s after the drop and 0.8 to 1.7 m from where
+the game was asked to put it. So the slot's id and row are now refused the
+moment the scan takes the note, wherever the object lands and however late it
+turns up, and the log line for that is `known by its instance id`. An object
+the id catches counts against its note, so the note does not go on to hand
+something else of that row to the drop by position. The position match stays
+behind it for any item that turns out to get a new id when it lands. The
+opposite direction does not hold: a pick-up gives the bag a new id, which the
+duplicate probe of 15 September 2026 found on all 133 of its tries.

@@ -530,6 +530,48 @@ namespace ml::loot
     // past, short enough that a recycled id has usually aged out.
     static constexpr DWORD kOnMeWindowMs = 45000;
 
+    // What the player drops out of the bag by hand stays where it lands.
+    // Until this, a dropped item was an ordinary world object to the scan and
+    // went straight back into the bag; 1.6.28 even made a dropped stack come
+    // back in one pass instead of one piece per retry delay.
+    //
+    // The drop is seen on the server thread, in its parse of the discard
+    // request (HandDropParse). The object it leaves is recognised on the scan
+    // thread (ClaimHandDrops) two ways. The first is the instance id: the
+    // world object keeps the bag slot's, which the session of 24 September
+    // 2026 showed on all three drops in it, a hide and two shovels, so the
+    // slot's id and row are refused the moment the scan hears of the drop,
+    // wherever the object lands and however late it turns up. The second is
+    // the older match by item row, by lying where the game was asked to put
+    // it, and by first appearing after the drop, kept for any item that turns
+    // out to get a new id when it lands. A pick-up does hand the bag a new id
+    // (the duplicate probe of 15 September 2026, 133 tries), so the agreement
+    // runs one way only and nothing else here leans on it.
+    struct HandDrop
+    {
+        uint16_t tid = 0;
+        uint32_t bagIid = 0;
+        int      left = 0;          // objects still to recognise; a stack can land as one per unit
+        int      claimed = 0;
+        DWORD    claimedAt = 0;     // the first recognition; the rest of a stack lands with it
+        float    world[3] = {};     // where the game was asked to put it, in its own world frame
+        DWORD    at = 0;            // when the server parsed the request
+        uint32_t pass = 0;          // the last scan pass fully recorded by then; anything first seen later is new
+        bool     scanLive = false;  // the scan was running then, so it knows what already lay there
+        Vec3     stamp{};           // the scan centre when the scan took the note
+        bool     useStamp = false;  // measure from the stamp, because the frames did not convert
+        DWORD    seenAt = 0;        // when the spot first came within reach of the scan; the window runs from here
+        float    nearest = -1.0f;   // the closest thing of the same row the scan saw, for the log
+    };
+    static SRWLOCK g_handDropLock = SRWLOCK_INIT;
+    static std::vector<HandDrop> g_handDropIn;        // parsed, not yet taken by the scan
+    static std::vector<HandDrop> g_handDrops;         // scan thread from here down
+    static std::unordered_set<uint32_t> g_droppedEid;
+    static std::unordered_map<uint32_t, uint16_t> g_droppedIid;   // instance id -> item row
+    static std::unordered_map<uint32_t, uint32_t> g_itemFirstPass; // eid -> the scan pass that first filled it
+    static volatile LONG g_handPass = 0;               // the last pass whose sightings are all recorded
+    static volatile LONG g_handScanAt = 0;             // and when it ran; both read on the server thread
+
     struct ArmRec { DWORD at; int fails; bool judged; int mode; int ctxKind; int rounds; DWORD restUntil; };
     // How to arm, in the order worth trying. Combo 0 names one key, the one
     // the game was last seen using; combo 1 passes a zeroed name and takes
@@ -2479,6 +2521,17 @@ namespace ml::loot
         if (it == g_onMe.end() || now - it->second.when > kOnMeWindowMs) return false;
         return !c.tid || !it->second.tid || c.tid == it->second.tid;
     }
+    // Dropped out of the bag by hand, as ClaimHandDrops recognised it. The
+    // instance id carries the bag slot's own id from the moment the scan hears
+    // of the drop, and every piece of a dropped stack shares it, as long as
+    // the item row agrees.
+    static bool Dropped(const Cand& c)
+    {
+        if (g_droppedEid.count(c.eid)) return true;
+        if (!c.iid) return false;
+        const auto it = g_droppedIid.find(c.iid);
+        return it != g_droppedIid.end() && it->second == c.tid;
+    }
     static DWORD AgeMs(uint32_t eid, DWORD now)
     {
         auto it = g_firstSeen.find(eid);
@@ -3042,6 +3095,10 @@ namespace ml::loot
         // moment, in a catch, and this then refused it for the next
         // forty-five seconds. Nothing alive is the player's kit coming back.
         if (!c.ai && WasOnMe(c, GetTickCount())) return skip("yours, just out of your hand");
+        // Anything the player dropped out of the bag by hand, for as long as it
+        // lies there. The burst key does not lift this; picking it up by hand
+        // does, since that ends the object. See HandDrop.
+        if (c.item && Dropped(c)) return skip("you dropped this");
         // Category 0x11 is the game saying a thing is being worn, and that is
         // enough by itself. Requiring a parent as well left a hole. Sov1737's
         // log of 14 September 2026 on 1.6.17 refuses his own Black Sun 118
@@ -3940,7 +3997,11 @@ namespace ml::loot
     // is no separate body and the search's own sender stands where he does;
     // as Damiane or Oongka the sender is the identity, which stands somewhere
     // else entirely, so the body's position is the only one to use.
-    struct DropAt { uint32_t eid; DWORD at; float pos[3]; };
+    //
+    // The scan's reading of the same point sits beside it, so the difference
+    // between the two frames is known wherever the player stands. A hand drop
+    // names its spot in the world frame and the scan works in the other.
+    struct DropAt { uint32_t eid; DWORD at; float pos[3]; float scan[3]; };
     static DropAt g_bodyDropAt{};
     static SRWLOCK g_bodyDropLock = SRWLOCK_INIT;
 
@@ -3959,7 +4020,7 @@ namespace ml::loot
         float w[3];
         if (!ReadWorldPos(ent, w)) return;
         AcquireSRWLockExclusive(&g_bodyDropLock);
-        g_bodyDropAt = { eid, now, { w[0], w[1], w[2] } };
+        g_bodyDropAt = { eid, now, { w[0], w[1], w[2] }, { scanAt.x, scanAt.y, scanAt.z } };
         ReleaseSRWLockExclusive(&g_bodyDropLock);
         static uint32_t s_said = 0;
         if (g_debugLog && s_said != eid)
@@ -4103,6 +4164,269 @@ namespace ml::loot
             }
         }
         return true;
+    }
+
+    // --- what the player drops by hand (HandDrop) ---------------------------
+    // The slot a discard names, read on the server thread before the parse so
+    // the note says which item it is, and after it so the log says whether it
+    // left. Server thread only, like the search watch above.
+    //
+    // A full slot after the parse does not withdraw the note. Nothing has shown
+    // yet that the routine empties the slot before it returns rather than a
+    // moment later, and if it is later, withdrawing would hand every drop back
+    // to the scan. A note left open for a refused drop costs fifteen seconds
+    // of watching for something that never lands.
+    struct HandParse { uintptr_t holder; uint16_t key, slot, tid; uint32_t iid; long long count; };
+    static HandParse g_handParse{};
+
+    // The occupied slot `slot` of the inventory the key names. False when it
+    // is empty or the holder cannot be read.
+    static bool SlotAt(uintptr_t holder, uint16_t key, uint16_t slot, game::InvEntry* out)
+    {
+        static game::BucketInfo bks[64];
+        static game::InvEntry ents[4096];
+        const int bn = game::HolderBuckets(holder, bks, 64);
+        const uint16_t type = game::InvTypeLookup(key);
+        if (bn <= 0 || type == 0xFFFF) return false;
+        const int n = game::HolderEntries(holder, ents, 4096);
+        for (int i = 0; i < n; ++i)
+            if (ents[i].slot == slot && ents[i].bucket < bn && bks[ents[i].bucket].type == type) { *out = ents[i]; return true; }
+        return false;
+    }
+
+    bool HandDropParse(uintptr_t sender, uint16_t key, uint16_t slot, long long amount, const float* at, bool after)
+    {
+        if (!after)
+        {
+            g_handParse = {};
+            if (!sender || !at || slot == 0xFFFF || amount <= 0 || !hooks::ThreadContext()) return false;
+            const uintptr_t holder = game::HolderNow(sender);
+            game::InvEntry e{};
+            if (!holder || !SlotAt(holder, key, slot, &e)) return false;
+            HandDrop d;
+            d.tid = e.tid;
+            d.bagIid = e.iid;
+            d.left = static_cast<int>(amount < 256 ? amount : 256);
+            for (int a = 0; a < 3; ++a) d.world[a] = at[a];
+            d.at = GetTickCount();
+            d.pass = static_cast<uint32_t>(InterlockedCompareExchange(&g_handPass, 0, 0));
+            // Two seconds covers the slowest scan rate the menu allows.
+            d.scanLive = d.pass && d.at - static_cast<DWORD>(InterlockedCompareExchange(&g_handScanAt, 0, 0)) < 2000;
+            // Handed over before the parse runs, so nothing the parse puts in
+            // the world can reach a scan that has not been told to expect it.
+            AcquireSRWLockExclusive(&g_handDropLock);
+            if (g_handDropIn.size() >= 256) g_handDropIn.erase(g_handDropIn.begin());
+            g_handDropIn.push_back(d);
+            ReleaseSRWLockExclusive(&g_handDropLock);
+            g_handParse = { holder, key, slot, e.tid, e.iid, e.count };
+            return true;
+        }
+        const HandParse p = g_handParse;
+        g_handParse = {};
+        if (!p.holder) return false;
+        game::InvEntry e{};
+        const long long kept = SlotAt(p.holder, p.key, p.slot, &e) && e.iid == p.iid ? e.count : 0;
+        const Item* it = ItemDb::ByRow(p.tid);
+        const char* name = it ? it->name.c_str() : "item";
+        if (kept >= p.count)
+        {
+            LOG("[drop] slot %u still held all %lld %s (row %u) when the game's parse of your drop returned; "
+                "if nothing lands, the game refused it", p.slot, p.count, name, p.tid);
+            return true;
+        }
+        LOG("[drop] you dropped %lld %s (row %u) from slot %u, instance %08X in the bag; the mod leaves it where it lands",
+            p.count - kept, name, p.tid, p.slot, p.iid);
+        return true;
+    }
+
+    static constexpr float kHandDropRadius2  = 25.0f;   // 5 m round the spot the game was given
+    static constexpr DWORD kHandDropWindowMs = 15000;
+    // A stack can land as one object or as one per unit, and the note cannot
+    // tell which in advance. The pieces of one drop land together, so a note
+    // closes this long after its first recognition rather than holding its
+    // whole count open for the window, which would hand anything of that row
+    // turning up nearby later to the player's drop.
+    static constexpr DWORD kHandDropTailMs   = 3000;
+
+    // Recognise what a hand drop left on the ground. Scan thread, after Fill
+    // and before Decide. Every item Fill reached is numbered with the pass that
+    // first saw it, which is how a note from a running scan tells the dropped
+    // object from one of the same kind that already lay there. A pass number
+    // rather than a time, so the answer does not depend on the scan rate.
+    //
+    // A note made while the scan was not running, with auto-loot off and the
+    // menu shut, has no such record to go on. It waits until the player is
+    // back near the spot and takes the nearest objects of that row, so turning
+    // auto-loot on beside a pile you dropped does not sweep it up.
+    static void ClaimHandDrops(const std::vector<Cand>& list, const Vec3& mp, DWORD now)
+    {
+        // A pass more than two seconds after the one before means the scan
+        // stopped in between, with auto-loot off and the menu shut. A note
+        // parsed before that gap can no longer lean on the pass numbers, since
+        // everything reads as new after it, nor on where the player stands.
+        static uint32_t s_pass = 0, s_gapPass = 0;
+        static DWORD s_passAt = 0;
+        ++s_pass;
+        if (s_passAt && now - s_passAt > 2000) s_gapPass = s_pass;
+        s_passAt = now;
+        for (const Cand& k : list)
+            if (k.filled && k.item) g_itemFirstPass.emplace(k.eid, s_pass);
+        if (g_itemFirstPass.size() > 4096)
+            for (auto it = g_itemFirstPass.begin(); it != g_itemFirstPass.end();)
+                it = g_present.count(it->first) ? std::next(it) : g_itemFirstPass.erase(it);
+        // Published only once this pass's sightings are in, so a drop parsed
+        // from here on is measured against everything this pass saw.
+        InterlockedExchange(&g_handScanAt, static_cast<LONG>(now));
+        InterlockedExchange(&g_handPass, static_cast<LONG>(s_pass));
+
+        // The world frame to the scan's, from the body's two readings of
+        // itself. The regional origin between them moves, so it is taken
+        // fresh each pass rather than once per note.
+        bool haveOff = false;
+        float off[3] = {};
+        {
+            AcquireSRWLockShared(&g_bodyDropLock);
+            const DropAt b = g_bodyDropAt;
+            ReleaseSRWLockShared(&g_bodyDropLock);
+            if (b.eid && now - b.at < 3000) { haveOff = true; for (int a = 0; a < 3; ++a) off[a] = b.pos[a] - b.scan[a]; }
+        }
+        auto dist2 = [](const Vec3& a, const Vec3& b) {
+            const float dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
+            return dx * dx + dy * dy + dz * dz;
+        };
+        // Where to look. A live note was taken while the player stood at the
+        // drop, so the player's position then will do when the frames cannot
+        // be converted. Any other note has only the converted spot, and waits
+        // for a pass that has it.
+        auto spotOf = [&](const HandDrop& d, Vec3* out) {
+            if (d.scanLive && (d.useStamp || !haveOff)) { *out = d.stamp; return true; }
+            if (!haveOff) return false;
+            out->x = d.world[0] - off[0]; out->y = d.world[1] - off[1]; out->z = d.world[2] - off[2];
+            return true;
+        };
+        auto demote = [&](HandDrop& d) {
+            if (!d.scanLive || d.pass >= s_gapPass) return;
+            d.scanLive = false;
+            d.useStamp = false;
+            d.seenAt = 0;
+        };
+
+        {
+            AcquireSRWLockExclusive(&g_handDropLock);
+            for (HandDrop& d : g_handDropIn)
+            {
+                d.stamp = mp;
+                demote(d);
+                // A note still live here was made where the player stands now.
+                // A converted spot ten metres from there means the frames did
+                // not convert, and the player's own position is the better
+                // guess.
+                if (d.scanLive)
+                {
+                    d.seenAt = now;
+                    Vec3 at;
+                    if (spotOf(d, &at) && dist2(at, mp) > 100.0f) d.useStamp = true;
+                }
+                if (d.bagIid) g_droppedIid[d.bagIid] = d.tid;
+                g_handDrops.push_back(d);
+            }
+            g_handDropIn.clear();
+            ReleaseSRWLockExclusive(&g_handDropLock);
+        }
+
+        // What the instance id caught that the spot has not, written down by
+        // entity once so the log says which of the two found it.
+        static int s_iidLines = 0;
+        for (const Cand& k : list)
+        {
+            if (!k.filled || !k.item || !k.iid || g_droppedEid.count(k.eid)) continue;
+            const auto it = g_droppedIid.find(k.iid);
+            if (it == g_droppedIid.end() || it->second != k.tid) continue;
+            g_droppedEid.insert(k.eid);
+            // Counted against its note, or the note would go on looking for
+            // it by position and could hand something else of that row to
+            // the player's drop.
+            for (HandDrop& d : g_handDrops)
+                if (d.bagIid == k.iid && d.tid == k.tid && d.left > 0)
+                {
+                    --d.left;
+                    if (!d.claimed++) d.claimedAt = now;
+                    break;
+                }
+            if (s_iidLines < 60)
+            {
+                ++s_iidLines;
+                LOG("[drop] %08X %s is what you dropped, known by its instance id %08X; it stays there", k.eid, Label(k), k.iid);
+            }
+        }
+        if (g_handDrops.empty()) return;
+
+        // Notes that are over go first, so none of them claims anything on the
+        // pass that ends it.
+        static int s_claimLines = 0, s_missLines = 0;
+        for (size_t i = 0; i < g_handDrops.size();)
+        {
+            HandDrop& d = g_handDrops[i];
+            demote(d);
+            const bool over = d.left <= 0 || (d.seenAt && now - d.seenAt > kHandDropWindowMs) ||
+                              (d.claimedAt && now - d.claimedAt > kHandDropTailMs);
+            if (!over) { ++i; continue; }
+            // A note that recognised nothing is the case worth reading about:
+            // whatever it was waiting for went into the bag, or never came.
+            if (!d.claimed && s_missLines < 20)
+            {
+                ++s_missLines;
+                const Item* it = ItemDb::ByRow(d.tid);
+                char nearest[64] = "the scan saw none of that row";
+                if (d.nearest >= 0) snprintf(nearest, sizeof nearest, "the nearest of that row was %.1f m from it", d.nearest);
+                LOG("[drop] nothing new turned up within 5 m of where the game put the %s you dropped; %s%s%s",
+                    it ? it->name.c_str() : "item", nearest,
+                    d.scanLive ? "" : ", and the scan was not running the whole time since the drop",
+                    d.useStamp ? ", measured from where you stood because the frames did not convert" : "");
+            }
+            g_handDrops.erase(g_handDrops.begin() + static_cast<long>(i));
+        }
+
+        for (HandDrop& d : g_handDrops)
+        {
+            Vec3 spot;
+            if (d.left <= 0 || !spotOf(d, &spot)) continue;
+            if (!d.seenAt && dist2(spot, mp) <= kHandDropRadius2) d.seenAt = now;
+            std::vector<std::pair<float, size_t>> hits;
+            for (size_t i = 0; i < list.size(); ++i)
+            {
+                const Cand& k = list[i];
+                if (!k.filled || !k.item || k.tid != d.tid || g_droppedEid.count(k.eid)) continue;
+                const float dd = dist2(k.pos, spot);
+                if (d.nearest < 0 || dd < d.nearest * d.nearest) d.nearest = std::sqrt(dd);
+                if (dd > kHandDropRadius2) continue;
+                if (d.scanLive)
+                {
+                    const auto f = g_itemFirstPass.find(k.eid);
+                    if (f != g_itemFirstPass.end() && f->second <= d.pass) continue;   // it was there first
+                }
+                hits.emplace_back(dd, i);
+            }
+            std::sort(hits.begin(), hits.end());
+            for (const auto& n : hits)
+            {
+                if (d.left <= 0) break;
+                const Cand& k = list[n.second];
+                g_droppedEid.insert(k.eid);
+                if (k.iid) g_droppedIid[k.iid] = k.tid;
+                --d.left;
+                if (!d.claimed++) d.claimedAt = now;
+                if (s_claimLines < 60)
+                {
+                    ++s_claimLines;
+                    LOG("[drop] %08X %s is what you dropped, %.1f m from where the game put it (instance %08X, the bag's was %08X); it stays there",
+                        k.eid, Label(k), std::sqrt(n.first), k.iid, d.bagIid);
+                }
+            }
+        }
+
+        if (g_handDrops.size() > 256)
+            g_handDrops.erase(g_handDrops.begin(), g_handDrops.begin() + static_cast<long>(g_handDrops.size() - 256));
     }
 
     static long long DeleteFromInventory(uint16_t tid, long long amount, const char* why)
@@ -5653,6 +5977,8 @@ namespace ml::loot
         // Anything the mod broke a moment ago is being watched for what it paid,
         // and this is where a loose item on the ground is seen at all.
         if (!g_spillWatch.empty()) for (const Cand& k : list) if (k.filled) NoteSpill(k, now);
+        // And what the player dropped by hand, before anything is decided.
+        ClaimHandDrops(list, mp, now);
 
         // Decide, publish, and act.
         std::vector<Nearby> nearby;

@@ -1057,10 +1057,39 @@ namespace ml::loot::hooks
         return r;
     }
 
+    // A drop by hand. The payload, DROP.md: the id, 03, the body length at
+    // +3, then the inventory key, the slot, the amount and the position the
+    // game is asked to put the item at. The parser refuses a packet whose
+    // length field disagrees with the packet's own, and so does this.
+    static FnParse oDiscardParse = nullptr;
+    static uint64_t hkDiscardParse(void* a, void* b, void* c, void* d)
+    {
+        const uintptr_t p = reinterpret_cast<uintptr_t>(c);
+        uintptr_t sender = 0, buf = 0;
+        uint16_t total = 0, len = 0, key = 0, slot = 0;
+        uint64_t amount = 0;
+        float at[3] = {};
+        const bool read = p && mem::ReadPtr(p, &sender) && mem::ReadPtr(p + 0x18, &buf) &&
+                          mem::Read16(p + 0x10, &total) && mem::Read16(buf + 3, &len) &&
+                          total >= 5 && len == total - 5 && len >= 0x18 &&
+                          mem::Read16(buf + 5, &key) && mem::Read16(buf + 7, &slot) &&
+                          mem::Read64(buf + 9, &amount) && mem::ReadF32x3(buf + 0x11, at);
+        const long long n = static_cast<long long>(amount);
+        const bool watch = read && loot::HandDropParse(sender, key, slot, n, at, false);
+        const uint64_t r = oDiscardParse(a, b, c, d);
+        if (watch) loot::HandDropParse(sender, key, slot, n, at, true);
+        return r;
+    }
+
     void InstallDrop(uintptr_t discardDesc, uintptr_t searchDesc)
     {
         const uintptr_t parser = ParserOf(discardDesc);
         g_dropFn = FindDropCall(parser);
+        // What the player drops by hand is watched whatever the switch says,
+        // so the scan can leave it where it lands. Hooked only once the line
+        // above has finished reading the parser's code.
+        if (!parser || !Hook("hand drops, server side", parser, reinterpret_cast<void*>(&hkDiscardParse), reinterpret_cast<void**>(&oDiscardParse)))
+            LOG_ERR("[drop] the discard parser could not be hooked; what you drop by hand may be picked straight back up on this build");
         if (!g_dropFn)
         {
             LOG_ERR("[drop] the drop routine was not found (discard parser +0x%llX); Drop refused loot from bodies does nothing on this build",

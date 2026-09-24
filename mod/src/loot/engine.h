@@ -58,6 +58,11 @@ namespace ml::loot
     // bag. After: what the search paid that the rules refuse goes back on the
     // ground. DROP.md.
     bool SearchParse(uintptr_t sender, uint32_t target, bool after);
+    // The same either side of its parse of a discard, the request a drop by
+    // hand raises. Before: reads the slot and tells the scan to expect the
+    // item on the ground at `at`, the world position the payload names. After:
+    // says in the log whether it left the bag. The scan leaves it there.
+    bool HandDropParse(uintptr_t sender, uint16_t key, uint16_t slot, long long amount, const float* at, bool after);
 
     Status GetStatus();
     int  CopyNearby(Nearby* out, int max);

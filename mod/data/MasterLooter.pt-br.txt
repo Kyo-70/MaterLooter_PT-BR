@@ -476,3 +476,8 @@ Writes every key press, open and close to PrivateStorageMaster.log, and keeps th
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	Grava cada tecla pressionada, abertura e fechamento em PrivateStorageMaster.log. Desativado, o registro mantém o resumo de inicialização, os erros e o despejo de tamanhos.
 x%d, by %s	x%d, por %s
 your own camp farm (off)	sua própria fazenda de acampamento (desativada)
+
+# --- traduzido automaticamente em 24 de setembro de 2026 ---
+# A linha abaixo foi traduzida automaticamente em 24 de setembro
+# de 2026 e ainda não foi revisada por Kyo-70.
+you dropped this	você largou isto

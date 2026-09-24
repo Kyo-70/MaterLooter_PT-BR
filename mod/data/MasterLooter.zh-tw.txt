@@ -468,3 +468,6 @@ Writes every key press, open and close to PrivateStorageMaster.log, and keeps th
 Writes every key press, open and close to PrivateStorageMaster.log. Off, the log keeps the startup summary, errors and the size dump.	把每一次按鍵、開啟與關閉都寫入 PrivateStorageMaster.log。關閉時，記錄檔只保留啟動摘要、錯誤與容量傾印資料。
 x%d, by %s	x%d，由 %s 提供
 your own camp farm (off)	你自己的營地農場 (已關閉)
+
+# 以下一行是在 2026 年 9 月 24 日以機器翻譯新增，尚未經過人工校對。
+you dropped this	你丟棄的物品
