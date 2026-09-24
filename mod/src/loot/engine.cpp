@@ -3458,12 +3458,24 @@ namespace ml::loot
                 if (cl == "insect")                       { if (!cfg.catchInsects) return skip("insects off"); }
                 else if (cl == "fish" || cl == "seafood") { if (!cfg.catchFish)    return skip("fish off"); }
                 else                                      { if (!cfg.catchAnimals) return skip("small animals off"); }
-                if (c.species)
-                    if (const Item* it = ItemDb::ByRow(c.species->itemRow))
-                    {
-                        const Rules::Verdict r = Rules::Decide(*it, cfg);
-                        if (!r.loot) { snprintf(v.detail, sizeof v.detail, "%s", r.detail.c_str()); v.loot = false; v.why = r.rule; return v; }
-                    }
+                if (const Item* it = c.species ? ItemDb::ByRow(c.species->itemRow) : nullptr)
+                {
+                    const Rules::Verdict r = Rules::Decide(*it, cfg);
+                    if (!r.loot) { snprintf(v.detail, sizeof v.detail, "%s", r.detail.c_str()); v.loot = false; v.why = r.rule; return v; }
+                }
+                else
+                {
+                    // No item to judge, so the class the creature table gives
+                    // it answers instead. A Firefly Colony has no item row and
+                    // went into the bag with the insect class refused, Sov1737
+                    // on 24 September 2026, because only the item was ever
+                    // asked. The table's five classes, insect, fish, seafood,
+                    // animal and amphibian, are all item classes as well, so
+                    // this is the same switch on the Classes tab that refuses
+                    // a Firefly. A tag or item rule still has nothing to read.
+                    const Rules::Verdict r = Rules::DecideClass(cl, cfg);
+                    if (!r.loot) { snprintf(v.detail, sizeof v.detail, "%s", r.detail.c_str()); v.loot = false; v.why = r.rule; return v; }
+                }
             }
             else if (c.cat2 == 0x05) { if (!cfg.catchFish || !cfg.catchInsects || !cfg.catchAnimals) return skip("unidentified: could be a fish, a flying insect or a bird"); }
             else                     { if (!cfg.catchInsects || !cfg.catchAnimals) return skip("unidentified: could be an insect or a small animal"); }
@@ -5292,6 +5304,14 @@ namespace ml::loot
                         candN, cfg.scanRange, line,
                         onHolder ? ", a gear holder, because no player-tagged actor has anything near it" : "");
                 }
+                // A new actor usually means a reload, and a reload can bring a
+                // new route. Sends follow the route the game raises the
+                // player's events on (events.cpp); this puts the one the actor
+                // itself carries beside it, so a log shows whether they agree
+                // even when the player has raised nothing yet.
+                if (changed)
+                    LOG("[route] player actor %08X carries route %08X; sends go out on %08X", g_meEid,
+                        game::Route(g_me), events::RouteKnown() ? events::Route() : 0);
             }
             // Not on a starved pass: nothing was judged, so the clock that says
             // the centre has nothing around it has not been answered.

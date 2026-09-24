@@ -67,14 +67,20 @@ namespace ml::Rules
             v.loot = false; v.rule = "below value floor"; v.detail = std::to_string(item.value) + " copper"; return v;
         }
 
-        auto co = cfg.classRule.find(item.klass);
+        return DecideClass(item.klass, cfg);
+    }
+
+    Verdict DecideClass(const std::string& klass, const Config& cfg)
+    {
+        Verdict v;
+        auto co = cfg.classRule.find(klass);
         if (co != cfg.classRule.end() && co->second == 0)
         {
-            v.loot = false; v.rule = "class skipped"; v.detail = item.klass; return v;
+            v.loot = false; v.rule = "class skipped"; v.detail = klass; return v;
         }
         v.loot = true;
         v.rule = co != cfg.classRule.end() ? "class" : "default";
-        v.detail = item.klass;
+        v.detail = klass;
         return v;
     }
 }

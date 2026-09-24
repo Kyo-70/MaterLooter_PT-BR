@@ -844,7 +844,29 @@ namespace ml::gui
                 ImGui::TableNextColumn();
                 ImGui::PushID(t.label);   // the English, so the id survives a language change
                 dirty |= ImGui::Checkbox(TR(t.label), t.value);
-                if (ImGui::BeginItemTooltip()) { ImGui::PushTextWrapPos(ImGui::GetFontSize() * 26.0f); ImGui::TextUnformatted(TR(t.help)); ImGui::PopTextWrapPos(); ImGui::EndTooltip(); }
+                if (ImGui::BeginItemTooltip())
+                {
+                    ImGui::PushTextWrapPos(ImGui::GetFontSize() * 26.0f);
+                    ImGui::TextUnformatted(TR(t.help));
+                    // Sov1737, 24 September 2026: fireflies kept coming in with
+                    // the insect class and the alchemy-material tag both
+                    // refused. They were Firefly Colonies, which the creature
+                    // table gives no item row, so only the catch switch could
+                    // stop them until Decide's Catch case learned to ask the
+                    // class rule for the creature table's own class. Tags and
+                    // item rules still cannot reach them. A paragraph of its
+                    // own, so the three help strings above keep their
+                    // translations.
+                    if (t.value == &c.catchInsects || t.value == &c.catchFish || t.value == &c.catchAnimals)
+                    {
+                        ImGui::Spacing();
+                        ImGui::TextUnformatted(TR("A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the "
+                                                  "Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is "
+                                                  "no item to check one against."));
+                    }
+                    ImGui::PopTextWrapPos();
+                    ImGui::EndTooltip();
+                }
                 ImGui::PopID();
             }
             ImGui::EndTable();

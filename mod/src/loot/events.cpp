@@ -1004,11 +1004,27 @@ namespace ml::events
             }
         }
         if ((who >> 24) != game::kTagPlayer) return;
-        if (!RouteKnown() && rt)
+        // The route follows the game, not the first event it raised. It was
+        // learned once per process, and starting a new game hands the player
+        // a new one: Sov1737's log of 24 September 2026 has the game raising
+        // his events on 9020152A from 10:36 on while every send still carried
+        // 90100000, and for three hours about half of what the mod asked for
+        // was ignored, until a restart took the same room's coins and swords
+        // on the first send. Every player-tagged raiser in every log on hand,
+        // mercenaries included, carries its session's route, and a pet is
+        // world-tagged with a route of its own, so the latest one seen here
+        // is the one to send on.
+        if (rt && (!RouteKnown() || rt != Route()))
         {
+            const uint32_t was = Route();
+            const bool first = !RouteKnown();
             InterlockedExchange(&g_route, static_cast<LONG>(rt));
             InterlockedExchange(&g_routeKnown, 1);
-            LOG("[route] learned from the game: player %08X route %08X", who, rt);
+            static volatile LONG s_changes = 0;
+            if (first) LOG("[route] learned from the game: player %08X route %08X", who, rt);
+            else if (InterlockedIncrement(&s_changes) <= 20)
+                LOG("[route] the game now raises the player's events on route %08X, not %08X (player %08X); sends follow it",
+                    rt, was, who);
         }
         // What did the player just do by hand? Same payload layout as ours.
         uintptr_t buf = 0; uint16_t size = 0;
