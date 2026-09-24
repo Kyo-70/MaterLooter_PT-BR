@@ -1259,6 +1259,38 @@ namespace ml::loot
     // read half done, in both places at once, which is a rise nobody picked up.
     static std::vector<std::pair<uint16_t, long long>> g_bagPrev;
     static bool g_bagPrevValid = false;
+    // What Private Storage Master takes out of the bag, counted back in.
+    //
+    // A rise used to be the bag now minus the bag one sample ago, so whatever
+    // was stored in between cancelled as many fresh arrivals. Fyreon87's
+    // Peony gathers of 24 September 2026 landed about 27 plants while this
+    // mod reported 16, and the other 11 stayed in the bag with no error
+    // anywhere, since Private Storage Master moves exactly what it is told.
+    // Its log shows the same for twelve items that session.
+    //
+    // So while a deposit of an item is out, the item keeps a tally: every
+    // change the bag shows, signed, plus every unit a result says was stored,
+    // and whatever that comes to beyond what was already reported is the rise.
+    // That is right whichever shows first, the bag falling or the result. The
+    // tally is per item because deposits of one item merge into one job and
+    // one result. It clears once the item has had a result and nothing for a
+    // few seconds, after two minutes regardless, and with the baseline. A
+    // result with no tally open is ignored, and no tally opens for a while
+    // after a world change, because a result that lands in a tally opened
+    // after its move would report stock the player already carried, and
+    // Private Storage Master would store it. Every way this can be off leaves
+    // things in the bag rather than taking more than arrived.
+    struct StoreTally { long long delta = 0, moved = 0, credited = 0; DWORD opened = 0, lastAt = 0; bool resulted = false; };
+    static std::unordered_map<uint16_t, StoreTally> g_storeTally;
+    static constexpr DWORD kTallyQuietMs = 8000;
+    static constexpr DWORD kTallyMaxMs = 120000;
+    static constexpr DWORD kTallyAfterChangeMs = 10000;
+    static long long BagCount(const std::vector<std::pair<uint16_t, long long>>& v, uint16_t row)
+    {
+        const auto it = std::lower_bound(v.begin(), v.end(), row,
+                                         [](const std::pair<uint16_t, long long>& e, uint16_t r) { return e.first < r; });
+        return it != v.end() && it->first == row ? it->second : 0;
+    }
     // Gather nodes whose yield is known, by entity, so a node gathered by hand
     // names what it paid the way an item's own row does.
     static std::unordered_map<uint32_t, uint16_t> g_yieldByEid;
@@ -1454,6 +1486,15 @@ namespace ml::loot
         {
             const PsmDepositResult& r = res[i];
             const Item* it = ItemDb::ByRow(r.item);
+            {
+                const auto t = g_storeTally.find(r.item);
+                if (t != g_storeTally.end())
+                {
+                    if (r.reason == PSM_DEPOSIT_STORED && r.moved > 0) t->second.moved += r.moved;
+                    t->second.resulted = true;
+                    t->second.lastAt = now;
+                }
+            }
             if (r.reason == PSM_DEPOSIT_STORED && r.storage >= 0 && r.storage < PSM_STORAGES && r.moved > 0)
             {
                 perStorage[r.storage] += r.moved;
@@ -1572,6 +1613,7 @@ namespace ml::loot
                 s_holder = hr;
                 g_invPrevValid = false;
                 g_bagPrevValid = false;
+                g_storeTally.clear();
                 InvalidateBagBaseline();
             }
         }
@@ -1600,7 +1642,7 @@ namespace ml::loot
         {
             static uint16_t btypes[1024]; static long long bqty[1024];
             const int bn = game::BagTypes(btypes, bqty, 1024);
-            if (bn < 0) g_bagPrevValid = false;
+            if (bn < 0) { g_bagPrevValid = false; g_storeTally.clear(); }
             else
             {
                 std::vector<std::pair<uint16_t, long long>> bcur(bn);
@@ -1610,11 +1652,34 @@ namespace ml::loot
                     size_t j = 0;
                     for (const auto& e : bcur)
                     {
+                        if (g_storeTally.count(e.first)) continue;
                         while (j < g_bagPrev.size() && g_bagPrev[j].first < e.first) ++j;
                         const long long before = (j < g_bagPrev.size() && g_bagPrev[j].first == e.first) ? g_bagPrev[j].second : 0;
                         if (e.second > before) bagRose.push_back({ e.first, e.second - before });
                     }
+                    // A tallied row can also have left the bag entirely, so it
+                    // is read from both samples rather than from this one alone.
+                    for (auto it = g_storeTally.begin(); it != g_storeTally.end();)
+                    {
+                        StoreTally& t = it->second;
+                        t.delta += BagCount(bcur, it->first) - BagCount(g_bagPrev, it->first);
+                        const long long rise = t.delta + t.moved - t.credited;
+                        if (rise > 0)
+                        {
+                            bagRose.push_back({ it->first, rise });
+                            t.credited += rise;
+                            if (g_debugLog)
+                            {
+                                const Item* named = ItemDb::ByRow(it->first);
+                                LOG("[store] +%lld %s counted past what was just stored (bag %+lld, stored %lld)",
+                                    rise, named && !named->name.empty() ? named->name.c_str() : "unnamed item", t.delta, t.moved);
+                            }
+                        }
+                        const bool done = (t.resulted && now - t.lastAt > kTallyQuietMs) || now - t.opened > kTallyMaxMs;
+                        it = done ? g_storeTally.erase(it) : std::next(it);
+                    }
                 }
+                else g_storeTally.clear();
                 g_bagPrev.swap(bcur);
                 g_bagPrevValid = true;
             }
@@ -4948,6 +5013,12 @@ namespace ml::loot
             {
                 if (psm::Deposit(h.row, h.credited))
                 {
+                    if (!(g_changeAt && now - g_changeAt < kTallyAfterChangeMs))
+                    {
+                        StoreTally& t = g_storeTally[h.row];
+                        if (!t.opened) t.opened = now;
+                        t.lastAt = now;
+                    }
                     if (g_debugLog) LOG("[store] offered %lld %s to Private Storage Master", h.credited, RowName(h.row));
                     h.credited = 0;
                 }
