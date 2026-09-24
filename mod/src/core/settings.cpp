@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include <vector>
 
@@ -405,6 +406,68 @@ namespace ml::Settings
         return migrated;
     }
 
+    // Every change to the settings, one line each, measured against the last
+    // text reported. Only the auto-loot switch used to write anything when it
+    // changed, so a log could say what was set at launch and nothing after.
+    // Fyreon87's ini of 24 September 2026 had 68 class rules where the log's
+    // launch had 55 and Plants off where launch had it on, and when each
+    // changed could only be pieced together from the first refusal it caused.
+    // Diffing the serialized text catches the menu, the keys, a preset and a
+    // backup alike, since all of them end in a save. The two sections the mod
+    // fills in itself are left out; learning a yield or a non-vein already
+    // logs its own line.
+    static std::string g_reported;
+
+    static std::vector<std::pair<std::string, std::string>> DiffLines(const std::string& text)
+    {
+        std::vector<std::pair<std::string, std::string>> out;
+        std::string section;
+        size_t at = 0;
+        while (at < text.size())
+        {
+            size_t end = text.find('\n', at);
+            if (end == std::string::npos) end = text.size();
+            std::string line = text.substr(at, end - at);
+            at = end + 1;
+            if (!line.empty() && line.back() == '\r') line.pop_back();
+            if (line.empty() || line[0] == ';') continue;
+            if (line[0] == '[') { section = line.substr(1, line.find(']') - 1); continue; }
+            if (section == "NotVeins" || section == "NodeYields") continue;
+            const size_t eq = line.find('=');
+            if (eq == std::string::npos) continue;
+            const char* label = section == "Classes" ? "class " : section == "Tags" ? "tag " : section == "Items" ? "item " : "";
+            out.emplace_back(label + line.substr(0, eq), line.substr(eq + 1));
+        }
+        std::sort(out.begin(), out.end());
+        return out;
+    }
+
+    static void ReportChanges(const std::string& now, const char* how)
+    {
+        if (g_reported.empty() || now == g_reported) { g_reported = now; return; }
+        const auto was = DiffLines(g_reported), is = DiffLines(now);
+        g_reported = now;
+        int n = 0, said = 0;
+        size_t i = 0, j = 0;
+        while (i < was.size() || j < is.size())
+        {
+            const char* key; const char* from; const char* to;
+            if (j == is.size() || (i < was.size() && was[i].first < is[j].first))
+            { key = was[i].first.c_str(); from = was[i].second.c_str(); to = "unset"; ++i; }
+            else if (i == was.size() || is[j].first < was[i].first)
+            { key = is[j].first.c_str(); from = "unset"; to = is[j].second.c_str(); ++j; }
+            else
+            {
+                key = is[j].first.c_str(); from = was[i].second.c_str(); to = is[j].second.c_str(); ++i; ++j;
+                if (!strcmp(from, to)) continue;
+            }
+            ++n;
+            // A preset or a restored backup can change a hundred rules at once.
+            if (said < 40) { ++said; LOG("[settings] %s %s -> %s%s", key, from, to, how); }
+        }
+        if (n > said) LOG("[settings] and %d more changes%s", n - said, how);
+    }
+
     void Load()
     {
         Config c;
@@ -427,6 +490,8 @@ namespace ml::Settings
         g_dirty = migrated;
         if (migrated) g_dirtyAt = GetTickCount64();
         ++g_generation;
+        // The first load sets the baseline; a later one is an edit on disk.
+        ReportChanges(Serialize(c), " (the ini was edited on disk)");
         LOG("Settings %s: %d class rules, %d tag rules, %d item rules.", present ? "loaded" : "defaulted (no ini yet)",
             static_cast<int>(c.classRule.size()), static_cast<int>(c.tagRule.size()), static_cast<int>(c.itemRule.size()));
         // Every range and switch that decides whether a thing is reached, written
@@ -534,8 +599,10 @@ namespace ml::Settings
     void Save()
     {
         g_dirty = false;
+        const std::string text = Serialize(g_cfg);
+        ReportChanges(text, "");
         if (!g_claimed) return;
-        if (WriteText(Path(), Serialize(g_cfg))) g_knownTime = FileTime();
+        if (WriteText(Path(), text)) g_knownTime = FileTime();
     }
 
     // --------------------------------------------------------- presets ----
