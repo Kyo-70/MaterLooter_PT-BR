@@ -45,6 +45,8 @@ TAG_KIND = {
     "catch_treefruit": "item", "catch_berries": "item", "catch_groundfruit": "item",
     "catch_crops": "item", "catch_vegetable": "item",
 }
+# A fruit tree or bush you harvest rather than fell. See kind_for.
+FRUIT_PLANT = re.compile(r"^gimmick_(unique_)?(tree|bush)_.*(crop_|broad_pear).*_collect")
 # Tags above that override collect_botany when a row carries both.
 FRUIT_TAGS = ("catch_treefruit", "catch_berries", "catch_groundfruit", "catch_crops", "catch_vegetable")
 
@@ -342,6 +344,17 @@ def kind_for(tags, name, prefab, folder=""):
     # taking one lifts what the player has planted.
     if "camp_farm" in prefab and "_seed" not in prefab:
         return "farm", False
+    # A fruit tree or bush you harvest. The game tags these collect_tree, so
+    # they came out wood, and with Crops off and Wood on the mod still shook
+    # them: Fyreon87's log of 24 September 2026 gathers an apple tree twice at
+    # 12:38 and refuses the apples it let fall as "crops off" a second later.
+    # The Crops help names apples on the plant, and the tree is the plant. The
+    # same eid was gathered three times in eighteen seconds at 12:26, so a
+    # harvest leaves the tree standing and the felling guard is not needed.
+    # 21 rows: apple, pear, orange, peach, fig, pomegranate, cacao, grape and
+    # ensete. The coconut palms have no _collect and stay wood.
+    if FRUIT_PLANT.search(prefab):
+        return "item", True
     for t in FRUIT_TAGS:
         if t in tags:
             return "item", True

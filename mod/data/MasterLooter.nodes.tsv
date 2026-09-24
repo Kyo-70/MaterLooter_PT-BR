@@ -354,9 +354,9 @@ gimmick_breakable_spot_tree_brothers_cliff_pillar_02	stone	Stone_Quarry	Stone	na
 gimmick_breakable_spot_tree_brothers_cliff_pillar_03	stone	Stone_Quarry	Stone	name	0		0	0	0
 gimmick_breakable_trollbag_01	container		Breakable trollbag	tag	0		0	0	0
 gimmick_brimstone_bomb_01	pickup		Battle brimstone bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0	0
-gimmick_bush_cd_crop_grape_02_collect_01	wood		Bush cd crop grape 02 collect	tag	0		0	0	0
-gimmick_bush_crop_ensete_01_collect	wood		Bush crop ensete 01 collect	tag	0		0	0	0
-gimmick_bush_crop_ensete_01_collect_02	wood		Bush crop ensete 01 collect	tag	0		0	0	0
+gimmick_bush_cd_crop_grape_02_collect_01	item		Bush cd crop grape 02 collect	tag	0		0	0	0
+gimmick_bush_crop_ensete_01_collect	item		Bush crop ensete 01 collect	tag	0		0	0	0
+gimmick_bush_crop_ensete_01_collect_02	item		Bush crop ensete 01 collect	tag	0		0	0	0
 gimmick_caltrop_bomb_01	pickup		Battle caltrop bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0	0
 gimmick_camp_farm_abyss_stone_01_phase01	farm		Camp farm abyss stone 01 phase01	name	0		0	0	0
 gimmick_camp_farm_abyss_stone_01_phase02	farm		Camp farm abyss stone 01 phase02	name	0		0	0	0
@@ -1939,7 +1939,7 @@ gimmick_tree_broad_oak_white_hero_thin_02	wood		Tree broad oak white hero thin	t
 gimmick_tree_broad_oak_white_hero_thin_03	wood		Tree broad oak white hero thin	tag	0		0	0	0
 gimmick_tree_broad_oak_white_hero_thin_burnt_01	wood		Wood	tag	0		0	0	0
 gimmick_tree_broad_oak_white_hero_thin_burnt_04	wood		Wood	tag	0		0	0	0
-gimmick_tree_broad_pear_01_collect_01	wood		Tree broad pear 01 collect	tag	0		0	0	0
+gimmick_tree_broad_pear_01_collect_01	item		Tree broad pear 01 collect	tag	0		0	0	0
 gimmick_tree_broad_shagbark_hickory_hero_02	wood		Tree broad shagbark hickory hero	tag	0		0	0	0
 gimmick_tree_broad_uniquetree_10	wood		Tree broad uniquetree	tag	0		0	0	0
 gimmick_tree_broad_white_poplar_01	wood		Tree broad white poplar	tag	0		0	0	0
@@ -1957,18 +1957,18 @@ gimmick_tree_cd_broad_birch_paper_drop_05	wood		Tree cd broad birch paper drop	t
 gimmick_tree_cd_broad_birch_paper_fw_05	wood		Tree cd broad birch paper fw	tag	0		0	0	0
 gimmick_tree_cd_broad_birch_paper_moss_05	wood		Tree cd broad birch paper moss	tag	0		0	0	0
 gimmick_tree_cd_broad_european_beech_01	wood		Tree cd broad european beech	tag	0		0	0	0
-gimmick_tree_cd_crop_apple_01_collect_01	wood		Tree cd crop apple 01 collect	tag	0		0	0	0
-gimmick_tree_cd_crop_apple_02_collect	wood		Tree cd crop apple 02 collect	tag	0		0	0	0
+gimmick_tree_cd_crop_apple_01_collect_01	item		Tree cd crop apple 01 collect	tag	0		0	0	0
+gimmick_tree_cd_crop_apple_02_collect	item		Tree cd crop apple 02 collect	tag	0		0	0	0
 gimmick_tree_cd_desert_juniper_drop_03	wood		Tree cd desert juniper drop	tag	0		0	0	0
 gimmick_tree_cd_palm_sabal_01	wood		Tree cd palm sabal	tag	0		0	0	0
 gimmick_tree_cd_pine_spruce_low_01	wood		Tree cd pine spruce low	tag	0		0	0	0
-gimmick_tree_crop_cacao_01_collect_01	wood		Tree crop cacao 01 collect	tag	0		0	0	0
-gimmick_tree_crop_figs_01_collect_01	wood		Tree crop figs 01 collect	tag	0		0	0	0
-gimmick_tree_crop_orange_01_collect_01	wood		Tree crop orange 01 collect	tag	0		0	0	0
-gimmick_tree_crop_orange_02_collect_01	wood		Tree crop orange 02 collect	tag	0		0	0	0
-gimmick_tree_crop_peach_01_collect_01	wood		Tree crop peach 01 collect	tag	0		0	0	0
-gimmick_tree_crop_peach_02_collect_01	wood		Tree crop peach 02 collect	tag	0		0	0	0
-gimmick_tree_crop_pomegranate_01_collect_01	wood		Tree crop pomegranate 01 collect	tag	0		0	0	0
+gimmick_tree_crop_cacao_01_collect_01	item		Tree crop cacao 01 collect	tag	0		0	0	0
+gimmick_tree_crop_figs_01_collect_01	item		Tree crop figs 01 collect	tag	0		0	0	0
+gimmick_tree_crop_orange_01_collect_01	item		Tree crop orange 01 collect	tag	0		0	0	0
+gimmick_tree_crop_orange_02_collect_01	item		Tree crop orange 02 collect	tag	0		0	0	0
+gimmick_tree_crop_peach_01_collect_01	item		Tree crop peach 01 collect	tag	0		0	0	0
+gimmick_tree_crop_peach_02_collect_01	item		Tree crop peach 02 collect	tag	0		0	0	0
+gimmick_tree_crop_pomegranate_01_collect_01	item		Tree crop pomegranate 01 collect	tag	0		0	0	0
 gimmick_tree_desert_dragon_01	wood		Tree desert dragon	tag	0		0	0	0
 gimmick_tree_hexe_marie_02	wood		Tree hexe marie	tag	0		0	0	0
 gimmick_tree_out_cypress_italian_hero_01	wood		Tree out cypress italian hero	tag	0		0	0	0
@@ -2000,15 +2000,15 @@ gimmick_tumbleweed_0002	plant	Item_gimmick_tumbleweed_0001	Tumbleweed	name	0	Ite
 gimmick_tumbleweed_0003	plant	Item_gimmick_tumbleweed_0001	Tumbleweed	name	0	Item_gimmick_tumbleweed_0001	0	0	0
 gimmick_umbra_break_rock_01	stone		Umbra break rock	name	0		0	0	0
 gimmick_umbra_break_rock_02	stone		Umbra break rock	name	0		0	0	0
-gimmick_unique_bush_crop_ensete_01_collect_02	wood		Wood	tag	0		0	0	0
-gimmick_unique_tree_broad_pear_01_collect_01	wood		Wood	tag	0		0	0	0
+gimmick_unique_bush_crop_ensete_01_collect_02	item		Crop	tag	0		0	0	0
+gimmick_unique_tree_broad_pear_01_collect_01	item		Crop	tag	0		0	0	0
 gimmick_unique_tree_broad_rubber_01_collect_01	wood		Wood	tag	0		0	0	0
-gimmick_unique_tree_cd_crop_apple_01_collect_01	wood		Wood	tag	0		0	0	0
-gimmick_unique_tree_crop_cacao_01_collect_01	wood		Wood	tag	0		0	0	0
-gimmick_unique_tree_crop_figs_01_collect_01	wood		Unique tree crop figs 01 collect	tag	0		0	0	0
-gimmick_unique_tree_crop_orange_01_collect_01	wood		Wood	tag	0		0	0	0
-gimmick_unique_tree_crop_peach_01_collect_01	wood		Wood	tag	0		0	0	0
-gimmick_unique_tree_crop_pomegranate_01_collect_01	wood		Wood	tag	0		0	0	0
+gimmick_unique_tree_cd_crop_apple_01_collect_01	item		Crop	tag	0		0	0	0
+gimmick_unique_tree_crop_cacao_01_collect_01	item		Crop	tag	0		0	0	0
+gimmick_unique_tree_crop_figs_01_collect_01	item		Unique tree crop figs 01 collect	tag	0		0	0	0
+gimmick_unique_tree_crop_orange_01_collect_01	item		Crop	tag	0		0	0	0
+gimmick_unique_tree_crop_peach_01_collect_01	item		Crop	tag	0		0	0	0
+gimmick_unique_tree_crop_pomegranate_01_collect_01	item		Crop	tag	0		0	0	0
 gimmick_urdavha_water_bottle_01	container		Water bottle	tag	0		0	0	0
 gimmick_urdavha_water_bottle_02	container		Water bottle	tag	0		0	0	0
 gimmick_vine_bomb_01	pickup		Battle vine bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0	0
