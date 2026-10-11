@@ -28,8 +28,8 @@ Uninstall by deleting the `MasterLooter.*` files from `bin64` and the `%LOCALAPP
 ## Controls
 
 - Insert opens and closes the menu (rebindable under General). Escape also closes it.
-- F10 turns auto-loot on and off, F11 loots everything in range once. Both rebindable.
-- Every key but Insert can be left unbound: Clear beside it in the menu, or 0 or nothing after the `=` in `MasterLooter.ini`. Rebind takes a single key, and a Ctrl or Alt combination is refused, because these keys stay quiet while Ctrl or Alt is held.
+- F10 turns auto-loot on and off, F11 loots everything in range for eight seconds, so a node that has to fill first is taken too. Both rebindable.
+- Every key but Insert can be left unbound: Clear beside it in the menu, or 0, `none` or nothing after the `=` in `MasterLooter.ini`, where a key can also be written by name (`End`, `F12`). A value the mod cannot read is named in the log at launch. Rebind takes a single key, and a Ctrl or Alt combination is refused, because these keys stay quiet while Ctrl or Alt is held.
 - Each of the four also takes a controller shortcut of two buttons at once, never one, because every single button already does something in this game. The mod only reads the pad, so the game still sees both buttons: pick a pair that does nothing together, such as the two shoulder buttons, or Back and a face button.
 - Home is watch mode: the menu stays on screen but the game keeps every input, so the Status log or the Nearby list can be watched while playing. Home from a closed menu opens it straight into watch mode. Insert then makes it interactive, and a second Home closes it. The Watch button in the title strip does the same.
 - While the menu is open the game does not see the keyboard, mouse or controller. Key releases still pass through so nothing sticks.

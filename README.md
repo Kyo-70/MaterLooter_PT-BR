@@ -93,7 +93,7 @@ Two scanners out of seventy flag `MasterLooter.asi` on 1.6.47. Webroot calls it 
 
 The number moves release to release without the code changing character: 1.2.1 scored four, 1.4.0 four, 1.5.0 two, 1.5.1 four, 1.6.0 two, 1.6.1 three, 1.6.2 three, 1.6.3 three, 1.6.4 four, 1.6.5 four, 1.6.6 four, 1.6.7 three, 1.6.8 four, 1.6.9 four, 1.6.10, the first signed build, two, 1.6.12 one, 1.6.13 one, 1.6.14 one, 1.6.15 two, 1.6.16 two, 1.6.17 one, 1.6.18 two, 1.6.19 two, 1.6.20 one, 1.6.21 one, 1.6.22 one, 1.6.23 one, 1.6.24 one, 1.6.25 two, 1.6.26 one, 1.6.27 one, 1.6.28 one, 1.6.29 one, 1.6.30 one, 1.6.31 one, 1.6.32 one, 1.6.33 two, 1.6.34 two, 1.6.35 one, 1.6.36 one, 1.6.37 one, 1.6.38 one, 1.6.39 one, 1.6.40 one, 1.6.41 one, 1.6.42 one, 1.6.43 one, 1.6.44 none, with Webroot timing out, 1.6.45 two, 1.6.46 one and 1.6.47 two. Microsoft flagged every one of them up to the signature, went quiet for five releases, came back for two, dropped off for five more, returned on 1.6.25, left again on 1.6.26, came back on 1.6.45 and left on 1.6.46; Symantec flagged every unsigned build and none since. Everything else comes and goes: Deep Instinct flagged early builds, went quiet, came back for 1.6.33 and 1.6.34 and left on 1.6.35, CrowdStrike Falcon stayed three releases and dropped off on 1.6.6, Cynet appeared on 1.6.4, was gone by 1.6.5, came back on 1.6.6, left on 1.6.7, returned on 1.6.9 and left again with the signature, Webroot arrived on 1.6.5, a build whose one change is that it no longer creates a Direct3D device at startup, and Elastic arrived on 1.6.8, was gone again on 1.6.9 and came back on 1.6.47. That is what a model guessing looks like, as against a scanner recognising something.
 
-Reports for 1.6.46: [the plugin](https://www.virustotal.com/gui/file/0165001d461dfb406ffdc0ea1e59c909e61ab7af5a588807bd6d5889634379f4) and [the package](https://www.virustotal.com/gui/file/a991e590b8a45effe76bbe4e3f557add1c6b04c3435fdc2f983bd007ebac11d7).
+Reports for 1.6.46: [the plugin](https://www.virustotal.com/gui/file/c397787ef10bc541c770541d0edb3aba61ee1a39ce550a826f3156114a8835f9) and [the package](https://www.virustotal.com/gui/file/fee5b7844c2e9b52a4e2eaa04c0c3e2e832127b83afa84389b4564039f3d86a8).
 
 The guess is easy to explain. The plugin is a DLL that a loader puts inside the game, and once there it rewrites instructions in memory, searches the game's code for byte patterns, reads the keyboard before the game does and draws over Direct3D 12. A trainer does the same things, so a model trained on trainers answers trainer, and a release a day old has no install history to argue back with.
 
@@ -101,20 +101,20 @@ What it does not do is reach the network. It imports no networking library, and 
 
 Since 1.6.10 the plugin is code signed: right-click `MasterLooter.asi`, Properties, Digital Signatures shows Seth Walker, issued through Microsoft's identity-verified signing service and timestamped. A signature carries reputation from one release to the next, where a false-positive report to a vendor clears one file only, so the numbers above should move over the coming releases; this section will say whether they do.
 
-If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.47:
+If Defender or your browser quarantines the download, restore it and exclude the game's `bin64` folder, or build from source and use your own binary. SHA-256 for 1.6.48:
 
-    a991e590b8a45effe76bbe4e3f557add1c6b04c3435fdc2f983bd007ebac11d7  MasterLooter-1.6.47-DMM.zip
-    ff30db59f15a6efbc2349021474eea503416ac645ae1f6161ef9ac9ef75de00e  MasterLooter-1.6.47.zip
-    0165001d461dfb406ffdc0ea1e59c909e61ab7af5a588807bd6d5889634379f4  MasterLooter.asi
+    fee5b7844c2e9b52a4e2eaa04c0c3e2e832127b83afa84389b4564039f3d86a8  MasterLooter-1.6.48-DMM.zip
+    13d7ac54c82e69d4dcd4da03c20d41075daf0e6eecf5d95b459814f63f94ea00  MasterLooter-1.6.48.zip
+    c397787ef10bc541c770541d0edb3aba61ee1a39ce550a826f3156114a8835f9  MasterLooter.asi
 
 ## Controls
 
 - Insert opens and closes the menu. Escape also closes it.
-- F10 turns auto-loot on and off. F11 loots everything in range once.
+- F10 turns auto-loot on and off. F11 loots everything in range, and keeps at it for eight seconds so a node that has to fill first is taken too.
 - Home is watch mode: the menu stays up while the game keeps every input. Insert makes it interactive again.
 - While the menu is interactive the game does not see the keyboard, mouse or controller. Key releases still pass so nothing sticks.
 
-All four keys are rebindable in the menu under General, and they also sit in `MasterLooter.ini` beside the plugin as `MenuKey`, `KeyToggle`, `KeyBurst` and `KeyWatch`, written as virtual-key codes. Edit the file and save it and the change is picked up about a second later without a restart, which is the quickest way to clear a clash with another ASI mod. Every key but the menu key can also be left unbound, with the Clear button beside it, or a 0 or nothing at all after the `=` in the file. Each of the four also takes a controller shortcut of two buttons at once rather than one, since every single button already does something in this game.
+All four keys are rebindable in the menu under General, and they also sit in `MasterLooter.ini` beside the plugin as `MenuKey`, `KeyToggle`, `KeyBurst` and `KeyWatch`, written as virtual-key codes or by name, `End` or `F12`. Edit the file and save it and the change is picked up about a second later without a restart, which is the quickest way to clear a clash with another ASI mod. Every key but the menu key can also be left unbound, with the Clear button beside it, or a 0, `none` or nothing at all after the `=` in the file. A value the mod cannot read is named in the log at launch. Each of the four also takes a controller shortcut of two buttons at once rather than one, since every single button already does something in this game.
 
 Hold Ctrl or Alt and none of these keys fire, unless the key is Ctrl or Alt itself, so Rebind takes one key on its own and turns a combination down with a line saying why. That keeps Private Storage Master's Ctrl+F10 from toggling auto-loot as well. Shift is left alone because the game sprints on it, and controller shortcuts work as they always did.
 
