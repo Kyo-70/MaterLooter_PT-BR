@@ -70,15 +70,46 @@ namespace ml::Settings
     // ReShade and the watch key came back as Home. A key missing from the
     // file never reaches here and keeps its default. A typo still falls
     // back. The menu key never unbinds, since the menu is how you rebind.
-    static int  Key(const std::string& v, int def, bool unbindable = false)
+    //
+    // Tebren said on 6 October 2026 that Home still opened the menu on
+    // 1.6.47. The empty value above did unbind it, but anything else a person
+    // types for "no key" (none, off, -1) and any key written by name (End, F12)
+    // came back as the default with nothing in the log, so the ini and the
+    // menu disagreed and the only sign was the key still working. Names are
+    // read now, the usual words for no key unbind, and a value that is still
+    // not a key says so at load, naming the key it fell back to.
+    static int  Key(const char* name, const std::string& raw, int def, bool unbindable = false)
     {
-        const int i = atoi(v.c_str());
-        if (i > 0 && i < 256) return i;
-        // Only zeros, with spaces allowed around them, or nothing at all.
-        // atoi reads "0x7A" as 0 too, and a hex value should fall back to the
-        // default, not unbind.
-        const size_t d = v.find_first_not_of(" \t"), e = v.find_last_not_of(" \t");
-        if (unbindable && (d == std::string::npos || v.find_first_not_of('0', d) > e)) return 0;
+        const std::string v = Trim(raw);
+        auto none = [&] { return unbindable ? 0 : def; };
+        if (v.empty()) return none();
+        if (v[0] >= '0' && v[0] <= '9')
+        {
+            // A number, decimal or 0x hex, with anything after it ignored the
+            // way atoi always ignored it, so "36 ; Home" still reads as 36.
+            const bool hex = v.size() > 2 && v[0] == '0' && (v[1] == 'x' || v[1] == 'X');
+            const long i = strtol(v.c_str(), nullptr, hex ? 16 : 10);
+            if (i == 0) return none();
+            if (i > 0 && i < 256) return static_cast<int>(i);
+        }
+        else
+        {
+            static const char* kNone[] = { "none", "off", "no", "false", "unbound", "disabled", "not set", "-1" };
+            // The menu key has no "no key": the menu is how you rebind.
+            bool noKey = false;
+            for (const char* w : kNone)
+                if (_stricmp(v.c_str(), w) == 0) noKey = true;
+            if (noKey && unbindable) return 0;
+            // KeyName hands back one shared buffer, so each name is compared
+            // before the next call writes over it.
+            if (!noKey)
+                for (int vk = 1; vk < 256; ++vk)
+                    if (_stricmp(v.c_str(), KeyName(vk)) == 0) return vk;
+        }
+        char was[64];
+        snprintf(was, sizeof was, "%s", KeyName(def));
+        LOG("MasterLooter.ini: %s=%s is not a key this mod can read, so it stays %s. Write a key name such as End or F12, "
+            "or a number%s.", name, v.c_str(), was, unbindable ? ", or leave it empty for no key" : "; this key cannot be left unbound");
         return def;
     }
     static float Range(const std::string& v, float lo, float hi, float def) { const float f = static_cast<float>(atof(v.c_str())); return (f >= lo && f <= hi) ? f : def; }
@@ -88,7 +119,7 @@ namespace ml::Settings
     static void ApplyGeneral(Config& c, const std::string& k, const std::string& v)
     {
         if      (k == "Enabled")          c.enabled = Flag(v);
-        else if (k == "MenuKey")          c.menuKey = Key(v, 0x2D);
+        else if (k == "MenuKey")          c.menuKey = Key("MenuKey", v, 0x2D);
         else if (k == "ShowHud")          c.showHud = Flag(v);
         else if (k == "NotifyBagFull")    c.notifyBagFull = Flag(v);
         else if (k == "NotifyAutoStore")  c.notifyAutoStore = Flag(v);
@@ -103,10 +134,10 @@ namespace ml::Settings
         else if (k == "PadToggle")        c.padToggle = static_cast<unsigned>(strtoul(v.c_str(), nullptr, 0));
         else if (k == "PadBurst")         c.padBurst  = static_cast<unsigned>(strtoul(v.c_str(), nullptr, 0));
         else if (k == "PadWatch")         c.padWatch  = static_cast<unsigned>(strtoul(v.c_str(), nullptr, 0));
-        else if (k == "KeyToggle")        c.keyToggle = Key(v, 0x79, true);
-        else if (k == "KeyBurst")         c.keyBurst = Key(v, 0x7A, true);
-        else if (k == "KeyWatch")         c.keyWatch = Key(v, 0x24, true);
-        else if (k == "KeyOwned")         c.keyOwned = Key(v, 0, true);
+        else if (k == "KeyToggle")        c.keyToggle = Key("KeyToggle", v, 0x79, true);
+        else if (k == "KeyBurst")         c.keyBurst = Key("KeyBurst", v, 0x7A, true);
+        else if (k == "KeyWatch")         c.keyWatch = Key("KeyWatch", v, 0x24, true);
+        else if (k == "KeyOwned")         c.keyOwned = Key("KeyOwned", v, 0, true);
         else if (k == "PadOwned")         c.padOwned  = static_cast<unsigned>(strtoul(v.c_str(), nullptr, 0));
         else if (k == "ScansPerSec")      c.scansPerSec = Clamp(v, 1, 30);
         else if (k == "PerScan")          c.perScan = Clamp(v, 0, 64);
