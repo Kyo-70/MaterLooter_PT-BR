@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <climits>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -38,6 +39,10 @@ namespace ml::loot
     // ------------------------------------------------------------ shared ----
     static HANDLE g_thread = nullptr;
     static volatile LONG g_running = 0, g_burst = 0, g_forget = 0;
+    // What a burst press may still take before its window closes. Written by
+    // the worker when the press is picked up and spent by Scan, both on the
+    // worker thread.
+    static int g_burstLeft = 0;
     static bool g_debugLog = false;          // the snapshot's DebugLog, for the diagnostics in Fill
     static std::mutex g_mu;                 // status, nearby, recent
     static Status g_status;
@@ -6453,7 +6458,7 @@ namespace ml::loot
             }
 
             int taken = 0;
-            const int cap = burst ? (cfg.burstPerKey ? cfg.burstPerKey : 64) : (cfg.perScan ? cfg.perScan : 64);
+            const int cap = burst ? std::min(g_burstLeft, 64) : (cfg.perScan ? cfg.perScan : 64);
             for (int pass = 0; pass < 2 && taken < cap; ++pass)
             {
                 for (size_t i = 0; i < list.size() && taken < cap; ++i)
@@ -6654,6 +6659,7 @@ namespace ml::loot
                     if (cfg.dupeProbe) DupeOpen(g_me, k.eid, k.iid, k.tid, k.pos, Label(k), k.node, now);
                 }
             }
+            if (burst) g_burstLeft = std::max(0, g_burstLeft - taken);
         }
 
         if (cfg.dupeProbe) DupeMature(g_me, now, mp, cfg.scanRange);
@@ -6774,7 +6780,37 @@ namespace ml::loot
                 g_prefabArm.clear();
                 LOG("[learn] node yields forgotten, and every prefab has its arming reach back");
             }
-            const bool burst = InterlockedExchange(&g_burst, 0) != 0;
+            // A press used to act on one scan and stop. Anything that scan had to
+            // arm first fills a moment later, 0.8 s at the median and 6.5 s at
+            // the 90th percentile across 362 arm lines in the saved logs, so
+            // with auto-loot off it was armed and never taken: dstackm23 on the
+            // posts tab, 4 October 2026, with the parts machines drop, and
+            // Sov1737's 28 September log, where a press armed objects and the
+            // next [loot] line came a minute and a half later. A press now
+            // keeps acting for eight seconds, or until it has taken as many
+            // objects as Objects per burst press allows.
+            static constexpr DWORD kBurstMs = 8000;
+            static DWORD s_burstUntil = 0;
+            static int s_burstBudget = 0;
+            if (InterlockedExchange(&g_burst, 0) != 0)
+            {
+                s_burstUntil = GetTickCount() + kBurstMs;
+                if (!s_burstUntil) s_burstUntil = 1;
+                g_burstLeft = cfg.burstPerKey ? cfg.burstPerKey : INT_MAX;
+                s_burstBudget = g_burstLeft;
+            }
+            bool burst = false;
+            if (s_burstUntil)
+            {
+                if (static_cast<LONG>(GetTickCount() - s_burstUntil) < 0 && g_burstLeft > 0) burst = true;
+                else
+                {
+                    const int took = s_burstBudget - g_burstLeft;
+                    LOG("[loot] the burst press is done: %d object(s) taken", took);
+                    s_burstUntil = 0;
+                    g_burstLeft = 0;
+                }
+            }
             const bool want = cfg.enabled || burst || st.menuOpen;
             if (want && !g_scanDisabled) ScanGuarded(cfg, cfg.enabled || burst, burst);
             {
