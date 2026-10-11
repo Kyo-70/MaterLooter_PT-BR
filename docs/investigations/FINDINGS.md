@@ -2174,3 +2174,35 @@ measured worst case of 130 ms. A vein whose drop somehow took longer than that
 would be gathered as well as broken, which is a double yield, so do not shorten
 the window without a reason and do not lengthen the measurement without
 re-checking it.
+
+## The break pair does not reach containers or webs (2026-10-11)
+
+Asked because sacks, barrels, crates and spider webs all sit at "not ready
+(node empty)" in every log, never filling, and a vein already spills its ore
+when the mod drives `onattackimpulsecomplete` then `onbreak` at it. Checked
+statically before writing any code, and the answer is no.
+
+The hash of `onattackimpulsecomplete` (0x3DB4A808) is in 277 of the 13,941
+`.binarygimmick` files: trees, `item_log`, mines, camp-farm crops, turrets and
+gas vents. Every ore vein with `breaks=1` has it, 44 of 44. Not one of the 559
+container rows in the node table has it, nor any of the eight
+`/00_common/mon_deco/` webs or the burlap sacks. Containers share the default
+event table. The 54 with a `<Break>` handler play 96 effects and one sound from
+it and drop nothing; their dropset is in the gimmick-level drop block, which
+314 prefabs have and which no chart event fires.
+
+Two things the `breaks` column turned out not to mean. It is set when a row
+overrides the default break impulse of 3.0 or names a break projectile, which
+is physics tuning: 1,477 rows, every chest and treasure box among them, and only
+53 of the 1,477 declare `OnAttackImpulseComplete`. On a container `breaks=1`
+says nothing about whether striking it pays out, and the sacks and webs that
+started this are `breaks=0` or have no row at all.
+
+What is left is a live test: drive the pair, or `onbreak` alone, at one sack and
+one web with the verbose log on, and look for `[state]` lines and an item entity
+within about 150 ms, the way session L did for veins. The webs pay
+`DropSet_Gimmick_Spiderweb` (Spider Web at 100 per cent, one or two) and the
+sacks `DropSet_Burlap_Bag`. The barrels and boxes that explode
+(`gimmick_barrel_fire_*`, `_electric_`, `_poison_`, `_ice_`, `gimmick_box_fire_01`,
+`gimmick_box_electric_01`) carry a `BreakProjectileKey` and must never be in
+such a rule.
