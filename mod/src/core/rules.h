@@ -13,7 +13,8 @@ namespace ml::Rules
         std::string detail;             // the class, tag or key it matched
     };
 
-    // Order: item override, tag never, protected tags (memory-fragment, gimmick),
+    // Order: item override, tag never, protected tags (memory-fragment, gimmick,
+    // housing-only),
     // tag always, quest/no-sell/dev filters, value floor, class rule, then loot.
     Verdict Decide(const Item& item, const Config& cfg);
 

@@ -27,7 +27,18 @@ namespace ml::Rules
         // taken, and mechanism parts (puzzle pillars, power cores) break the
         // puzzle they belong to. Only an explicit "always" on that very tag
         // lifts the protection; an "always" on a broader tag does not.
-        static const char* protectedTags[] = { "memory-fragment", "gimmick" };
+        //
+        // housing-only joined them on 10 October 2026. GG1313 and Ahplla on
+        // the posts tab: with Furniture on, the camp tables went, the cups and
+        // plates on them were left floating, and characters in later cutscenes
+        // lay on a table that was no longer there. The table never reached the
+        // bag, only the housing decoration storage, which is what the tag
+        // means. 108 items carry it, 81 of them furniture: the camp Table
+        // (Item_Background_Breakable_Wood_10 and _11), beds, wardrobes,
+        // cabinets, the house chairs and tables, the Cooking Pot, Griddle and
+        // Cauldron, and a dozen jars. Each one taken is a fixture gone from the
+        // scene it furnishes, so none is taken unless the tag is set to always.
+        static const char* protectedTags[] = { "memory-fragment", "gimmick", "housing-only" };
         for (const char* tag : protectedTags)
         {
             if (!item.HasTag(tag)) continue;
