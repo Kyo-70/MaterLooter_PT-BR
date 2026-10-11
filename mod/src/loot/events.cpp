@@ -82,7 +82,8 @@ namespace ml::events
     // ev 0 means the vein's pair of transitions, which is what DriveBreak
     // wants. Any other value is one transition driven by id, which is what a
     // well's sequence is made of.
-    struct PendDrive { uintptr_t comp, actor; uint32_t player, target; float x, y, z; uint32_t ev; uintptr_t ent; };
+    // test is the BreakTest mode, 0 for every ordinary drive.
+    struct PendDrive { uintptr_t comp, actor; uint32_t player, target; float x, y, z; uint32_t ev; uintptr_t ent; uint8_t test; };
     static PendAct g_pendAct[64]; static int g_pendActN = 0;
     struct PendDelete { uint64_t aval; uint16_t tid, c; uint64_t dval; uint16_t count; uint32_t player, route; bool set; };
     static PendDelete g_pendDel[16]; static int g_pendDelN = 0;
@@ -570,6 +571,23 @@ namespace ml::events
         if (d.ev)
             return ml::loot::hooks::DriveGimmickEvent(d.comp, d.ev, d.player, d.actor, d.target, nullptr);
 
+        // BreakTest. No ore-bonus marker, since nothing here is a vein, and
+        // both answers are logged: whether the driver changed the gimmick's
+        // state is the first thing the test is asking.
+        if (d.test)
+        {
+            bool swing = false;
+            if (d.test == 1)
+                swing = ml::loot::hooks::DriveGimmickEvent(d.comp, game::NameId("onattackimpulsecomplete"),
+                                                           d.player, d.actor, d.target, nullptr);
+            const bool brk = ml::loot::hooks::DriveGimmickEvent(d.comp, game::NameId("onbreak"),
+                                                                d.player, d.actor, d.target, pos);
+            LOG("[breaktest] %08X on the game thread: %s%s", d.target,
+                d.test == 1 ? (swing ? "the swing changed its state, " : "the swing changed nothing, ") : "",
+                brk ? "the break changed its state" : "the break changed nothing");
+            return swing || brk;
+        }
+
         // Stamp the time so the ore bonus knows this vein was broken by the
         // mod. The drop resolves after this returns, so a flag held only for
         // the call would never cover it.
@@ -586,6 +604,19 @@ namespace ml::events
     {
         if (!comp) return false;
         const PendDrive d{ comp, actor, player, target, x, y, z, 0, ent };
+        if (OnGameThread()) return DriveNow(d);
+        Lock();
+        const bool room = g_pendDrvN < 32;
+        if (room) g_pendDrv[g_pendDrvN++] = d;
+        Unlock();
+        return room;
+    }
+
+    bool DriveBreakTest(uintptr_t comp, uint32_t player, uintptr_t actor,
+                        uint32_t target, uintptr_t ent, float x, float y, float z, bool swing)
+    {
+        if (!comp) return false;
+        const PendDrive d{ comp, actor, player, target, x, y, z, 0, ent, static_cast<uint8_t>(swing ? 1 : 2) };
         if (OnGameThread()) return DriveNow(d);
         Lock();
         const bool room = g_pendDrvN < 32;

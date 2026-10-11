@@ -40,6 +40,11 @@ namespace ml::events
     bool DriveBreak(uintptr_t gimmickComp, uint32_t playerEid, uintptr_t playerActor,
                     uint32_t targetEid, uintptr_t targetEnt, float x, float y, float z);
 
+    // BreakTest only. The vein's pair with swing set, onbreak alone without
+    // it, and each answer logged on the game thread. No ore-bonus marker.
+    bool DriveBreakTest(uintptr_t gimmickComp, uint32_t playerEid, uintptr_t playerActor,
+                        uint32_t targetEid, uintptr_t targetEnt, float x, float y, float z, bool swing);
+
     // Send (or queue when off the game thread). Returns false when refused.
     // A search given a skin interaction and a character key is followed on the
     // game thread by the reward a hand skin raises, which is where the game

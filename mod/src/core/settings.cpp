@@ -188,6 +188,7 @@ namespace ml::Settings
         else if (k == "DropRefused")      c.dropRefused = Flag(v);
         else if (k == "DebugLog")         c.debugLog = Flag(v);
         else if (k == "DeleteTestName")   c.deleteTestName = v;
+        else if (k == "BreakTest")        c.breakTest = Clamp(v, 0, 2);
         else if (k == "EquipStrict")      c.equipStrict = Flag(v);
         else if (k == "DupeProbe")        c.dupeProbe = Flag(v);
         else if (k == "DescriptorDump")   c.descriptorDump = Flag(v);
@@ -692,6 +693,7 @@ namespace ml::Settings
                  c.lootOwned, c.skipQuestItems, c.skipNoSell, c.skipQuestGear, c.minValueCopper, c.takeUnknownItems, c.petFilter, c.stopPetLooting, c.stopPetBodies, c.debugLog, c.configVersion); s += b;
         snprintf(b, sizeof b, "DropRefused=%d\n", c.dropRefused); s += b;
         if (!c.deleteTestName.empty()) { snprintf(b, sizeof b, "DeleteTestName=%s\n", c.deleteTestName.c_str()); s += b; }
+        if (c.breakTest) { snprintf(b, sizeof b, "BreakTest=%d\n", c.breakTest); s += b; }
         if (c.equipStrict) { snprintf(b, sizeof b, "EquipStrict=1\n"); s += b; }
         if (c.dupeProbe)  { snprintf(b, sizeof b, "DupeProbe=1\n"); s += b; }
         if (c.descriptorDump) { snprintf(b, sizeof b, "DescriptorDump=1\n"); s += b; }

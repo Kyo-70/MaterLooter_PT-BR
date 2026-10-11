@@ -3999,6 +3999,111 @@ namespace ml::loot
 
     static bool g_scanDisabled = false;
 
+    // --- break test -----------------------------------------------------------
+    //
+    // Research behind BreakTest in the ini, 11 October 2026. Burlap sacks,
+    // potato sacks and the cobwebs in /00_common/mon_deco/ never fill a gather
+    // block, so every log has them at "not ready (node empty)", and by hand
+    // they are struck and spill. GG1313 asked for the sacks and Sov1737 for
+    // the webs. The vein's pair is onattackimpulsecomplete then onbreak, and
+    // the first is in all 44 vein charts and in none of these, which
+    // FINDINGS.md counts. So this drives the pair, or onbreak alone, at one
+    // of them at a time and reads back what happened: the driver's own answer
+    // on the game thread, the game's drop event for that entity, whether the
+    // object is still there, and what new items lie within four metres of it
+    // 0.4, 2 and 6 seconds on. Close by, at walking pace, never anything the
+    // game calls theft, 24 drives a session at most.
+    static bool BreakTestTarget(const char* node)
+    {
+        if (!node || !node[0] || IStr(node, "shops")) return false;
+        static const char* kWords[] = {
+            "gimmick_mon_deco_giant_spider_web_", "gimmick_mon_deco_spider_web_bottom_",
+            "gimmick_breakable_sack_", "gimmick_breakable_baggage_", "gimmick_breakable_trollbag_",
+            "gimmick_breakable_ex_dpf_sack_", "gimmick_breakable_ex_dpf_herbsack_",
+            "gimmick_breakable_ex_dpf_potatosack_", "gimmick_breakable_ex_dpf_sweetpotatosack_" };
+        for (const char* w : kWords)
+            if (IStr(node, w)) return true;
+        return false;
+    }
+
+    struct BreakTry { uint32_t eid; Vec3 p; DWORD when; int stage; char node[160]; std::vector<uint32_t> before; };
+    static std::vector<BreakTry> g_breakTries;
+    static std::unordered_set<uint32_t> g_breakTried;
+    static int g_breakTestDrives = 0;
+
+    static void BreakTestPass(const std::vector<Cand>& list, const Config& cfg, DWORD now)
+    {
+        static bool s_said = false;
+        if (!s_said)
+        {
+            s_said = true;
+            LOG("[breaktest] on, mode %d: %s at burlap sacks and spider webs within 10 m, one at a time, 24 at most",
+                cfg.breakTest, cfg.breakTest == 1 ? "the swing and the break" : "the break alone");
+        }
+        auto near4 = [](const Vec3& a, const Vec3& b) {
+            const float dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
+            return dx * dx + dy * dy + dz * dz < 16.0f;
+        };
+        // What became of the ones already driven.
+        static const DWORD kStageMs[3] = { 400, 2000, 6000 };
+        for (size_t t = 0; t < g_breakTries.size();)
+        {
+            BreakTry& b = g_breakTries[t];
+            if (b.stage >= 3) { g_breakTries.erase(g_breakTries.begin() + static_cast<long>(t)); continue; }
+            if (now - b.when < kStageMs[b.stage]) { ++t; continue; }
+            bool there = false;
+            std::string fresh;
+            int freshN = 0;
+            for (const Cand& k : list)
+            {
+                if (k.eid == b.eid) { there = true; continue; }
+                if (!near4(k.pos, b.p)) continue;
+                if (std::find(b.before.begin(), b.before.end(), k.eid) != b.before.end()) continue;
+                if (++freshN <= 6)
+                {
+                    if (!fresh.empty()) fresh += ", ";
+                    fresh += Label(k);
+                }
+            }
+            if (freshN > 6) fresh += ", and " + std::to_string(freshN - 6) + " more";
+            LOG("[breaktest] %08X after %lu ms: drop event %s, the object %s, new within 4 m: %s | %s",
+                b.eid, static_cast<unsigned long>(now - b.when), SawDropFor(b.eid) ? "seen" : "not seen",
+                there ? "is still there" : "is gone", freshN ? fresh.c_str() : "nothing", b.node);
+            ++b.stage;
+            ++t;
+        }
+        // One new drive a pass, and none while the last is still being read.
+        if (!g_breakTries.empty() || g_breakTestDrives >= 24) return;
+        for (const Cand& k : list)
+        {
+            if (!k.ent || !BreakTestTarget(k.node) || g_breakTried.count(k.eid)) continue;
+            if (BreakUnsafe(k.d, now)) continue;
+            if (WouldStealCached(k) != 0) continue;
+            const uintptr_t gc = game::CompByClass(game::Comps(k.ent), kCls_Gimmick);
+            const char* gn = gc ? mem::RttiShort(gc) : nullptr;
+            if (!gn || !strstr(gn, "GimmickActorComponent")) continue;
+            g_breakTried.insert(k.eid);
+            BreakTry b{ k.eid, k.pos, now, 0, "", {} };
+            snprintf(b.node, sizeof b.node, "%s", k.node);
+            for (const Cand& o : list)
+                if (o.eid != k.eid && near4(o.pos, k.pos)) b.before.push_back(o.eid);
+            if (!events::DriveBreakTest(gc, g_meEid, g_me, k.eid, k.ent, k.pos.x, k.pos.y, k.pos.z, cfg.breakTest == 1))
+            {
+                LOG("[breaktest] %08X could not be queued", k.eid);
+                return;
+            }
+            // What spills is then picked up like anything else, and this keeps
+            // a heap of it from reading as storage contents.
+            BrokeMark(k.pos, now);
+            ++g_breakTestDrives;
+            LOG("[breaktest] drive %d: %08X %.1f m, %d object(s) already within 4 m, filled %d gather %d inter %d | %s",
+                g_breakTestDrives, k.eid, k.d, static_cast<int>(b.before.size()), k.filled ? 1 : 0, k.gather ? 1 : 0,
+                k.inter ? 1 : 0, k.node);
+            g_breakTries.push_back(std::move(b));
+            return;
+        }
+    }
+
     static void Scan(const Config& cfg, bool act, bool burst);
 
     // No C++ objects in this frame, so __try is allowed here where it is not
@@ -6271,6 +6376,7 @@ namespace ml::loot
         if (act && !settling)
         {
             const uint32_t route = events::RouteKnown() ? events::Route() : g_meRoute;
+            if (cfg.breakTest && g_me) BreakTestPass(list, cfg, now);
             // Arm empty nodes first: the game only fills a node's data when it
             // thinks the player can reach it; arming does that for us.
             if (cfg.autoArm && game::F().armFn)

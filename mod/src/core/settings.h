@@ -180,6 +180,14 @@ namespace ml
         // layout on the way. This is how the delete was proved on 2760 and
         // how it is checked again after a game patch. Not in the menu.
         std::string deleteTestName;
+        // Research, 11 October 2026. Sacks and spider webs never fill, and the
+        // pair the mod drives at a vein is absent from every one of their
+        // charts, so whether either can be broken from here is a question for
+        // a live test. 1 drives the swing and the break at the burlap sacks
+        // and the cobwebs within reach, 2 the break alone, and each drive is
+        // followed in the log for six seconds. 0 in every shipped build, and
+        // not in the menu.
+        int breakTest = 0;
         // Issue #73. Let a piece of gear from the worn-gear folder through when
         // the game has not marked it worn. Off in every shipped build, where
         // that folder is refused entire.

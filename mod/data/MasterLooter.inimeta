@@ -816,6 +816,17 @@
           "hidden": true,
           "order": 67
         },
+        "BreakTest": {
+          "label": "Break test",
+          "type": "int",
+          "group": "Overlay and diagnostics",
+          "default": "0",
+          "help": "Research: 1 drives the vein's swing and break at burlap sacks and spider webs within reach, 2 the break alone, and logs what each one did. Leave at 0.",
+          "min": 0,
+          "max": 2,
+          "hidden": true,
+          "order": 69
+        },
         "ConfigVersion": {
           "label": "Config version",
           "type": "int",
