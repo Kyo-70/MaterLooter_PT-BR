@@ -2206,3 +2206,29 @@ sacks `DropSet_Burlap_Bag`. The barrels and boxes that explode
 (`gimmick_barrel_fire_*`, `_electric_`, `_poison_`, `_ice_`, `gimmick_box_fire_01`,
 `gimmick_box_electric_01`) carry a `BreakProjectileKey` and must never be in
 such a rule.
+
+The live test was run on 15 October 2026 by Sov1737 on 1.6.48, with
+`BreakTest=1` then `BreakTest=2` set while the game ran. Eleven drives, ten at
+webs (`giant_spider_web_02`, `_04`, `_05`, `spider_web_bottom_02` and others)
+and one at `gimmick_breakable_sack_02`, all at 2.5 to 9 m. Each reported "the
+break changed its state", and in mode 1 the swing changed nothing. None raised
+a drop event, none removed the object, and nothing new appeared within 4 m at
+422, about 2,100 and about 6,100 ms. So neither the pair nor `onbreak` alone
+pays out on a web or a sack. The next step is to watch the game take one: a
+verbose log of the player collecting webs and a sack by hand, for the
+`[player-event]` descriptor it raises and the `[inter]` row the web offers.
+
+Sov1737's second log the same afternoon, with the verbose log on, caught the
+game doing it by hand. A web the player cuts receives `OnStartSpiderWeb`
+(0x6481C2F2) and then `OnBreakSpiderWeb` (0x2754AA5B), named by
+`name_events.py`. The clean case is `giant_spider_web_02` B0100E15, which the
+mod never drove: the start at 15:06:09.930 and the break at 15:06:11.340.
+`spider_web_bottom_02` B0100E19 and B0100E1B also took `OnBreakSpiderWeb`
+(15:06:10.390 and 15:06:14.777) and were gone within two seconds of it, but
+BreakTest mode 2 had driven `onbreak` at each two to four seconds earlier, so
+they prove less. The two BreakTest watched raised no drop event and left no
+item within 4 m, so the Spider Web from a cut web reaches the bag some other
+way. `[gstate]` keeps three samples per id, so
+those are the first three cuts and not all of them. Driving `OnBreakSpiderWeb`
+at a web is the obvious next build, the way the well is driven by its own
+transition. Nothing in the log named a sack event.

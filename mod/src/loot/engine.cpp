@@ -489,6 +489,24 @@ namespace ml::loot
     static constexpr uint32_t kPickEvent = 0x003ECC59;
     static bool StatePick(const NodeType* t) { return t && t->statePick; }
 
+    // A cobweb is picked through two events of its own, not the plant's one.
+    // Sov1737's log of 15 October 2026 caught the game cutting a web by hand:
+    // OnStartSpiderWeb on the web's gimmick, OnBreakSpiderWeb about 1.4
+    // seconds later, and the web was gone. Both names come from hashing the
+    // exe's strings. The ore pair driven at the same webs that afternoon
+    // changed their state and paid nothing, eleven times. The node table marks
+    // the eight web prefabs as state picks; this only chooses the events.
+    static constexpr uint32_t kWebStart = 0x6481C2F2;
+    static constexpr uint32_t kWebBreak = 0x2754AA5B;
+    static constexpr DWORD    kWebCutMs = 1500;
+    // A start older than this is treated as never sent, so a web walked away
+    // from mid-cut gets the whole cut again and not a lone break.
+    static constexpr DWORD    kWebStaleMs = 30000;
+    // Webs whose cut has started, by entity id, and when. Ids are not reused
+    // inside a session and nothing here holds a pointer, so the world-change
+    // purge does not need to know about it.
+    static std::unordered_map<uint32_t, DWORD> g_webCut;
+
     // Memories. Keys: instance id when the node has one (survives respawns),
     // otherwise the entity id.
     // Instance ids seen on more than one world object at once. A stack dropped
@@ -2909,6 +2927,52 @@ namespace ml::loot
         return node && node[0] && !type && !identified && IStr(node, "/00_common/tool/");
     }
 
+    // The eight cobweb prefabs; kWebStart above says why they are cut apart.
+    static bool SpiderWeb(const char* node)
+    {
+        return node && node[0] && (IStr(node, "gimmick_mon_deco_giant_spider_web_") ||
+                                   IStr(node, "gimmick_mon_deco_spider_web_bottom_"));
+    }
+
+    // Doors, switches, gates, lamps and the operators behind puzzles, none of
+    // which a player ever gathers. With Unidentified nodes on they read as
+    // nodes nobody has learned yet. Across 46 logs on 15 October 2026 the mod
+    // sent 606 gathers at doors, 120 at Abyss gates and circuit gates, and more
+    // at a valve switch and a decorative trigger, all without item data, and
+    // not one paid out; Sov1737's session that day armed switches, doors and
+    // two gimmick_operator_gimmickcomplete puzzle operators. Driving an
+    // interaction on something that is not loot is how the woodthorn vines
+    // broke in issue #41. A word has to be a whole segment of the basename, so
+    // a lamp the game hands over as an item, the Icy White Glass Lamp, carries
+    // item data and is still taken. make_nodes_tsv.py refuses the same words
+    // before its name guess.
+    static bool Mechanism(const char* node, const NodeType* type, bool identified)
+    {
+        if (!node || !node[0] || type || identified) return false;
+        static const char* kParts[] = { "door", "switch", "gate", "lamp", "streetlamp", "operator", "decolinker",
+                                        "decotrigger", "spotlight", "candle", "brazier", "firepot", "pusher",
+                                        "pinballmachine", "cushionballmachine", "clawmachine" };
+        const char* base = node;
+        for (const char* q = node; *q; ++q) if (*q == '/' || *q == '\\') base = q + 1;
+        char seg[48];
+        int n = 0;
+        for (const char* q = base; ; ++q)
+        {
+            const char ch = *q;
+            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+            {
+                if (n < 47) seg[n++] = static_cast<char>(ch | 0x20);
+                continue;
+            }
+            seg[n] = 0;
+            if (n)
+                for (const char* w : kParts) if (strcmp(seg, w) == 0) return true;
+            n = 0;
+            if (!ch || ch == '.') break;
+        }
+        return false;
+    }
+
     static bool OffLimits(const char* node, bool unwornEquip = false)
     {
         if (!node || !node[0]) return false;
@@ -3279,6 +3343,7 @@ namespace ml::loot
             if (PlacedCookFire(c.node)) return skip("a placed Field Pot or Bonfire");
             if (CraftStation(c.node)) return skip("a crafting station");
             if (Machinery(c.node, c.nodeType, c.db != nullptr)) return skip("machinery or a fixture, not loot");
+            if (Mechanism(c.node, c.nodeType, c.db != nullptr)) return skip("a door, switch or other mechanism, not loot");
             // Gear that is being worn, which the game keeps in the world as an
             // object of its own under /00_common/equip/. Taking one hands over a
             // copy and leaves the original equipped, so the player ends up with
@@ -6399,6 +6464,7 @@ namespace ml::loot
                     // fast-travel artifact. Refusing to loot one afterwards is too late.
                     if (OffLimits(k.node)) continue;
                     if (Machinery(k.node, k.nodeType, false)) continue;
+                    if (Mechanism(k.node, k.nodeType, false)) continue;
                     if (AttachedPart(k.node, k.nodeType)) continue;
                     // A well is seven entities and six of them never answer, so
                     // standing beside one meant seven arm calls every five seconds for
@@ -6625,7 +6691,37 @@ namespace ml::loot
                             held("its gimmick component no longer reads as one");
                             continue;
                         }
-                        if (!events::DriveEvent(gc, kPickEvent, g_meEid, g_me, k.eid, k.ent))
+                        // A web is cut the way the game cuts one: the start, then
+                        // the break on a later pass. Nothing is committed until
+                        // the break goes, so the retry gates above stay clear
+                        // while the cut is under way.
+                        const bool web = SpiderWeb(k.node);
+                        if (web)
+                        {
+                            auto wc = g_webCut.find(k.eid);
+                            if (wc != g_webCut.end() && now - wc->second > kWebStaleMs)
+                            {
+                                g_webCut.erase(wc);
+                                wc = g_webCut.end();
+                            }
+                            if (wc == g_webCut.end())
+                            {
+                                if (g_webCut.size() > 4096) g_webCut.clear();
+                                if (!events::DriveEvent(gc, kWebStart, g_meEid, g_me, k.eid, k.ent))
+                                {
+                                    static int s_webErr = 0;
+                                    if (s_webErr < 8) { ++s_webErr; LOG_ERR("[web] eid %08X could not be queued", k.eid); }
+                                    commit();
+                                    continue;
+                                }
+                                g_webCut[k.eid] = now;
+                                held("started cutting the web, the break follows");
+                                continue;
+                            }
+                            if (now - wc->second < kWebCutMs && held("cutting the web")) continue;
+                            g_webCut.erase(wc);
+                        }
+                        if (!events::DriveEvent(gc, web ? kWebBreak : kPickEvent, g_meEid, g_me, k.eid, k.ent))
                         {
                             static int s_pickErr = 0;
                             if (s_pickErr < 8) { ++s_pickErr; LOG_ERR("[pick] eid %08X could not be queued", k.eid); }
@@ -6655,7 +6751,7 @@ namespace ml::loot
                         if (cfg.debugLog || s_pickLines < 40)
                         {
                             ++s_pickLines;
-                            LOG("[pick] drove the game's own pick at eid %08X %.1f m: %s", k.eid, k.d, k.node);
+                            LOG("[pick] drove the game's own %s at eid %08X %.1f m: %s", web ? "web cut" : "pick", k.eid, k.d, k.node);
                         }
                         continue;
                     }

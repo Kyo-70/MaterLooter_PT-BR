@@ -186,6 +186,33 @@ SEEN_PICKUPS = {}
 # because all thirteen carry the gimmick tag and it is protected.
 HOUSING_WORD = "housing"
 
+# The cobwebs in /00_common/mon_deco/. The game tags them as nothing and never
+# fills a gather block on one, so every log had them at "not ready (node empty)".
+# Sov1737's log of 15 October 2026 caught the game cutting one by hand: the web
+# receives OnStartSpiderWeb, then OnBreakSpiderWeb about 1.4 seconds later, and
+# is gone. Their dropset is DropSet_Gimmick_Spiderweb, Spider Web at 100 per
+# cent. They go in as items that yield Spider Web and are reached through their
+# own state events, which the engine sends in that order. src is "seen" because
+# the log is the evidence, not the name.
+SPIDER_WEB = re.compile(r"^gimmick_mon_deco_(giant_spider_web|spider_web_bottom)_")
+SPIDER_WEB_ITEM = "spider_web"
+
+# Mechanisms the name guess turned into nodes. A segment of the basename names
+# what the thing is, and none of these is ever something a player gathers:
+# doors, switches, gates, lamps, the operators behind puzzles. The guess filed 65
+# of them, 54 as stone, 8 as wood and 3 as plant, because "door_double_wood_log"
+# holds "log" and "lamp_standstone" holds "stone". Across 46 logs on 15 October
+# 2026 not one of the 65 was ever looted or paid out, and the mod armed
+# gimmick_switch_bigtree_01_jijeongta 44 times. Rows the game tags itself, the
+# streetlamp planters and a bismuth switch among them, are decided above this
+# and keep their kinds. The engine refuses the same words for a prefab with no
+# row and no item, which is where the 606 door gathers in those logs came from.
+MECHANISM_SEGMENTS = {
+    "door", "switch", "gate", "lamp", "streetlamp", "operator", "decolinker",
+    "decotrigger", "spotlight", "candle", "brazier", "firepot", "pusher",
+    "pinballmachine", "cushionballmachine", "clawmachine",
+}
+
 # Fallback for gather nodes the table does not tag, read off the prefab name.
 # Ordered: the first hit wins. Never consulted for a gimmick_attach_ prefab;
 # see kind_for().
@@ -382,6 +409,8 @@ def kind_for(tags, name, prefab, folder=""):
     """The kind, and whether the game said so or the name merely suggested it."""
     if prefab in SEEN_PICKUPS:
         return SEEN_PICKUPS[prefab], "seen"
+    if SPIDER_WEB.match(prefab):
+        return "item", "seen"
     if HOUSING_WORD in re.split(r"[^a-z0-9]+", prefab):
         return "", False
     # Anything growing in a camp farm, whatever else the game says about it.
@@ -470,6 +499,8 @@ def kind_for(tags, name, prefab, folder=""):
     # "stone" in it. All 25 gimmick_craft_ prefabs are stations, and those
     # three were the only rows the prefix gave the table.
     if prefab.startswith("gimmick_craft_"):
+        return "", False
+    if MECHANISM_SEGMENTS & set(re.split(r"[^a-z]+", prefab.lower())):
         return "", False
     low = name.lower()
     for kind, words in NAME_KIND:
@@ -691,6 +722,10 @@ def main():
             continue
         seen.add(base)
         it = match_item(name, kind, by_key, by_name)
+        web = bool(SPIDER_WEB.match(base))
+        if web:
+            it = by_key.get(SPIDER_WEB_ITEM)
+            statepick = True
         if it:
             stats["with_item"] += 1
         yields = [by_num[v]["string_key"] for v in cand_by_path.get(base, [])

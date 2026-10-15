@@ -753,18 +753,6 @@ gimmick_cup_oath_0001	pickup		Cup oath	tag	0		0	0	0
 gimmick_detectchange_stonebridge_top_01	stone		Dc stonebridge top	name	0		0	0	0
 gimmick_detectchange_stonebridge_top_02	stone		Dc stonebridge top	name	0		0	0	0
 gimmick_detectchange_stonebridge_top_03	stone		Dc stonebridge top	name	0		0	0	0
-gimmick_door_double_wood_log_01	wood		Door double wood log	name	0		0	0	0
-gimmick_door_double_wood_log_01_left	wood		Door double wood log 01 left	name	0		0	0	0
-gimmick_door_double_wood_log_01_lock	wood		Door double wood log 01 lock	name	0		0	0	0
-gimmick_door_double_wood_log_01_lock_left	wood		Wood	name	0		0	0	0
-gimmick_door_double_wood_log_01_lock_right	wood		Wood	name	0		0	0	0
-gimmick_door_double_wood_log_01_right	wood		Door double wood log 01 right	name	0		0	0	0
-gimmick_door_doublearch_stone_02	stone	Stone_Quarry	Stone	name	0		0	0	0
-gimmick_door_doublearch_stone_02_left	stone		Door doublearch stone 02 left	name	0		0	0	0
-gimmick_door_doublearch_stone_02_right	stone		Door doublearch stone 02 right	name	0		0	0	0
-gimmick_door_dungeon_platform_jumping_01_reeddevil	plant		Plant	name	0		0	0	0
-gimmick_door_spot_tower_stone_0001_left	stone		Door spot tower stone 0001 left	name	0		0	0	0
-gimmick_door_spot_tower_stone_0001_right	stone		Door spot tower stone 0001 right	name	0		0	0	0
 gimmick_dpw_picture_01b	container	Collection_Prop_Picture_0066	Study - Emptiness	tag	0		0	0	0
 gimmick_drug_bottle_04	container		Drug bottle	tag	0		0	0	0
 gimmick_drug_bottle_05	container		Drug bottle	tag	0		0	0	0
@@ -841,12 +829,6 @@ gimmick_gemstone_hanger_top_chandelier_0102_index02	stone		Stone	name	0		0	0	0
 gimmick_gemstone_hanger_top_chandelier_0103	stone		Gemstone hanger top chandelier	name	0		0	0	0
 gimmick_gemstone_hanger_top_chandelier_0103_index01	stone		Stone	name	0		0	0	0
 gimmick_gemstone_hanger_top_chandelier_0103_index02	stone		Stone	name	0		0	0	0
-gimmick_gemstone_lamp_0001	stone		Gemstone lamp	name	0		0	0	0
-gimmick_gemstone_lamp_0001_index01	stone		Gemstone lamp 0001 index01	name	0		0	0	0
-gimmick_gemstone_lamp_0001_index02	stone		Gemstone lamp 0001 index02	name	0		0	0	0
-gimmick_gemstone_lamp_0002	stone		Gemstone lamp	name	0		0	0	0
-gimmick_gemstone_lamp_0002_index01	stone		Gemstone lamp 0002 index01	name	0		0	0	0
-gimmick_gemstone_lamp_0002_index02	stone		Gemstone lamp 0002 index02	name	0		0	0	0
 gimmick_hanger_flower_01	plant		Hanger flower	name	0		0	0	0
 gimmick_hanger_flower_02	plant		Hanger flower	name	0		0	0	0
 gimmick_hanger_flower_03	plant		Hanger flower	name	0		0	0	0
@@ -1404,48 +1386,6 @@ gimmick_jijeongta_leaf_vegetation_0001	plant		Jijeongta leaf vegetation	name	0		
 gimmick_jijeongta_leaf_vegetation_0002	plant		Jijeongta leaf vegetation	name	0		0	0	0
 gimmick_kudzu_tree_0001	wood		Kudzu tree	name	0		0	0	0
 gimmick_kudzu_vine_0001	plant		Kudzu vine	tag	0	Item_Rare_Collect_Kudzu	0	0	1
-gimmick_lamp_side_antumbra_0001_reeddevil	plant		Plant	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_del_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_dem_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_desert_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_kwe_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_nameless_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_off	stone		Lamp standstone 01 antumbra off	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_on	stone		Lamp standstone 01 antumbra on	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_reeddevil_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_antumbra_troll_on	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_01_darknessking_off	stone		Stone	name	0	Greyfur_Leather_Boots_VII	0	0	0
-gimmick_lamp_standstone_01_dungeon_off	stone		Lamp standstone 01 dungeon off	name	0		0	0	0
-gimmick_lamp_standstone_01_dungeon_on	stone		Lamp standstone 01 dungeon on	name	0		0	0	0
-gimmick_lamp_standstone_01_index01_off	stone		Lamp standstone 01 index01 off	name	0		0	0	0
-gimmick_lamp_standstone_01_marni_on	stone		Lamp standstone 01 marni on	name	0		0	0	0
-gimmick_lamp_standstone_01_off	stone		Lamp standstone 01 off	name	0		0	0	0
-gimmick_lamp_standstone_01_on	stone		Lamp standstone 01 on	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra	stone		Lamp standstone 02 antumbra	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_del	stone		Lamp standstone 02 antumbra del	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_dem	stone		Lamp standstone 02 antumbra dem	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_desert	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_kwe	stone		Lamp standstone 02 antumbra kwe	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_nameless	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_reeddevil	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_02_antumbra_troll	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_02_index01_off	stone		Lamp standstone 02 index01 off	name	0		0	0	0
-gimmick_lamp_standstone_02_off	stone		Lamp standstone 02 off	name	0		0	0	0
-gimmick_lamp_standstone_02_on	stone		Lamp standstone 02 on	name	0		0	0	0
-gimmick_lamp_standstone_02_skullknight_ice	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_02_skullknight_off	stone		Stone	name	0		0	0	0
-gimmick_lamp_standstone_03_off	stone		Lamp standstone 03 off	name	0		0	0	0
-gimmick_lamp_standstone_03_on	stone		Lamp standstone 03 on	name	0		0	0	0
-gimmick_lamp_standstone_03_on_index01	stone		Lamp standstone 03 on index01	name	0		0	0	0
-gimmick_lamp_standstone_04_off	stone		Lamp standstone 04 off	name	0		0	0	0
-gimmick_lamp_standstone_04_on	stone		Lamp standstone 04 on	name	0		0	0	0
-gimmick_lamp_standstone_05_index01_off	stone		Lamp standstone 05 index01 off	name	0		0	0	0
-gimmick_lamp_standstone_05_off	stone		Lamp standstone 05 off	name	0		0	0	0
-gimmick_lamp_standstone_06_index01_off	stone		Lamp standstone 06 index01 off	name	0		0	0	0
-gimmick_lamp_standstone_06_index02_off	stone		Lamp standstone 06 index02 off	name	0		0	0	0
-gimmick_lamp_standstone_06_index03_off	stone		Lamp standstone 06 index03 off	name	0		0	0	0
-gimmick_lamp_standstone_06_index04_off	stone		Lamp standstone 06 index04 off	name	0		0	0	0
-gimmick_lamp_standstone_06_off	stone		Lamp standstone 06 off	name	0		0	0	0
 gimmick_laser_safe_01_button	pickup		Laser safe 01 button	tag	0		1	0	0
 gimmick_laser_safe_02_button	pickup		Laser safe 02 button	tag	0		1	0	0
 gimmick_laser_safe_03_button	pickup		Laser safe 03 button	tag	0		1	0	0
@@ -1485,6 +1425,14 @@ gimmick_mine_silverstone_place_01_cave	ore		Mine silver cave	tag	1	SilverOre	0	0
 gimmick_mine_stone_01	ore	Stone_Quarry	Stone	tag	1	Stone_Quarry Fine_Stone Premium_Stone	0	0	0
 gimmick_mine_whitestone_place_01	ore	WhiteStone	Scolecite Ore	tag	1	WhiteStone	0	0	0
 gimmick_mine_whitestone_place_01_cave	ore		Mine whitestone cave	tag	1	WhiteStone	0	0	0
+gimmick_mon_deco_giant_spider_web_01	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_giant_spider_web_02	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_giant_spider_web_03	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_giant_spider_web_04	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_giant_spider_web_05	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_giant_spider_web_06	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_spider_web_bottom_02	item	Spider_Web	Spider Web	seen	0		0	0	1
+gimmick_mon_deco_spider_web_bottom_03	item	Spider_Web	Spider Web	seen	0		0	0	1
 gimmick_mon_mechanic_core_big	pickup		Docking core big	tag	0	AbyssRuinsCreatureCore	0	0	0
 gimmick_mon_mechanic_core_small	pickup		Docking core small	tag	0	AbyssRuinsCreatureCore	0	0	0
 gimmick_mon_mechanic_elite_core_big	pickup		Mon mechanic elite core big	tag	0		1	0	0
@@ -1545,7 +1493,6 @@ gimmick_protective_stone_01	stone	Stone_Quarry	Stone	name	0		0	0	0
 gimmick_protective_stone_01_attach	stone		Protective stone 01 attach	name	0		0	0	0
 gimmick_purple_bomb_01	pickup		Battle purple bomb	tag	1	BountyHunter_Fabric_Boots_I	0	0	0
 gimmick_puzzle_basket_01	container		Basket	tag	1		0	0	0
-gimmick_puzzle_demeniss_bottom_kingtomb_door_01	stone		Gate dem stone kingtomb	name	0		0	0	0
 gimmick_puzzle_egg_01_kuku	container		Puzzle egg 01 kuku	tag	0		0	0	0
 gimmick_puzzle_egg_01_standstone	container		Puzzle egg 01 standstone	tag	0		0	0	0
 gimmick_puzzle_ice_block_break_01	ore		Puzzle ice block break	tag	0		0	0	0
@@ -1563,7 +1510,6 @@ gimmick_puzzle_standstone_smallstone_02	pickup		Puzzle standstone smallstone	tag
 gimmick_puzzle_standstone_smallstone_03	pickup		Puzzle standstone smallstone	tag	0		1	0	0
 gimmick_puzzle_statue_01_standstone_combi	stone		Stone	name	0		0	0	0
 gimmick_puzzle_statue_01_standstone_dial	stone		Puzzle statue 01 standstone dial	name	0		0	0	0
-gimmick_puzzle_statue_01_standstone_operator	stone		Stone	name	0	Money_Camp_Food	0	0	0
 gimmick_puzzle_statue_01_standstone_part	stone		Puzzle statue 01 standstone part	name	0		0	0	0
 gimmick_puzzle_stone_wall_break_01_index01	ore		Ore	tag	0		0	0	0
 gimmick_puzzle_tariv_guardiantree_attach_parts_01	wood		Wood	name	0	Flame_staff_spear_TwoHandSpear	0	0	0
@@ -1747,9 +1693,6 @@ gimmick_swingbridge_vine_03	plant		Swingbridge vine 03 part	name	0		0	0	0
 gimmick_swingbridge_vine_03_set	plant		Swingbridge vine 03 set	name	0		0	0	0
 gimmick_swingbridge_vine_pillar_01_part	plant		Swingbridge vine pillar 01 part	name	0		0	0	0
 gimmick_switch_attack_07_bismuth	ore		Switch attack 07 bismuth	tag	1		0	0	0
-gimmick_switch_bigtree_01_jijeongta	wood		Switch bigtree 01 jijeongta	name	0		0	0	0
-gimmick_switch_bigtree_03_jijeongta	wood		Switch bigtree 03 jijeongta	name	0		0	0	0
-gimmick_switch_lever_sidehole_01_reeddevil	plant		Plant	name	0		0	0	0
 gimmick_swordtombstone_0001	stone		Swordtombstone	name	1		0	0	0
 gimmick_swordtombstone_0001_parts01	stone		Swordtombstone 0001 parts01	name	1		0	0	0
 gimmick_tableset_cup_01	pickup	Collection_Prop_Cup_0017	Plain Wooden Beer Mug	tag	0		0	0	0
