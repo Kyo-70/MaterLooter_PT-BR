@@ -479,3 +479,8 @@ Items of this class worth less than this many copper are skipped, in place of Mi
 A backup is written when the game starts with settings changed since the last one, and the last twelve are kept. Backups, presets and a copy of MasterLooter.ini are kept in %s, where a mod manager reinstalling the plugin cannot reach them, and a missing MasterLooter.ini is put back from that copy at the next launch.	前回から設定が変わった状態でゲームが起動するとバックアップが書き込まれ、最新の12件が保持されます。バックアップ、プリセット、MasterLooter.ini のコピーは %s に保存され、プラグインを再インストールするMODマネージャーからは届きません。MasterLooter.ini がなくなっていた場合は、次回起動時にこのコピーから戻されます。
 Off hides the notices the mod puts on screen. Four still show because they need you: bag full, which has its own switch below; another loot mod being installed; the menu being in watch mode; and settings put back after MasterLooter.ini went missing.	オフにすると、MODが画面に出す通知を隠します。次の4つは確認が必要なため表示されます：バッグ満杯（下に専用のスイッチあり）、別のルートMODのインストール、監視モードのメニュー、MasterLooter.ini が消えた後に戻された設定。
 Show on-screen notices	画面に通知を表示する
+a door, switch or other mechanism, not loot	ドアやスイッチなどの仕掛け、戦利品ではない
+machinery or a fixture, not loot	機械や設備、戦利品ではない
+on a living creature	生きている生き物に付いている
+Leave living creatures alone	生きている生き物には手を出さない
+Skips anything attached to a creature that is still alive, such as the Abyss cells on a stone crab. Taking one kills the creature, which then does not count for a challenge and loses its own drops. Dead creatures are not affected, and Carcasses still skins them. Catching small animals has its own switch. Off lets the mod take them.	まだ生きている生き物に付いているものはすべてスキップします。たとえば石ガニに付いたアビスの細胞です。取ると生き物が死に、チャレンジにカウントされず、本来のドロップも失われます。死んだ生き物は対象外で、死骸のスイッチが引き続き剥ぎ取ります。小動物の捕獲には別のスイッチがあります。オフにすると、MODがそれらを取ります。

@@ -41,6 +41,7 @@ A backup is written when the game starts with settings changed since the last on
 A bigger multiplier takes hold as soon as you pick it. A smaller one waits for the next launch.	
 a crafting station	
 A creature the game gives no item of its own, such as a Firefly Colony, is judged by this switch and by the Classes tab, where a Firefly Colony counts as insect. No tag or item rule can reach it, because there is no item to check one against.	
+a door, switch or other mechanism, not loot	
 A floor set for a class on the Classes tab takes the place of this one for that class. Ctrl+click the slider to type a number.	
 A key or controller combo opens that storage from anywhere, and again closes it. Another storage's key switches straight to it.	
 a Master Looter key	
@@ -203,6 +204,7 @@ Largest limit
 Last error	
 learned from the game	
 Leave every size alone	
+Leave living creatures alone	
 left as the game has them	
 Load	
 load a save to see it	
@@ -219,6 +221,7 @@ Loot everything in range once
 loot: %s	
 Looting	
 Lowering the multiplier does not shrink a stack you already built. A slot holding more than the game now allows keeps what is in it until you take some out, and anything above the new limit can be lost.	
+machinery or a fixture, not loot	
 MASTER LOOTER	
 Master Looter v%s for game build %s	
 Materials	
@@ -267,6 +270,7 @@ off
 Off hides the notices the mod puts on screen. Four still show because they need you: bag full, which has its own switch below; another loot mod being installed; the menu being in watch mode; and settings put back after MasterLooter.ini went missing.	
 off, see the error below	
 off, the mod is disabled	
+on a living creature	
 on the player	
 on XInput slot %d	
 On, a vein is harvested where it stands and you never swing a pickaxe. Off, veins are left alone and only the chunks you knock loose are picked up. Needs arming, since asking the vein to open is the whole trick.	
@@ -368,6 +372,7 @@ Skip items shops refuse to buy
 Skip quest equipment	
 Skip quest items	
 skip: %s	
+Skips anything attached to a creature that is still alive, such as the Abyss cells on a stone crab. Taking one kills the creature, which then does not count for a challenge and loses its own drops. Dead creatures are not affected, and Carcasses still skins them. Catching small animals has its own switch. Off lets the mod take them.	
 Small animals	
 small animals off	
 Some changes take effect the next time the game starts.	

@@ -2,6 +2,7 @@
 
 #include <MinHook.h>
 #include <TlHelp32.h>
+#include <cctype>
 #include <cstring>
 #include <string>
 
@@ -649,6 +650,21 @@ namespace ml::Mod
         LOG("[modules] system DLL names loaded from the game folder instead (proxies and the ASI loader): %s",
             proxy.empty() ? "none" : proxy.c_str());
         LOG("[modules] known overlays: %s", overlay.empty() ? "none" : overlay.c_str());
+        // Mod menus that open on Insert, as this one does. hayxo on the posts tab,
+        // 18 October 2026, saw the menu flicker constantly with DesertLink Mod Menu
+        // loaded. It is a fork of the Trinity menu, opens on Insert or F10 by
+        // default, and F10 is this mod's auto-loot key. Whether two menus open at
+        // once is the first thing to rule out, so the log says that both are here.
+        {
+            std::string low = asi;
+            for (char& ch : low) ch = static_cast<char>(tolower(static_cast<unsigned char>(ch)));
+            for (const char* menu : { "desertlinkmodmenu.asi", "trinity.asi" })
+                if (low.find(menu) != std::string::npos)
+                    LOG("[modules] %s is another mod menu and opens on Insert (DesertLink also on F10, which toggles auto-loot here). "
+                        "This mod's menu key is %s, so one press can open both menus at once, and two menus drawing over each other "
+                        "can look like flicker. Set MenuKey in MasterLooter.ini to another key to tell.",
+                        menu, Settings::KeyName(Settings::Get().menuKey));
+        }
     }
 
     void OnRenderProcess()

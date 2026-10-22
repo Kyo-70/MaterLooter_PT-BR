@@ -81,7 +81,12 @@ namespace ml::events
     // GetTickCount of the last body search raised by a pet or a companion.
     uint32_t PetSearchAt();
     // Arm a gimmick node so the game fills its interaction data. Queued off-thread.
-    bool Arm(uintptr_t gimmickComp, uintptr_t mode, uintptr_t arg3, uintptr_t ctx); // arg3 0 = a zeroed scratch buffer
+    // targetEnt is the entity the component was read from and targetEid the id
+    // the scan saw on it. Just before the arm runs on the game thread that
+    // entity has to still carry the id and still own the component, or the
+    // arm is refused, the same rule a drive follows.
+    bool Arm(uintptr_t gimmickComp, uintptr_t mode, uintptr_t arg3, uintptr_t ctx,
+             uintptr_t targetEnt = 0, uint32_t targetEid = 0); // arg3 0 = a zeroed scratch buffer
     // Game thread only: run queued sends and arms.
     void Drain();
     // Throw away everything queued and say how many went. For a world change:

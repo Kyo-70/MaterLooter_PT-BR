@@ -480,3 +480,8 @@ Items of this class worth less than this many copper are skipped, in place of Mi
 A backup is written when the game starts with settings changed since the last one, and the last twelve are kept. Backups, presets and a copy of MasterLooter.ini are kept in %s, where a mod manager reinstalling the plugin cannot reach them, and a missing MasterLooter.ini is put back from that copy at the next launch.	마지막 백업 이후 설정이 바뀐 상태로 게임이 시작되면 백업을 쓰고, 최근 12개를 보관합니다. 백업, 프리셋, MasterLooter.ini 사본은 %s에 보관되어 플러그인을 다시 설치하는 모드 관리자가 건드릴 수 없으며, MasterLooter.ini가 없어지면 다음 실행 때 이 사본으로 되돌립니다.
 Off hides the notices the mod puts on screen. Four still show because they need you: bag full, which has its own switch below; another loot mod being installed; the menu being in watch mode; and settings put back after MasterLooter.ini went missing.	끄면 모드가 화면에 띄우는 알림을 숨깁니다. 다음 네 가지는 확인이 필요해 계속 표시됩니다: 가방 가득 참(아래에 별도 스위치 있음), 다른 루팅 모드 설치됨, 워치 모드인 메뉴, MasterLooter.ini가 사라진 뒤 되돌린 설정.
 Show on-screen notices	화면 알림 표시
+a door, switch or other mechanism, not loot	문, 스위치 같은 장치, 전리품 아님
+machinery or a fixture, not loot	기계 또는 고정 시설, 전리품 아님
+on a living creature	살아 있는 생물에 붙어 있음
+Leave living creatures alone	살아 있는 생물은 건드리지 않기
+Skips anything attached to a creature that is still alive, such as the Abyss cells on a stone crab. Taking one kills the creature, which then does not count for a challenge and loses its own drops. Dead creatures are not affected, and Carcasses still skins them. Catching small animals has its own switch. Off lets the mod take them.	아직 살아 있는 생물에 붙어 있는 것은 모두 건너뜁니다. 예를 들어 돌게에 붙은 Abyss 세포가 그렇습니다. 하나를 가져가면 생물이 죽어 도전 과제에 집계되지 않고 고유 드롭도 잃습니다. 죽은 생물은 영향을 받지 않으며, 사체 스위치가 계속 가죽을 벗깁니다. 작은 동물 포획에는 별도의 스위치가 있습니다. 끄면 모드가 가져갑니다.

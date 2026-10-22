@@ -362,6 +362,16 @@
           "help": "Searching a body or a carcass hands over everything it holds, and the mod only sees it once it is in the bag. On: whatever of that your item rules, tags, classes or value floor refuse is put straight back on the ground beside you, through the same drop the game uses when you drop something yourself, one pile per stack. It covers the mod's own searches and the bodies a pet or a companion loots, whose refused items land beside you as well. A body you search yourself keeps what it paid. Money, documents, quest items and protected items stay in the bag.",
           "order": 24
         },
+        "SpareLivingCreatures": {
+          "label": "Leave living creatures alone",
+          "type": "bool",
+          "group": "Filters",
+          "default": "1",
+          "true": "1",
+          "false": "0",
+          "help": "Skips anything attached to a creature that is still alive, such as the Abyss cells on a stone crab. Taking one kills the creature, which then does not count for a challenge and loses its own drops. Dead creatures are not affected, and Carcasses still skins them. Catching small animals has its own switch. Off lets the mod take them.",
+          "order": 70
+        },
         "LootOwned": {
           "label": "Take goods that belong to someone",
           "type": "bool",

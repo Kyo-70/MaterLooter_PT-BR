@@ -771,6 +771,29 @@ namespace ml::loot::hooks
         return false;
     }
 
+    // The game has just said a pet may take whatever is in this context. If the
+    // scan has recognised it as something the player dropped by hand, say so, once
+    // per object and a few times a session. A dropped item that is back in the bag
+    // with no scan send behind it is this: the pet took it, and the mod's own
+    // hand-drop rule never sees a pet's pick-up. Nothing is changed here.
+    static void NoteDroppedAsked(void* ctx)
+    {
+        const uintptr_t c = reinterpret_cast<uintptr_t>(ctx);
+        if (!c) return;
+        uintptr_t ent = 0;
+        for (int i = 0; i < 2 && !ent; ++i) mem::ReadPtr(c + kOff_Ctx_Entity[i], &ent);
+        uint32_t eid = 0;
+        if (!ent || !game::Eid(ent, &eid) || !ml::loot::HandDroppedEntity(eid)) return;
+        static volatile LONG s_said = 0;
+        static volatile LONG s_last = 0;
+        if (static_cast<LONG>(eid) == s_last || InterlockedIncrement(&s_said) > 12) return;
+        s_last = static_cast<LONG>(eid);
+        char name[160];
+        ml::loot::DescribeEntity(ent, name, sizeof name);
+        LOG("[pet] the game let a pet take %s, which you dropped by hand. If it turns up in the bag, the pet put it there; "
+            "Stop pets picking up loose items keeps a pet off it.", name);
+    }
+
     static FnCondition oPetLooting = nullptr, oHasInteraction = nullptr;
     static bool g_petLootingHooked = false;
     static uint64_t hkPetLooting(void* a1, void* a2, void* a3, void* a4)
@@ -788,7 +811,9 @@ namespace ml::loot::hooks
         // holds until it is open, so bodies stay with the old judge-what-lands
         // path.
         if (cfg.petFilter && PetFilterRefuses(a2)) return kCondNo;
-        return oPetLooting ? oPetLooting(a1, a2, a3, a4) : kCondUnknown;
+        const uint64_t r = oPetLooting ? oPetLooting(a1, a2, a3, a4) : kCondUnknown;
+        if (r == 0) NoteDroppedAsked(a2);
+        return r;
     }
 
     // The other half of the same table row: a pet looting a body asks whether

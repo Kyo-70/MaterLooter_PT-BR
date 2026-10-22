@@ -63,6 +63,11 @@ namespace ml::loot
     // item on the ground at `at`, the world position the payload names. After:
     // says in the log whether it left the bag. The scan leaves it there.
     bool HandDropParse(uintptr_t sender, uint16_t key, uint16_t slot, long long amount, const float* at, bool after);
+    // Whether the scan has recognised this entity as something the player dropped
+    // by hand. Any thread. The pet-looting condition asks it so the log can say
+    // when the game let a pet take one, which is how a dropped item comes back to
+    // the bag without the scan having sent anything.
+    bool HandDroppedEntity(uint32_t eid);
 
     Status GetStatus();
     int  CopyNearby(Nearby* out, int max);

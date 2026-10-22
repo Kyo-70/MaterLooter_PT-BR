@@ -491,3 +491,8 @@ Items of this class worth less than this many copper are skipped, in place of Mi
 A backup is written when the game starts with settings changed since the last one, and the last twelve are kept. Backups, presets and a copy of MasterLooter.ini are kept in %s, where a mod manager reinstalling the plugin cannot reach them, and a missing MasterLooter.ini is put back from that copy at the next launch.	遊戲啟動時若設定與上一個備份不同，就會寫入一個備份，並保留最近十二個。備份、預設組合和 MasterLooter.ini 的副本保存在 %s，重新安裝外掛的模組管理器碰不到那裡；若 MasterLooter.ini 不見了，下次啟動時會從該副本放回。
 Off hides the notices the mod puts on screen. Four still show because they need you: bag full, which has its own switch below; another loot mod being installed; the menu being in watch mode; and settings put back after MasterLooter.ini went missing.	關閉後會隱藏模組在畫面上顯示的提示。有四種仍會顯示，因為需要你注意：背包已滿（下方有獨立的開關）；安裝了另一個拾取模組；選單處於監視模式；以及 MasterLooter.ini 遺失後放回的設定。
 Show on-screen notices	顯示畫面提示
+a door, switch or other mechanism, not loot	門、開關或其他機關，不是戰利品
+machinery or a fixture, not loot	機械或固定設施，不是戰利品
+on a living creature	附在活著的生物上
+Leave living creatures alone	不要動活著的生物
+Skips anything attached to a creature that is still alive, such as the Abyss cells on a stone crab. Taking one kills the creature, which then does not count for a challenge and loses its own drops. Dead creatures are not affected, and Carcasses still skins them. Catching small animals has its own switch. Off lets the mod take them.	略過附著在仍然活著的生物身上的一切，例如石甲蟹身上的阿比斯細胞。取下一個會殺死該生物，它既不計入挑戰，也會失去自身的掉落。已經死亡的生物不受影響，生物遺骸仍會負責剝皮。捕捉小型動物有單獨的開關。關閉後，模組會取走它們。

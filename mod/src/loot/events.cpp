@@ -78,7 +78,10 @@ namespace ml::events
     }
 
     struct PendAct { Action act; uint32_t eid, player, route; uint8_t mode; uint32_t skinInter, skinChr; };
-    struct PendArm { uintptr_t node, mode, arg3, ctx; };
+    // ent and target are the entity the component was read from and the id the
+    // scan saw on it, so the game thread can check the component is still that
+    // entity's before it writes to it. Zero ent means the caller gave none.
+    struct PendArm { uintptr_t node, mode, arg3, ctx; uintptr_t ent; uint32_t target; };
     // ev 0 means the vein's pair of transitions, which is what DriveBreak
     // wants. Any other value is one transition driven by id, which is what a
     // well's sequence is made of.
@@ -514,10 +517,27 @@ namespace ml::events
         __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
     }
 
-    static bool ArmNow(uintptr_t node, uintptr_t mode, uintptr_t arg3, uintptr_t ctx)
+    // Declared here and defined with the drive's check further down.
+    static const char* TargetGone(uintptr_t ent, uint32_t target, uintptr_t comp);
+
+    static bool ArmNow(uintptr_t node, uintptr_t mode, uintptr_t arg3, uintptr_t ctx, uintptr_t ent, uint32_t target)
     {
         const game::Fns& f = game::F();
         if (!f.armFn || !mem::Readable(node, 0x400)) return false;
+        // Readable only proves the page is still mapped. A gimmick the game
+        // freed since the scan queued this sits on a heap that very much is,
+        // and the arm then writes a trigger into whatever lives there now.
+        // The drive has asked the entity since 1.6.46; the arm never did, and
+        // it is the one that reaches every empty node in range, which in a
+        // camp means farm plots, racks and boards that the game rebuilds as
+        // they change.
+        if (const char* gone = TargetGone(ent, target, node))
+        {
+            static volatile LONG s_said = 0;
+            if (InterlockedIncrement(&s_said) <= 10)
+                LOG("[arm] refused an arm at %08X: %s, so the area changed after it was queued", target, gone);
+            return false;
+        }
         static __declspec(align(16)) unsigned char scratch[256];
         memset(scratch, 0, sizeof scratch);
         void* a3 = arg3 && mem::Readable(arg3, 0x40) ? reinterpret_cast<void*>(arg3) : static_cast<void*>(scratch);
@@ -541,15 +561,16 @@ namespace ml::events
     // was read from settles that: it has to still carry the id the scan saw
     // and still hold this component in its gimmick slot. Everything here is a
     // guarded read, so a freed entity fails the test instead of faulting.
-    static const char* DriveTargetGone(const PendDrive& d)
+    static const char* TargetGone(uintptr_t ent, uint32_t target, uintptr_t comp)
     {
-        if (!d.ent) return nullptr;
+        if (!ent) return nullptr;
         uint32_t id = 0;
-        if (!game::Eid(d.ent, &id)) return "its entity can no longer be read";
-        if (id != d.target) return "its entity now belongs to another object";
-        if (game::CompByClass(game::Comps(d.ent), kCls_Gimmick) != d.comp) return "its entity no longer holds that component";
+        if (!game::Eid(ent, &id)) return "its entity can no longer be read";
+        if (id != target) return "its entity now belongs to another object";
+        if (game::CompByClass(game::Comps(ent), kCls_Gimmick) != comp) return "its entity no longer holds that component";
         return nullptr;
     }
+    static const char* DriveTargetGone(const PendDrive& d) { return TargetGone(d.ent, d.target, d.comp); }
 
     static bool DriveNow(const PendDrive& d)
     {
@@ -717,13 +738,13 @@ namespace ml::events
         return ok;
     }
 
-    bool Arm(uintptr_t node, uintptr_t mode, uintptr_t arg3, uintptr_t ctx)
+    bool Arm(uintptr_t node, uintptr_t mode, uintptr_t arg3, uintptr_t ctx, uintptr_t ent, uint32_t target)
     {
         if (!game::F().armFn) return false;
-        if (OnGameThread()) return ArmNow(node, mode, arg3, ctx);
+        if (OnGameThread()) return ArmNow(node, mode, arg3, ctx, ent, target);
         Lock();
         const bool room = g_pendArmN < 32;
-        if (room) g_pendArm[g_pendArmN++] = { node, mode, arg3, ctx };
+        if (room) g_pendArm[g_pendArmN++] = { node, mode, arg3, ctx, ent, target };
         Unlock();
         return room;
     }
@@ -769,7 +790,7 @@ namespace ml::events
         PendDelete dels[16]; const int xn = g_pendDelN; memcpy(dels, g_pendDel, sizeof(PendDelete) * xn); g_pendDelN = 0;
         Unlock();
         for (int i = 0; i < xn; ++i) DeleteNow(dels[i]);
-        for (int i = 0; i < rn; ++i) ArmNow(arms[i].node, arms[i].mode, arms[i].arg3, arms[i].ctx);
+        for (int i = 0; i < rn; ++i) ArmNow(arms[i].node, arms[i].mode, arms[i].arg3, arms[i].ctx, arms[i].ent, arms[i].target);
         for (int i = 0; i < an; ++i) SendNow(acts[i].act, acts[i].eid, acts[i].player, acts[i].route, acts[i].mode,
                                              acts[i].skinInter, acts[i].skinChr);
         for (int i = 0; i < dn; ++i) DriveNow(drvs[i]);

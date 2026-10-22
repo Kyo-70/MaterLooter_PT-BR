@@ -591,6 +591,29 @@ namespace ml::loot
     static std::vector<HandDrop> g_handDropIn;        // parsed, not yet taken by the scan
     static std::vector<HandDrop> g_handDrops;         // scan thread from here down
     static std::unordered_set<uint32_t> g_droppedEid;
+    // A copy of the line above for threads other than the scan's, filled in
+    // beside it. Capped, and cleared when it is, since an entity id the game
+    // hands out again is not worth remembering for a log line.
+    static SRWLOCK g_droppedPubLock = SRWLOCK_INIT;
+    static std::unordered_set<uint32_t> g_droppedPub;
+    static volatile LONG g_droppedPubN = 0;
+    static void NoteDroppedEid(uint32_t eid)
+    {
+        g_droppedEid.insert(eid);
+        AcquireSRWLockExclusive(&g_droppedPubLock);
+        if (g_droppedPub.size() >= 1024) g_droppedPub.clear();
+        g_droppedPub.insert(eid);
+        InterlockedExchange(&g_droppedPubN, static_cast<LONG>(g_droppedPub.size()));
+        ReleaseSRWLockExclusive(&g_droppedPubLock);
+    }
+    bool HandDroppedEntity(uint32_t eid)
+    {
+        if (!eid || InterlockedCompareExchange(&g_droppedPubN, 0, 0) == 0) return false;
+        AcquireSRWLockShared(&g_droppedPubLock);
+        const bool hit = g_droppedPub.count(eid) != 0;
+        ReleaseSRWLockShared(&g_droppedPubLock);
+        return hit;
+    }
     static std::unordered_map<uint32_t, uint16_t> g_droppedIid;   // instance id -> item row
     static std::unordered_map<uint32_t, uint32_t> g_itemFirstPass; // eid -> the scan pass that first filled it
     static volatile LONG g_handPass = 0;               // the last pass whose sightings are all recorded
@@ -668,6 +691,9 @@ namespace ml::loot
     struct Spot { Vec3 p; uint16_t tid; DWORD when; uint32_t eid; };
     static std::vector<Spot> g_spots;                       // recently sent, by place and type
     static std::unordered_set<uint32_t> g_present;          // eids seen in the current scan
+    // Creatures in the current scan that are alive, so a node can be asked whether
+    // it hangs off one. Rebuilt every pass; scan thread only.
+    static std::unordered_set<uint32_t> g_living;
     struct Seen { uintptr_t ent; Vec3 pos; DWORD when; };
     static std::unordered_map<uint32_t, Seen>  g_seen;      // merges the game's partial lists
 
@@ -3260,6 +3286,28 @@ namespace ml::loot
         }
     }
 
+    // Whether c is a living creature carrying a node, or hangs off one. What it
+    // hangs off is found among this pass's creatures by the parent id, which is
+    // how a fade rock's core points at its rock in the logs on hand. Whether a
+    // crab's cell is parented that way has not been seen, so the first few
+    // hits say which half caught them.
+    static bool OnLivingCreature(const Cand& c)
+    {
+        const bool self = c.ai && c.dead != 1 && c.inter && (c.gather || c.item);
+        // Gear in the worn and dropped-weapon categories has rules of its own
+        // further down, and a weapon that has just left a disarmed enemy's hand
+        // may still point at him for a moment, which is no reason to leave it.
+        const bool gear = c.cat2 == 0x11 || c.cat2 == 0x19 || c.cat2 == 0x01;
+        const bool onOne = c.parent && !gear && g_living.count(c.parent) != 0;
+        if (!self && !onOne) return false;
+        static std::unordered_set<uint32_t> s_said;
+        if (s_said.size() < 40 && s_said.insert(c.eid).second)
+            LOG("[spare] %08X %s is %s; left alone while Leave living creatures alone is on",
+                c.eid, c.node[0] ? c.node : "an object",
+                self ? "a living creature with a node of its own" : "attached to a living creature");
+        return true;
+    }
+
     static Verdict Decide(const Cand& c, const Config& cfg)
     {
         Verdict v;
@@ -3294,6 +3342,14 @@ namespace ml::loot
         // lies there. The burst key does not lift this; picking it up by hand
         // does, since that ends the object. See HandDrop.
         if (c.item && Dropped(c)) return skip("you dropped this");
+        // Anything growing on a living creature, or a living creature that
+        // carries a node of its own. Sov1737, 16 September 2026: the mod
+        // extracted the Abyss cells from stone crabs as he walked up, which
+        // killed them, so they did not count for the stone crab challenge and
+        // dropped none of their ore. A creature that is dead is not this: it
+        // is a carcass, and Carcasses decides it. The Catch path never has a
+        // node, so small game is not reached by either half.
+        if (cfg.spareLiving && OnLivingCreature(c)) return skip("on a living creature");
         // Category 0x11 is the game saying a thing is being worn, and that is
         // enough by itself. Requiring a parent as well left a hole. Sov1737's
         // log of 14 September 2026 on 1.6.17 refuses his own Black Sun 118
@@ -4686,7 +4742,7 @@ namespace ml::loot
             if (!k.filled || !k.item || !k.iid || g_droppedEid.count(k.eid)) continue;
             const auto it = g_droppedIid.find(k.iid);
             if (it == g_droppedIid.end() || it->second != k.tid) continue;
-            g_droppedEid.insert(k.eid);
+            NoteDroppedEid(k.eid);
             // Counted against its note, or the note would go on looking for
             // it by position and could hand something else of that row to
             // the player's drop.
@@ -4756,7 +4812,7 @@ namespace ml::loot
             {
                 if (d.left <= 0) break;
                 const Cand& k = list[n.second];
-                g_droppedEid.insert(k.eid);
+                NoteDroppedEid(k.eid);
                 if (k.iid) g_droppedIid[k.iid] = k.tid;
                 --d.left;
                 if (!d.claimed++) d.claimedAt = now;
@@ -6213,7 +6269,23 @@ namespace ml::loot
             // entity id for anything that never had an instance id, and
             // g_retiredEid holds the rest once they have been recognised once.
             if ((!g_debugLog || !WatchingBreak(k.eid, now)) &&
-                (g_retiredEid.count(k.eid) || g_searched.count(k.eid))) { k.filled = true; k.banned = true; continue; }
+                (g_retiredEid.count(k.eid) || g_searched.count(k.eid)))
+            {
+                k.filled = true;
+                k.banned = true;
+                // A creature given up on is still alive, and what hangs off it
+                // is still spared, so the living set needs its ai and dead
+                // flags even though nothing else is read for it.
+                if (cfg.spareLiving)
+                    if (const uintptr_t comps = game::Comps(k.ent))
+                    {
+                        k.ai = game::CompByClass(comps, kCls_Ai) != 0;
+                        if (k.ai)
+                            if (const uintptr_t status = game::CompByClass(comps, kCls_Status))
+                                mem::Read8(status + kOff_Status_Dead, &k.dead);
+                    }
+                continue;
+            }
             Fill(k);
             ++detailed;
             if (k.tid && k.db) { if (g_tidByEid.size() > 8192) g_tidByEid.clear(); g_tidByEid[k.eid] = k.tid; }
@@ -6335,6 +6407,11 @@ namespace ml::loot
         // Anything the mod broke a moment ago is being watched for what it paid,
         // and this is where a loose item on the ground is seen at all.
         if (!g_spillWatch.empty()) for (const Cand& k : list) if (k.filled) NoteSpill(k, now);
+        // Which creatures in reach are alive, for the rule that leaves what is
+        // attached to them alone.
+        g_living.clear();
+        for (const Cand& k : list)
+            if (k.filled && k.ai && k.dead != 1 && k.eid) g_living.insert(k.eid);
         // And what the player dropped by hand, before anything is decided.
         ClaimHandDrops(list, mp, now);
 
@@ -6460,6 +6537,11 @@ namespace ml::loot
                     // so out to the arm range rather than the gather range the
                     // player set. LuxDragon, 13 September 2026.
                     if (k.nodeType && k.nodeType->tagged && k.nodeType->pickup) continue;
+                    // A node on a living creature is refused by the verdict, and arming
+                    // it is what makes the game offer the extraction in the first place.
+                    // An empty node on a creature has no item or gather data yet, so
+                    // the creature being alive is the whole test for that half.
+                    if (cfg.spareLiving && ((k.ai && k.dead != 1) || OnLivingCreature(k))) continue;
                     // Never ask the game to open a memory trigger, a puzzle mechanism or a
                     // fast-travel artifact. Refusing to loot one afterwards is too late.
                     if (OffLimits(k.node)) continue;
@@ -6599,7 +6681,7 @@ namespace ml::loot
                                                  : ((combo == 1) ? 0 : hooks::ArmArg3());
                     rec.ctxKind = combo;
                     if (s_armLogs < 60) { ++s_armLogs; LOG("[arm] arming eid %08X %.1f m mode %d try %d combo %d ctx %llX id %u of %d own (tag %02X cat2 %02X%s%s)", k.eid, k.d, rec.mode, rec.fails + 1, combo, static_cast<unsigned long long>(armCtx), nids ? ids[rec.fails % nids] : 0u, nids, k.type, k.cat2, k.node[0] ? " node " : "", k.node); }
-                    events::Arm(g, static_cast<uintptr_t>(rec.mode), armA3, armCtx);
+                    events::Arm(g, static_cast<uintptr_t>(rec.mode), armA3, armCtx, k.ent, k.eid);
                     if (armedN < 32) armedNow[armedN++] = k.eid;
                     if (cfg.debugLog) LOG("[arm] eid %08X %.1f m%s %s", k.eid, k.d,
                         vouched ? " (ore, reached for early)" : oreNode ? " (ore by name only, ordinary reach)" : "",
