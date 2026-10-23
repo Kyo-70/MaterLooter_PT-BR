@@ -2724,12 +2724,20 @@ namespace ml::loot
         g_spillWatch.push_back(w);
     }
 
+    // Prefabs whose watch ran out with nothing learned. A bismuth vein breaks
+    // into ore chunks, which are nodes of their own and never a loose item,
+    // so its watch can never answer, and holding the next vein for it made
+    // every bismuth vein wait the whole six seconds, one at a time (Seth,
+    // 23 October 2026). One silent watch is enough to stop waiting on that
+    // prefab for the session; the watch itself still runs.
+    static std::unordered_set<std::string> g_spillSilent;
+
     // A break already being watched answers for its whole prefab, so the next
     // rock of the same kind waits rather than being broken for the same lesson.
     // Seth's run broke three in the six seconds before the first answer landed.
     static bool WatchingSpillFor(const char* node, DWORD now)
     {
-        if (!node || !node[0]) return false;
+        if (!node || !node[0] || g_spillSilent.count(node)) return false;
         for (const SpillWatch& w : g_spillWatch)
             if (now - w.when <= kSpillWatchMs && strcmp(w.node, node) == 0) return true;
         return false;
@@ -2775,6 +2783,9 @@ namespace ml::loot
                     "MasterLooter.ini so it is worked out once and not again.",
                     w.node, it ? it->Label() : w.yield, it ? it->klass.c_str() : "?");
             }
+            else if (!g_nodeYield.count(w.node) && g_spillSilent.insert(w.node).second)
+                LOG("[learn] nothing loose that could be its yield fell out of %s, so the next ones of it break "
+                    "without waiting on the last.", w.node);
             g_spillWatch.erase(g_spillWatch.begin() + static_cast<long>(i));
         }
     }
