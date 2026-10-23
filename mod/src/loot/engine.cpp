@@ -2018,10 +2018,40 @@ namespace ml::loot
     // [NotVeins] is, because a node that has not filled has no type id to key on
     // and the path is known from the first sighting.
     static std::unordered_map<std::string, std::string> g_nodeYield;
+
+    // A node never pays out equipment. Before 1.6.50 the spill watch could
+    // take the pickaxe in the player's hand, a world object standing beside
+    // the vein just after a swing, for what the vein dropped. LuxDragon's
+    // bismuth vein was written down as holding a tool that way, and with tools
+    // refused the vein was refused for good (23 October 2026).
+    static bool NeverAYield(const Item* it)
+    {
+        return it && (it->HasTag("equipment") || it->klass == "tool");
+    }
+
     static void SeedNodeYields(const Config& cfg)
     {
-        if (g_nodeYield.size() == cfg.nodeYields.size()) return;
-        for (const auto& kv : cfg.nodeYields) g_nodeYield.emplace(kv.first, kv.second);
+        static std::unordered_set<std::string> s_dropped;
+        if (g_nodeYield.size() + s_dropped.size() == cfg.nodeYields.size()) return;
+        for (const auto& kv : cfg.nodeYields)
+        {
+            if (g_nodeYield.count(kv.first) || s_dropped.count(kv.first)) continue;
+            const Item* it = ItemDb::ByStringKey(kv.second.c_str());
+            if (NeverAYield(it))
+            {
+                s_dropped.insert(kv.first);
+                {
+                    std::lock_guard<std::recursive_mutex> lk(Settings::Mutex());
+                    Settings::Get().nodeYields.erase(kv.first);
+                }
+                Settings::MarkDirty();
+                LOG("[learn] forgot that %s holds %s (%s): a node never pays out equipment, so that was "
+                    "something held nearby when it broke. Removed from [NodeYields] in MasterLooter.ini.",
+                    kv.first.c_str(), it->Label(), it->klass.c_str());
+                continue;
+            }
+            g_nodeYield.emplace(kv.first, kv.second);
+        }
     }
     static const Item* LearnedNodeYield(const char* node)
     {
@@ -2705,9 +2735,14 @@ namespace ml::loot
         return false;
     }
 
+    static bool IStr(const char* hay, const char* needle);
+
     static void NoteSpill(const Cand& c, DWORD now)
     {
         if (!c.item || !c.db || c.db->stringKey.empty() || g_spillWatch.empty()) return;
+        // What someone holds or wears is not a spill: one of the game's equip
+        // objects, or anything that is equipment at all.
+        if (IStr(c.node, "gimmick_equip_") || NeverAYield(c.db)) return;
         const DWORD age = AgeMs(c.eid, now);
         for (SpillWatch& w : g_spillWatch)
         {
