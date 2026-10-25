@@ -499,3 +499,15 @@ machinery or a fixture, not loot	maquinário ou uma peça fixa, não é saque
 on a living creature	em uma criatura viva
 Leave living creatures alone	Deixar criaturas vivas em paz
 Skips anything attached to a creature that is still alive, such as the Abyss cells on a stone crab. Taking one kills the creature, which then does not count for a challenge and loses its own drops. Dead creatures are not affected, and Carcasses still skins them. Catching small animals has its own switch. Off lets the mod take them.	Ignora o que estiver preso a uma criatura que ainda esteja viva, como as células do Abismo de um caranguejo de pedra. Pegar uma mata a criatura, que então não conta para um desafio e perde o que deixaria cair. Criaturas mortas não são afetadas, e Carcaças continua esfolando-as. A captura de animais pequenos tem a própria opção. Desativada, o mod pode pegá-las.
+
+# --- linhas novas, revisadas por Kyo-70 em 25 de outubro de 2026 ---
+# Estas sete frases estão em mod/src/gui/stack_link.cpp e aparecem na
+# coluna Motivo da aba Pilhas. O modelo ainda não as lista, porque
+# scripts/make_translation_template.py só lê menu.cpp e engine.cpp.
+it is the one changing stack limits	é este mod que está alterando os limites de pilha
+the multiplier is 1, so nothing is changed	o multiplicador é 1, então nada é alterado
+another mod is changing stack limits instead	outro mod é que está alterando os limites de pilha
+it could not find where the game reads its item table	ele não encontrou onde o jogo lê a tabela de itens
+its hook could not be installed	não foi possível instalar o hook dele
+the game had already read its item table	o jogo já tinha lido a tabela de itens
+a reason this build of Master Looter does not know	um motivo que esta versão do Master Looter não conhece
